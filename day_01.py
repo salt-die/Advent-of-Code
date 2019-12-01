@@ -1,4 +1,4 @@
-with open('day_01_input.txt', 'r') as numbers:
+with open('input', 'r') as numbers:
     numbers = list(map(int, numbers.readlines()))
 
 print(sum(number//3 - 2 for number in numbers))
