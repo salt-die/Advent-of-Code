@@ -47,14 +47,14 @@ class TuringTape:
 
 #Part1
 tape = TuringTape()
-for compute, _ in tape.compute_data(12, 2):
+for result, _ in tape.compute_data(12, 2):
     pass
-print(compute)
+print(result)
 
 #Part2
 for i, j in product(range(100), repeat=2):
-    for compute, _ in tape.compute_data(i, j):
+    for result, _ in tape.compute_data(i, j):
         pass
-    if compute == 19690720: #Date of moon landing
+    if result == 19690720: #Date of moon landing
         print(100 * i + j)
         break
