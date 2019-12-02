@@ -10,6 +10,12 @@ class TuringTape:
                                 99:None}
 
     def compute_iter(self, noun, verb):
+        """
+        Returns an iterator, each item being (value, address)  of the computation.
+
+        -1, -1 indicates an error in the data. (Either an incorrect op_code,
+                                                or reached end of data without halting.)
+        """
         head_position = 0
         memory = data.copy()
         memory[1:3] = noun, verb
@@ -45,6 +51,9 @@ class TuringTape:
             head_position += argcount + 2
 
     def compute(self, noun, verb):
+        """
+        Returns the last item of compute_iter
+        """
         for result, _ in self.compute_iter(noun, verb):
             pass
         return result
