@@ -76,8 +76,7 @@ class TuringTape:
             argcount = operator.__code__.co_argcount
 
             try:
-                args = [self.read() for _ in range(argcount) if self.move()]
-                operator(*args)
+                operator(*(self.read() for _ in range(argcount) if self.move()))
             except IndexError:
                 yield -1
                 break
