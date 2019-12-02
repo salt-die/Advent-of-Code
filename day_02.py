@@ -3,7 +3,7 @@ from itertools import product
 with open('input', 'r') as data:
     data = list(map(int, data.read().split(',')))
 
-def compute_data(memory):
+def compute_data():
     head_position = 0
     while True:
         try:
@@ -27,8 +27,8 @@ def compute_data(memory):
         head_position += 4
 
 for i,j in product(range(100), repeat=2):
-    new_data = data.copy()
-    new_data[1], new_data[2] = i, j
-    if compute_data(new_data) == 19690720:
+    memory = data.copy()
+    memory[1], memory[2] = i, j
+    if compute_data() == 19690720:
         print(100 * i + j)
         break
