@@ -9,7 +9,7 @@ class TuringTape:
                                 2:lambda x, y: x * y,
                                 99:None}
 
-    def compute_data(self, noun, verb):
+    def compute_iter(self, noun, verb):
         head_position = 0
         memory = data.copy()
         memory[1:3] = noun, verb
@@ -44,17 +44,18 @@ class TuringTape:
 
             head_position += argcount + 2
 
+    def compute(self, noun, verb):
+        for result, _ in self.compute_iter(noun, verb):
+            pass
+        return result
+
 
 #Part1
 tape = TuringTape()
-for result, _ in tape.compute_data(12, 2):
-    pass
-print(result)
+print(tape.compute(12, 2))
 
 #Part2
 for i, j in product(range(100), repeat=2):
-    for result, _ in tape.compute_data(i, j):
-        pass
-    if result == 19690720: #Date of moon landing
+    if tape.compute(i, j) == 19690720: #Date of moon landing
         print(100 * i + j)
         break
