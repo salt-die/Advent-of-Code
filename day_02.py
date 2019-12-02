@@ -1,20 +1,16 @@
-from itertools import product
-
-with open('input', 'r') as data:
-    data = list(map(int, data.read().split(',')))
-
 class TuringTape:
-    def __init__(self):
+    def __init__(self, data):
         self.translate = {1:lambda x, y, out: self.write(self.read(x) + self.read(y), out),
                           2:lambda x, y, out: self.write(self.read(x) * self.read(y), out),
                           99:None}
+        self.data = data
 
-    def reset(self, data=data):
+    def reset(self):
         """
         Reset our head and reinitialize our memory.
         """
         self.head_position = 0
-        self.memory = data.copy()
+        self.memory = self.data.copy()
 
     def read(self, address=None):
         """
@@ -92,13 +88,18 @@ class TuringTape:
             pass
         return result
 
+if __name__ == "__main__":
+    from itertools import product
 
-#Part1
-tape = TuringTape()
-print(tape.compute(12, 2))
+    with open('input', 'r') as data:
+        data = list(map(int, data.read().split(',')))
 
-#Part2
-for i, j in product(range(100), repeat=2):
-    if tape.compute(i, j) == 19690720: #Date of moon landing
-        print(100 * i + j)
-        break
+    #Part1
+    tape = TuringTape(data)
+    print(tape.compute(12, 2))
+
+    #Part2
+    for i, j in product(range(100), repeat=2):
+        if tape.compute(i, j) == 19690720: #Date of moon landing
+            print(100 * i + j)
+            break
