@@ -34,12 +34,12 @@ class TuringTape:
             address=self.head_position
         self.memory[address] = value
 
-    def move(self, incr=1, value=None):
+    def move(self, incr=1, address=None):
         """
-        Increment head_position by incr is value is None else move head to position value.
+        Increment head_position by incr if value is None else move head to address.
         """
-        if value is not None:
-            self.head_position = value
+        if address is not None:
+            self.head_position = address
             return True
         self.head_position += incr
         return True
