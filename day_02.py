@@ -17,11 +17,12 @@ class Computer:
 
     def read(self, address=None):
         """
-        Return the value at instruction_pointer if address is None else return the value at
-        address.
+        Return the value at instruction_pointer and increment_instruction pointer if address
+        is None else return the value at address.
         """
         if address is None:
             address=self.instruction_pointer
+            self.move()
         return self.memory[address]
 
     def write(self, value, address=None):
@@ -45,11 +46,10 @@ class Computer:
 
     def compute_iter(self, noun=None, verb=None):
         """
-        Returns an iterator, each item being current head position of the computation, except
-        the last item. The last item is memory at index 0 if the program halts else -1.
-
-        -1 indicates an error in the data. (Either an incorrect op_code,
-                                            or reached end of data without halting.)
+        Returns an iterator, each item being current instruction_point of the computation,
+        except the last item. The last item is memory at index 0 if the program halts else -1;
+        -1 indicates an error in the data: Either an incorrect op_code, or reached end of data
+        without halting.
         """
         self.reset()
         if noun is not None and verb is not None:
@@ -67,22 +67,24 @@ class Computer:
                 yield -1
                 break
 
-            operator = self.instructions[op_code]
+            instruction = self.instructions[op_code]
 
-            if operator is None: #Halt
+            if instruction is None: #Halt
                 yield self.read(0)
                 break
 
-            argcount = operator.__code__.co_argcount
+            #Account for an arbitrary number of instruction parameters.
+            parameter_count = instruction.__code__.co_argcount
 
             try:
-                operator(*(self.read() for _ in range(argcount) if self.move()))
+                parameters = [self.read() for _ in range(parameter_count)]
             except IndexError:
                 yield -1
                 break
 
+            instruction(*parameters)
+
             yield self.instruction_pointer
-            self.move()
 
     def compute(self, noun, verb):
         """
