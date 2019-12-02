@@ -46,10 +46,11 @@ class TuringTape:
 
     def compute_iter(self, noun, verb):
         """
-        Returns an iterator, each item being (value, address)  of the computation.
+        Returns an iterator, each item being current head position of the computation, except
+        the last item. The last item is memory at index 0 if the program halts else -1.
 
-        -1, -1 indicates an error in the data. (Either an incorrect op_code,
-                                                or reached end of data without halting.)
+        -1 indicates an error in the data. (Either an incorrect op_code,
+                                            or reached end of data without halting.)
         """
         self.reset()
         self.write(noun, 1)
@@ -59,17 +60,17 @@ class TuringTape:
             try:
                 op_code = self.read()
             except IndexError:
-                yield -1, -1
+                yield -1
                 break
 
             if op_code not in self.translate:
-                yield -1, -1
+                yield -1
                 break
 
             operator = self.translate[op_code]
 
             if operator is None: #Halt
-                yield self.memory[0], 0
+                yield self.read(0)
                 break
 
             argcount = operator.__code__.co_argcount
@@ -78,17 +79,17 @@ class TuringTape:
                 args = [self.read() for _ in range(argcount) if self.move()]
                 operator(*args)
             except IndexError:
-                yield -1, -1
+                yield -1
                 break
 
-            yield self.read(), self.head_position
+            yield self.head_position
             self.move()
 
     def compute(self, noun, verb):
         """
         Returns the last item of compute_iter
         """
-        for result, _ in self.compute_iter(noun, verb):
+        for result in self.compute_iter(noun, verb):
             pass
         return result
 
