@@ -3,32 +3,47 @@ from itertools import product
 with open('input', 'r') as data:
     data = list(map(int, data.read().split(',')))
 
-def compute_data():
-    head_position = 0
-    while True:
-        try:
-            op_code = memory[head_position]
-        except IndexError:
-            return -1
+class TuringTape:
+    def __init__(self):
+        self.op_code_to_function = {1:lambda x, y: x + y,
+                                    2:lambda x, y: x * y,
+                                    99:None}
 
-        if op_code not in (1, 2, 99):
-            return -1
+    def compute_data(self, noun, verb):
+        head_position = 0
+        memory = data.copy()
+        memory[1:3] = [noun, verb]
 
-        if op_code == 99:
-            return memory[0]
+        while True:
+            try:
+                op_code = memory[head_position]
+            except IndexError:
+                return -1
 
-        try:
-            address_1, address_2, output_address = data[head_position + 1:head_position + 4]
-        except IndexError:
-            return -1
+            if op_code not in self.op_code_to_function:
+                return -1
 
-        value_1, value_2 = memory[address_1], memory[address_2]
-        memory[output_address] = value_1 + value_2 if op_code == 1 else value_1 * value_2
-        head_position += 4
+            operator = self.op_code_to_function[op_code]
 
-for i,j in product(range(100), repeat=2):
-    memory = data.copy()
-    memory[1], memory[2] = i, j
-    if compute_data() == 19690720:
+            if operator is None: #Halt
+                return memory[0]
+
+            argcount = operator.__code__.co_argcount
+
+            try:
+                *args, output_address = memory[head_position + 1:head_position + argcount + 2]
+            except IndexError:
+                return -1
+
+            memory[output_address] = operator(*(memory[arg] for arg in args))
+            head_position += argcount + 2
+
+#Part1
+tape = TuringTape()
+print(tape.compute_data(12, 2))
+
+#Part2
+for i, j in product(range(100), repeat=2):
+    if tape.compute_data(i, j) == 19690720: #Date of moon landing
         print(100 * i + j)
         break
