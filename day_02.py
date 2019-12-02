@@ -36,7 +36,7 @@ class TuringTape:
 
     def move(self, incr=1, address=None):
         """
-        Increment head_position by incr if value is None else move head to address.
+        Increment head_position by incr if address is None else move head to address.
         """
         if address is not None:
             self.head_position = address
