@@ -5,9 +5,44 @@ with open('input', 'r') as data:
 
 class TuringTape:
     def __init__(self):
-        self.op_from_op_code = {1:lambda x, y: x + y,
-                                2:lambda x, y: x * y,
-                                99:None}
+        self.translate = {1:lambda x, y, out: self.write(self.read(x) + self.read(y), out),
+                          2:lambda x, y, out: self.write(self.read(x) * self.read(y), out),
+                          99:None}
+
+    def reset(self, data=data):
+        """
+        Reset our head and reinitialize our memory.
+        """
+        self.head_position = 0
+        self.memory = data.copy()
+
+    def read(self, address=None):
+        """
+        Return the value at current head position if address is None
+
+        Else return the value at address
+        """
+        if address is None:
+            address=self.head_position
+        return self.memory[address]
+
+    def write(self, value, address=None):
+        """
+        Write the value at the given address or at head_position if address is None.
+        """
+        if address is None:
+            address=self.head_position
+        self.memory[address] = value
+
+    def move(self, incr=1, value=None):
+        """
+        Increment head_position by incr is value is None else move head to position value.
+        """
+        if value is not None:
+            self.head_position = value
+            return True
+        self.head_position += incr
+        return True
 
     def compute_iter(self, noun, verb):
         """
@@ -16,39 +51,38 @@ class TuringTape:
         -1, -1 indicates an error in the data. (Either an incorrect op_code,
                                                 or reached end of data without halting.)
         """
-        head_position = 0
-        memory = data.copy()
-        memory[1:3] = noun, verb
+        self.reset()
+        self.write(noun, 1)
+        self.write(verb, 2)
 
         while True:
             try:
-                op_code = memory[head_position]
+                op_code = self.read()
             except IndexError:
                 yield -1, -1
                 break
 
-            if op_code not in self.op_from_op_code:
+            if op_code not in self.translate:
                 yield -1, -1
                 break
 
-            operator = self.op_from_op_code[op_code]
+            operator = self.translate[op_code]
 
             if operator is None: #Halt
-                yield memory[0], 0
+                yield self.memory[0], 0
                 break
 
             argcount = operator.__code__.co_argcount
 
             try:
-                *args, output_address = memory[head_position + 1:head_position + argcount + 2]
+                args = [self.read() for _ in range(argcount) if self.move()]
+                operator(*args)
             except IndexError:
                 yield -1, -1
                 break
 
-            memory[output_address] = operator(*(memory[arg] for arg in args))
-            yield memory[output_address], output_address
-
-            head_position += argcount + 2
+            yield self.read(), self.head_position
+            self.move()
 
     def compute(self, noun, verb):
         """
