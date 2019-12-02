@@ -1,46 +1,49 @@
-class TuringTape:
-    def __init__(self, data):
-        self.translate = {1:lambda x, y, out: self.write(self.read(x) + self.read(y), out),
-                          2:lambda x, y, out: self.write(self.read(x) * self.read(y), out),
-                          99:None}
-        self.data = data
+class Computer:
+    def __init__(self, int_code, instructions=None):
+        if instructions is None:
+            self.instructions = {1:lambda x, y, out: self.write(self.read(x) + self.read(y), out),
+                                 2:lambda x, y, out: self.write(self.read(x) * self.read(y), out),
+                                 99:None}
+        else:
+            self.instructions = instructions
+        self.int_code = int_code
 
     def reset(self):
         """
         Reset our head and reinitialize our memory.
         """
-        self.head_position = 0
-        self.memory = self.data.copy()
+        self.instruction_pointer = 0
+        self.memory = self.int_code.copy()
 
     def read(self, address=None):
         """
-        Return the value at current head position if address is None
-
-        Else return the value at address
+        Return the value at instruction_pointer if address is None else return the value at
+        address.
         """
         if address is None:
-            address=self.head_position
+            address=self.instruction_pointer
         return self.memory[address]
 
     def write(self, value, address=None):
         """
-        Write the value at the given address or at head_position if address is None.
+        Write the value at the given address or at instruction_pointer if address is None.
         """
         if address is None:
-            address=self.head_position
+            address=self.instruction_pointer
         self.memory[address] = value
 
     def move(self, incr=1, address=None):
         """
-        Increment head_position by incr if address is None else move head to address.
+        Increment instruction_pointer by incr if address is None else change
+        instruction_pointer to address.
         """
         if address is not None:
-            self.head_position = address
+            self.instruction_pointer = address
             return True
-        self.head_position += incr
+        self.instruction_pointer += incr
         return True
 
-    def compute_iter(self, noun, verb):
+    def compute_iter(self, noun=None, verb=None):
         """
         Returns an iterator, each item being current head position of the computation, except
         the last item. The last item is memory at index 0 if the program halts else -1.
@@ -49,8 +52,9 @@ class TuringTape:
                                             or reached end of data without halting.)
         """
         self.reset()
-        self.write(noun, 1)
-        self.write(verb, 2)
+        if noun is not None and verb is not None:
+            self.write(noun, 1)
+            self.write(verb, 2)
 
         while True:
             try:
@@ -59,11 +63,11 @@ class TuringTape:
                 yield -1
                 break
 
-            if op_code not in self.translate:
+            if op_code not in self.instructions:
                 yield -1
                 break
 
-            operator = self.translate[op_code]
+            operator = self.instructions[op_code]
 
             if operator is None: #Halt
                 yield self.read(0)
@@ -77,7 +81,7 @@ class TuringTape:
                 yield -1
                 break
 
-            yield self.head_position
+            yield self.instruction_pointer
             self.move()
 
     def compute(self, noun, verb):
@@ -95,7 +99,7 @@ if __name__ == "__main__":
         data = list(map(int, data.read().split(',')))
 
     #Part1
-    tape = TuringTape(data)
+    tape = Computer(data)
     print(tape.compute(12, 2))
 
     #Part2
