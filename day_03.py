@@ -19,8 +19,6 @@ for wire in wires:
 intersections = set(visits[0]) & set(visits[1])
 intersections.remove((0, 0))
 
-#Part 1
-print(min(sum(np.abs(location)) for location in intersections))
+print(min(sum(np.abs(location)) for location in intersections)) # Part 1
 
-#Part 2
-print(min(sum(wire.index(location) for wire in visits) for location in intersections))
+print(min(sum(wire.index(location) for wire in visits) for location in intersections)) # Part 2
