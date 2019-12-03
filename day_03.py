@@ -21,7 +21,7 @@ for wire in wires:
             visited.append(tuple(current_location))
     visits.append(visited)
 
-intersections = (set(visits[0]) & set(visits[1]))
+intersections = set(visits[0]) & set(visits[1])
 intersections.remove((0, 0))
 
 #Part 1
