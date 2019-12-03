@@ -3,9 +3,9 @@ import numpy as np
 with open('input', 'r') as data:
     data = data.readlines()
 
-wires = [[(d, int(''.join(num))) for d, *num in wire.split(',')] for wire in data]
-
 directions = dict(zip('UDRL', map(np.array,([0, 1], [0, -1], [1, 0], [-1, 0]))))
+
+wires = [[(directions[d], int(''.join(num))) for d, *num in wire.split(',')] for wire in data]
 
 visits = []
 for wire in wires:
@@ -13,9 +13,8 @@ for wire in wires:
     current_location = np.array([0, 0])
     visited.append(tuple(current_location))
     for direction, number in wire:
-        for _ in range(number):
-            current_location += directions[direction]
-            visited.append(tuple(current_location))
+        visited.extend(tuple(current_location + i * direction) for i in range(1, number + 1))
+        current_location += number * direction
     visits.append(visited)
 
 intersections = set(visits[0]) & set(visits[1])
