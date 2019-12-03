@@ -52,7 +52,7 @@ class Computer:
         without halting.
         """
         self.reset()
-        if noun is not None and verb is not None:
+        if not (noun is None or verb is None):
             self.write(noun, 1)
             self.write(verb, 2)
 
