@@ -10,7 +10,7 @@ directions = dict(zip('UDRL', map(np.array,([0, 1], [0, -1], [1, 0], [-1, 0]))))
 visits = []
 for wire in wires:
     visited = []
-    current_location = np.array([0,0])
+    current_location = np.array([0, 0])
     visited.append(tuple(current_location))
     for direction, number in wire:
         for _ in range(number):
