@@ -5,10 +5,7 @@ with open('input', 'r') as data:
 
 wires = [[(d, int(''.join(num))) for d, *num in wire.split(',')] for wire in data]
 
-directions={'U': np.array([0, 1]),
-            'D': np.array([0, -1]),
-            'R': np.array([1, 0]),
-            'L': np.array([-1, 0])}
+directions=dict(zip('UDRL', map(np.array,([0, 1], [0, -1], [1, 0], [-1, 0]))))
 
 visits = []
 for wire in wires:
