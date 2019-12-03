@@ -25,9 +25,9 @@ intersections = set(visits[0]) & set(visits[1])
 intersections.remove((0, 0))
 
 #Part 1
-x, y = min(intersections, key=lambda x:abs(x[0]) + abs(x[1]))
-print(abs(x) + abs(y))
+arr = min(intersections, key=lambda arr:sum(np.abs(arr)))
+print(sum(np.abs(arr)))
 
 #Part 2
-closest = min(intersections, key=lambda x:visits[0].index(x) + visits[1].index(x))
-print(visits[0].index(closest) + visits[1].index(closest))
+closest = min(intersections, key=lambda arr:sum(wire.index(arr) for wire in visits))
+print(sum(wire.index(closest) for wire in visits))
