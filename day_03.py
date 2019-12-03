@@ -9,9 +9,8 @@ wires = [[(directions[d], int(''.join(num))) for d, *num in wire.split(',')] for
 
 visits = []
 for wire in wires:
-    visited = []
     current_location = (0, 0)
-    visited.append(current_location)
+    visited = [current_location]
     for direction, number in wire:
         visited.extend(tuple(current_location + i * direction) for i in range(1, number + 1))
         current_location += number * direction
