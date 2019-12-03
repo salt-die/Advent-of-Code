@@ -5,7 +5,6 @@ with open('input', 'r') as data:
 
 wires = [[(d, int(''.join(num))) for d, *num in wire.split(',')] for wire in data]
 
-wire1, wire2 = wires
 directions={'U': np.array([0, 1]),
             'D': np.array([0, -1]),
             'R': np.array([1, 0]),
