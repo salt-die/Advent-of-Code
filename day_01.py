@@ -12,7 +12,7 @@ while np.any(fuel):
     np.clip(fuel, 0, None, out=fuel)
     total += fuel
 
-print(np.sum(total))
+print(np.sum(total)) # Part 2
 
 #Alternate solution -- one-line non-recursive for-loop
 from math import log
