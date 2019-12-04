@@ -8,10 +8,7 @@ def has_adjacent_pair(number):
 
 def is_non_decreasing(number):
     number = str(number)
-    for one, two in zip(number, number[1:]):
-        if int(one) > int(two):
-            return False
-    return True
+    return not any(int(first) > int(second) for first, second in zip(number, number[1:]))
 
 start, end = 134564, 585159
 
