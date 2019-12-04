@@ -1,10 +1,11 @@
-from itertools import groupby
+from itertools import groupby, tee
+from glen import glen
 
 def has_adjacent(number):
-    return any(sum(1 for _ in n) > 1 for _, n in groupby(str(number)))
+    return any(glen(n) > 1 for _, n in groupby(str(number)))
 
 def has_adjacent_pair(number):
-    return any(sum(1 for _ in n) == 2 for _, n in groupby(str(number)))
+    return any(glen(n) == 2 for _, n in groupby(str(number)))
 
 def is_non_decreasing(number):
     number = str(number)
@@ -14,9 +15,9 @@ start, end = 134564, 585159
 
 # Part 1
 nondecreasing = filter(is_non_decreasing, range(start, end + 1))
-passwords = tuple(filter(has_adjacent, nondecreasing))
-print(len(passwords))
+passwords, copy = tee(filter(has_adjacent, nondecreasing))
+print(glen(copy))
 
 # Part 2
 passwords = filter(has_adjacent_pair, passwords)
-print(sum(1 for _ in passwords))
+print(glen(passwords))
