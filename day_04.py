@@ -4,7 +4,7 @@ from glen import glen # generator length
 def has_adjacent(number):
     return any(glen(n) > 1 for _, n in groupby(str(number)))
 
-def has_adjacent_pair(number):
+def has_pair(number):
     return any(glen(n) == 2 for _, n in groupby(str(number)))
 
 def is_non_decreasing(number):
@@ -19,5 +19,5 @@ passwords, passwords_copy = tee(filter(has_adjacent, nondecreasing))
 print(glen(passwords_copy))
 
 # Part 2
-passwords = filter(has_adjacent_pair, passwords)
+passwords = filter(has_pair, passwords)
 print(glen(passwords))
