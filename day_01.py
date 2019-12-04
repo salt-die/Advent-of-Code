@@ -1,16 +1,18 @@
-with open('input01', 'r') as numbers:
-    numbers = list(map(int, numbers.readlines()))
+import numpy as np
 
-print(sum(number//3 - 2 for number in numbers))
+with open('input01', 'r') as numbers:
+    numbers = np.array(list(map(int, numbers.readlines())))
+
+print(np.sum(numbers//3 - 2)) # Part 1
 
 total = 0
-for number in numbers:
-    fuel = number // 3 - 2
-    while fuel > 0:
-        total += fuel
-        fuel = fuel // 3 - 2
+fuel = numbers
+while np.any(fuel):
+    fuel = fuel // 3 - 2
+    np.clip(fuel, 0, None, out=fuel)
+    total += fuel
 
-print(total)
+print(np.sum(total))
 
 #Alternate solution -- one-line non-recursive for-loop
 from math import log
