@@ -10,7 +10,7 @@ class Computer:
 
     def reset(self):
         """
-        Reset our head and reinitialize our memory.
+        Set instruction_pointer to 0 and reinitialize our memory.
         """
         self.instruction_pointer = 0
         self.memory = self.int_code.copy()
@@ -21,7 +21,7 @@ class Computer:
         is None else return the value at address.
         """
         if address is None:
-            address=self.instruction_pointer
+            address = self.instruction_pointer
             self.move()
         return self.memory[address]
 
@@ -30,7 +30,7 @@ class Computer:
         Write the value at the given address or at instruction_pointer if address is None.
         """
         if address is None:
-            address=self.instruction_pointer
+            address = self.instruction_pointer
         self.memory[address] = value
 
     def move(self, incr=1, address=None):
@@ -38,11 +38,7 @@ class Computer:
         Increment instruction_pointer by incr if address is None else change
         instruction_pointer to address.
         """
-        if address is not None:
-            self.instruction_pointer = address
-            return True
-        self.instruction_pointer += incr
-        return True
+        self.instruction_pointer = address if address else self.instruction_pointer + incr
 
     def compute_iter(self, noun=None, verb=None):
         """
@@ -59,34 +55,23 @@ class Computer:
         while True:
             try:
                 op_code = self.read()
-            except IndexError:
+                instruction = self.instructions[op_code]
+
+                if instruction is None: # Halt
+                    yield self.read(0)
+                    break
+
+                #Account for an arbitrary number of instruction parameters.
+                parameter_count = instruction.__code__.co_argcount
+
+                instruction(*(self.read() for _ in range(parameter_count)))
+                yield self.instruction_pointer
+
+            except (IndexError, KeyError):
                 yield -1
                 break
 
-            if op_code not in self.instructions:
-                yield -1
-                break
-
-            instruction = self.instructions[op_code]
-
-            if instruction is None: #Halt
-                yield self.read(0)
-                break
-
-            #Account for an arbitrary number of instruction parameters.
-            parameter_count = instruction.__code__.co_argcount
-
-            try:
-                parameters = [self.read() for _ in range(parameter_count)]
-            except IndexError:
-                yield -1
-                break
-
-            instruction(*parameters)
-
-            yield self.instruction_pointer
-
-    def compute(self, noun, verb):
+    def compute(self, noun=None, verb=None):
         """
         Returns the last item of compute_iter
         """
