@@ -2,13 +2,13 @@ from itertools import groupby
 
 def has_adjacent(number):
     number = str(number)
-    for one, two in zip(number, number[1:]):
-        if one == two:
+    for first, second in zip(number, number[1:]):
+        if first == second:
             return True
     return False
 
 def has_adjacent_pair(number):
-    return [len(tuple(n)) for _, n in groupby(str(number))].count(2) >= 1
+    return any(len(tuple(n)) == 2 for _, n in groupby(str(number)))
 
 def is_non_decreasing(number):
     number = str(number)
