@@ -40,7 +40,7 @@ class Computer:
         """
         self.instruction_pointer = address if address else self.instruction_pointer + incr
 
-    def compute_iter(self, noun=None, verb=None):
+    def compute_iter(self, *, noun=None, verb=None):
         """
         Returns an iterator, each item being current instruction_pointer of the computation,
         except the last item. The last item is memory at index 0 if the program halts else
@@ -77,10 +77,10 @@ class Computer:
 
             yield self.instruction_pointer
 
-    def compute(self, noun=None, verb=None):
+    def compute(self, *, noun=None, verb=None):
         """
         Returns the last item of compute_iter
         """
-        for result in self.compute_iter(noun, verb):
+        for result in self.compute_iter(noun=noun, verb=verb):
             pass
         return result
