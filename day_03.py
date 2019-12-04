@@ -1,6 +1,6 @@
 import numpy as np
 
-with open('input', 'r') as data:
+with open('input03', 'r') as data:
     data = data.readlines()
 
 directions = dict(zip('UDRL', map(np.array, ([0, 1], [0, -1], [1, 0], [-1, 0]))))

@@ -1,7 +1,7 @@
 from itertools import product
 from Computer import Computer
 
-with open('input', 'r') as data:
+with open('input02', 'r') as data:
     data = list(map(int, data.read().split(',')))
 
 #Part1
