@@ -45,8 +45,8 @@ class Computer:
         Returns an iterator, each item being current instruction_pointer of the computation,
         except the last item. The last item is memory at index 0 if the program halts else
         -1 or -2.
-        -1 or -2 indicates bad intcode: -1 if we reached end of intcode without halting, -2 for
-        an incorrect op_code.
+        -1 or -2 indicates an error in the intcode: -1 if we reached end of intcode without
+        halting, -2 for an incorrect op_code.
         """
         self.reset()
         if not (noun is None or verb is None):
