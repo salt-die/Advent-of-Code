@@ -53,8 +53,8 @@ class Computer:
             self.write(noun, 1)
             self.write(verb, 2)
 
-        while True:
-            try:
+        try:
+            while True:
                 op_code = self.read()
                 instruction = self.instructions[op_code]
 
@@ -65,17 +65,16 @@ class Computer:
                 #Account for an arbitrary number of instruction parameters.
                 parameter_count = instruction.__code__.co_argcount
 
-                instruction(*(self.read() for _ in range(parameter_count)))
+                parameters = (self.read() for _ in range(parameter_count))
+                instruction(*parameters)
 
-            except IndexError:
-                yield -1
-                break
+                yield self.instruction_pointer
 
-            except KeyError:
-                yield -2
-                break
+        except IndexError:
+            yield -1
 
-            yield self.instruction_pointer
+        except KeyError:
+            yield -2
 
     def compute(self, *, noun=None, verb=None):
         """
