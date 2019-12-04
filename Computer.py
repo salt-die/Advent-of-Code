@@ -42,10 +42,11 @@ class Computer:
 
     def compute_iter(self, noun=None, verb=None):
         """
-        Returns an iterator, each item being current instruction_point of the computation,
-        except the last item. The last item is memory at index 0 if the program halts else -1;
-        -1 indicates an error in the data: Either an incorrect op_code, or reached end of data
-        without halting.
+        Returns an iterator, each item being current instruction_pointer of the computation,
+        except the last item. The last item is memory at index 0 if the program halts else
+        -1 or -2.
+        -1 or -2 indicates bad intcode: -1 if we reached end of intcode without halting, -2 for
+        an incorrect op_code.
         """
         self.reset()
         if not (noun is None or verb is None):
@@ -65,11 +66,16 @@ class Computer:
                 parameter_count = instruction.__code__.co_argcount
 
                 instruction(*(self.read() for _ in range(parameter_count)))
-                yield self.instruction_pointer
 
-            except (IndexError, KeyError):
+            except IndexError:
                 yield -1
                 break
+
+            except KeyError:
+                yield -2
+                break
+
+            yield self.instruction_pointer
 
     def compute(self, noun=None, verb=None):
         """
