@@ -1,10 +1,10 @@
 from itertools import groupby
 
 def has_adjacent(number):
-    return any(len(tuple(n)) > 1 for _, n in groupby(str(number)))
+    return any(sum(1 for _ in n) > 1 for _, n in groupby(str(number)))
 
 def has_adjacent_pair(number):
-    return any(len(tuple(n)) == 2 for _, n in groupby(str(number)))
+    return any(sum(1 for _ in n) == 2 for _, n in groupby(str(number)))
 
 def is_non_decreasing(number):
     number = str(number)
