@@ -1,5 +1,5 @@
 from itertools import groupby, tee
-from glen import glen
+from glen import glen # generator length
 
 def has_adjacent(number):
     return any(glen(n) > 1 for _, n in groupby(str(number)))
@@ -15,8 +15,8 @@ start, end = 134564, 585159
 
 # Part 1
 nondecreasing = filter(is_non_decreasing, range(start, end + 1))
-passwords, copy = tee(filter(has_adjacent, nondecreasing))
-print(glen(copy))
+passwords, passwords_copy = tee(filter(has_adjacent, nondecreasing))
+print(glen(passwords_copy))
 
 # Part 2
 passwords = filter(has_adjacent_pair, passwords)
