@@ -8,7 +8,7 @@ def has_adjacent_pair(number):
 
 def is_non_decreasing(number):
     number = str(number)
-    return all(int(first) <= int(second) for first, second in zip(number, number[1:]))
+    return all(first <= second for first, second in zip(number, number[1:]))
 
 start, end = 134564, 585159
 
@@ -18,5 +18,5 @@ passwords = tuple(filter(has_adjacent, nondecreasing))
 print(len(passwords))
 
 # Part 2
-passwords = tuple(filter(has_adjacent_pair, passwords))
-print(len(passwords))
+passwords = filter(has_adjacent_pair, passwords)
+print(sum(1 for _ in passwords))
