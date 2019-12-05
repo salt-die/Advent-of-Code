@@ -46,7 +46,7 @@ class Computer:
             address = self.instruction_pointer
         self.memory[address] = value
 
-    def move(self, incr=1, address=None):
+    def move(self, incr=1, *, address=None):
         """
         Increment instruction_pointer by incr if address is None else change
         instruction_pointer to address.
