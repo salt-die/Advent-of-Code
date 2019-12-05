@@ -35,5 +35,4 @@ passwords = tuple(filter(has_adjacent, non_decreasing(start, end)))
 print(len(passwords))
 
 # Part 2
-passwords = filter(has_pair, passwords)
-print(glen(passwords))
+print(glen(filter(has_pair, passwords)))
