@@ -1,12 +1,14 @@
 class Computer:
+    input_str = 'RUNNING DIAGNOSTIC\nEnter System ID: '
+
     def __init__(self, int_code, verbose=False):
         self.parameter_modes = {'0':lambda x:self.read(x),
                                 '1':lambda x:x}
 
         self.instructions = {'01':lambda x, y, out: self.write(x + y, out),
                              '02':lambda x, y, out: self.write(x * y, out),
-                             '03':lambda out: self.write(int(input('Diagnose: ')), out),
-                             '04':lambda out: print(out),
+                             '03':lambda out: self.write(int(input(self.input_str)), out),
+                             '04':lambda out: print(self.output_msg(out)),
                              '05':lambda x, y: self.move(address=y) if x else None,
                              '06':lambda x, y: self.move(address=y) if not x else None,
                              '07':lambda x, y, out: self.write(int(x < y), out),
@@ -15,6 +17,9 @@ class Computer:
 
         self.int_code = int_code
         self.verbose = verbose
+
+    def output_msg(self, out):
+        return  f'Test Complete\nDIAGNOSTIC CODE: {out}' if out else 'OK'
 
     def reset(self):
         """
@@ -80,7 +85,7 @@ class Computer:
 
                 if instruction is None: # Halt
                     if self.verbose:
-                        print("HALT")
+                        print('Exitcode: 0')
                     if noun and verb:
                         yield self.read(0)
                     break
@@ -98,9 +103,13 @@ class Computer:
                 yield self.instruction_pointer
 
         except IndexError:
+            if self.verbose:
+                print('Exitcode: -1')
             yield -1
 
         except KeyError:
+            if self.verbose:
+                print('Exitcode: -2')
             yield -2
 
     def compute(self, *, noun=None, verb=None):
