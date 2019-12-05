@@ -1,8 +1,8 @@
+import random
 import time
 from prompt_toolkit.shortcuts import ProgressBar
-from prompt_toolkit import prompt
-import random
-from itertools import cycle
+from prompt_toolkit.shortcuts import input_dialog
+
 
 
 HARDWARE = ('Accelerator', 'AI accelerator', 'AT', 'Bus', 'Cache', 'Cache coherency',
@@ -12,20 +12,20 @@ HARDWARE = ('Accelerator', 'AI accelerator', 'AT', 'Bus', 'Cache', 'Cache cohere
             'Non-volatile memory', 'Operation code', 'Processor node', 'PROM',
             'Write back cache', 'Write through cache')
 
+def get_toolbar():
+    return f'RUNNING DIAGNOSTIC{"..."[:round(time.time())%4]}'
+
 def output_msg(x):
     if x:
         print(f'DIAGNOSTIC CODE: {x}')
     else:
-        with ProgressBar(title=random.choice(HARDWARE)) as pb:
+        with ProgressBar(title=random.choice(HARDWARE), bottom_toolbar=get_toolbar) as pb:
             for i in pb(range(random.randint(100, 750)), label="Testing..."):
                 time.sleep(.01)
         print('OK')
 
 def get_in():
-    toolbar = cycle(('RUNNING DIAGNOSTIC.', 'RUNNING DIAGNOSTIC..', 'RUNNING DIAGNOSTIC...'))
-    def get_toolbar():
-        return next(toolbar)
-    return int(prompt('Enter System ID: ', bottom_toolbar=get_toolbar, refresh_interval=0.5))
+    return int(input_dialog(title='DIAGNOSTICS', text='Enter System ID: '))
 
 class Computer:
     def __init__(self, int_code, verbose=False):
