@@ -1,14 +1,41 @@
-class Computer:
-    input_str = 'RUNNING DIAGNOSTIC...\nEnter System ID: '
+import time
+from prompt_toolkit.shortcuts import ProgressBar
+from prompt_toolkit import prompt
+import random
+from itertools import cycle
 
+
+HARDWARE = ('Accelerator', 'AI accelerator', 'AT', 'Bus', 'Cache', 'Cache coherency',
+            'Card reader', 'Channel I/O', 'COMA', 'Control store', 'Core', 'Core memory',
+            'CPU', 'Data cache', 'D-cache', 'Device memory', 'DASD', 'DIMM', 'DMA',
+            'IOPS', 'I-cache', 'Local memory', 'Network interface controller', 'NUMA',
+            'Non-volatile memory', 'Operation code', 'Processor node', 'PROM',
+            'Write back cache', 'Write through cache')
+
+def output_msg(x):
+    if x:
+        print(f'DIAGNOSTIC CODE: {x}')
+    else:
+        with ProgressBar(title=random.choice(HARDWARE)) as pb:
+            for i in pb(range(random.randint(100, 750)), label="Testing..."):
+                time.sleep(.01)
+        print('OK')
+
+def get_in():
+    toolbar = cycle(('RUNNING DIAGNOSTIC.', 'RUNNING DIAGNOSTIC..', 'RUNNING DIAGNOSTIC...'))
+    def get_toolbar():
+        return next(toolbar)
+    return int(prompt('Enter System ID: ', bottom_toolbar=get_toolbar, refresh_interval=0.5))
+
+class Computer:
     def __init__(self, int_code, verbose=False):
         self.parameter_modes = {'0':lambda x: self.read(x),
                                 '1':lambda x: x}
 
         self.instructions = {'01':lambda x, y, out: self.write(x + y, out),
                              '02':lambda x, y, out: self.write(x * y, out),
-                             '03':lambda out: self.write(int(input(self.input_str)), out),
-                             '04':lambda x: print(self.output_msg(x)),
+                             '03':lambda out: self.write(get_in(), out),
+                             '04':output_msg,
                              '05':lambda x, y: self.move(address=y) if x else None,
                              '06':lambda x, y: self.move(address=y) if not x else None,
                              '07':lambda x, y, out: self.write(int(x < y), out),
@@ -17,9 +44,6 @@ class Computer:
 
         self.int_code = int_code
         self.verbose = verbose
-
-    def output_msg(self, out):
-        return  f'DIAGNOSTIC CODE: {out}' if out else 'OK'
 
     def reset(self):
         """
