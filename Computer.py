@@ -1,5 +1,5 @@
 class Computer:
-    input_str = 'RUNNING DIAGNOSTIC\nEnter System ID: '
+    input_str = 'RUNNING DIAGNOSTIC...\nEnter System ID: '
 
     def __init__(self, int_code, verbose=False):
         self.parameter_modes = {'0':lambda x: self.read(x),
@@ -64,7 +64,8 @@ class Computer:
         modes = list(reversed(read_str.zfill(n_params)))
         if 'out' in instruction.__code__.co_varnames:
             modes[instruction.__code__.co_varnames.index('out')] = '1'
-        return modes
+
+        return map(self.parameter_modes.get, modes)
 
     def compute_iter(self, *, noun=None, verb=None):
         """
@@ -100,7 +101,7 @@ class Computer:
 
                 modes = self.parse_modes(unparsed[:-2], instruction)
 
-                parameters = (self.parameter_modes[mode](self.read()) for mode in modes)
+                parameters = (mode(self.read()) for mode in modes)
 
                 instruction(*parameters)
 
