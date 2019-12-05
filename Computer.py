@@ -68,7 +68,7 @@ class Computer:
         Returns an iterator, each item being current instruction_pointer of the computation,
         except the last item.
 
-        The last item is"
+        The last item is:
         self.read(0): if the computation halts and noun and verb aren't None
         0: if the computation halts and noun or verb is None
         -1: if we reach end of data without halting
