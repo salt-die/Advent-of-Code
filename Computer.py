@@ -4,7 +4,7 @@ from prompt_toolkit.shortcuts import ProgressBar
 from prompt_toolkit.shortcuts import input_dialog
 
 
-
+###Eye Candy
 HARDWARE = ('Accelerator', 'AI accelerator', 'AT', 'Bus', 'Cache', 'Cache coherency',
             'Card reader', 'Channel I/O', 'COMA', 'Control store', 'Core', 'Core memory',
             'CPU', 'Data cache', 'D-cache', 'Device memory', 'DASD', 'DIMM', 'DMA',
@@ -26,6 +26,8 @@ def output_msg(x):
 
 def get_in():
     return int(input_dialog(title='DIAGNOSTICS', text='Enter System ID: '))
+###
+
 
 class Computer:
     def __init__(self, int_code, verbose=False):
