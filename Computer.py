@@ -2,13 +2,13 @@ class Computer:
     input_str = 'RUNNING DIAGNOSTIC\nEnter System ID: '
 
     def __init__(self, int_code, verbose=False):
-        self.parameter_modes = {'0':lambda x:self.read(x),
-                                '1':lambda x:x}
+        self.parameter_modes = {'0':lambda x: self.read(x),
+                                '1':lambda x: x}
 
         self.instructions = {'01':lambda x, y, out: self.write(x + y, out),
                              '02':lambda x, y, out: self.write(x * y, out),
                              '03':lambda out: self.write(int(input(self.input_str)), out),
-                             '04':lambda out: print(self.output_msg(out)),
+                             '04':lambda x: print(self.output_msg(x)),
                              '05':lambda x, y: self.move(address=y) if x else None,
                              '06':lambda x, y: self.move(address=y) if not x else None,
                              '07':lambda x, y, out: self.write(int(x < y), out),
@@ -19,7 +19,7 @@ class Computer:
         self.verbose = verbose
 
     def output_msg(self, out):
-        return  f'Test Complete\nDIAGNOSTIC CODE: {out}' if out else 'OK'
+        return  f'DIAGNOSTIC CODE: {out}' if out else 'OK'
 
     def reset(self):
         """
@@ -53,15 +53,18 @@ class Computer:
         """
         self.instruction_pointer = address if address else self.instruction_pointer + incr
 
-    def parse_modes(self, read_str, n_params, op_code):
+    def parse_modes(self, read_str, instruction):
         """
         Parse modes by filling read_str with leading '0's so that len(modes) == n_params.
-        Leading '0' replaced with '1' if op_code instruction writes. (Writes must be in
-        immediate mode.)
+
+        If instruction writes out, the mode corresponding to out variable is replaced with '1'.
+        (Writes must be in immediate mode.)
         """
-        if op_code in '040506':
-            return read_str.zfill(n_params)
-        return f'1{read_str.zfill(n_params - 1)}'
+        n_params = instruction.__code__.co_argcount
+        modes = list(reversed(read_str.zfill(n_params)))
+        if 'out' in instruction.__code__.co_varnames:
+            modes[instruction.__code__.co_varnames.index('out')] = '1'
+        return modes
 
     def compute_iter(self, *, noun=None, verb=None):
         """
@@ -95,12 +98,9 @@ class Computer:
                         yield 0
                     break
 
-                # Account for an arbitrary number of instruction parameters.
-                parameter_count = instruction.__code__.co_argcount
+                modes = self.parse_modes(unparsed[:-2], instruction)
 
-                modes = self.parse_modes(unparsed[:-2], parameter_count, op_code)
-
-                parameters = (self.parameter_modes[mode](self.read()) for mode in reversed(modes))
+                parameters = (self.parameter_modes[mode](self.read()) for mode in modes)
 
                 instruction(*parameters)
 
