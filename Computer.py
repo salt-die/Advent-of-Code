@@ -1,11 +1,18 @@
 class Computer:
-    def __init__(self, int_code, instructions=None):
-        if instructions is None:
-            self.instructions = {1:lambda x, y, out: self.write(self.read(x) + self.read(y), out),
-                                 2:lambda x, y, out: self.write(self.read(x) * self.read(y), out),
-                                 99:None}
-        else:
-            self.instructions = instructions
+    def __init__(self, int_code):
+        self.parameter_modes = {'0':lambda x:self.read(x),
+                                '1':lambda x:x}
+
+        self.instructions = {'1':lambda x, y, out: self.write(x + y, out),
+                             '2':lambda x, y, out: self.write(x * y, out),
+                             '3':lambda out: self.write(int(input('Diagnose: ')), out),
+                             '4':lambda out: print(out),
+                             '5':lambda x, y: self.move(address=y) if x else None,
+                             '6':lambda x, y: self.move(address=y) if not x else None,
+                             '7':lambda x, y, out: self.write(int(x < y), out),
+                             '8':lambda x, y, out: self.write(int(x == y), out),
+                             '99':None}
+
         self.int_code = int_code
 
     def reset(self):
@@ -40,6 +47,16 @@ class Computer:
         """
         self.instruction_pointer = address if address else self.instruction_pointer + incr
 
+    def parse_modes(self, read_str, n_params, op_code):
+        """
+        Parse modes by filling read_str with leading '0's so that len(modes) == n_params.
+        Leading '0' replaced with '1' if op_code instruction writes. (Writes must be in
+        immediate mode.)
+        """
+        if op_code in '12378':
+            return f'1{read_str.zfill(n_params - 1)}'
+        return read_str.zfill(n_params)
+
     def compute_iter(self, *, noun=None, verb=None):
         """
         Returns an iterator, each item being current instruction_pointer of the computation,
@@ -55,17 +72,25 @@ class Computer:
 
         try:
             while True:
-                op_code = self.read()
+                unparsed = str(self.read())
+                op_code = unparsed[-1:]
+
                 instruction = self.instructions[op_code]
 
                 if instruction is None: # Halt
-                    yield self.read(0)
+                    print("HALT")
+                    if noun and verb:
+                        yield self.read()
                     break
 
-                #Account for an arbitrary number of instruction parameters.
+                # Account for an arbitrary number of instruction parameters.
                 parameter_count = instruction.__code__.co_argcount
 
-                parameters = (self.read() for _ in range(parameter_count))
+                modes = self.parse_modes(unparsed[:-2], parameter_count, op_code)
+
+                parameters = (self.parameter_modes[mode](self.read())
+                              for mode, _ in zip(reversed(modes), range(parameter_count)))
+
                 instruction(*parameters)
 
                 yield self.instruction_pointer
