@@ -54,9 +54,9 @@ class Computer:
         Leading '0' replaced with '1' if op_code instruction writes. (Writes must be in
         immediate mode.)
         """
-        if op_code in '12378':
-            return f'1{read_str.zfill(n_params - 1)}'
-        return read_str.zfill(n_params)
+        if op_code in '040506':
+            return read_str.zfill(n_params)
+        return f'1{read_str.zfill(n_params - 1)}'
 
     def compute_iter(self, *, noun=None, verb=None):
         """
@@ -88,7 +88,7 @@ class Computer:
                 # Account for an arbitrary number of instruction parameters.
                 parameter_count = instruction.__code__.co_argcount
 
-                modes = self.parse_modes(unparsed[:-2], parameter_count, op_code[-1])
+                modes = self.parse_modes(unparsed[:-2], parameter_count, op_code)
 
                 parameters = (self.parameter_modes[mode](self.read())
                               for mode, _ in zip(reversed(modes), range(parameter_count)))
