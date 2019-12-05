@@ -69,10 +69,10 @@ class Computer:
         except the last item.
 
         The last item is:
-        self.read(0): if the computation halts and noun and verb aren't None
-        0: if the computation halts and noun or verb is None
-        -1: if we reach end of data without halting
-        -2: if we receive an incorrect op_code or parameter mode
+            self.read(0): if the computation halts and noun and verb aren't None
+                       0: if the computation halts and noun or verb is None
+                      -1: if we reach end of data without halting
+                      -2: if we receive an incorrect op_code or parameter mode
         """
         self.reset()
         if not (noun is None or verb is None):
