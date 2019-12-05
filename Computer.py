@@ -100,8 +100,7 @@ class Computer:
 
                 modes = self.parse_modes(unparsed[:-2], parameter_count, op_code)
 
-                parameters = (self.parameter_modes[mode](self.read())
-                              for mode, _ in zip(reversed(modes), range(parameter_count)))
+                parameters = (self.parameter_modes[mode](self.read()) for mode in reversed(modes))
 
                 instruction(*parameters)
 
