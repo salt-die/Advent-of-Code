@@ -66,10 +66,13 @@ class Computer:
     def compute_iter(self, *, noun=None, verb=None):
         """
         Returns an iterator, each item being current instruction_pointer of the computation,
-        except the last item. The last item is memory at index 0 if the program halts else
-        -1 or -2.
-        -1 indicates we've reached end of data without halting
-        -2 indicates an incorrect op_code or parameter mode.
+        except the last item.
+
+        The last item is"
+        self.read(0): if the computation halts and noun and verb aren't None
+        0: if the computation halts and noun or verb is None
+        -1: if we reach end of data without halting
+        -2: if we receive an incorrect op_code or parameter mode
         """
         self.reset()
         if not (noun is None or verb is None):
@@ -88,6 +91,8 @@ class Computer:
                         print('Exitcode: 0')
                     if noun and verb:
                         yield self.read(0)
+                    else:
+                        yield 0
                     break
 
                 # Account for an arbitrary number of instruction parameters.
