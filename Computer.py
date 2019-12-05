@@ -1,19 +1,20 @@
 class Computer:
-    def __init__(self, int_code):
+    def __init__(self, int_code, verbose=False):
         self.parameter_modes = {'0':lambda x:self.read(x),
                                 '1':lambda x:x}
 
-        self.instructions = {'1':lambda x, y, out: self.write(x + y, out),
-                             '2':lambda x, y, out: self.write(x * y, out),
-                             '3':lambda out: self.write(int(input('Diagnose: ')), out),
-                             '4':lambda out: print(out),
-                             '5':lambda x, y: self.move(address=y) if x else None,
-                             '6':lambda x, y: self.move(address=y) if not x else None,
-                             '7':lambda x, y, out: self.write(int(x < y), out),
-                             '8':lambda x, y, out: self.write(int(x == y), out),
+        self.instructions = {'01':lambda x, y, out: self.write(x + y, out),
+                             '02':lambda x, y, out: self.write(x * y, out),
+                             '03':lambda out: self.write(int(input('Diagnose: ')), out),
+                             '04':lambda out: print(out),
+                             '05':lambda x, y: self.move(address=y) if x else None,
+                             '06':lambda x, y: self.move(address=y) if not x else None,
+                             '07':lambda x, y, out: self.write(int(x < y), out),
+                             '08':lambda x, y, out: self.write(int(x == y), out),
                              '99':None}
 
         self.int_code = int_code
+        self.verbose = verbose
 
     def reset(self):
         """
@@ -62,8 +63,8 @@ class Computer:
         Returns an iterator, each item being current instruction_pointer of the computation,
         except the last item. The last item is memory at index 0 if the program halts else
         -1 or -2.
-        -1 or -2 indicates an error in the intcode: -1 if we reached end of intcode without
-        halting, -2 for an incorrect op_code.
+        -1 indicates we've reached end of data without halting
+        -2 indicates an incorrect op_code or parameter mode.
         """
         self.reset()
         if not (noun is None or verb is None):
@@ -73,20 +74,21 @@ class Computer:
         try:
             while True:
                 unparsed = str(self.read())
-                op_code = unparsed[-1:]
+                op_code = unparsed[-2:].zfill(2)
 
                 instruction = self.instructions[op_code]
 
                 if instruction is None: # Halt
-                    print("HALT")
+                    if self.verbose:
+                        print("HALT")
                     if noun and verb:
-                        yield self.read()
+                        yield self.read(0)
                     break
 
                 # Account for an arbitrary number of instruction parameters.
                 parameter_count = instruction.__code__.co_argcount
 
-                modes = self.parse_modes(unparsed[:-2], parameter_count, op_code)
+                modes = self.parse_modes(unparsed[:-2], parameter_count, op_code[-1])
 
                 parameters = (self.parameter_modes[mode](self.read())
                               for mode, _ in zip(reversed(modes), range(parameter_count)))
