@@ -16,8 +16,9 @@ def non_decreasing(start, end):
         yield number
         for i, digit in enumerate(reversed(number), start=1):
             if digit != '9':
+                digit = str(int(digit) + 1)
                 number = number[:6 - i]
-                number.extend(str(int(digit) + 1) for _ in range(i))
+                number.extend(digit for _ in range(i))
                 break
         else:
             break
