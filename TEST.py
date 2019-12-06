@@ -99,7 +99,6 @@ class TEST:
     def show_computation(self, pointer, op_code, modes):
         pass
 
-
     def output_win(self, out):
         self.output_box.clear()
         for i, char in enumerate(out):
