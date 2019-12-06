@@ -1,3 +1,4 @@
+from itertools import cycle
 import random
 import time
 from prompt_toolkit.shortcuts import ProgressBar
@@ -5,18 +6,16 @@ from prompt_toolkit.shortcuts import input_dialog
 
 
 ########Eye Candy
-HARDWARE = ('Accelerator', 'AI accelerator', 'AT', 'Bus', 'Cache', 'Cache coherency',
-            'Card reader', 'Channel I/O', 'COMA', 'Control store', 'Core', 'Core memory',
-            'CPU', 'Data cache', 'D-cache', 'Device memory', 'DASD', 'DIMM', 'DMA',
-            'IOPS', 'I-cache', 'Local memory', 'Network interface controller', 'NUMA',
-            'Operation code', 'Processor node', 'PROM',
-            'Write back cache', 'Write through cache')
+HARDWARE = ['AT', 'Bus', 'Cache', 'Channel I/O', 'Core', 'Core memory', 'CPU', 'Data cache',
+            'DASD', 'DIMM', 'DMA', 'IOPS', 'I-cache', 'NUMA', 'PROM']
+random.shuffle(HARDWARE)
+HARDWARE = cycle(HARDWARE)
 
 def get_toolbar():
     return f'RUNNING DIAGNOSTIC{"..."[:round(time.time())%4]}'
 
 def output_msg(x):
-    with ProgressBar(title=random.choice(HARDWARE), bottom_toolbar=get_toolbar) as pb:
+    with ProgressBar(title=next(HARDWARE), bottom_toolbar=get_toolbar) as pb:
         for i in pb(range(random.randint(100, 750)), label="Testing..."):
             time.sleep(.005)
     print(f'DIAGNOSTIC CODE: {x}') if x else print('OK')
