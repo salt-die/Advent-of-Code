@@ -9,7 +9,7 @@ HARDWARE = ('Accelerator', 'AI accelerator', 'AT', 'Bus', 'Cache', 'Cache cohere
             'Card reader', 'Channel I/O', 'COMA', 'Control store', 'Core', 'Core memory',
             'CPU', 'Data cache', 'D-cache', 'Device memory', 'DASD', 'DIMM', 'DMA',
             'IOPS', 'I-cache', 'Local memory', 'Network interface controller', 'NUMA',
-            'Non-volatile memory', 'Operation code', 'Processor node', 'PROM',
+            'Operation code', 'Processor node', 'PROM',
             'Write back cache', 'Write through cache')
 
 def get_toolbar():
