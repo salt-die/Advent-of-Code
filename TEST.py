@@ -24,6 +24,7 @@ class TEST:
                           '99':'HALT',
                           '0':'POSITION',
                           '1':'IMMEDIATE'}
+        self.old_pointer = self.old_nparams = self.old_write = 0
 
     def start(self):
         self.setup()
@@ -42,9 +43,10 @@ class TEST:
         curses.start_color()
         curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
         curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_GREEN)
-        curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLUE)
-        curses.init_pair(4, curses.COLOR_WHITE, curses.COLOR_RED)
-        curses.init_pair(5, curses.COLOR_RED, curses.COLOR_BLACK)
+        curses.init_pair(3, curses.COLOR_BLACK, curses.COLOR_CYAN)
+        curses.init_pair(4, curses.COLOR_BLACK, curses.COLOR_BLUE)
+        curses.init_pair(5, curses.COLOR_WHITE, curses.COLOR_RED)
+
         self.screen.attron(curses.color_pair(1))
 
     def end_curses(self):
@@ -58,24 +60,19 @@ class TEST:
         self.height, self.width = self.screen.getmaxyx()
         self.boxes_per_row = self.width // 9
 
-        for i in range(len(self.computer.int_code)):
-            row, col = divmod(i, self.boxes_per_row)
-            self.screen.addstr(row + 2, col * 9, f'{0:>9}')
+        data_len = len(self.computer.int_code)
+        for i in range(data_len + (-data_len % self.boxes_per_row)):
+            self.write_to(i, 0)
             self.screen.refresh()
             sleep(SLEEP)
 
-        self.out_win_row_start = row + 4
-
-        for col in range(col + 1, self.boxes_per_row):
-            self.screen.addstr(row + 2, col * 9, f'{0:>9}')
-            self.screen.refresh()
-            sleep(SLEEP)
+        self.out_win_row_start = data_len // self.boxes_per_row + 4
 
         rectangle(self.screen, self.out_win_row_start - 1, 0, self.height - 1, self.width - 2)
         self.screen.refresh()
 
-        self.output_box = curses.newwin(self.height - row - 6, self.width - 4,
-                                        self.out_win_row_start, 1)
+        self.output_box = curses.newwin(self.height - self.out_win_row_start - 6,
+                                        self.width - 4, self.out_win_row_start, 1)
 
         self.output_win("Welcome to Thermal Environment Supervision Terminal (TEST). Press any key to continue.")
         self.screen.getch()
@@ -97,20 +94,42 @@ class TEST:
         curses.noecho()
         curses.curs_set(0)
         self.operation_iterator = self.computer.compute_iter(sys_id=system_id)
-        self.old_pointer = 0
+
 
     def show_computation(self, pointer, op_code, modes):
         op_code = self.translate[op_code]
-        modes = map(self.translate.get, modes)
-        old_row, old_col = divmod(self.old_pointer, self.boxes_per_row)
-        row, col = divmod(pointer, self.boxes_per_row)
 
-        self.screen.chgat(old_row + 2, old_col * 9, 9, curses.color_pair(1))
-        self.screen.chgat(row + 2, col * 9, 9, curses.color_pair(2))
+        for i in range(self.old_nparams + 1): #Un-highlight
+            self.highlight(self.old_pointer + i, 1)
+
+        #Highlight pointer and parameters
+        self.highlight(pointer, 2)
         self.screen.refresh()
-        sleep(.1)
+        sleep(.2)
+        for i, mode in enumerate(modes, start=1):
+            self.highlight(pointer + i, 3 + int(mode))
+            self.screen.refresh()
+            sleep(.2)
+
+        last_write = self.computer.last_write_to
+        if self.old_write not in (pointer, last_write):
+            self.highlight(self.old_write, 1)
+            self.write_to(last_write, self.computer.read(last_write))
+            self.highlight(self.computer.last_write_to, 5)
+            self.screen.refresh()
+            sleep(.2)
 
         self.old_pointer = pointer
+        self.old_nparams = len(modes)
+        self.old_write = self.computer.last_write_to
+
+    def write_to(self, index, value):
+        row, col = divmod(index, self.boxes_per_row)
+        self.screen.addstr(row + 2, col * 9, f'{value:>9}')
+
+    def highlight(self, index, color_pair):
+        row, col = divmod(index, self.boxes_per_row)
+        self.screen.chgat(row + 2, col * 9, 9, curses.color_pair(color_pair))
 
     def output_win(self, out):
         self.output_box.clear()

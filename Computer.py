@@ -42,6 +42,7 @@ class Computer:
 
         self.int_code = int_code
         self.verbose = verbose
+        self.last_write_to = 0
 
     def for_curses(self, x):
         """
@@ -73,6 +74,7 @@ class Computer:
         if address is None:
             address = self.instruction_pointer
         self.memory[address] = value
+        self.last_write_to = address
 
     def move(self, incr=1, *, address=None):
         """
