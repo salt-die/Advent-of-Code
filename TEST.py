@@ -17,11 +17,13 @@ class TEST:
                           '02':'MUL',
                           '03':'IN>>',
                           '04':'OUT>>',
-                          '05':'J-IF-T',
-                          '06':'J-IF-F',
+                          '05':'JUMP-IF-TRUE',
+                          '06':'JUMP-IF-FALSE',
                           '07':'LT',
                           '08':'EQ',
-                          '99':'HALT'}
+                          '99':'HALT',
+                          '0':'POSITION',
+                          '1':'IMMEDIATE'}
 
     def start(self):
         self.setup()
@@ -95,9 +97,20 @@ class TEST:
         curses.noecho()
         curses.curs_set(0)
         self.operation_iterator = self.computer.compute_iter(sys_id=system_id)
+        self.old_pointer = 0
 
     def show_computation(self, pointer, op_code, modes):
-        pass
+        op_code = self.translate[op_code]
+        modes = map(self.translate.get, modes)
+        old_row, old_col = divmod(self.old_pointer, self.boxes_per_row)
+        row, col = divmod(pointer, self.boxes_per_row)
+
+        self.screen.chgat(old_row + 2, old_col * 9, 9, curses.color_pair(1))
+        self.screen.chgat(row + 2, col * 9, 9, curses.color_pair(2))
+        self.screen.refresh()
+        sleep(.1)
+
+        self.old_pointer = pointer
 
     def output_win(self, out):
         self.output_box.clear()
