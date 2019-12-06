@@ -43,8 +43,11 @@ class Computer:
         self.int_code = int_code
         self.verbose = verbose
 
-    def for_curses(self, out_string):
-        self.out_string = out_string
+    def for_curses(self, x):
+        """
+        Write to self.out_string instead of stdout when interfaced with TEST.
+        """
+        self.diagnostic_code = x
 
     def reset(self):
         """
@@ -104,7 +107,7 @@ class Computer:
         """
         if sys_id is not None:
             self.instructions['03'] = lambda out: self.write(sys_id, out)
-            self.instructions['04'] = self.for_curses
+            self.instructions['04'] = lambda x: self.for_curses(x)
 
         self.reset()
         if not (noun is None or verb is None):
