@@ -130,7 +130,7 @@ class Computer:
 
                 modes = self.parse_modes(unparsed[:-2], instruction)
 
-                yield self.instruction_pointer, op_code, modes
+                yield self.instruction_pointer - 1, op_code, modes
 
                 modes = map(self.parameter_modes.get, modes)
 

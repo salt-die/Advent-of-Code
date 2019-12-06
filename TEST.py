@@ -5,13 +5,29 @@ from Computer import Computer
 import curses
 from curses.textpad import rectangle
 import time
+from time import sleep
+
+SLEEP = .005
 
 class TEST:
     def __init__(self, computer):
         self.init_scr()
         self.computer = computer
+        self.translate = {'01':'ADD',
+                          '02':'MUL',
+                          '03':'IN>>',
+                          '04':'OUT>>',
+                          '05':'J-IF-T',
+                          '06':'J-IF-F',
+                          '07':'LT',
+                          '08':'EQ',
+                          '99':'HALT'}
+
+    def start(self):
         self.setup()
-        self.show_computation()
+        for computation in self.operation_iterator:
+            self.show_computation(*computation)
+            sleep(SLEEP)
         self.end_curses()
 
     def init_scr(self):
@@ -44,14 +60,14 @@ class TEST:
             row, col = divmod(i, self.boxes_per_row)
             self.screen.addstr(row + 2, col * 9, f'{0:>9}')
             self.screen.refresh()
-            time.sleep(.005)
+            sleep(SLEEP)
 
         self.out_win_row_start = row + 4
 
         for col in range(col + 1, self.boxes_per_row):
             self.screen.addstr(row + 2, col * 9, f'{0:>9}')
             self.screen.refresh()
-            time.sleep(.005)
+            sleep(SLEEP)
 
         rectangle(self.screen, self.out_win_row_start - 1, 0, self.height - 1, self.width - 2)
         self.screen.refresh()
@@ -70,7 +86,7 @@ class TEST:
             self.output_box.addstr(0, 15, "...   "[dots:dots + 3])
             self.output_box.refresh()
             self.screen.refresh()
-            time.sleep(.005)
+            sleep(SLEEP)
 
         self.output_win("Intcode Loaded. Enter System ID to start diagnostic: ")
         curses.echo()
@@ -80,7 +96,7 @@ class TEST:
         curses.curs_set(0)
         self.operation_iterator = self.computer.compute_iter(sys_id=system_id)
 
-    def show_computation(self):
+    def show_computation(self, pointer, op_code, modes):
         pass
 
 
@@ -89,7 +105,7 @@ class TEST:
         for i, char in enumerate(out):
             self.output_box.addstr(0, i, char)
             self.output_box.refresh()
-            time.sleep(.005)
+            sleep(SLEEP)
 
 
 if __name__=="__main__":
@@ -97,4 +113,4 @@ if __name__=="__main__":
         data = list(map(int, data.read().split(',')))
 
     tape = Computer(int_code=data)
-    term = TEST(tape)
+    TEST(tape).start()
