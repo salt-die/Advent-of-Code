@@ -88,7 +88,7 @@ class TEST:
             self.screen.refresh()
             sleep(SLEEP)
 
-        self.output_win("Intcode Loaded. Enter System ID to start diagnostic: ")
+        self.output_win("Int-code Loaded. Enter System ID to start diagnostic: ")
         curses.echo()
         curses.curs_set(1)
         system_id = int(chr(self.output_box.getch())) #TODO: try/except for bad inputs
@@ -116,9 +116,9 @@ class TEST:
             self.screen.refresh()
             sleep(SLEEP2)
 
+        #Interpret parameter modes
         for i, mode in enumerate(modes, start=1):
             self.highlight(pointer + i, 2)
-
         params = " ".join(f"{self.computer.parameter_modes[mode](self.computer.read(pointer + j))}"
                           for j, mode in enumerate(modes, start=1))
         self.output_win(f'{op_code}: {params}', pause=False)
@@ -126,7 +126,7 @@ class TEST:
         sleep(SLEEP2)
 
         if op_code == 'OUT':
-            self.output_win(f'DIAGNOSTIC CODE: {self.computer.parameter_modes[mode](self.computer.read(pointer + 1))}. Press any key to continue.')
+            self.output_win(f'DIAGNOSTIC CODE: {self.computer.diagnostic_code}. Press any key to continue.')
             self.screen.getch()
         if op_code == 'HALT':
             self.output_win('HALT. Press any key to exit.')

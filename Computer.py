@@ -1,28 +1,7 @@
-from itertools import cycle
-import random
-import time
-from prompt_toolkit.shortcuts import ProgressBar
-from prompt_toolkit.shortcuts import input_dialog
-
-
-########Eye Candy
-HARDWARE = ['AT', 'Bus', 'Cache', 'Channel I/O', 'Core', 'Core memory', 'CPU', 'Data cache',
-            'DASD', 'DIMM', 'DMA', 'IOPS', 'I-cache', 'NUMA', 'PROM']
-random.shuffle(HARDWARE)
-HARDWARE = cycle(HARDWARE)
-
-def get_toolbar():
-    return f'RUNNING DIAGNOSTIC{"..."[:round(time.time())%4]}'
+input_str = 'DIAGNOSTICS\nEnter System ID: '
 
 def output_msg(x):
-    with ProgressBar(title=next(HARDWARE), bottom_toolbar=get_toolbar) as pb:
-        for i in pb(range(random.randint(100, 750)), label="Testing..."):
-            time.sleep(.005)
     print(f'DIAGNOSTIC CODE: {x}') if x else print('OK')
-
-def get_in():
-    return int(input_dialog(title='DIAGNOSTICS', text='Enter System ID: '))
-#########
 
 
 class Computer:
@@ -32,7 +11,7 @@ class Computer:
 
         self.instructions = {'01':lambda x, y, out: self.write(x + y, out),
                              '02':lambda x, y, out: self.write(x * y, out),
-                             '03':lambda out: self.write(get_in(), out),
+                             '03':lambda out: self.write(int(input(input_str)), out),
                              '04':output_msg,
                              '05':lambda x, y: self.move(address=y) if x else None,
                              '06':lambda x, y: self.move(address=y) if not x else None,
@@ -54,7 +33,7 @@ class Computer:
         """
         Set instruction_pointer to 0 and reinitialize our memory.
         """
-        self.instruction_pointer = 0
+        self.instruction_pointer = self.last_pointer = 0
         self.memory = self.int_code.copy()
 
     def read(self, address=None):
@@ -118,6 +97,7 @@ class Computer:
 
         try:
             while True:
+                self.last_pointer = self.instruction_pointer
                 unparsed = str(self.read())
                 op_code = unparsed[-2:].zfill(2)
 
@@ -129,18 +109,18 @@ class Computer:
                     if noun and verb:
                         yield self.read(0)
                     else:
-                        yield self.instruction_pointer - 1, op_code, []
+                        yield self.last_pointer - 1, op_code, []
                     break
 
                 modes = self.parse_modes(unparsed[:-2], instruction)
 
-                yield self.instruction_pointer - 1, op_code, modes
+                mapped_modes = map(self.parameter_modes.get, modes)
 
-                modes = map(self.parameter_modes.get, modes)
-
-                parameters = (mode(self.read()) for mode in modes)
+                parameters = (mode(self.read()) for mode in mapped_modes)
 
                 instruction(*parameters)
+
+                yield self.last_pointer, op_code, modes
 
         except IndexError:
             if self.verbose:
