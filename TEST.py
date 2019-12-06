@@ -29,9 +29,36 @@ class TEST:
 
     def start(self):
         self.setup()
-        for computation in self.operation_iterator:
-            self.show_computation(*computation)
-            sleep(SLEEP)
+        running = True
+        while running:
+            for computation in self.operation_iterator:
+                self.show_computation(*computation)
+                sleep(SLEEP)
+
+            curses.echo()
+            curses.curs_set(1)
+            system_id = self.screen.getch()
+            curses.noecho()
+            curses.curs_set(0)
+
+            running = system_id not in (ord('q'), ord('Q'))
+            if running:
+                self.old_pointer = self.old_nparams = self.old_write = 0
+                self.operation_iterator = self.computer.compute_iter(sys_id=int(chr(system_id)))
+                #Reset Highlights
+                for i in range(len(self.computer.int_code)):
+                    self.highlight(i, 1)
+                self.screen.refresh()
+                self.output_win("Re-Loading Intcode")
+                #Reset Int_code
+                for i, item in enumerate(self.computer.int_code):
+                    self.write_to(i, item)
+                    dots = 3 - round(2*time.time()) % 4
+                    self.output_box.addstr(0, 18, "...   "[dots:dots + 3])
+                    self.output_box.refresh()
+                    self.screen.refresh()
+                    sleep(SLEEP)
+
         self.end_curses()
 
     def init_scr(self):
@@ -80,8 +107,7 @@ class TEST:
         self.output_win("Loading Intcode")
 
         for i, item in enumerate(self.computer.int_code):
-            row, col = divmod(i, self.boxes_per_row)
-            self.screen.addstr(row + 2, col * 9, f'{item:>9}')
+            self.write_to(i, item)
             dots = 3 - round(2*time.time()) % 4
             self.output_box.addstr(0, 15, "...   "[dots:dots + 3])
             self.output_box.refresh()
@@ -129,8 +155,7 @@ class TEST:
             self.output_win(f'DIAGNOSTIC CODE: {self.computer.diagnostic_code}. Press any key to continue.')
             self.screen.getch()
         if op_code == 'HALT':
-            self.output_win('HALT. Press any key to exit.')
-            self.screen.getch()
+            self.output_win("HALT. 'q' to quit or Enter System ID to begin DIAGNOSTIC: ")
 
         #Highlight writes
         last_write = self.computer.last_write_to
