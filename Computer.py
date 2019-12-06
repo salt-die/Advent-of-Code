@@ -43,6 +43,9 @@ class Computer:
         self.int_code = int_code
         self.verbose = verbose
 
+    def for_curses(self, out_string):
+        self.out_string = out_string
+
     def reset(self):
         """
         Set instruction_pointer to 0 and reinitialize our memory.
@@ -87,12 +90,12 @@ class Computer:
         if 'out' in instruction.__code__.co_varnames:
             modes[instruction.__code__.co_varnames.index('out')] = '1'
 
-        return map(self.parameter_modes.get, modes)
+        return modes
 
-    def compute_iter(self, *, noun=None, verb=None):
+    def compute_iter(self, *, noun=None, verb=None, sys_id=None):
         """
-        Returns an iterator, each item being current instruction_pointer of the computation,
-        except the last item.
+        Returns an iterator, each item being (instruction_pointer, op_code, modes) except the
+        last item.
 
         The last item is:
             self.read(0): if the computation halts and noun and verb aren't None
@@ -100,6 +103,10 @@ class Computer:
                       -1: if we reach end of data without halting
                       -2: if we receive an incorrect op_code or parameter mode
         """
+        if sys_id is not None:
+            self.instructions['03'] = lambda out: self.write(sys_id, out)
+            self.instructions['04'] = self.for_curses
+
         self.reset()
         if not (noun is None or verb is None):
             self.write(noun, 1)
@@ -123,11 +130,13 @@ class Computer:
 
                 modes = self.parse_modes(unparsed[:-2], instruction)
 
+                yield self.instruction_pointer, op_code, modes
+
+                modes = map(self.parameter_modes.get, modes)
+
                 parameters = (mode(self.read()) for mode in modes)
 
                 instruction(*parameters)
-
-                yield self.instruction_pointer
 
         except IndexError:
             if self.verbose:
