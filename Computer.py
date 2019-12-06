@@ -78,13 +78,13 @@ class Computer:
 
     def parse_modes(self, read_str, instruction):
         """
-        Parse modes by filling read_str with leading '0's so that len(modes) == n_params.
+        Parse modes by filling read_str with leading '0's so that len(modes) == number of
+        instruction parameters.
 
         If instruction writes out, the mode corresponding to out variable is replaced with '1'.
         (Writes must be in immediate mode.)
         """
-        n_params = instruction.__code__.co_argcount
-        modes = list(reversed(read_str.zfill(n_params)))
+        modes = list(reversed(read_str.zfill(instruction.__code__.co_argcount)))
         if 'out' in instruction.__code__.co_varnames:
             modes[instruction.__code__.co_varnames.index('out')] = '1'
 
