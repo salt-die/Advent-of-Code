@@ -8,6 +8,7 @@ import time
 from time import sleep
 
 SLEEP = .005
+SLEEP2 = .1
 
 class TEST:
     def __init__(self, computer):
@@ -15,15 +16,15 @@ class TEST:
         self.computer = computer
         self.translate = {'01':'ADD',
                           '02':'MUL',
-                          '03':'IN>>',
-                          '04':'OUT>>',
+                          '03':'IN',
+                          '04':'OUT',
                           '05':'JUMP-IF-TRUE',
                           '06':'JUMP-IF-FALSE',
                           '07':'LT',
                           '08':'EQ',
                           '99':'HALT',
-                          '0':'POSITION',
-                          '1':'IMMEDIATE'}
+                          '0':'P',
+                          '1':'I'}
         self.old_pointer = self.old_nparams = self.old_write = 0
 
     def start(self):
@@ -43,7 +44,7 @@ class TEST:
         curses.start_color()
         curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
         curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_GREEN)
-        curses.init_pair(3, curses.COLOR_BLACK, curses.COLOR_CYAN)
+        curses.init_pair(3, curses.COLOR_BLACK, curses.COLOR_YELLOW)
         curses.init_pair(4, curses.COLOR_BLACK, curses.COLOR_BLUE)
         curses.init_pair(5, curses.COLOR_WHITE, curses.COLOR_RED)
 
@@ -74,7 +75,7 @@ class TEST:
         self.output_box = curses.newwin(self.height - self.out_win_row_start - 6,
                                         self.width - 4, self.out_win_row_start, 1)
 
-        self.output_win("Welcome to Thermal Environment Supervision Terminal (TEST). Press any key to continue.")
+        self.output_win("Welcome to the Thermal Environment Supervision Terminal (TEST). Press any key to continue.")
         self.screen.getch()
         self.output_win("Loading Intcode")
 
@@ -104,20 +105,40 @@ class TEST:
 
         #Highlight pointer and parameters
         self.highlight(pointer, 2)
+        self.output_win(f'{op_code}:', pause=False)
         self.screen.refresh()
-        sleep(.2)
+        sleep(SLEEP2)
         for i, mode in enumerate(modes, start=1):
             self.highlight(pointer + i, 3 + int(mode))
+            params = " ".join(f"{self.translate[mode]}{self.computer.read(pointer + j)}"
+                              for j, mode in enumerate(modes[:i], start=1))
+            self.output_win(f'{op_code}: {params}', pause=False)
             self.screen.refresh()
-            sleep(.2)
+            sleep(SLEEP2)
 
+        for i, mode in enumerate(modes, start=1):
+            self.highlight(pointer + i, 2)
+
+        params = " ".join(f"{self.computer.parameter_modes[mode](self.computer.read(pointer + j))}"
+                          for j, mode in enumerate(modes, start=1))
+        self.output_win(f'{op_code}: {params}', pause=False)
+        self.screen.refresh()
+        sleep(SLEEP2)
+
+        if op_code == 'OUT':
+            self.output_win(f'DIAGNOSTIC CODE: {self.computer.parameter_modes[mode](self.computer.read(pointer + 1))}. Press any key to continue.')
+            self.screen.getch()
+        if op_code == 'HALT':
+            self.output_win('HALT. Press any key to exit.')
+            self.screen.getch()
+
+        #Highlight writes
         last_write = self.computer.last_write_to
-        if self.old_write not in (pointer, last_write):
-            self.highlight(self.old_write, 1)
-            self.write_to(last_write, self.computer.read(last_write))
-            self.highlight(self.computer.last_write_to, 5)
-            self.screen.refresh()
-            sleep(.2)
+        self.highlight(self.old_write, 1)
+        self.write_to(last_write, self.computer.read(last_write))
+        self.highlight(last_write, 5)
+        self.screen.refresh()
+        sleep(SLEEP2)
 
         self.old_pointer = pointer
         self.old_nparams = len(modes)
@@ -131,12 +152,16 @@ class TEST:
         row, col = divmod(index, self.boxes_per_row)
         self.screen.chgat(row + 2, col * 9, 9, curses.color_pair(color_pair))
 
-    def output_win(self, out):
+    def output_win(self, out, pause=True):
         self.output_box.clear()
-        for i, char in enumerate(out):
-            self.output_box.addstr(0, i, char)
+        if pause:
+            for i, char in enumerate(out):
+                self.output_box.addstr(0, i, char)
+                self.output_box.refresh()
+                sleep(SLEEP)
+        else:
+            self.output_box.addstr(0, 0, out)
             self.output_box.refresh()
-            sleep(SLEEP)
 
 
 if __name__=="__main__":
