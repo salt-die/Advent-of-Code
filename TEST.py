@@ -114,7 +114,7 @@ class TEST:
             self.screen.refresh()
             sleep(SLEEP)
 
-        self.output_win("Int-code Loaded. Enter System ID to start diagnostic: ")
+        self.output_win("Intcode Loaded. Enter System ID to start diagnostic: ")
         curses.echo()
         curses.curs_set(1)
         system_id = int(chr(self.output_box.getch())) #TODO: try/except for bad inputs
