@@ -28,7 +28,7 @@ class Computer:
         """
         Write to self.out_string instead of stdout when interfaced with TEST.
         """
-        self.diagnostic_code = x
+        self.out = x
 
     def reset(self):
         """
@@ -86,12 +86,12 @@ class Computer:
             -1: if we reach end of data without halting
             -2: if we receive an incorrect op_code or parameter mode
         """
-        if std_in is not None:
+        if std_in is not None: # output directed to self.out
             self.instructions['04'] = lambda x: self.no_print(x)
-            if isinstance(std_in, tuple): # Replacing input
+            if isinstance(std_in, tuple):
                 gen = iter(std_in)
                 self.instructions['03'] = lambda out: self.write(next(gen), out)
-            else:
+            else: # recieving input from self.feed
                 self.feed = std_in
                 self.instructions['03'] = lambda out: self.write(self.feed, out)
 
