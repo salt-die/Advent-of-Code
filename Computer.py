@@ -1,5 +1,6 @@
 from collections.abc import Iterable
 from collections import deque
+
 input_str = 'DIAGNOSTICS\nEnter System ID: '
 
 def output_msg(x):
@@ -104,6 +105,7 @@ class Computer:
             -2: if we receive an incorrect op_code or parameter mode
         """
         self.reset()
+
         if not (noun is None or verb is None):
             self.write(noun, 1)
             self.write(verb, 2)
