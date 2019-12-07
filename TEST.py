@@ -8,8 +8,9 @@ from curses.textpad import rectangle
 import time
 from time import sleep
 
-SLEEP = .005
-SLEEP2 = .1
+SLEEP = .01 # For char-by-char printing in output window
+SLEEP2 = .1 # For highlighting points and parameters
+COMPSLEEP = .5 # Longer sleep to show interpreted parameters
 
 class TEST:
     def __init__(self, computer):
@@ -34,13 +35,9 @@ class TEST:
         while running:
             for computation in self.operation_iterator:
                 self.show_computation(*computation)
-                sleep(SLEEP)
+                #sleep(SLEEP)
 
-            curses.echo()
-            curses.curs_set(1)
-            system_id = self.screen.getch()
-            curses.noecho()
-            curses.curs_set(0)
+            system_id = self.output_box.getch()
 
             running = system_id not in (ord('q'), ord('Q'))
             if running:
@@ -85,6 +82,7 @@ class TEST:
             sleep(SLEEP)
 
     def fetch(self, times=1):
+        self.output_box.refresh()
         curses.echo()
         curses.curs_set(1)
         system_id = "".join(chr(self.output_box.getch()) for _ in range(times))
@@ -140,6 +138,7 @@ class TEST:
             self.write_to(2, verb)
             self.screen.refresh()
             self.output_win("Intcode Loaded. Any key to continue.")
+            self.output_box.getch()
             self.operation_iterator = self.computer.compute_iter(noun=noun, verb=verb)
         else:
             self.output_win("Intcode Loaded. Enter System ID to begin Diagnostic: ")
@@ -179,10 +178,10 @@ class TEST:
         if op_code != 'HALT':
             self.output_win(f'{op_code}: {params}', pause=False)
             self.screen.refresh()
-            sleep(.5)
+            sleep(COMPSLEEP)
 
         if op_code == 'OUT':
-            self.output_win(f'DIAGNOSTIC CODE: {self.computer.diagnostic_code}. Press any key to continue.')
+            self.output_win(f'DIAGNOSTIC CODE: {self.computer.out}. Press any key to continue.')
             self.screen.getch()
         if op_code == 'HALT':
             self.output_win("HALT")
@@ -210,6 +209,7 @@ class TEST:
 
     def output_win(self, out, pause=True, save=True):
         self.output_box.clear()
+
         if save:
             if len(self.output_buffer) and self.output_buffer[-1] == '':
                 self.output_buffer[-1] = out
@@ -217,17 +217,20 @@ class TEST:
                 self.output_buffer.append(out)
         elif self.output_buffer[-1] != '':
             self.output_buffer.append('')
+
         last_line = len(self.output_buffer) - 1
         for i, line in enumerate(self.output_buffer):
             if i != last_line:
                 self.output_box.addstr(i, 0, line)
+
         if pause:
             for i, char in enumerate(out):
                 self.output_box.addstr(last_line, i, char)
+                self.output_box.refresh()
                 sleep(SLEEP)
         else:
             self.output_box.addstr(last_line, 0, out)
-        self.output_box.refresh()
+            self.output_box.refresh()
 
 
 
