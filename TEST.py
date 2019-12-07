@@ -129,21 +129,24 @@ class TEST:
         self.out_win_setup()
         self.load_intcode("Loading Intcode")
         if filename == '02': # 12, 02 for part 1; 70, 14 for part 2
-            self.output_win("Enter two-digit noun: ")
-            noun = int(self.fetch(2))
-            self.write_to(1, noun)
+            self.output_win("Enter two-digit noun: ", save=False)
+            noun = self.fetch(2)
+            self.output_win(f"Enter two-digit noun: {noun}", pause=False)
+            self.write_to(1, int(noun))
             self.screen.refresh()
-            self.output_win("Enter two-digit verb: ")
-            verb = int(self.fetch(2))
-            self.write_to(2, verb)
+            self.output_win("Enter two-digit verb: ", save=False)
+            verb = self.fetch(2)
+            self.output_win(f"Enter two-digit verb: {verb}", pause=False)
+            self.write_to(2, int(verb))
             self.screen.refresh()
             self.output_win("Intcode Loaded. Any key to continue.")
             self.output_box.getch()
             self.operation_iterator = self.computer.compute_iter(noun=noun, verb=verb)
         else:
-            self.output_win("Intcode Loaded. Enter System ID to begin Diagnostic: ")
-            self.operation_iterator = self.computer.compute_iter(std_in=int(self.fetch()))
-
+            self.output_win("Intcode Loaded. Enter System ID to begin Diagnostic: ", save=False)
+            sys_ID = self.fetch()
+            self.output_win(f"Intcode Loaded. Enter System ID to begin Diagnostic: {sys_ID}", pause=False)
+            self.operation_iterator = self.computer.compute_iter(std_in=int(sys_ID))
 
     def show_computation(self, pointer, op_code, modes):
         self.output_win('', pause=False, save=False)

@@ -5,7 +5,6 @@ with open('input07', 'r') as data:
     data = list(map(int, data.read().split(',')))
 
 outs = []
-
 for permutation in permutations('01234'):
     out = 0
     for i in range(5):
