@@ -95,6 +95,9 @@ class Computer:
 
     __lshift__ = connect
 
+    def pop(self):
+        return self.out.pop()
+
     def compute_iter(self, *, noun=None, verb=None, feed=None):
         """
         Returns an iterator, each item being (instruction_pointer, op_code, modes)

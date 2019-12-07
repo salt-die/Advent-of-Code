@@ -31,7 +31,7 @@ for permutation in permutations('56789'):
             if computer.out:
                 break
         else:
-            outs.append(computers[-1].out.pop())
+            outs.append(computers[-1].pop())
             break
 
 print(max(outs)) # Part 2

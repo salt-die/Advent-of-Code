@@ -189,7 +189,7 @@ class TEST:
             sleep(COMPSLEEP)
 
         if op_code == 'OUT':
-            self.output_win(f'DIAGNOSTIC CODE: {self.computer.out.pop()}. Press any key to continue.')
+            self.output_win(f'DIAGNOSTIC CODE: {self.computer.pop()}. Press any key to continue.')
             self.screen.getch()
         if op_code == 'HALT':
             self.output_win("HALT")
