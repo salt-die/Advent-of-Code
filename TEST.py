@@ -86,10 +86,7 @@ class TEST:
     def fetch(self, times=1):
         curses.echo()
         curses.curs_set(1)
-        if times == 1:
-            system_id = chr(self.output_box.getch())
-        else:
-            system_id = "".join(chr(self.output_box.getch()) for _ in range(times))
+        system_id = "".join(chr(self.output_box.getch()) for _ in range(times))
         curses.noecho()
         curses.curs_set(0)
         sleep(1)
@@ -110,7 +107,7 @@ class TEST:
         self.height, self.width = self.screen.getmaxyx()
         self.boxes_per_row = self.width // 9
         data_len = len(self.computer.int_code)
-        self.out_win_row_start = data_len // self.boxes_per_row + 4
+        self.out_win_row_start = data_len // self.boxes_per_row + (4 if data_len else 1)
 
         self.output_box = curses.newwin(self.height - self.out_win_row_start - 6,
                                         self.width - 4, self.out_win_row_start, 1)
