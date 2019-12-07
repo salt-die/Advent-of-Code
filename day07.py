@@ -11,7 +11,7 @@ for permutation in permutations('01234'):
     for i in range(5):
         tape = Computer(int_code=data)
         tape.compute(std_in=(int(permutation[i]), out))
-        out = int(tape.diagnostic_code)
+        out = int(tape.out)
     outs.append(out)
 
 print(max(outs)) # Part 1
@@ -33,7 +33,7 @@ for permutation in permutations('56789'):
             while True:
                 _, op, __ = next(amp)
                 if op == '04':
-                    feed = int(computer.diagnostic_code)
+                    feed = int(computer.out)
                     break
         except:
             outs.append(feed)
