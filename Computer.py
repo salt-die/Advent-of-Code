@@ -79,8 +79,8 @@ class Computer:
 
     def compute_iter(self, *, noun=None, verb=None, feed=None):
         """
-        Returns an iterator, each item being (instruction_pointer, op_code, modes) except,
-        possibly, the last item.
+        Returns an iterator, each item being (instruction_pointer, op_code, modes, before/after)
+        except, possibly, the last item.
 
         The last item is:
             -1: if we reach end of data without halting
@@ -109,28 +109,30 @@ class Computer:
                 if instruction is None: # Halt
                     if self.verbose:
                         print('Exitcode: 0')
-                    yield self.instruction_pointer - 1, op_code, []
+                    yield self.instruction_pointer - 1, op_code, [], 0
                     break
 
                 modes = self.parse_modes(unparsed[:-2], instruction)
-
-                yield self.instruction_pointer - 1, op_code, modes
 
                 mapped_modes = map(self.parameter_modes.get, modes)
 
                 parameters = (mode(self.read()) for mode in mapped_modes)
 
+                yield self.instruction_pointer - 1, op_code, modes, 0
+
                 instruction(*parameters)
+
+                yield self.instruction_pointer - 1, op_code, modes, 1
 
         except IndexError:
             if self.verbose:
                 print('Exitcode: -1')
-            yield -1, '', []
+            yield -1, '', [], 0
 
         except KeyError:
             if self.verbose:
                 print('Exitcode: -2')
-            yield -2, '', []
+            yield -2, '', [], 0
 
     def compute(self, *args, **kwargs):
         """
