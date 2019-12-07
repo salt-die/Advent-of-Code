@@ -15,15 +15,15 @@ for permutation in permutations('01234'):
 
 print(max(outs)) # Part 1
 
+#setup network
+computers = [Computer(int_code=data) for _ in range(5)]
+for computer1, computer2 in zip(computers, computers[1:]):
+    computer2.connect(computer1.out)
+computers[0].connect(computers[-1].out)
 
 outs = []
 for permutation in permutations('56789'):
-    #setup network
-    computers = [Computer(int_code=data) for _ in range(5)]
     amps = [c.compute_iter(feed=int(digit)) for c, digit in zip(computers, permutation)]
-    for computer1, computer2 in zip(computers, computers[1:]):
-        computer2.connect(computer1.out)
-    computers[0].connect(computers[-1].out)
     computers[0].feed.appendleft(0)
 
     for amp, computer in cycle(zip(amps, computers)):

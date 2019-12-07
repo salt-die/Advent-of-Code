@@ -29,10 +29,11 @@ class Computer:
 
     def reset(self):
         """
-        Set instruction_pointer to 0 and reinitialize our memory.
+        Set instruction_pointer to 0, reinitialize our memory, and dump self.out.
         """
         self.instruction_pointer = 0
         self.memory = self.int_code.copy()
+        self.out.clear()
 
     def read(self, address=None):
         """
