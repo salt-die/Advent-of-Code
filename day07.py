@@ -4,11 +4,11 @@ from itertools import permutations, cycle
 with open('input07', 'r') as data:
     data = list(map(int, data.read().split(',')))
 
+tape = Computer(int_code=data)
 outs = []
 for permutation in permutations('01234'):
     out = 0
     for i in range(5):
-        tape = Computer(int_code=data)
         tape.compute(feed=(int(permutation[i]), out))
         out = tape.out.pop()
     outs.append(out)
