@@ -18,7 +18,7 @@ print(max(outs)) # Part 1
 #setup network
 computers = [Computer(int_code=data) for _ in range(5)]
 for i in range(5):
-    computers[i].connect(computers[i - 1])
+    computers[i] << computers[i - 1]
 
 outs = []
 for permutation in permutations('56789'):

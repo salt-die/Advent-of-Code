@@ -83,9 +83,16 @@ class Computer:
         if isinstance(new_feed, Computer):
             new_feed.out.extend(self.feed)
             self.feed = new_feed.out
-        else:
+        elif isinstance(new_feed, deque):
             new_feed.extend(self.feed)
             self.feed = new_feed
+        elif isinstance(new_feed, Iterable):
+            for item in new_feed:
+                self.feed.appendleft(item)
+        else:
+            self.feed.append(new_feed)
+
+    __lshift__ = connect
 
     def compute_iter(self, *, noun=None, verb=None, feed=None):
         """
@@ -104,11 +111,7 @@ class Computer:
         if feed is not None: # output directed to self.out; recieving input from self.feed
             self.instructions['03'] = lambda out: self.write(self.feed.pop(), out)
             self.instructions['04'] = lambda x: self.out.appendleft(x)
-            if isinstance(feed, Iterable):
-                for item in feed:
-                    self.feed.appendleft(item)
-            else:
-                self.feed.append(feed)
+            self.connect(feed)
 
         try:
             while True:
