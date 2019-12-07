@@ -100,9 +100,13 @@ class TEST:
             data = list(map(int, data.read().split(',')))
         self.computer.int_code = data
 
-    def out_win_setup(self):
-        #self.init_scr()
+    def setup(self):
+        self.out_win_setup()
+        self.output_win("Welcome to the Thermal Environment Supervision Terminal (TEST). Press any key to continue.")
+        self.screen.getch()
+        self.pre_compute()
 
+    def out_win_setup(self):
         self.height, self.width = self.screen.getmaxyx()
         self.boxes_per_row = self.width // 9
         data_len = len(self.computer.int_code)
@@ -127,7 +131,7 @@ class TEST:
         self.file_open(filename)
         self.out_win_setup()
         self.load_intcode("Loading Intcode")
-        if filename == '02':
+        if filename == '02': # 12, 02 for part 1; 70, 14 for part 2
             self.output_win("Enter two-digit noun: ")
             noun = int(self.fetch(2))
             self.write_to(1, noun)
@@ -141,13 +145,6 @@ class TEST:
         else:
             self.output_win("Intcode Loaded. Enter System ID to begin Diagnostic: ")
             self.operation_iterator = self.computer.compute_iter(sys_id=int(self.fetch()))
-
-    def setup(self):
-        self.out_win_setup()
-        self.output_win("Welcome to the Thermal Environment Supervision Terminal (TEST). Press any key to continue.")
-        self.screen.getch()
-        self.pre_compute()
-
 
 
     def show_computation(self, pointer, op_code, modes):

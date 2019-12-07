@@ -96,7 +96,8 @@ class Computer:
 
         try:
             while True:
-                self.last_pointer = self.instruction_pointer
+                self.last_pointer = self.instruction_pointer # For interfacing with TEST
+
                 unparsed = str(self.read())
                 op_code = unparsed[-2:].zfill(2)
 
