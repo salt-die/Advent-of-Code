@@ -10,7 +10,7 @@ for permutation in permutations('01234'):
     out = 0
     for i in range(5):
         tape.compute(feed=(int(permutation[i]), out))
-        out = tape.out.pop()
+        out = tape.pop()
     outs.append(out)
 
 print(max(outs)) # Part 1
