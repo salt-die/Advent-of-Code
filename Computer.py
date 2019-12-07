@@ -1,3 +1,5 @@
+from collections.abc import Iterable
+from collections import deque
 input_str = 'DIAGNOSTICS\nEnter System ID: '
 
 def output_msg(x):
@@ -22,13 +24,8 @@ class Computer:
         self.int_code = int_code
         self.verbose = verbose
         self.last_write_to = -1
-        self.feed = []
-
-    def no_print(self, x):
-        """
-        Write to self.out instead of stdout when interfaced with TEST or networked.
-        """
-        self.out = x
+        self.feed = deque()
+        self.out = deque()
 
     def reset(self):
         """
@@ -77,6 +74,13 @@ class Computer:
 
         return modes
 
+    def connect(self, new_feed):
+        """
+        Move existing items in feed to new_feed then set self.feed to new_feed
+        """
+        new_feed.extend(self.feed)
+        self.feed = new_feed
+
     def compute_iter(self, *, noun=None, verb=None, feed=None):
         """
         Returns an iterator, each item being (instruction_pointer, op_code, modes, before/after)
@@ -88,9 +92,10 @@ class Computer:
         """
         if feed is not None: # output directed to self.out; recieving input from self.feed
             self.instructions['03'] = lambda out: self.write(self.feed.pop(), out)
-            self.instructions['04'] = lambda x: self.no_print(x)
-            if isinstance(feed, (tuple, list)):
-                self.feed.extend(feed[::-1])
+            self.instructions['04'] = lambda x: self.out.appendleft(x)
+            if isinstance(feed, Iterable):
+                for item in feed:
+                    self.feed.appendleft(item)
             else:
                 self.feed.append(feed)
 
