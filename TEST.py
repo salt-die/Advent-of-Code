@@ -33,9 +33,11 @@ class TEST:
         self.setup()
         running = True
         while running:
+            last_yield = next(self.operation_iterator)
             for computation in self.operation_iterator:
-                self.show_computation(*computation)
-                #sleep(SLEEP)
+                self.show_computation(*last_yield)
+                last_yield = computation
+            self.show_computation(*last_yield)
 
             system_id = self.output_box.getch()
 
@@ -132,12 +134,14 @@ class TEST:
             self.output_win("Enter two-digit noun: ", save=False)
             noun = self.fetch(2)
             self.output_win(f"Enter two-digit noun: {noun}", pause=False)
-            self.write_to(1, int(noun))
+            noun = int(noun)
+            self.write_to(1, noun)
             self.screen.refresh()
             self.output_win("Enter two-digit verb: ", save=False)
             verb = self.fetch(2)
             self.output_win(f"Enter two-digit verb: {verb}", pause=False)
-            self.write_to(2, int(verb))
+            verb = int(verb)
+            self.write_to(2, verb)
             self.screen.refresh()
             self.output_win("Intcode Loaded. Any key to continue.")
             self.output_box.getch()
@@ -234,7 +238,6 @@ class TEST:
         else:
             self.output_box.addstr(last_line, 0, out)
             self.output_box.refresh()
-
 
 
 if __name__=="__main__":

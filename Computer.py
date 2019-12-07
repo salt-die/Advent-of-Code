@@ -34,7 +34,7 @@ class Computer:
         """
         Set instruction_pointer to 0 and reinitialize our memory.
         """
-        self.instruction_pointer = self.last_pointer = 0
+        self.instruction_pointer = 0
         self.memory = self.int_code.copy()
 
     def read(self, address=None):
@@ -103,8 +103,6 @@ class Computer:
 
         try:
             while True:
-                self.last_pointer = self.instruction_pointer # For interfacing with TEST
-
                 unparsed = str(self.read())
                 op_code = unparsed[-2:].zfill(2)
 
@@ -113,18 +111,18 @@ class Computer:
                 if instruction is None: # Halt
                     if self.verbose:
                         print('Exitcode: 0')
-                    yield self.last_pointer, op_code, []
+                    yield self.instruction_pointer - 1, op_code, []
                     break
 
                 modes = self.parse_modes(unparsed[:-2], instruction)
+
+                yield self.instruction_pointer - 1, op_code, modes
 
                 mapped_modes = map(self.parameter_modes.get, modes)
 
                 parameters = (mode(self.read()) for mode in mapped_modes)
 
                 instruction(*parameters)
-
-                yield self.last_pointer, op_code, modes
 
         except IndexError:
             if self.verbose:
