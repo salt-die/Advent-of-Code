@@ -77,10 +77,15 @@ class Computer:
 
     def connect(self, new_feed):
         """
+        If new_feed is a Computer we'll connect that Computer's *out* to our *in*.
         Move existing items in feed to new_feed then set self.feed to new_feed
         """
-        new_feed.extend(self.feed)
-        self.feed = new_feed
+        if isinstance(new_feed, Computer):
+            new_feed.out.extend(self.feed)
+            self.feed = new_feed.out
+        else:
+            new_feed.extend(self.feed)
+            self.feed = new_feed
 
     def compute_iter(self, *, noun=None, verb=None, feed=None):
         """
