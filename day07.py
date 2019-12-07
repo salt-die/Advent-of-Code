@@ -24,7 +24,7 @@ outs = []
 for permutation in permutations('56789'):
     programs = [computer.compute_iter(feed=int(digit))
                 for computer, digit in zip(computers, permutation)]
-    computers[0].feed.appendleft(0)
+    computers[0] << 0
 
     for program, computer in cycle(zip(programs, computers)):
         for _ in program:
