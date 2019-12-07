@@ -82,9 +82,8 @@ class Computer:
         possibly, the last item.
 
         The last item is:
-            self.read(0): if the computation halts and noun and verb aren't None
-                      -1: if we reach end of data without halting
-                      -2: if we receive an incorrect op_code or parameter mode
+            -1: if we reach end of data without halting
+            -2: if we receive an incorrect op_code or parameter mode
         """
         if sys_id is not None:
             self.instructions['03'] = lambda out: self.write(sys_id, out)
@@ -106,10 +105,7 @@ class Computer:
                 if instruction is None: # Halt
                     if self.verbose:
                         print('Exitcode: 0')
-                    if noun and verb:
-                        yield self.read(0)
-                    else:
-                        yield self.last_pointer - 1, op_code, []
+                    yield self.last_pointer, op_code, []
                     break
 
                 modes = self.parse_modes(unparsed[:-2], instruction)

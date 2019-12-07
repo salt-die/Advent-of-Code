@@ -44,20 +44,8 @@ class TEST:
             running = system_id not in (ord('q'), ord('Q'))
             if running:
                 self.old_pointer = self.old_nparams = self.old_write = 0
-                self.operation_iterator = self.computer.compute_iter(sys_id=int(chr(system_id)))
-                #Reset Highlights
-                for i in range(len(self.computer.int_code)):
-                    self.highlight(i, 1)
+                self.pre_compute()
                 self.screen.refresh()
-                self.output_win("Re-Loading Intcode")
-                #Reset Int_code
-                for i, item in enumerate(self.computer.int_code):
-                    self.write_to(i, item)
-                    dots = 3 - round(2*time.time()) % 4
-                    self.output_box.addstr(0, 18, "...   "[dots:dots + 3])
-                    self.output_box.refresh()
-                    self.screen.refresh()
-                    sleep(SLEEP)
 
         self.end_curses()
 
@@ -84,43 +72,82 @@ class TEST:
         curses.flushinp()
         curses.endwin()
 
-    def setup(self):
+    def load_intcode(self, message):
+        self.output_win(message)
+
+        for i, item in enumerate(self.computer.int_code):
+            self.write_to(i, item)
+            dots = 3 - round(2*time.time()) % 4
+            self.output_box.addstr(0, len(message), "...   "[dots:dots + 3])
+            self.output_box.refresh()
+            self.screen.refresh()
+            sleep(SLEEP)
+
+    def fetch(self, times=1):
+        curses.echo()
+        curses.curs_set(1)
+        if times == 1:
+            system_id = chr(self.output_box.getch())
+        else:
+            system_id = "".join(chr(self.output_box.getch()) for _ in range(times))
+        curses.noecho()
+        curses.curs_set(0)
+        sleep(1)
+        return system_id
+
+    def file_open(self, filename):
+        with open(f'input{filename}', 'r') as data:
+            data = list(map(int, data.read().split(',')))
+        self.computer.int_code = data
+
+    def out_win_setup(self):
+        #self.init_scr()
+
         self.height, self.width = self.screen.getmaxyx()
         self.boxes_per_row = self.width // 9
-
         data_len = len(self.computer.int_code)
+        self.out_win_row_start = data_len // self.boxes_per_row + 4
+
+        self.output_box = curses.newwin(self.height - self.out_win_row_start - 6,
+                                        self.width - 4, self.out_win_row_start, 1)
+        self.screen.clear()
+        self.output_box.clear()
+        self.output_box.refresh()
+        rectangle(self.screen, self.out_win_row_start - 1, 0, self.height - 1, self.width - 2)
+        self.screen.refresh()
+
         for i in range(data_len + (-data_len % self.boxes_per_row)):
             self.write_to(i, 0)
             self.screen.refresh()
             sleep(SLEEP)
 
-        self.out_win_row_start = data_len // self.boxes_per_row + 4
+    def pre_compute(self):
+        self.output_win("Please enter two-digit filename: ")
+        filename = self.fetch(2)
+        self.file_open(filename)
+        self.out_win_setup()
+        self.load_intcode("Loading Intcode")
+        if filename == '02':
+            self.output_win("Enter two-digit noun: ")
+            noun = int(self.fetch(2))
+            self.write_to(1, noun)
+            self.screen.refresh()
+            self.output_win("Enter two-digit verb: ")
+            verb = int(self.fetch(2))
+            self.write_to(2, verb)
+            self.screen.refresh()
+            self.output_win("Intcode Loaded. Any key to continue.")
+            self.operation_iterator = self.computer.compute_iter(noun=noun, verb=verb)
+        else:
+            self.output_win("Intcode Loaded. Enter System ID to begin Diagnostic: ")
+            self.operation_iterator = self.computer.compute_iter(sys_id=int(self.fetch()))
 
-        rectangle(self.screen, self.out_win_row_start - 1, 0, self.height - 1, self.width - 2)
-        self.screen.refresh()
-
-        self.output_box = curses.newwin(self.height - self.out_win_row_start - 6,
-                                        self.width - 4, self.out_win_row_start, 1)
-
+    def setup(self):
+        self.out_win_setup()
         self.output_win("Welcome to the Thermal Environment Supervision Terminal (TEST). Press any key to continue.")
         self.screen.getch()
-        self.output_win("Loading Intcode")
+        self.pre_compute()
 
-        for i, item in enumerate(self.computer.int_code):
-            self.write_to(i, item)
-            dots = 3 - round(2*time.time()) % 4
-            self.output_box.addstr(0, 15, "...   "[dots:dots + 3])
-            self.output_box.refresh()
-            self.screen.refresh()
-            sleep(SLEEP)
-
-        self.output_win("Intcode Loaded. Enter System ID to start diagnostic: ")
-        curses.echo()
-        curses.curs_set(1)
-        system_id = int(chr(self.output_box.getch())) #TODO: try/except for bad inputs
-        curses.noecho()
-        curses.curs_set(0)
-        self.operation_iterator = self.computer.compute_iter(sys_id=system_id)
 
 
     def show_computation(self, pointer, op_code, modes):
@@ -149,13 +176,13 @@ class TEST:
                           for j, mode in enumerate(modes, start=1))
         self.output_win(f'{op_code}: {params}', pause=False)
         self.screen.refresh()
-        sleep(SLEEP2)
+        sleep(.5)
 
         if op_code == 'OUT':
             self.output_win(f'DIAGNOSTIC CODE: {self.computer.diagnostic_code}. Press any key to continue.')
             self.screen.getch()
         if op_code == 'HALT':
-            self.output_win("HALT. 'q' to quit or Enter System ID to begin DIAGNOSTIC: ")
+            self.output_win("HALT. Press 'q' to quit or any key to continue.")
 
         #Highlight writes
         last_write = self.computer.last_write_to
@@ -190,8 +217,4 @@ class TEST:
 
 
 if __name__=="__main__":
-    with open('input05', 'r') as data:
-        data = list(map(int, data.read().split(',')))
-
-    tape = Computer(int_code=data)
-    TEST(tape).start()
+    TEST(Computer(int_code=[])).start()
