@@ -21,9 +21,10 @@ class Computer:
 
         self.int_code = int_code
         self.verbose = verbose
-        self.last_write_to = 0
+        self.last_write_to = -1
+        self.feed = 0
 
-    def for_curses(self, x):
+    def no_print(self, x):
         """
         Write to self.out_string instead of stdout when interfaced with TEST.
         """
@@ -76,7 +77,7 @@ class Computer:
 
         return modes
 
-    def compute_iter(self, *, noun=None, verb=None, sys_id=None):
+    def compute_iter(self, *, noun=None, verb=None, std_in=None):
         """
         Returns an iterator, each item being (instruction_pointer, op_code, modes) except,
         possibly, the last item.
@@ -85,9 +86,15 @@ class Computer:
             -1: if we reach end of data without halting
             -2: if we receive an incorrect op_code or parameter mode
         """
-        if sys_id is not None:
-            self.instructions['03'] = lambda out: self.write(sys_id, out)
-            self.instructions['04'] = lambda x: self.for_curses(x)
+        if std_in is not None:
+            self.instructions['04'] = lambda x: self.no_print(x)
+            if isinstance(std_in, tuple): # Replacing input
+                gen = iter(std_in)
+                self.instructions['03'] = lambda out: self.write(next(gen), out)
+            else:
+                self.feed = std_in
+                self.instructions['03'] = lambda out: self.write(self.feed, out)
+
 
         self.reset()
         if not (noun is None or verb is None):
@@ -129,10 +136,10 @@ class Computer:
                 print('Exitcode: -2')
             yield -2, '', []
 
-    def compute(self, *, noun=None, verb=None):
+    def compute(self, *args, **kwargs):
         """
         Returns the last item of compute_iter
         """
-        for result in self.compute_iter(noun=noun, verb=verb):
+        for result in self.compute_iter(*args, **kwargs):
             pass
         return result
