@@ -33,6 +33,7 @@ class TEST:
         self.setup()
         running = True
         while running:
+            #This odd loop is because Computer yields before instructions have executed.
             last_yield = next(self.operation_iterator)
             for computation in self.operation_iterator:
                 self.show_computation(*last_yield)
@@ -152,9 +153,7 @@ class TEST:
             self.output_win(f"Intcode Loaded. Enter System ID to begin Diagnostic: {sys_ID}", pause=False)
             self.operation_iterator = self.computer.compute_iter(feed=int(sys_ID))
 
-    def show_computation(self, pointer, op_code, modes, after):
-        if after:
-            return
+    def show_computation(self, pointer, op_code, modes):
         self.output_win('', pause=False, save=False)
         sleep(SLEEP2)
 
