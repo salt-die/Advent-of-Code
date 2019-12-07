@@ -150,7 +150,7 @@ class TEST:
             self.output_win("Intcode Loaded. Enter System ID to begin Diagnostic: ", save=False)
             sys_ID = self.fetch()
             self.output_win(f"Intcode Loaded. Enter System ID to begin Diagnostic: {sys_ID}", pause=False)
-            self.operation_iterator = self.computer.compute_iter(std_in=int(sys_ID))
+            self.operation_iterator = self.computer.compute_iter(feed=int(sys_ID))
 
     def show_computation(self, pointer, op_code, modes):
         self.output_win('', pause=False, save=False)
