@@ -28,7 +28,7 @@ for permutation in permutations('56789'):
 
     for program, computer in cycle(zip(programs, computers)):
         for _ in program:
-            if computer.out:
+            if computer:
                 break
         else:
             outs.append(computers[-1].pop())

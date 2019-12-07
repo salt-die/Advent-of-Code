@@ -98,6 +98,9 @@ class Computer:
     def pop(self):
         return self.out.pop()
 
+    def __bool__(self):
+        return bool(self.out)
+
     def compute_iter(self, *, noun=None, verb=None, feed=None):
         """
         Returns an iterator, each item being (instruction_pointer, op_code, modes)
