@@ -91,6 +91,11 @@ class Computer:
             -1: if we reach end of data without halting
             -2: if we receive an incorrect op_code or parameter mode
         """
+        self.reset()
+        if not (noun is None or verb is None):
+            self.write(noun, 1)
+            self.write(verb, 2)
+
         if feed is not None: # output directed to self.out; recieving input from self.feed
             self.instructions['03'] = lambda out: self.write(self.feed.pop(), out)
             self.instructions['04'] = lambda x: self.out.appendleft(x)
@@ -99,11 +104,6 @@ class Computer:
                     self.feed.appendleft(item)
             else:
                 self.feed.append(feed)
-
-        self.reset()
-        if not (noun is None or verb is None):
-            self.write(noun, 1)
-            self.write(verb, 2)
 
         try:
             while True:
