@@ -15,16 +15,16 @@ for permutation in permutations('01234'):
 
 print(max(outs)) # Part 1
 
-#setup network
+#Setup network
 computers = [Computer(int_code=data) for _ in range(5)]
 for i in range(5):
-    computers[i] << computers[i - 1]
+    computers[i] << computers[i - 1] # Connect computers[i - 1].out to computers[i].feed
 
 outs = []
 for permutation in permutations('56789'):
     programs = [computer.compute_iter(feed=int(digit))
                 for computer, digit in zip(computers, permutation)]
-    computers[0] << 0
+    computers[0] << 0 # Feed in 0
 
     for program, computer in cycle(zip(programs, computers)):
         for _ in program:
