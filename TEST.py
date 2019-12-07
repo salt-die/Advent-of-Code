@@ -1,6 +1,7 @@
 """
 Thermal Environment Supervision Terminal
 """
+from collections import deque
 from Computer import Computer
 import curses
 from curses.textpad import rectangle
@@ -109,8 +110,9 @@ class TEST:
         data_len = len(self.computer.int_code)
         self.out_win_row_start = data_len // self.boxes_per_row + (4 if data_len else 1)
 
-        self.output_box = curses.newwin(self.height - self.out_win_row_start - 6,
+        self.output_box = curses.newwin(self.height - self.out_win_row_start - 1,
                                         self.width - 4, self.out_win_row_start, 1)
+        self.output_buffer = deque(maxlen=self.height - self.out_win_row_start - 1)
         self.screen.clear()
         self.output_box.clear()
         self.output_box.refresh()
@@ -141,25 +143,31 @@ class TEST:
             self.operation_iterator = self.computer.compute_iter(noun=noun, verb=verb)
         else:
             self.output_win("Intcode Loaded. Enter System ID to begin Diagnostic: ")
-            self.operation_iterator = self.computer.compute_iter(sys_id=int(self.fetch()))
+            self.operation_iterator = self.computer.compute_iter(std_in=int(self.fetch()))
 
 
     def show_computation(self, pointer, op_code, modes):
+        self.output_win('', pause=False, save=False)
+        sleep(SLEEP2)
+
         op_code = self.translate[op_code]
 
         for i in range(self.old_nparams + 1): #Un-highlight
-            self.highlight(self.old_pointer + i, 1)
+                self.highlight(self.old_pointer + i, 1)
+        if self.old_write != -1:
+            self.highlight(self.old_write, 5)
 
         #Highlight pointer and parameters
         self.highlight(pointer, 2)
-        self.output_win(f'{op_code}:', pause=False)
-        self.screen.refresh()
-        sleep(SLEEP2)
+        if op_code != 'HALT':
+            self.output_win(f'{op_code}:', pause=False, save=False)
+            self.screen.refresh()
+            sleep(SLEEP2)
         for i, mode in enumerate(modes, start=1):
             self.highlight(pointer + i, 3 + int(mode))
             params = " ".join(f"{self.translate[mode]}{self.computer.read(pointer + j)}"
                               for j, mode in enumerate(modes[:i], start=1))
-            self.output_win(f'{op_code}: {params}', pause=False)
+            self.output_win(f'{op_code}: {params}', pause=False, save=False)
             self.screen.refresh()
             sleep(SLEEP2)
 
@@ -168,15 +176,17 @@ class TEST:
             self.highlight(pointer + i, 2)
         params = " ".join(f"{self.computer.parameter_modes[mode](self.computer.read(pointer + j))}"
                           for j, mode in enumerate(modes, start=1))
-        self.output_win(f'{op_code}: {params}', pause=False)
-        self.screen.refresh()
-        sleep(.5)
+        if op_code != 'HALT':
+            self.output_win(f'{op_code}: {params}', pause=False)
+            self.screen.refresh()
+            sleep(.5)
 
         if op_code == 'OUT':
             self.output_win(f'DIAGNOSTIC CODE: {self.computer.diagnostic_code}. Press any key to continue.')
             self.screen.getch()
         if op_code == 'HALT':
-            self.output_win("HALT. Press 'q' to quit or any key to continue.")
+            self.output_win("HALT")
+            self.output_win("Press 'q' to quit or any key to continue.")
 
         #Highlight writes
         last_write = self.computer.last_write_to
@@ -198,16 +208,27 @@ class TEST:
         row, col = divmod(index, self.boxes_per_row)
         self.screen.chgat(row + 2, col * 9, 9, curses.color_pair(color_pair))
 
-    def output_win(self, out, pause=True):
+    def output_win(self, out, pause=True, save=True):
         self.output_box.clear()
+        if save:
+            if len(self.output_buffer) and self.output_buffer[-1] == '':
+                self.output_buffer[-1] = out
+            else:
+                self.output_buffer.append(out)
+        elif self.output_buffer[-1] != '':
+            self.output_buffer.append('')
+        last_line = len(self.output_buffer) - 1
+        for i, line in enumerate(self.output_buffer):
+            if i != last_line:
+                self.output_box.addstr(i, 0, line)
         if pause:
             for i, char in enumerate(out):
-                self.output_box.addstr(0, i, char)
-                self.output_box.refresh()
+                self.output_box.addstr(last_line, i, char)
                 sleep(SLEEP)
         else:
-            self.output_box.addstr(0, 0, out)
-            self.output_box.refresh()
+            self.output_box.addstr(last_line, 0, out)
+        self.output_box.refresh()
+
 
 
 if __name__=="__main__":
