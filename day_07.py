@@ -17,12 +17,12 @@ print(max(outs)) # Part 1
 
 computers = [Computer(int_code=data) for _ in range(5)]
 for i in range(5): # Setup network
-    computers[i] << computers[i - 1] # Connect computers[i - 1].out to computers[i].feed
+    computers[i] << computers[i - 1]
 
 outs = []
 for permutation in permutations('56789'):
     programs = [amp.compute_iter(feed=int(digit)) for amp, digit in zip(computers, permutation)]
-    computers[0] << 0 # Feed in 0
+    computers[0] << 0
 
     for program, computer in cycle(zip(programs, computers)):
         for _ in program:
