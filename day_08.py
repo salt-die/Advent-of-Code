@@ -12,7 +12,7 @@ for layer in data:
 
 decoded = np.where(decoded == '1', '█', ' ') # To make it easier to see
 for row in decoded: # Part 2
-    print(*row, sep="")
+    print(*row, sep='')
 
 # ████ █   ████  █    █  █
 #    █ █   ██  █ █    █  █
