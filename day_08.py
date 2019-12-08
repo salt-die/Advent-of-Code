@@ -25,4 +25,4 @@ print(*map(''.join, decoded.astype(str)), sep='\n')
 #
 #frames = [imageio.imread(os.path.join('frames/', file_name))
 #          for file_name in sorted(os.listdir('frames/'))]
-#imageio.mimsave('frames/transmission.gif', frames, duration = .1)
+#imageio.mimsave('frames/transmission.gif', frames, duration=.1)
