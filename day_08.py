@@ -14,13 +14,11 @@ print(*map(''.join, decoded.astype(str)), sep='\n')
 #import cv2
 #import imageio
 #
-#decoded = data[-1]
-#for i, layer in enumerate(data[::-1]):
-#    decoded = np.where(layer != 2, layer, decoded)
+#decoded = data[0]
+#for i, layer in enumerate(data):
+#    decoded = np.where(decoded != 2, decoded, layer)
 #    cv2.imwrite(f'frames/{i:03d}.png',
-#                cv2.resize(np.where(decoded != 0, 255, 0),
-#                           (250, 60),
-#                           interpolation=cv2.INTER_NEAREST))
+#                cv2.resize(np.where(decoded != 1, 0, 255), (250, 60), interpolation=cv2.INTER_NEAREST))
 #
 #frames = [imageio.imread(f'frames/{i:03d}.png') for i in range(len(data))]
 #frames[-1:] += frames[-1:] * 20 # Show last frame for longer duration
