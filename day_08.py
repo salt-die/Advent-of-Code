@@ -10,13 +10,13 @@ decoded = data[0]
 for layer in data:
     decoded = np.where(decoded != '2', decoded, layer)
 
-decoded = np.where(decoded == '1', 'M', ' ') # To make it easier to see
+decoded = np.where(decoded == '1', '█', ' ') # To make it easier to see
 for row in decoded:
     print(*row) # Part 2
 
-#   M M M M   M       M M M M     M         M     M
-#         M   M       M M     M   M         M     M
-#       M       M   M   M M M     M         M M M M
-#     M           M     M     M   M         M     M
-#   M             M     M     M   M         M     M
-#   M M M M       M     M M M     M M M M   M     M
+# █ █ █ █   █       █ █ █ █     █         █     █
+#       █   █       █ █     █   █         █     █
+#     █       █   █   █ █ █     █         █ █ █ █
+#   █           █     █     █   █         █     █
+# █             █     █     █   █         █     █
+# █ █ █ █       █     █ █ █     █ █ █ █   █     █
