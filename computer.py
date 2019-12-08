@@ -97,12 +97,18 @@ class Computer:
         else:
             self.feed.append(new_feed)
 
-    __lshift__ = connect
+    __lshift__ = connect # << functionality for connect method
 
     def pop(self):
+        """
+        Shortcut to retrieve oldest output.
+        """
         return self.out.pop()
 
     def __bool__(self):
+        """
+        Shortcut for checking if we've produced output.
+        """
         return bool(self.out)
 
     def compute_iter(self, *, noun=None, verb=None, feed=None):
