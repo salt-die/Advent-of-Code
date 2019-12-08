@@ -103,7 +103,7 @@ class Computer:
         else:
             self.feed.append(new_feed) # We may appendleft in the future.
 
-    __lshift__ = connect # << functionality for connect method
+    __lshift__ = connect # '<<' functionality for connect method
 
     def pop(self):
         """
@@ -133,7 +133,7 @@ class Computer:
             self.write(verb, 2)
 
         if feed is not None:
-            self.connect(feed)
+            self << feed
 
         try:
             while True:
