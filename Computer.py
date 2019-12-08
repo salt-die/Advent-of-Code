@@ -91,7 +91,7 @@ class Computer:
             for item in new_feed:
                 self.feed.appendleft(item)
         else:
-            # Note this is reverse order from iterables: Single items are placed on top of the stack
+            # Single items are placed on top of the stack
             self.feed.append(new_feed)
 
     __lshift__ = connect
