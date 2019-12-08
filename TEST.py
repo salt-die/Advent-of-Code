@@ -2,7 +2,7 @@
 Thermal Environment Supervision Terminal
 """
 from collections import deque
-from Computer import Computer
+from computer import Computer
 import curses
 from curses.textpad import rectangle
 import time

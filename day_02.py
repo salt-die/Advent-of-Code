@@ -1,5 +1,5 @@
 from itertools import product
-from Computer import Computer
+from computer import Computer
 
 with open('input02', 'r') as data:
     data = list(map(int, data.read().split(',')))

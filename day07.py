@@ -1,4 +1,4 @@
-from Computer import Computer
+from computer import Computer
 from itertools import permutations, cycle
 
 with open('input07', 'r') as data:
