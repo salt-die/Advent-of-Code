@@ -22,13 +22,12 @@ for i in range(5):
 
 outs = []
 for permutation in permutations('56789'):
-    programs = [computer.compute_iter(feed=int(digit))
-                for computer, digit in zip(computers, permutation)]
+    programs = [amp.compute_iter(feed=int(digit)) for amp, digit in zip(computers, permutation)]
     computers[0] << 0 # Feed in 0
 
     for program, computer in cycle(zip(programs, computers)):
         for _ in program:
-            if computer:
+            if computer: # Produced output
                 break
         else:
             outs.append(computers[-1].pop())
