@@ -78,16 +78,23 @@ class Computer:
 
     def connect(self, new_feed):
         """
+        This method first changes the default *out* and *in* that we write to.
+
         If new_feed is a Computer we'll connect that Computer's *out* to our *in*.
 
-        If new_feed is iterable, move existing items in feed to new_feed then set
+        If new_feed is a deque, we'll move existing items in feed to new_feed then set
         self.feed to new_feed.
+
+        Else if new_feed is an iterable we'll move items from that iterable into our feed.
 
         If new_feed is a single item, we'll place it on top of the stack.
         """
+
+        self.instructions['03'] = lambda out: self.write(self.feed.pop(), out)
+        self.instructions['04'] = lambda x: self.out.appendleft(x)
+
         if isinstance(new_feed, Computer):
-            new_feed.out.extend(self.feed)
-            self.feed = new_feed.out
+            self.connect(new_feed.out)
         elif isinstance(new_feed, deque):
             new_feed.extend(self.feed)
             self.feed = new_feed
@@ -126,9 +133,7 @@ class Computer:
             self.write(noun, 1)
             self.write(verb, 2)
 
-        if feed is not None: # output directed to self.out; recieving input from self.feed
-            self.instructions['03'] = lambda out: self.write(self.feed.pop(), out)
-            self.instructions['04'] = lambda x: self.out.appendleft(x)
+        if feed is not None:
             self.connect(feed)
 
         try:
