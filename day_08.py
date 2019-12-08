@@ -8,7 +8,7 @@ fewest_zeros = data[(data == 0).sum(axis=(1, 2)).argmin()]
 print((fewest_zeros == 1).sum() * (fewest_zeros == 2).sum()) # Part 1
 
 decoded = reduce(lambda top, bottom: np.where(top != 2, top, bottom), data) # Part 2
-print(*("".join(row) for row in decoded.astype(str)), sep='\n')
+print(*map(''.join, decoded.astype(str)), sep='\n')
 
 #Alternative part 2 for creating animation
 #import os
