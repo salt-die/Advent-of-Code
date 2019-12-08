@@ -89,7 +89,6 @@ class Computer:
 
         If new_feed is a single item, we'll place it on top of the stack.
         """
-
         self.instructions['03'] = lambda out: self.write(self.feed.pop(), out)
         self.instructions['04'] = lambda x: self.out.appendleft(x)
 
@@ -102,7 +101,7 @@ class Computer:
             for item in new_feed:
                 self.feed.appendleft(item)
         else:
-            self.feed.append(new_feed)
+            self.feed.append(new_feed) # We may appendleft in the future.
 
     __lshift__ = connect # << functionality for connect method
 
