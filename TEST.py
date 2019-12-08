@@ -40,9 +40,9 @@ class TEST:
                 last_yield = computation
             self.show_computation(*last_yield)
 
-            system_id = self.output_box.getch()
+            is_quitting = self.output_box.getch()
 
-            running = system_id not in (ord('q'), ord('Q'))
+            running = is_quitting not in (ord('q'), ord('Q'))
             if running:
                 self.old_pointer = self.old_nparams = self.old_write = 0
                 self.pre_compute()
