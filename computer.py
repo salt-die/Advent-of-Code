@@ -78,7 +78,7 @@ class Computer:
 
     def connect(self, new_feed):
         """
-        This method first changes the default *out* and *in* that we write to.
+        This method first changes the default *out* and *in* that we write/print to.
 
         If new_feed is a Computer we'll connect that Computer's *out* to our *in*.
 
@@ -93,7 +93,7 @@ class Computer:
         self.instructions['04'] = lambda x: self.out.appendleft(x)
 
         if isinstance(new_feed, Computer):
-            self.connect(new_feed.out)
+            self << new_feed.out
         elif isinstance(new_feed, deque):
             new_feed.extend(self.feed)
             self.feed = new_feed
