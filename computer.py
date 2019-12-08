@@ -73,13 +73,10 @@ class Computer:
         modes = list(reversed(read_str.zfill(instruction.__code__.co_argcount)))
         if 'out' in instruction.__code__.co_varnames:
             modes[instruction.__code__.co_varnames.index('out')] = '1'
-
         return modes
 
     def connect(self, new_feed):
         """
-        This method first changes the default *out* and *in* that we write/print to.
-
         If new_feed is a Computer we'll connect that Computer's *out* to our *in*.
 
         If new_feed is a deque, we'll move existing items in feed to new_feed then set
@@ -87,11 +84,10 @@ class Computer:
 
         Else if new_feed is an iterable we'll move items from that iterable into our feed.
 
-        If new_feed is a single item, we'll place it on top of the stack.
-        """
-        self.instructions['03'] = lambda out: self.write(self.feed.pop(), out)
-        self.instructions['04'] = lambda x: self.out.appendleft(x)
+        Else we'll place new_feed on top of the stack.
 
+        Lastly, we change the default *out* and *in* that we write/print to.
+        """
         if isinstance(new_feed, Computer):
             self << new_feed.out
         elif isinstance(new_feed, deque):
@@ -102,6 +98,9 @@ class Computer:
                 self.feed.appendleft(item)
         else:
             self.feed.append(new_feed) # We may appendleft in the future.
+
+        self.instructions['03'] = lambda out: self.write(self.feed.pop(), out)
+        self.instructions['04'] = lambda x: self.out.appendleft(x)
 
     __lshift__ = connect # '<<' functionality for connect method
 
