@@ -15,9 +15,8 @@ for permutation in permutations('01234'):
 
 print(max(outs)) # Part 1
 
-#Setup network
 computers = [Computer(int_code=data) for _ in range(5)]
-for i in range(5):
+for i in range(5): # Setup network
     computers[i] << computers[i - 1] # Connect computers[i - 1].out to computers[i].feed
 
 outs = []
