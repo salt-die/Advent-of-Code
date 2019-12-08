@@ -16,3 +16,7 @@ More info here: [Advent of Code - About](https://adventofcode.com/2019/about)
 **Visualization of Incoming Transmission, Day 8**
 
 ![day08 visualization](transmission.gif)
+
+**AOC19 in the form of Day 8 transmission**
+
+![AOC19 transmission visualization](AOC19.gif)
