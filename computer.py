@@ -4,7 +4,7 @@ from collections import deque
 input_str = 'DIAGNOSTICS\nEnter System ID: '
 
 def output_msg(x):
-    print(f'DIAGNOSTIC CODE: {x}') if x else print('OK')
+    print(f'DIAGNOSTIC CODE: {x}' if x else 'OK')
 
 
 class Computer:
