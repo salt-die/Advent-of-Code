@@ -10,7 +10,9 @@ def output_msg(x):
 class Computer:
     def __init__(self, int_code, verbose=False):
         self.parameter_modes = {'0':lambda x: self.read(x),
-                                '1':lambda x: x}
+                                '1':lambda x: x,
+                                '2':lambda x: self.read(x + self.relative_base),
+                                '2o':lambda x: x + self.relative_base}
 
         self.instructions = {'01':lambda x, y, out: self.write(x + y, out),
                              '02':lambda x, y, out: self.write(x * y, out),
@@ -20,9 +22,10 @@ class Computer:
                              '06':lambda x, y: self.move(address=y) if not x else None,
                              '07':lambda x, y, out: self.write(int(x < y), out),
                              '08':lambda x, y, out: self.write(int(x == y), out),
+                             '09':lambda x: self.move(relative_base_incr=x),
                              '99':None}
 
-        self.int_code = int_code
+        self.int_code = int_code + [0] * 10000
         self.verbose = verbose
         self.last_write_to = -1
         self.feed = deque()
@@ -32,6 +35,7 @@ class Computer:
         """
         Set instruction_pointer to 0, reinitialize our memory, and dump self.out.
         """
+        self.relative_base = 0
         self.instruction_pointer = 0
         self.memory = self.int_code.copy()
         self.out.clear()
@@ -55,11 +59,14 @@ class Computer:
         self.memory[address] = value
         self.last_write_to = address
 
-    def move(self, incr=1, *, address=None):
+    def move(self, *, incr=1, address=None, relative_base_incr=None):
         """
         Increment instruction_pointer by incr if address is None else change
         instruction_pointer to address.
         """
+        if relative_base_incr is not None:
+            self.relative_base += relative_base_incr
+            return
         self.instruction_pointer = address if address else self.instruction_pointer + incr
 
     def parse_modes(self, read_str, instruction):
@@ -67,12 +74,15 @@ class Computer:
         Parse modes by filling read_str with leading '0's so that len(modes) == number of
         instruction parameters.
 
-        If instruction writes out, the mode corresponding to out variable is replaced with '1'.
-        (Writes must be in immediate mode.)
+        If instruction writes out, the mode corresponding to out variable is replaced with '1'
+        if '0' or '2o' if '2'.
+        (self.write already interprets out values as positions.)
         """
         modes = list(reversed(read_str.zfill(instruction.__code__.co_argcount)))
-        if 'out' in instruction.__code__.co_varnames:
-            modes[instruction.__code__.co_varnames.index('out')] = '1'
+        var_names = instruction.__code__.co_varnames
+        if 'out' in var_names:
+            index = var_names.index('out')
+            modes[index] = '2o' if modes[index] == '2' else '1'
         return modes
 
     def connect(self, new_feed):
