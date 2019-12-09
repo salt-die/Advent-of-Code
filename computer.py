@@ -197,6 +197,6 @@ class Computer:
             self << feed
         for _ in range(niter):
             self.compute()
-            all_outs.extend(self.out.reverse())
+            all_outs.extend(reversed(self.out))
         return all_outs
 
