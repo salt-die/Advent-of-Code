@@ -24,13 +24,15 @@ class TEST:
                           '06':'JUMP-IF-FALSE',
                           '07':'LT',
                           '08':'EQ',
+                          '09':'BASE-INCR',
                           '99':'HALT',
                           '0':'P',
                           '0o':'P',
                           '1':'I',
                           '2':'R',
                           '2o':'R'}
-        self.old_pointer = self.old_nparams = self.old_write = 0
+        self.old_pointer = self.old_nparams = 0
+        self.old_write = -1
 
     def start(self):
         self.setup()
@@ -42,6 +44,7 @@ class TEST:
                 self.show_computation(*last_yield)
                 last_yield = computation
             self.show_computation(*last_yield)
+            self.output_win("Press 'q' to quit or any key to continue.")
 
             is_quitting = self.output_box.getch()
 
@@ -156,11 +159,15 @@ class TEST:
             self.output_win(f"Intcode Loaded. Enter System ID to begin Diagnostic: {sys_ID}", pause=False)
             self.operation_iterator = self.computer.compute_iter(feed=int(sys_ID))
 
-    def show_computation(self, pointer, op_code, modes):
+    def show_computation(self, pointer, op_code, modes, params, moded_params):
         self.output_win('', pause=False, save=False)
         sleep(SLEEP2)
 
         op_code = self.translate[op_code]
+
+        if op_code == 'HALT':
+            self.output_win("HALT")
+            return
 
         for i in range(self.old_nparams + 1): #Un-highlight
                 self.highlight(self.old_pointer + i, 1)
@@ -175,8 +182,8 @@ class TEST:
             sleep(SLEEP2)
         for i, mode in enumerate(modes, start=1):
             self.highlight(pointer + i, 3 + int(mode[0]))
-            params = " ".join(f"{self.translate[mode]}{self.computer.read(pointer + j)}"
-                              for j, mode in enumerate(modes[:i], start=1))
+            params = ' '.join(f'{self.translate[modes[j]]}{param}'
+                              for j, param in enumerate(params[:i]))
             self.output_win(f'{op_code}: {params}', pause=False, save=False)
             self.screen.refresh()
             sleep(SLEEP2)
@@ -184,8 +191,7 @@ class TEST:
         #Interpret parameter modes
         for i, mode in enumerate(modes, start=1):
             self.highlight(pointer + i, 2)
-        params = " ".join(f"{self.computer.parameter_modes[mode](self.computer.read(pointer + j))}"
-                          for j, mode in enumerate(modes, start=1))
+        params = ' '.join(f'{moded_param}' for moded_param in moded_params)
         if op_code != 'HALT':
             self.output_win(f'{op_code}: {params}', pause=False)
             self.screen.refresh()
@@ -194,9 +200,7 @@ class TEST:
         if op_code == 'OUT':
             self.output_win(f'DIAGNOSTIC CODE: {self.computer.pop()}. Press any key to continue.')
             self.screen.getch()
-        if op_code == 'HALT':
-            self.output_win("HALT")
-            self.output_win("Press 'q' to quit or any key to continue.")
+
 
         #Highlight writes
         last_write = self.computer.last_write_to

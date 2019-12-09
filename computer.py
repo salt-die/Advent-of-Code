@@ -134,8 +134,8 @@ class Computer:
         except, possibly, the last item.
 
         The last item is:
-            -1,'',[]: if we reach end of data without halting
-            -2,'',[]: if we receive an incorrect op_code or parameter mode
+            -1: if we reach end of data without halting
+            -2: if we receive an incorrect op_code or parameter mode
         """
         self.reset()
 
@@ -154,21 +154,23 @@ class Computer:
                 instruction = self.instructions[op_code]
 
                 if instruction is None: # Halt
-                    yield self.instruction_pointer - 1, op_code, [], []
+                    yield self.instruction_pointer - 1, op_code, [], [], []
                     break
 
                 modes = self.parse_modes(unparsed[:-2], instruction)
                 mapped_modes = map(self.parameter_modes.get, modes)
-                parameters = [mode(self.read()) for mode in mapped_modes]
+                params = [self.read() for _ in modes]
+                moded_params = [mode(param) for mode, param in zip(mapped_modes, params)]
 
-                yield self.instruction_pointer - 1, op_code, modes, parameters
-                instruction(*parameters)
+                yield self.instruction_pointer - len(modes) - 1, op_code, modes, params, moded_params
+
+                instruction(*moded_params)
 
         except IndexError:
-            yield -1, '', [], []
+            yield -1
 
         except KeyError:
-            yield -2, '', [], []
+            yield -2
 
     def compute(self, *args, **kwargs):
         """
