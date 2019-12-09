@@ -80,8 +80,9 @@ class Computer:
         Parse modes by filling read_str with leading '0's so that len(modes) == number of
         instruction parameters.
 
-        If instruction writes out, the mode corresponding to out parameter has 'o' appended to
-        it. (We take into account that self.write already interprets out values as positions.)
+        If instruction writes out, the mode corresponding to an out parameter has 'o' appended
+        to it. (We take into account that self.write already interprets out parameters as
+        positions.)
         """
         names = instruction.__code__.co_varnames
         modes = reversed(read_str.zfill(len(names)))
