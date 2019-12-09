@@ -137,8 +137,8 @@ class Computer:
         except, possibly, the last item.
 
         The last item is:
-            -1: if we reach end of data without halting
-            -2: if we receive an incorrect op_code or parameter mode
+            -1,'',[]: if we reach end of data without halting
+            -2,'',[]: if we receive an incorrect op_code or parameter mode
         """
         self.reset()
 
