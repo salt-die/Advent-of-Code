@@ -86,7 +86,7 @@ class Computer:
         """
         names = instruction.__code__.co_varnames
         modes = reversed(read_str.zfill(len(names)))
-        return [f'{mode}{("","o")[name == "out"]}' for mode, name in zip(modes, names)]
+        return [f'{mode}{"o"[name != "out":]}' for mode, name in zip(modes, names)]
 
     def connect(self, new_feed):
         """
@@ -99,7 +99,7 @@ class Computer:
 
         Else we'll place new_feed on top of the stack.
 
-        Lastly, we change the default *out* and *in* that we write/print to.
+        Lastly, we change the default *input* and *output* instructions.
         """
         if isinstance(new_feed, Computer):
             self << new_feed.out
