@@ -62,8 +62,11 @@ class Computer:
 
     def move(self, *, incr=1, address=None, relative_base_incr=None):
         """
-        Increment instruction_pointer by incr if address is None else change
-        instruction_pointer to address.
+        If address is given, move instruction_pointer to address
+        Else if relative_base_incr is given, increment relative_base by relative_base_incr
+        Else increment instruction_pointer by incr
+
+        Passing multiple keywords to this method not suggested.
         """
         if address is not None:
             self.instruction_pointer = address
@@ -81,12 +84,9 @@ class Computer:
         it. (We must take into account that self.write already interprets out values as
         positions.)
         """
-        modes = list(reversed(read_str.zfill(instruction.__code__.co_argcount)))
-        var_names = instruction.__code__.co_varnames
-        if 'out' in var_names:
-            index = var_names.index('out')
-            modes[index] = f'{modes[index]}o'
-        return modes
+        names = instruction.__code__.co_varnames
+        modes = reversed(read_str.zfill(len(names)))
+        return [f'{mode}{("","o")[name == "out"]}' for mode, name in zip(modes, names)]
 
     def connect(self, new_feed):
         """
@@ -199,4 +199,3 @@ class Computer:
             self.compute()
             all_outs.extend(reversed(self.out))
         return all_outs
-
