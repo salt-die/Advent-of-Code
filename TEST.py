@@ -26,7 +26,10 @@ class TEST:
                           '08':'EQ',
                           '99':'HALT',
                           '0':'P',
-                          '1':'I'}
+                          '0o':'P',
+                          '1':'I',
+                          '2':'R',
+                          '2o':'R'}
         self.old_pointer = self.old_nparams = self.old_write = 0
 
     def start(self):
