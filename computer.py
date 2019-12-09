@@ -10,6 +10,7 @@ def output_msg(x):
 class Computer:
     def __init__(self, int_code, verbose=False):
         self.parameter_modes = {'0':lambda x: self.read(x),
+                                '0o': lambda x: x,
                                 '1':lambda x: x,
                                 '2':lambda x: self.read(x + self.relative_base),
                                 '2o':lambda x: x + self.relative_base}
@@ -64,25 +65,27 @@ class Computer:
         Increment instruction_pointer by incr if address is None else change
         instruction_pointer to address.
         """
-        if relative_base_incr is not None:
+        if address is not None:
+            self.instruction_pointer = address
+        elif relative_base_incr is not None:
             self.relative_base += relative_base_incr
-            return
-        self.instruction_pointer = address if address else self.instruction_pointer + incr
+        else:
+            self.instruction_pointer += incr
 
     def parse_modes(self, read_str, instruction):
         """
         Parse modes by filling read_str with leading '0's so that len(modes) == number of
         instruction parameters.
 
-        If instruction writes out, the mode corresponding to out variable is replaced with '1'
-        if '0' or '2o' if '2'.
-        (self.write already interprets out values as positions.)
+        If instruction writes out, the mode corresponding to out variable has 'o' appended to
+        it. (We must take into account that self.write already interprets out values as
+        positions.)
         """
         modes = list(reversed(read_str.zfill(instruction.__code__.co_argcount)))
         var_names = instruction.__code__.co_varnames
         if 'out' in var_names:
             index = var_names.index('out')
-            modes[index] = '2o' if modes[index] == '2' else '1'
+            modes[index] = f'{modes[index]}o'
         return modes
 
     def connect(self, new_feed):
@@ -184,3 +187,16 @@ class Computer:
         for result in self.compute_iter(*args, **kwargs):
             pass
         return result
+
+    def compute_n(self, *, niter, feed=None):
+        """
+        Run self.compute niter times -- Only *feed* kwarg allowed.
+        """
+        all_outs = []
+        if feed is not None:
+            self << feed
+        for _ in range(niter):
+            self.compute()
+            all_outs.extend(self.out.reverse())
+        return all_outs
+

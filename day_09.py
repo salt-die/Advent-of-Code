@@ -4,6 +4,4 @@ with open('input09', 'r') as data:
     data = list(map(int, data.read().split(',')))
 
 tape = Computer(int_code=data)
-for value in (1, 2): #Part 1 and Part 2
-    tape.compute(feed=value)
-    print(tape.pop())
+print(*tape.compute_n(niter=2, feed=(1, 2)))
