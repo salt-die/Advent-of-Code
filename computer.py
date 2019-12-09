@@ -85,7 +85,7 @@ class Computer:
         """
         names = instruction.__code__.co_varnames
         modes = reversed(read_str.zfill(len(names)))
-        return [f'{mode}{"o"[name != "out":]}' for mode, name in zip(modes, names)]
+        return [mode + "o"[name != "out":] for mode, name in zip(modes, names)]
 
     def connect(self, new_feed):
         """
@@ -160,13 +160,10 @@ class Computer:
                     break
 
                 modes = self.parse_modes(unparsed[:-2], instruction)
-
-                mapped_modes = map(self.parameter_modes.get, modes)
-
-                parameters = (mode(self.read()) for mode in mapped_modes)
-
                 yield self.instruction_pointer - 1, op_code, modes
 
+                mapped_modes = map(self.parameter_modes.get, modes)
+                parameters = (mode(self.read()) for mode in mapped_modes)
                 instruction(*parameters)
 
         except IndexError:
