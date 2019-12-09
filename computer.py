@@ -8,7 +8,7 @@ def output_msg(x):
 
 
 class Computer:
-    def __init__(self, int_code, verbose=False):
+    def __init__(self, int_code, verbose=False, memory=10000):
         self.parameter_modes = {'0':lambda x: self.read(x),
                                 '0o': lambda x: x,
                                 '1':lambda x: x,
@@ -26,7 +26,7 @@ class Computer:
                              '09':lambda x: self.move(relative_base_incr=x),
                              '99':None}
 
-        self.int_code = int_code + [0] * 10000
+        self.int_code = int_code + [0] * memory
         self.verbose = verbose
         self.last_write_to = -1
         self.feed = deque()
