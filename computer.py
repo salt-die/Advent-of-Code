@@ -47,6 +47,8 @@ class Computer:
         is None else return the value at address.
         """
         if address is None:
+            if address < 0:
+                raise IndexError
             address = self.instruction_pointer
             self.move()
         return self.memory[address]
