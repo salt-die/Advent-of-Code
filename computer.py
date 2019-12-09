@@ -85,7 +85,7 @@ class Computer:
         """
         names = instruction.__code__.co_varnames
         modes = reversed(read_str.zfill(len(names)))
-        return [mode + "o"[name != "out":] for mode, name in zip(modes, names)]
+        return [mode + 'o'[name != 'out':] for mode, name in zip(modes, names)]
 
     def connect(self, new_feed):
         """
