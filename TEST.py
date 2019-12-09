@@ -245,4 +245,4 @@ class TEST:
 
 
 if __name__=="__main__":
-    TEST(Computer(int_code=[])).start()
+    TEST(Computer(int_code=[], memory=0)).start()
