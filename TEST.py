@@ -174,7 +174,7 @@ class TEST:
             self.screen.refresh()
             sleep(SLEEP2)
         for i, mode in enumerate(modes, start=1):
-            self.highlight(pointer + i, 3 + int(mode))
+            self.highlight(pointer + i, 3 + int(mode[0]))
             params = " ".join(f"{self.translate[mode]}{self.computer.read(pointer + j)}"
                               for j, mode in enumerate(modes[:i], start=1))
             self.output_win(f'{op_code}: {params}', pause=False, save=False)
