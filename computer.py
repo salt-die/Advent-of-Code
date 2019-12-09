@@ -56,6 +56,8 @@ class Computer:
         Write the value at the given address or at instruction_pointer if address is None.
         """
         if address is None:
+            if address < 0:
+                raise IndexError
             address = self.instruction_pointer
         self.memory[address] = value
         self.last_write_to = address
