@@ -171,9 +171,9 @@ class TEST:
                                  f' Relative Base {self.computer.relative_base:5} | '
                                  f'{sum(bool(i) for i in self.computer.memory):4} Used/'
                                  f'{self.cells} Total Memory | TESTv2.AoC.19'))
-        self.pointer_win.chgat(0, 1, 3, curses.color_pair(6))
-        self.pointer_win.chgat(0, 7, 3, curses.color_pair(7))
-        self.pointer_win.chgat(0, 13, 3, curses.color_pair(8))
+        self.pointer_win.chgat(0, 1, 3, curses.color_pair(3))
+        self.pointer_win.chgat(0, 7, 3, curses.color_pair(4))
+        self.pointer_win.chgat(0, 13, 3, curses.color_pair(5))
         self.pointer_win.chgat(0, 19, 3, curses.color_pair(9))
         self.pointer_win.chgat(0, 25, 25, curses.color_pair(2))
         self.pointer_win.refresh()
