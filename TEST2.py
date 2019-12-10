@@ -193,13 +193,13 @@ class TEST:
         #Highlight pointer and parameters
         self.highlight(pointer, 2)
         self.display(f'{op_code:>13}', pause=False, save=False)
-        time.sleep(.4)
+        time.sleep(.1)
         trans_modes = list(map(self.translate.get, modes))
         for i in range(1, len(modes) + 1):
             self.highlight(pointer + i, 3 + int(modes[i - 1][0]))
             param_str = ' '.join(f'{trans_modes[j]}{params[j]}' for j in range(i))
             self.display(f'{op_code:>13} {param_str}', pause=False, save=False)
-            time.sleep(.4)
+            time.sleep(.1)
         self.display(f'{op_code:>13} {param_str}', pause=False)
 
         #Interpret parameter modes
@@ -207,7 +207,7 @@ class TEST:
             self.highlight(pointer + i, 6 + int(mode[0]))
         param_str = ' '.join(f'{moded_param}' for moded_param in moded_params)
         self.display(f'{"":^13} {param_str}', pause=False)
-        time.sleep(.4)
+        time.sleep(.1)
 
         #Highlight writes
         last_write = self.computer.last_write_to
@@ -215,7 +215,7 @@ class TEST:
             self.highlight(self.old_write, 1)
         self.write_to(last_write, '◌●'[bool(self.computer.read(last_write))])
         self.highlight(last_write, 9)
-        time.sleep(.4)
+        time.sleep(.1)
 
         if op_code == 'OUT':
             self.display(f'DIAGNOSTIC CODE: {self.computer.pop()}')
