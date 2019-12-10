@@ -120,8 +120,8 @@ class TEST:
         self.output_box = curses.newwin(self.height - self.out_win_row_start - 1,
                                         self.width - 4, self.out_win_row_start, 1)
         self.output_buffer = deque(maxlen=self.height - self.out_win_row_start - 1)
-        self.screen.clear()
-        self.output_box.clear()
+        self.screen.erase()
+        self.output_box.erase()
         self.output_box.refresh()
         rectangle(self.screen, self.out_win_row_start - 1, 0, self.height - 1, self.width - 2)
         self.screen.refresh()
@@ -223,7 +223,7 @@ class TEST:
         self.screen.chgat(row + 2, col * 9, 9, curses.color_pair(color_pair))
 
     def output_win(self, out, pause=True, save=True):
-        self.output_box.clear()
+        self.output_box.erase()
 
         if save:
             if len(self.output_buffer) and self.output_buffer[-1] == '':
