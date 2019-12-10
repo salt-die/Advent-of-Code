@@ -1,12 +1,6 @@
 from collections.abc import Iterable
 from collections import deque
 
-input_str = 'DIAGNOSTICS\nEnter System ID: '
-
-def output_msg(x):
-    print(f'DIAGNOSTIC CODE: {x}' if x else 'OK')
-
-
 class Computer:
     def __init__(self, int_code, memory=10000):
         self.parameter_modes = {'0':lambda x: self.read(x),
@@ -17,8 +11,8 @@ class Computer:
 
         self.instructions = {'01':lambda x, y, out: self.write(x + y, out),
                              '02':lambda x, y, out: self.write(x * y, out),
-                             '03':lambda out: self.write(int(input(input_str)), out),
-                             '04':output_msg,
+                             '03':lambda out: self.write(self.feed.pop(), out),
+                             '04':lambda x: self.out.appendleft(x),
                              '05':lambda x, y: self.move(address=y) if x else None,
                              '06':lambda x, y: self.move(address=y) if not x else None,
                              '07':lambda x, y, out: self.write(int(x < y), out),
@@ -111,9 +105,6 @@ class Computer:
         else:
             self.feed.append(new_feed) # We may appendleft in the future.
 
-        self.instructions['03'] = lambda out: self.write(self.feed.pop(), out)
-        self.instructions['04'] = lambda x: self.out.appendleft(x)
-
     __lshift__ = connect # '<<' functionality for connect method
 
     def pop(self):
@@ -130,12 +121,8 @@ class Computer:
 
     def compute_iter(self, *, noun=None, verb=None, feed=None):
         """
-        Returns an iterator, each item being (instruction_pointer, op_code, modes)
-        except, possibly, the last item.
-
-        The last item is:
-            -1: if we reach end of data without halting
-            -2: if we receive an incorrect op_code or parameter mode
+        Returns an iterator, each item being (instruction_pointer, op_code, modes) of the
+        current state of computation.
         """
         self.reset()
 
@@ -146,31 +133,23 @@ class Computer:
         if feed is not None:
             self << feed
 
-        try:
-            while True:
-                unparsed = str(self.read())
-                op_code = unparsed[-2:].zfill(2)
+        while True:
+            unparsed = str(self.read())
+            op_code = unparsed[-2:].zfill(2)
 
-                instruction = self.instructions[op_code]
+            instruction = self.instructions[op_code]
 
-                if instruction is None: # Halt
-                    yield self.instruction_pointer - 1, op_code, [], [], []
-                    break
+            if instruction is None: # Halt
+                yield self.instruction_pointer - 1, op_code, [], [], []
+                break
 
-                modes = self.parse_modes(unparsed[:-2], instruction)
-                mapped_modes = map(self.parameter_modes.get, modes)
-                params = [self.read() for _ in modes]
-                moded_params = [mode(param) for mode, param in zip(mapped_modes, params)]
+            modes = self.parse_modes(unparsed[:-2], instruction)
+            mapped_modes = map(self.parameter_modes.get, modes)
+            params = [self.read() for _ in modes]
+            moded_params = [mode(param) for mode, param in zip(mapped_modes, params)]
 
-                yield self.instruction_pointer - len(modes) - 1, op_code, modes, params, moded_params
-
-                instruction(*moded_params)
-
-        except IndexError:
-            yield -1
-
-        except KeyError:
-            yield -2
+            yield self.instruction_pointer - len(modes) - 1, op_code, modes, params, moded_params
+            instruction(*moded_params)
 
     def compute(self, *args, **kwargs):
         """
@@ -182,7 +161,7 @@ class Computer:
 
     def compute_n(self, *, niter, feed=None):
         """
-        Run self.compute niter times -- Only *feed* kwarg allowed.
+        Run self.compute niter times; other than niter, only feed kwarg supported.
         """
         all_outs = []
         if feed is not None:
