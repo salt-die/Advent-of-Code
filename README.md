@@ -21,6 +21,6 @@ More info here: [Advent of Code - About](https://adventofcode.com/2019/about)
 
 ![AOC19 transmission visualization](AOC19.gif)
 
-**Terminal Incode Computer v2, Day 9**
+**Terminal Intcode Computer v2, Day 9**
 
 ![day09 visualization](Computer2.gif)
