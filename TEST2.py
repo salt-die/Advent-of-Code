@@ -5,6 +5,7 @@ from curses.textpad import Textbox, rectangle
 from computer import Computer
 
 OUTPUT_WIDTH = 46
+CELL_WIDTH = 2
 
 class TEST:
     translate = {'01':'ADD',
@@ -110,7 +111,7 @@ class TEST:
         rectangle(screen, 3, OUTPUT_WIDTH + 3, height - 4, width - 2)
         self.array_win = curses.newwin(height - 8, width - OUTPUT_WIDTH - 8, 4, OUTPUT_WIDTH + 5)
         self.array_win.attron(curses.color_pair(1))
-        self.cells_per_row = (width - OUTPUT_WIDTH - 8) // 2
+        self.cells_per_row = (width - OUTPUT_WIDTH - 8) // CELL_WIDTH
         self.cells = self.cells_per_row * (height - 8)
 
         # Input
@@ -239,12 +240,12 @@ class TEST:
 
     def write_to(self, index, value):
         row, col = divmod(index, self.cells_per_row)
-        self.array_win.addstr(row, col * 2, value)
+        self.array_win.addstr(row, col * CELL_WIDTH, value)
         self.array_win.refresh()
 
     def highlight(self, index, color_pair):
         row, col = divmod(index, self.cells_per_row)
-        self.array_win.chgat(row, col * 2, 1, curses.color_pair(color_pair))
+        self.array_win.chgat(row, col * CELL_WIDTH, 1, curses.color_pair(color_pair))
         self.array_win.refresh()
 
 if __name__ == '__main__':
