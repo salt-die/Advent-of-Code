@@ -57,15 +57,14 @@ class Window:
             if running:
                 self.pre_compute()
 
-    def dots(self, win, row, column, n=3, refresh=True, attributes=None):
+    def dots(self, win, row, column, n=3, attributes=None):
         dots = n - round(2 * time.time()) % (n + 1)
         dot_str = '.' * n + ' ' * n
         if attributes is None:
             win.addstr(row, column, dot_str[dots:dots + n])
         else:
             win.addstr(row, column, dot_str[dots:dots + n], attributes)
-        if refresh:
-            win.refresh()
+        win.refresh()
 
     def draw_network(self):
         height, width = self.network_win.getmaxyx()
