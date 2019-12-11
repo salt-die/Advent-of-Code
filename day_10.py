@@ -24,3 +24,16 @@ rank = {asteroid : sum(angle(laser_base, asteroid) == angle(laser_base, other)
         for i, asteroid in enumerate(asteroids)}
 x, y = sorted(asteroids, key=lambda asteroid: (rank[asteroid], angle(laser_base, asteroid)))[199]
 print(x * 100 + y) # Part 2
+
+#Alternative discrete, pseudo-code:
+#hit = 0
+#for slope in product(ysteps, xsteps): Need to make sure slope isn't a repeated ratio
+#    i = 0
+#    while inbounds(slope):
+#        i += 1
+#        location = base + i * slope
+#        if asteroids[location] == '#':
+#            hit += 1
+#            break
+#    if hit == 200:
+#        break
