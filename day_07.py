@@ -6,10 +6,10 @@ with open('input07', 'r') as data:
 
 tape = Computer(int_code=data)
 outs = []
-for permutation in permutations('01234'):
+for permutation in permutations(range(5)):
     out = 0
     for i in range(5):
-        tape.compute(feed=(int(permutation[i]), out))
+        tape.compute(feed=(permutation[i], out))
         out = tape.pop()
     outs.append(out)
 
@@ -20,8 +20,8 @@ for i in range(5): # Setup network
     computers[i] << computers[i - 1]
 
 outs = []
-for permutation in permutations('56789'):
-    programs = [amp.compute_iter(feed=int(digit)) for amp, digit in zip(computers, permutation)]
+for permutation in permutations(range(5, 10)):
+    programs = [amp.compute_iter(feed=digit) for amp, digit in zip(computers, permutation)]
     computers[0] << 0
 
     for program, computer in cycle(zip(programs, computers)):
