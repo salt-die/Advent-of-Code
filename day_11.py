@@ -9,7 +9,7 @@ with open('input11', 'r') as data:
 class Robot:
     def __init__(self, data=data):
         self.brain = Computer(int_code=data)
-        self.angle = -1 + 0j
+        self.direction = -1 + 0j
         self.location = np.array([0, 0])
         self.painted_locations = set()
         self.colors = defaultdict(int)
@@ -18,10 +18,10 @@ class Robot:
         self.colors[tuple(self.location)] = color
 
     def turn(self, clockwise):
-        self.angle *= 1j * (-1)**(clockwise)
+        self.direction *= 1j * (-1)**(clockwise)
 
     def move(self):
-        self.location += int(self.angle.real), int(self.angle.imag)
+        self.location += int(self.direction.real), int(self.direction.imag)
 
     def start(self):
         for _, op, _, _, _ in self.brain.compute_iter():
