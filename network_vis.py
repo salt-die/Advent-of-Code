@@ -23,7 +23,6 @@ class Window:
     def __init__(self):
         self.deques = [deque(maxlen=2) for i in range(5)]
         self.init_scr()
-        self.screen.getch()
         self.setup()
         self.start()
         self.end_curses()
@@ -173,11 +172,14 @@ class Window:
         self.deques[computer].append(output)
         for row, line in enumerate(self.deques[computer]):
             self.network_win.addstr(self.top + 3 + row, self.left + 5 + 20 * computer, ' ' * 9)
+        for row, line in enumerate(self.deques[computer]):
             self.network_win.addstr(self.top + 3 + row, self.left + 5 + 20 * computer, line)
             self.network_win.chgat(self.top + 3 + row, self.left + 5 + 20 * computer, 9, curses.A_BOLD)
-        self.network_win.addstr(self.top + len(self.deques) - 1,
+            self.network_win.refresh()
+            time.sleep(.1)
+        self.network_win.addstr(self.top + 3 + len(self.deques[computer]) - 1,
                                 self.left + 5 + 20 * computer + len(output), '_')
-        self.network_win.chgat(self.top + len(self.deques) - 1,
+        self.network_win.chgat(self.top + +3 + len(self.deques[computer]) - 1,
                                self.left + 5 + 20 * computer + len(output),
                                1, curses.A_BOLD | curses.A_BLINK)
         self.network_win.refresh()

@@ -12,6 +12,10 @@ More info here: [Advent of Code - About](https://adventofcode.com/2019/about)
 
 ![day06 visualization](day06.png)
 
+**Visualization of Day 7 Part 2 Network**
+
+![day07 visualization](network_vis.gif)
+
 **Visualization of Incoming Transmission, Day 8**
 
 ![day08 visualization](transmission.gif)
