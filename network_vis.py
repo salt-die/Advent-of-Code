@@ -42,10 +42,11 @@ class Window:
         while running:
             self.display('Computing')
             for i, program, computer in cycle(zip(range(5), self.programs, self.network)):
+                self.dots(self.title_win, 0, 9)
                 for _ in program:
-                    self.dots(self.title_win, 0, 9)
                     if computer: # Produced output
                         self.computer_display(i, f'{computer.out[-1]}')
+                        self.send(i)
                         break
                 else:
                     result = self.network[-1].pop()
@@ -56,6 +57,26 @@ class Window:
             running = self.input_win.getch() not in (ord('q'), ord('Q'))
             if running:
                 self.pre_compute()
+
+    def send(self, computer):
+        if computer == 5:
+            return
+        for col in range(17, 20):
+            self.network_win.chgat(self.top + 5, self.left + col + 20 * computer, 1, curses.A_BOLD)
+            self.network_win.refresh()
+            time.sleep(.05)
+        for col in range(20, 22):
+            self.network_win.chgat(self.top + 6, self.left + col + 20 * computer, 1, curses.A_BOLD)
+            self.network_win.refresh()
+            time.sleep(.05)
+        for col in range(17, 20):
+            self.network_win.chgat(self.top + 5, self.left + col + 20 * computer, 1, curses.color_pair(1))
+            self.network_win.refresh()
+            time.sleep(.05)
+        for col in range(20, 22):
+            self.network_win.chgat(self.top + 6, self.left + col + 20 * computer, 1, curses.color_pair(1))
+            self.network_win.refresh()
+            time.sleep(.05)
 
     def dots(self, win, row, column, n=3, attributes=None):
         dots = n - round(2 * time.time()) % (n + 1)
@@ -76,7 +97,7 @@ class Window:
                 self.network_win.addstr(row, col, char)
                 self.network_win.refresh()
                 self.dots(self.title_win, 0, 18)
-                time.sleep(.005)
+                time.sleep(.003)
 
     def pre_compute(self, first_time=False):
         if first_time:
@@ -115,9 +136,8 @@ class Window:
                 self.dots(self.network_win, self.top + 3, self.left + 12 + 20 * i, 2, curses.A_BOLD)
         for i in range(5):
             self.computer_display(i, 'Ready...')
-        time.sleep(.5)
-        for i in range(5):
             self.network_win.chgat(self.top + 6, self.left + 3 + 20 * i, 1, curses.color_pair(2))
+        time.sleep(.5)
         self.network_win.refresh()
 
     def init_scr(self):
