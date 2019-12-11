@@ -1,8 +1,7 @@
 """
 Network simulator for D7P2 of Advent of Code 2019.
 """
-
-
+from collections import deque
 from computer import Computer
 import curses
 from curses.textpad import Textbox, rectangle
@@ -12,7 +11,7 @@ import time
 computers=['    / ======= \         / ======= \         / ======= \         / ======= \         / ======= \    ',
            '   / __________\       / __________\       / __________\       / __________\       / __________\   ',
            '  | ___________ |     | ___________ |     | ___________ |     | ___________ |     | ___________ |  ',
-           '  | | -       | |     | | -       | |     | | -       | |     | | -       | |     | | -       | |  ',
+           '  | |         | |     | |         | |     | |         | |     | |         | |     | |         | |  ',
            '  | |         | |     | |         | |     | |         | |     | |         | |     | |         | |  ',
            '  | |_________| |=-,  | |_________| |=-,  | |_________| |=-,  | |_________| |=-,  | |_________| |  ',
            "  \\=____________/   '=\\=____________/   '=\\=____________/   '=\\=____________/   '=\\=____________/  ",
@@ -22,7 +21,9 @@ computers=['    / ======= \         / ======= \         / ======= \         / ==
 
 class Window:
     def __init__(self):
+        self.deques = [deque(maxlen=2) for i in range(5)]
         self.init_scr()
+        self.screen.getch()
         self.setup()
         self.start()
         self.end_curses()
@@ -45,11 +46,11 @@ class Window:
                 for _ in program:
                     self.dots(self.title_win, 0, 9)
                     if computer: # Produced output
-                        self.computer_display(i, 1, f'{computer.out[-1]:^9}')
+                        self.computer_display(i, f'{computer.out[-1]}')
                         break
                 else:
                     result = self.network[-1].pop()
-                    self.computer_display(4, 1, f'{result:^9}')
+                    self.computer_display(4, f'{result}')
                     self.display(f"Computation complete. Final result: {result}. 'q' to quit or any key to continue...")
                     break
                 time.sleep(.5)
@@ -57,11 +58,12 @@ class Window:
             if running:
                 self.pre_compute()
 
-    def dots(self, win, row, column, n=3):
+    def dots(self, win, row, column, n=3, refresh=True):
         dots = n - round(2 * time.time()) % (n + 1)
         dot_str = '.' * n + ' ' * n
         win.addstr(row, column, dot_str[dots:dots + n])
-        win.refresh()
+        if refresh:
+            win.refresh()
 
     def draw_network(self):
         height, width = self.network_win.getmaxyx()
@@ -87,11 +89,6 @@ class Window:
         if first_time:
             self.display('Loading')
             self.boot_sequence()
-        else:
-            self.display('Loading')
-            for i in range(5):
-                self.computer_display(i, 1, ' ' * 9)
-                self.dots(self.title_win, 0, 7)
 
         phase_settings = self.ask('Please enter phase setting: ').replace(' ', '')
         self.programs = [pc.compute_iter(feed=int(digit))
@@ -99,29 +96,30 @@ class Window:
         self.network[0] << 0
 
         for i, setting in enumerate(phase_settings):
-            self.computer_display(i, 0, f' {setting}_')
-            self.network_win.chgat(self.top + 3, self.left + 7 + 20 * i, 1,
-                                   curses.A_BLINK | curses.A_BOLD)
+            self.computer_display(i, f'{setting}')
             self.network_win.refresh()
             time.sleep(.1)
 
     def boot_sequence(self):
         for i in range(5):
             self.network_win.chgat(self.top + 6, self.left + 3 + 20 * i, 1, curses.color_pair(3))
-            self.network_win.chgat(self.top + 3, self.left + 6 + 20 * i, 1,
-                                   curses.A_BLINK | curses.A_BOLD)
             self.network_win.refresh()
             time.sleep(.01)
-            self.computer_display(i, 1, 'Loading')
-            now = time.time()
-            while time.time() - now < 3:
-                self.dots(self.title_win, 0, 7)
-                self.dots(self.network_win, self.top + 4, self.left + 12 + 20 * i, 2)
-            self.computer_display(i, 1, 'Ready... ')
-            time.sleep(.5)
-            self.computer_display(i, 1, ' ' * 9)
+            self.computer_display(i, 'Loading')
+
+        now = time.time()
+        while time.time() - now < 3:
+            self.dots(self.title_win, 0, 7)
+            for i in range(5):
+                self.dots(self.network_win, self.top + 3, self.left + 12 + 20 * i, 2, refresh=False)
+                self.network_win.chgat(self.top + 3, self.left + 5 + 20 * i, 9, curses.A_BOLD)
+                self.network_win.refresh()
+        for i in range(5):
+            self.computer_display(i, 'Ready...')
+        time.sleep(.5)
+        for i in range(5):
             self.network_win.chgat(self.top + 6, self.left + 3 + 20 * i, 1, curses.color_pair(2))
-            self.network_win.refresh()
+        self.network_win.refresh()
 
     def init_scr(self):
         self.screen = curses.initscr()
@@ -171,14 +169,19 @@ class Window:
             self.title_win.refresh()
             time.sleep(.01)
 
-    def computer_display(self, computer, row, output):
-        for col, char in enumerate(output):
-            self.network_win.addstr(self.top + 3 + row, self.left + 5 + 20 * computer + col, char)
-            self.network_win.refresh()
-            time.sleep(.01)
-
-    def show_computation(self, pointer, op_code, modes, params, moded_params):
-        pass
+    def computer_display(self, computer, output):
+        self.deques[computer].append(output)
+        for row, line in enumerate(self.deques[computer]):
+            self.network_win.addstr(self.top + 3 + row, self.left + 5 + 20 * computer, ' ' * 9)
+            self.network_win.addstr(self.top + 3 + row, self.left + 5 + 20 * computer, line)
+            self.network_win.chgat(self.top + 3 + row, self.left + 5 + 20 * computer, 9, curses.A_BOLD)
+        self.network_win.addstr(self.top + len(self.deques) - 1,
+                                self.left + 5 + 20 * computer + len(output), '_')
+        self.network_win.chgat(self.top + len(self.deques) - 1,
+                               self.left + 5 + 20 * computer + len(output),
+                               1, curses.A_BOLD | curses.A_BLINK)
+        self.network_win.refresh()
+        time.sleep(.1)
 
     def ask(self, question):
         self.display(question)
