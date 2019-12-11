@@ -18,6 +18,7 @@ print(number_visible) # Part 1
 
 asteroids.remove(laser_base)
 asteroids.sort(key=lambda asteroid: norm(array(asteroid) - laser_base))
+# Number of asteroids closer to laser_base with same angle
 rank = {asteroid : sum(angle(laser_base, asteroid) == angle(laser_base, other)
                        for other in asteroids[:i])
         for i, asteroid in enumerate(asteroids)}
