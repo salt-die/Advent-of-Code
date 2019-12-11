@@ -16,7 +16,9 @@ class Robot:
         self.colors = defaultdict(int)
 
         self.animate = animate
-        if animate: # Only works for part two (We know how large the array needs to be.)
+        # Only works for part two (We know how large the array needs to be.)
+        # Make sure to have 'frames/' sub-directory
+        if animate:
             self.counter = count()
             self.array = np.zeros((6, 43))
             self.array[self.loc] *= 255
