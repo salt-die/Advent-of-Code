@@ -25,7 +25,7 @@ class Robot:
 
     def start(self):
         for _, op, _, _, _ in self.brain.compute_iter():
-            if len(self.brain.out)==2:
+            if len(self.brain) == 2:
                 self.painted_locations.add(tuple(self.location))
                 self.paint(self.brain.pop())
                 self.turn(self.brain.pop())

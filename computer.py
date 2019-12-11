@@ -113,6 +113,12 @@ class Computer:
         """
         return self.out.pop()
 
+    def __len__(self):
+        """
+        Shortcut to check length of self.out.
+        """
+        return len(self.out)
+
     def __bool__(self):
         """
         Shortcut for checking if we've produced output.
