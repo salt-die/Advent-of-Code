@@ -125,8 +125,8 @@ class Computer:
 
     def compute_iter(self, *, noun=None, verb=None, feed=None):
         """
-        Returns an iterator, each item being (instruction_pointer, op_code, modes) of the
-        current state of computation.
+        Returns an iterator, each item being (instruction_pointer, op_code, modes, parameters,
+        pamaraters with modes applied) of the current state of computation.
         """
         self.reset()
 
