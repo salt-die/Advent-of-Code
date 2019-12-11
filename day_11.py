@@ -25,13 +25,14 @@ class Robot:
 
     def start(self):
         for _, op, _, _, _ in self.brain.compute_iter():
-            if op == '03':
-                self.brain << self.colors[tuple(self.location)]
             if len(self.brain.out)==2:
                 self.painted_locations.add(tuple(self.location))
                 self.paint(self.brain.pop())
                 self.turn(self.brain.pop())
                 self.move()
+            if op == '03':
+                self.brain << self.colors[tuple(self.location)]
+
 
 bad_robot = Robot()
 bad_robot.start()
@@ -41,6 +42,7 @@ good_robot = Robot()
 good_robot.colors[tuple(good_robot.location)] = 1
 good_robot.start()
 
+# Construct picture from dictionary
 height = max(good_robot.colors)[0] + 1
 width = max(good_robot.colors, key=lambda tup:tup[1])[1] + 1
 
