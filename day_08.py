@@ -13,6 +13,7 @@ print(*map(''.join, decoded.astype(str)), sep='\n')
 ## Alternative Part 2 -- animation
 #import cv2
 #import imageio
+#from stitch import stitch
 #
 #decoded = data[0]
 #for i, layer in enumerate(data):
@@ -20,6 +21,4 @@ print(*map(''.join, decoded.astype(str)), sep='\n')
 #    cv2.imwrite(f'frames/{i:03d}.png',
 #                cv2.resize(np.where(decoded != 1, 0, 255), (250, 60), interpolation=cv2.INTER_NEAREST))
 #
-#frames = [imageio.imread(f'frames/{i:03d}.png') for i in range(len(data))]
-#frames[-1:] += frames[-1:] * 20 # Show last frame for longer duration
-#imageio.mimsave('frames/transmission.gif', frames, duration=.1)
+#stitch(filename='transmission')

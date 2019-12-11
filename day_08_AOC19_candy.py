@@ -27,4 +27,4 @@ while random_indices:
     cv2.imwrite(f'frames/{next(counter):03d}.png',
                 cv2.resize(np.where(start != 1, 0, 255), (250, 60), interpolation=cv2.INTER_NEAREST))
 
-stitch(filename='AOC19', duration=.1)
+stitch(filename='AOC19')
