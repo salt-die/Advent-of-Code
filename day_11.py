@@ -5,6 +5,7 @@ with open('input11', 'r') as data:
 
 bad_robot = Robot(data=data)
 bad_robot.start()
+bad_robot.show()
 print(len(bad_robot.painted_locations)) # Part 1
 
 good_robot = Robot(data=data)

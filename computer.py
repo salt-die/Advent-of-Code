@@ -91,8 +91,6 @@ class Computer:
         Else if new_feed is an iterable we'll move items from that iterable into our feed.
 
         Else we'll place new_feed on top of the stack.
-
-        Lastly, we change the default *input* and *output* instructions.
         """
         if isinstance(new_feed, Computer):
             self << new_feed.out
