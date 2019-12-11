@@ -57,10 +57,13 @@ class Window:
             if running:
                 self.pre_compute()
 
-    def dots(self, win, row, column, n=3, refresh=True):
+    def dots(self, win, row, column, n=3, refresh=True, attributes=None):
         dots = n - round(2 * time.time()) % (n + 1)
         dot_str = '.' * n + ' ' * n
-        win.addstr(row, column, dot_str[dots:dots + n])
+        if attributes is None:
+            win.addstr(row, column, dot_str[dots:dots + n])
+        else:
+            win.addstr(row, column, dot_str[dots:dots + n], attributes)
         if refresh:
             win.refresh()
 
@@ -110,9 +113,7 @@ class Window:
         while time.time() - now < 3:
             self.dots(self.title_win, 0, 7)
             for i in range(5):
-                self.dots(self.network_win, self.top + 3, self.left + 12 + 20 * i, 2, refresh=False)
-                self.network_win.chgat(self.top + 3, self.left + 5 + 20 * i, 9, curses.A_BOLD)
-                self.network_win.refresh()
+                self.dots(self.network_win, self.top + 3, self.left + 12 + 20 * i, 2, curses.A_BOLD)
         for i in range(5):
             self.computer_display(i, 'Ready...')
         time.sleep(.5)
@@ -173,15 +174,13 @@ class Window:
         for row, line in enumerate(self.deques[computer]):
             self.network_win.addstr(self.top + 3 + row, self.left + 5 + 20 * computer, ' ' * 9)
         for row, line in enumerate(self.deques[computer]):
-            self.network_win.addstr(self.top + 3 + row, self.left + 5 + 20 * computer, line)
-            self.network_win.chgat(self.top + 3 + row, self.left + 5 + 20 * computer, 9, curses.A_BOLD)
+            self.network_win.addstr(self.top + 3 + row, self.left + 5 + 20 * computer,
+                                    line, curses.A_BOLD)
             self.network_win.refresh()
             time.sleep(.1)
         self.network_win.addstr(self.top + 3 + len(self.deques[computer]) - 1,
-                                self.left + 5 + 20 * computer + len(output), '_')
-        self.network_win.chgat(self.top + +3 + len(self.deques[computer]) - 1,
-                               self.left + 5 + 20 * computer + len(output),
-                               1, curses.A_BOLD | curses.A_BLINK)
+                                self.left + 5 + 20 * computer + len(output), '_',
+                                curses.A_BOLD | curses.A_BLINK)
         self.network_win.refresh()
         time.sleep(.1)
 
