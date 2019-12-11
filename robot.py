@@ -4,10 +4,10 @@ from itertools import count
 from computer import Computer
 import cv2
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 class Robot:
-    def __init__(self, data, *, animate=False):
+    def __init__(self, data, *, animate=''):
         self.brain = Computer(int_code=data)
         self.direction = -1 + 0j
         self.location = np.array([0, 0])
@@ -19,6 +19,22 @@ class Robot:
             self.counter = count()
             self.array = np.zeros((6, 43))
             self.array[self.loc] *= 255
+
+    def show(self):
+        xs = [x for x, _ in self.colors]
+        ys = [y for _, y in self.colors]
+
+        min_xy = min_x, min_y = min(xs), min(ys)
+        width = max(xs) - min_x + 1
+        height = max(ys) - min_y + 1
+
+        registration_identifier = np.zeros([width, height])
+        for location, color in self.colors.items():
+            location = tuple(np.array(location) - min_xy)
+            registration_identifier[location] = color
+
+        plt.imshow(registration_identifier)
+        plt.show()
 
     @property
     def loc(self):
@@ -50,3 +66,11 @@ class Robot:
                 self.move()
             if op == '03':
                 self.brain << self.colors[self.loc]
+
+        if self.animate:
+            import imageio
+            import os
+            frames = [imageio.imread(os.path.join('frames/', file))
+                      for file in sorted(os.listdir('frames/'))]
+            frames[-1:] += frames[-1:] * 40 # Show last frame for longer duration
+            imageio.mimsave(f'frames/{self.animate}.gif', frames, duration=.05)
