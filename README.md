@@ -23,3 +23,7 @@ More info here: [Advent of Code - About](https://adventofcode.com/2019/about)
 **Terminal Intcode Computer v2, Day 9**
 
 ![day09 visualization](Computer2.gif)
+
+**Painting Robot Animation, Day 11**
+
+![day11 visualization](langtons_robot.gif)
