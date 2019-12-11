@@ -5,6 +5,7 @@ from computer import Computer
 import cv2
 import numpy as np
 
+
 class Robot:
     def __init__(self, data, *, animate=False):
         self.brain = Computer(int_code=data)

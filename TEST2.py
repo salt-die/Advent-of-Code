@@ -7,6 +7,7 @@ from computer import Computer
 
 OUTPUT_WIDTH = 46
 CELL_WIDTH = 2
+BASE_2 = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 class TEST:
     translate = {'01':'ADD',
@@ -151,12 +152,16 @@ class TEST:
             self.output_win.refresh()
 
     def draw_cells(self, init=False, slow=False):
-        message, fill = (('Loading Intcode', '●'), ('Initializing Memory', '◌'))[init]
+        message = ('Loading Intcode', 'Initializing Memory')[init]
         if slow:
             self.display(message)
         col = len(message)
 
         for cell in range(self.cells):
+            if init or not self.computer.int_code[cell]:
+                fill = BASE_2[0]
+            else:
+                fill = BASE_2[int(log(abs(self.computer.int_code[cell]), 2))]
             if init or self.computer.int_code[cell]:
                 self.write_to(cell, fill)
                 if slow:
@@ -215,7 +220,9 @@ class TEST:
         last_write = self.computer.last_write_to
         if self.old_write != -1:
             self.highlight(self.old_write, 1)
-        self.write_to(last_write, '◌●'[bool(self.computer.read(last_write))])
+        value = self.computer.read(last_write)
+        fill = BASE_2[0 if not value else int(log(value, 2))]
+        self.write_to(last_write, fill)
         self.highlight(last_write, 9)
         time.sleep(.1)
 
