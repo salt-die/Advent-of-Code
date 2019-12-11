@@ -8,7 +8,7 @@ bad_robot.start()
 bad_robot.show()
 print(len(bad_robot.painted_locations)) # Part 1
 
-good_robot = Robot(data=data)
+good_robot = Robot(data=data, animate='work')
 good_robot.colors[tuple(good_robot.location)] = 1
 good_robot.start()
 good_robot.show() # Part 2

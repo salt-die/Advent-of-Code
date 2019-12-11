@@ -21,7 +21,7 @@ class Robot:
         if animate:
             self.counter = count()
             self.array = np.zeros((6, 43))
-            self.array[self.loc] *= 255
+            self.array[self.loc] = self.colors[self.loc] * 255
 
     def show(self):
         xs = [x for x, _ in self.colors]
