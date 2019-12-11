@@ -1,4 +1,5 @@
 from collections import deque
+from math import log
 import time
 import curses
 from curses.textpad import Textbox, rectangle
