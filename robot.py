@@ -2,6 +2,7 @@ from collections import defaultdict
 from itertools import count
 
 from computer import Computer
+from stitch import stitch
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
@@ -68,9 +69,4 @@ class Robot:
                 self.brain << self.colors[self.loc]
 
         if self.animate:
-            import imageio
-            import os
-            frames = [imageio.imread(os.path.join('frames/', file))
-                      for file in sorted(os.listdir('frames/'))]
-            frames[-1:] += frames[-1:] * 40 # Show last frame for longer duration
-            imageio.mimsave(f'frames/{self.animate}.gif', frames, duration=.05)
+            stitch(self.animate, .05)
