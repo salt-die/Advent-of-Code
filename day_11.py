@@ -16,6 +16,7 @@ class Robot:
 
     def paint(self, color):
         self.colors[tuple(self.location)] = color
+        self.painted_locations.add(tuple(self.location))
 
     def turn(self, clockwise):
         self.direction *= 1j * (-1)**(clockwise)
@@ -26,7 +27,6 @@ class Robot:
     def start(self):
         for _, op, _, _, _ in self.brain.compute_iter():
             if len(self.brain) == 2:
-                self.painted_locations.add(tuple(self.location))
                 self.paint(self.brain.pop())
                 self.turn(self.brain.pop())
                 self.move()
