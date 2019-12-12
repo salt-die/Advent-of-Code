@@ -14,16 +14,15 @@ state = np.hstack((planets, np.zeros((4,3), dtype=np.int16)))
 for _ in range(1000):
     update_state()
 print((np.abs(state[:, :3]).sum(axis=1) * np.abs(state[:, 3:]).sum(axis=1)).sum()) # Part 1
-
+###==================================
 state = np.hstack((planets, np.zeros((4,3), dtype=np.int16)))
-flags, cycle_lengths, initial, cycle = np.array([True] * 3), [], state.copy(), 0
-is_equal = np.vectorize(lambda i: np.array_equal(state[:, i::3], initial[:, i::3]))
-while flags.any():
+flags, cycle_lengths, initial, cycle = [True] * 3, [], state.copy(), 0
+while any(flags):
     update_state()
     cycle += 1
 
-    if is_equal(np.nonzero(flags)).any():
-        cycle_lengths.append(cycle)
-        flags[flags] = ~is_equal(*np.nonzero(flags))
-
+    for i, flag in enumerate(flags):
+        if flag and np.array_equal(state[:, i::3], initial[:, i::3]):
+            cycle_lengths.append(cycle)
+            flags[i] = False
 print(np.lcm.reduce(cycle_lengths)) # Part 2
