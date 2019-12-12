@@ -9,12 +9,13 @@ def update_state():
     np.sign(intermediate, out=intermediate)
     np.add.at(state[:, 3:], combs, intermediate)
     state[:, :3] += state[:, 3:]
-
+#== Part 1
 state = np.hstack((planets, np.zeros((4,3), dtype=np.int16)))
 for _ in range(1000):
     update_state()
-print((np.abs(state[:, :3]).sum(axis=1) * np.abs(state[:, 3:]).sum(axis=1)).sum()) # Part 1
-###==================================
+
+print((np.abs(state[:, :3]).sum(axis=1) * np.abs(state[:, 3:]).sum(axis=1)).sum())
+#== Part 2
 state = np.hstack((planets, np.zeros((4,3), dtype=np.int16)))
 flags, cycle_lengths, initial, cycle = [True] * 3, [], state.copy(), 0
 while any(flags):
@@ -25,4 +26,5 @@ while any(flags):
         if flag and np.array_equal(state[:, i::3], initial[:, i::3]):
             cycle_lengths.append(cycle)
             flags[i] = False
-print(np.lcm.reduce(cycle_lengths)) # Part 2
+
+print(np.lcm.reduce(cycle_lengths))
