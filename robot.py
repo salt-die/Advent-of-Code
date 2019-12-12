@@ -27,9 +27,9 @@ class Robot:
         xs = [x for x, _ in self.colors]
         ys = [y for _, y in self.colors]
 
-        min_xy = min_x, min_y = min(xs), min(ys)
-        width = max(xs) - min_x + 1
-        height = max(ys) - min_y + 1
+        min_xy = min(xs), min(ys)
+        width = np.ptp(xs) + 1
+        height = np.ptp(ys) + 1
 
         registration_identifier = np.zeros([width, height])
         for location, color in self.colors.items():
