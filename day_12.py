@@ -19,8 +19,8 @@ print((np.abs(state[:, :3]).sum(axis=1) * np.abs(state[:, 3:]).sum(axis=1)).sum(
 
 state = np.hstack((planets, np.zeros((4,3), dtype=np.int16)))
 
-flags, cycle_lengths, initial_state, cycle = [True] * 3, [], state.copy(), 0
 # System is reversible, initial state will be the first repeated
+flags, cycle_lengths, initial_state, cycle = [True] * 3, [], state.copy(), 0
 while any(flags):
     update_state()
     cycle += 1
