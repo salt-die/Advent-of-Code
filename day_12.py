@@ -3,7 +3,6 @@ Warning: This solution is slow due to the number of arrays we create.  Std libra
 recommended, but this was to practice numpy implementation.  We can also pass all combinations
 of indices at once in apply_gravity_along, but I haven't figured out the masking needed yet.
 """
-from copy import deepcopy
 from itertools import combinations, chain
 import numpy as np
 
@@ -14,10 +13,11 @@ Callisto = [8, 7, -6]
 
 planets = [Io, Europa, Ganymede, Callisto]
 
+#combs = array([[0, 1], [0, 2], [0, 3], [1, 2], [1, 3], [2, 3]])
+
 def apply_gravity_along(axis):
     for comb in combinations(range(4), r=2):
-        if np.ptp(positions[comb, axis]):
-            velocities[comb, axis] += (-1)**((arr := positions[comb, axis]) - arr[::-1] > 0)
+        velocities[comb, axis] += np.sign(positions[comb, axis][::-1] - positions[comb, axis])
 
 def apply_velocity_along(axis):
     positions[:, axis] += velocities[:, axis]
