@@ -32,20 +32,17 @@ print((np.abs(positions).sum(axis=1) * np.abs(velocities).sum(axis=1)).sum()) # 
 
 positions = np.array(planets)
 velocities = np.zeros((4, 3), dtype=int)
-intervals = []
+cycle_length = []
 for axis in range(3):
-    previous_states = set()
-    cycle = 0
+    initial_state = tuple(chain(positions[:,axis], velocities[:, axis]))
+    cycle = 0 # System is reversible, initial state will be the first repeated
     while True:
-        state = tuple(chain(positions[:,axis], velocities[:, axis]))
-        if state in previous_states:
-            intervals.append(cycle)
+        if initial_state == tuple(chain(positions[:,axis], velocities[:, axis])) and cycle:
+            cycle_length.append(cycle)
             break
-        else:
-            previous_states.add(state)
 
         apply_gravity_along(axis)
         apply_velocity_along(axis)
         cycle += 1
 
-print(np.lcm.reduce(intervals)) # Part 2
+print(np.lcm.reduce(cycle_length)) # Part 2
