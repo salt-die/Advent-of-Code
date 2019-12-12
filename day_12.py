@@ -32,6 +32,7 @@ initial_state = state.copy()
 cycle = 0 # System is reversible, initial state will be the first repeated
 while any(flags):
     update_state()
+    cycle += 1
 
     for axis, flag in enumerate(flags):
         if flag and np.array_equal(state[:, axis::3], initial_state[:, axis::3]):
