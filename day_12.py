@@ -25,8 +25,8 @@ while any(flags):
     cycle += 1
 
     for i, flag in enumerate(flags):
-        if flag and np.array_equal(state[:, i::3], initial[:, i::3]):
-            cycle_lengths.append(cycle)
+        if flag and ~state[:, i + 3].any():
+            cycle_lengths.append(2 * cycle)
             flags[i] = False
 
 print(np.lcm.reduce(cycle_lengths))
