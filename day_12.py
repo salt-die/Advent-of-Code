@@ -25,7 +25,7 @@ while any(flags):
     cycle += 1
 
     for i in flags:
-        if i and ~state[:, i].any():
+        if i and  not state[:, i].any():
             cycle_lengths.append(2 * cycle)
             flags[i - 3] = 0
 
