@@ -10,12 +10,14 @@ def update_state():
     np.sign(intermediate, out=intermediate)
     np.add.at(state[:, 3:], combs, intermediate)
     state[:, :3] += state[:, 3:]
+
 #== Part 1
 state = initial.copy()
 for _ in range(1000):
     update_state()
 
 print((np.abs(state[:, :3]).sum(axis=1) * np.abs(state[:, 3:]).sum(axis=1)).sum())
+
 #== Part 2
 flags, cycle_lengths, state, cycle = [True] * 3, [], initial.copy(), 0
 while any(flags):
