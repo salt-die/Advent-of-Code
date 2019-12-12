@@ -28,20 +28,20 @@ for _ in range(1000):
 
 print((np.abs(positions).sum(axis=1) * np.abs(velocities).sum(axis=1)).sum()) # Part 1
 
-#
-#positions = np.array(planets)
-#velocities = np.zeros((4, 3), dtype=int)
-#cycle_length = []
-#for axis in range(3):
-#    initial_state = tuple(chain(positions[:,axis], velocities[:, axis]))
-#    cycle = 0 # System is reversible, initial state will be the first repeated
-#    while True:
-#        if initial_state == tuple(chain(positions[:,axis], velocities[:, axis])) and cycle:
-#            cycle_length.append(cycle)
-#            break
-#
-#        apply_gravity_along(axis)
-#        apply_velocity_along(axis)
-#        cycle += 1
-#
-#print(np.lcm.reduce(cycle_length)) # Part 2
+
+positions = np.array(planets)
+velocities = np.zeros((4, 3), dtype=int)
+cycle_length = []
+for axis in range(3):
+    initial_state = tuple(chain(positions[:,axis], velocities[:, axis]))
+    cycle = 0 # System is reversible, initial state will be the first repeated
+    while True:
+        if initial_state == tuple(chain(positions[:,axis], velocities[:, axis])) and cycle:
+            cycle_length.append(cycle)
+            break
+
+        apply_gravity_along(axis)
+        apply_velocity_along(axis)
+        cycle += 1
+
+print(np.lcm.reduce(cycle_length)) # Part 2
