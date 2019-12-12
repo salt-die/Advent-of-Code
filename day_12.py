@@ -24,7 +24,7 @@ state[:, :3] = np.array(planets)
 intermediate = np.zeros((6, 2), dtype=int)
 cycle_length = []
 for axis in range(3):
-    initial_state = state[:, [axis, axis + 3]].copy()
+    initial_state = state[:, axis::3].copy()
     cycle = 0 # System is reversible, initial state will be the first repeated
     while True:
         np.subtract(np.fliplr(state[combs, axis]), state[combs, axis], out=intermediate)
@@ -33,7 +33,7 @@ for axis in range(3):
         state[:, axis] += state[:, axis + 3]
         cycle += 1
 
-        if np.array_equal(state[:, [axis, axis + 3]], initial_state):
+        if np.array_equal(state[:, axis::3], initial_state):
             cycle_length.append(cycle)
             break
 
