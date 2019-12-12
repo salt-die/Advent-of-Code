@@ -1,9 +1,4 @@
-"""
-Warning: This solution is slow due to the number of arrays we create.  Std library solutions
-recommended, but this was to practice numpy implementation.  We can also pass all combinations
-of indices at once in apply_gravity_along, but I haven't figured out the masking needed yet.
-"""
-from itertools import combinations, chain
+from itertools import chain
 import numpy as np
 
 Io = [19, -10, 7]
@@ -13,11 +8,13 @@ Callisto = [8, 7, -6]
 
 planets = [Io, Europa, Ganymede, Callisto]
 
-#combs = array([[0, 1], [0, 2], [0, 3], [1, 2], [1, 3], [2, 3]])
+combs = np.array([[0, 1], [0, 2], [0, 3], [1, 2], [1, 3], [2, 3]])
+intermediate = np.zeros((6, 2), dtype=int) # For doing numpy operations in place.
 
 def apply_gravity_along(axis):
-    for comb in combinations(range(4), r=2):
-        velocities[comb, axis] += np.sign(positions[comb, axis][::-1] - positions[comb, axis])
+    np.subtract(np.fliplr(positions[combs, axis]), positions[combs, axis], out=intermediate)
+    np.sign(intermediate, out=intermediate)
+    np.add.at(velocities[:, axis], combs, intermediate)
 
 def apply_velocity_along(axis):
     positions[:, axis] += velocities[:, axis]
@@ -39,7 +36,8 @@ for axis in range(3):
     cycle = 0 # System is reversible, initial state will be the first repeated
     while True:
         if (all(init_val == state_val
-                for init_val, state_val in zip(initial_state, chain(positions[:, axis], velocities[:, axis])))
+                for init_val, state_val in zip(initial_state, chain(positions[:, axis],
+                                                                    velocities[:, axis])))
            and cycle):
             cycle_length.append(cycle)
             break
