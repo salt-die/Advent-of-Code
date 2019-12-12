@@ -1,4 +1,3 @@
-from itertools import chain
 import numpy as np
 
 Io = [19, -10, 7]
