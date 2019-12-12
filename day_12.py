@@ -19,7 +19,7 @@ for _ in range(1000):
 print((np.abs(state[:, :3]).sum(axis=1) * np.abs(state[:, 3:]).sum(axis=1)).sum())
 
 #== Part 2
-flags, cycle_lengths, state, cycle = [3, 4, 5], [], initial.copy(), 0
+state, flags, cycle_lengths, cycle = initial.copy(), [3, 4, 5], [], 0
 while any(flags):
     update_state()
     cycle += 1
