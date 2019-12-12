@@ -19,14 +19,14 @@ for _ in range(1000):
 print((np.abs(state[:, :3]).sum(axis=1) * np.abs(state[:, 3:]).sum(axis=1)).sum())
 
 #== Part 2
-flags, cycle_lengths, state, cycle = [True] * 3, [], initial.copy(), 0
+flags, cycle_lengths, state, cycle = [3, 4, 5], [], initial.copy(), 0
 while any(flags):
     update_state()
     cycle += 1
 
-    for i, flag in enumerate(flags):
-        if flag and ~state[:, i + 3].any():
+    for i in flags:
+        if i and ~state[:, i].any():
             cycle_lengths.append(2 * cycle)
-            flags[i] = False
+            flags[i - 3] = 0
 
 print(np.lcm.reduce(cycle_lengths))
