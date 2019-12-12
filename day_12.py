@@ -1,11 +1,6 @@
 import numpy as np
 
-Io       = [19, -10, 7]
-Europa   = [1, 2, -3]
-Ganymede = [14, -4, 1]
-Callisto = [8, 7, -6]
-
-planets = [Io, Europa, Ganymede, Callisto]
+planets = [[19, -10, 7], [1, 2, -3], [14, -4, 1], [8, 7, -6]]
 combs = np.array([[0, 1], [0, 2], [0, 3], [1, 2], [1, 3], [2, 3]])
 
 state = np.hstack((planets, np.zeros((4,3), dtype=np.int16)))
@@ -24,16 +19,14 @@ print((np.abs(state[:, :3]).sum(axis=1) * np.abs(state[:, 3:]).sum(axis=1)).sum(
 
 state = np.hstack((planets, np.zeros((4,3), dtype=np.int16)))
 
-flags = [True] * 3
-cycle_lengths = []
-initial_state = state.copy()
-cycle = 0 # System is reversible, initial state will be the first repeated
+flags, cycle_lengths, initial_state, cycle = [True] * 3, [], state.copy(), 0
+# System is reversible, initial state will be the first repeated
 while any(flags):
     update_state()
     cycle += 1
 
-    for axis, flag in enumerate(flags):
-        if flag and np.array_equal(state[:, axis::3], initial_state[:, axis::3]):
+    for axis in range(3):
+        if flags[axis] and np.array_equal(state[:, axis::3], initial_state[:, axis::3]):
             cycle_lengths.append(cycle)
             flags[axis] = False
 
