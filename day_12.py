@@ -8,9 +8,8 @@ Callisto = [8, 7, -6]
 planets = [Io, Europa, Ganymede, Callisto]
 combs = np.array([[0, 1], [0, 2], [0, 3], [1, 2], [1, 3], [2, 3]])
 
-state = np.zeros((4, 6), dtype=int)
-state[:, :3] = np.array(planets)
-intermediate = np.zeros((6, 2, 3), dtype=int) # For doing numpy operations in place.
+state = np.hstack((planets, np.zeros((4,3), dtype=np.int16)))
+intermediate = np.zeros((6, 2, 3), dtype=np.int16) # For doing numpy operations in place.
 
 def update_state():
     np.subtract(np.fliplr(state[combs, :3]), state[combs, :3], out=intermediate)
@@ -23,8 +22,7 @@ for _ in range(1000):
 
 print((np.abs(state[:, :3]).sum(axis=1) * np.abs(state[:, 3:]).sum(axis=1)).sum()) # Part 1
 
-state = np.zeros((4, 6), dtype=int)
-state[:, :3] = np.array(planets)
+state = np.hstack((planets, np.zeros((4,3), dtype=np.int16)))
 
 flags = [True] * 3
 cycle_lengths = []
