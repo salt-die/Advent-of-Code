@@ -37,7 +37,7 @@ for axis in range(3):
     previous_states = set()
     cycle = 0
     while True:
-        state = tuple(value for value in chain(positions[:,axis], velocities[:, axis]))
+        state = tuple(chain(positions[:,axis], velocities[:, axis]))
         if state in previous_states:
             intervals.append(cycle)
             break
