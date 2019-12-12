@@ -1,6 +1,6 @@
 from copy import deepcopy
-from itertools import combinations
 from functools import reduce
+from itertools import combinations
 import numpy as np
 
 Io = [19, -10, 7]
