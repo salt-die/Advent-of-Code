@@ -20,14 +20,14 @@ print((np.abs(state[:, :3]).sum(axis=1) * np.abs(state[:, 3:]).sum(axis=1)).sum(
 state = np.hstack((planets, np.zeros((4,3), dtype=np.int16)))
 
 # System is reversible, initial state will be the first repeated
-flags, cycle_lengths, initial_state, cycle = [True] * 3, [], state.copy(), 0
-while any(flags):
+flags, cycle_lengths, initial, cycle = np.array([True] * 3), [], state.copy(), 0
+is_equal = np.vectorize(lambda i: np.array_equal(state[:, i::3], initial[:, i::3]))
+while flags.any():
     update_state()
     cycle += 1
 
-    for axis in range(3):
-        if flags[axis] and np.array_equal(state[:, axis::3], initial_state[:, axis::3]):
-            cycle_lengths.append(cycle)
-            flags[axis] = False
+    if is_equal(np.nonzero(flags)).any():
+        cycle_lengths.append(cycle)
+        flags[flags] = ~is_equal(*np.nonzero(flags))
 
 print(np.lcm.reduce(cycle_lengths)) # Part 2
