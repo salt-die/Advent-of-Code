@@ -32,18 +32,17 @@ positions = np.array(planets)
 velocities = np.zeros((4, 3), dtype=int)
 cycle_length = []
 for axis in range(3):
-    initial_state = tuple(chain(positions[:,axis], velocities[:, axis]))
+    initial_pos = positions[:, axis].copy()
+    initial_vel = velocities[:, axis].copy()
     cycle = 0 # System is reversible, initial state will be the first repeated
     while True:
-        if (all(init_val == state_val
-                for init_val, state_val in zip(initial_state, chain(positions[:, axis],
-                                                                    velocities[:, axis])))
-           and cycle):
-            cycle_length.append(cycle)
-            break
-
         apply_gravity_along(axis)
         apply_velocity_along(axis)
         cycle += 1
+
+        if (np.array_equal(velocities[:, axis], initial_vel) and
+            np.array_equal(positions[:, axis], initial_pos)):
+            cycle_length.append(cycle)
+            break
 
 print(np.lcm.reduce(cycle_length)) # Part 2
