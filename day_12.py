@@ -1,7 +1,7 @@
 import numpy as np
 
-Io = [19, -10, 7]
-Europa = [1, 2, -3]
+Io       = [19, -10, 7]
+Europa   = [1, 2, -3]
 Ganymede = [14, -4, 1]
 Callisto = [8, 7, -6]
 
