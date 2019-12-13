@@ -1,48 +1,33 @@
 from computer import Computer
-import cv2
+from display import Display, array_from_dict
 import numpy as np
-import matplotlib.pyplot as plt
-from stitch import stitch
 
 class Arcade:
-    def __init__(self, animate=''):
-        self.animate = animate
-        if animate:
-            self.counter = 0
-
     def load(self, data):
         self.processor = Computer(int_code=data)
 
     __lshift__ = load
 
-    def show(self, animate=False):
-        xs = [x for x, _ in self.pixels]
-        ys = [y for _, y in self.pixels]
+    def show(self):
+        if isinstance(self.pixels, dict):
+            self.pixels = array_from_dict(self.pixels)
 
-        min_xy = min(xs), min(ys)
-        width = np.ptp(xs) + 1
-        height = np.ptp(ys) + 1
-
-        self.screen = np.zeros([width, height])
-        for location, pixel in self.pixels.items():
-            location = tuple(np.array(location) - min_xy)
-            self.screen[location] = pixel
-
-        if animate:
-            self.counter += 1
-            if self.counter < 300:
-                cv2.imwrite(f'frames/{self.counter:03d}.png',
-                            cv2.resize(self.screen * 62, (350, 250),
-                                       interpolation=cv2.INTER_NEAREST))
-        else:
-            plt.imshow(self.screen)
-            plt.show()
+        self.display.info['Score'] = self.score
+        self.display(self.pixels)
 
     def start(self, quarters=None):
         self.pixels = {}
+
         if quarters is not None:
             self.processor.int_code[0] = 2
 
+        self.run_game()
+
+    __call__ = start
+
+    def run_game(self):
+        self.score = 0
+        self.display = Display(Score=self.score)
         for _, op, _, _, _ in self.processor:
             if len(self.processor) == 3:
                 z, y, x = self.processor.out
@@ -54,12 +39,12 @@ class Arcade:
                         ball_pos = x
                     elif z == 3:
                         paddle_pos = x
-                    self.pixels[(y, x)] = z
+                    self.pixels[y, x] = z
 
             if op == '03':
-                if self.animate:
-                    self.show(animate=True)
+                self.show()
                 self.processor << np.sign(ball_pos - paddle_pos)
 
-        if self.animate:
-            stitch(self.animate, .01)
+        self.show()
+        self.display.getch()
+        self.display.stop()
