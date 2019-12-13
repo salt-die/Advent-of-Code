@@ -1,15 +1,21 @@
 from computer import Computer
+import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-#cv2.imwrite(f'frames/{next(self.counter):03d}.png',
-#            cv2.resize(self.array, (430, 60), interpolation=cv2.INTER_NEAREST))
+from stitch import stitch
+
 class Arcade:
+    def __init__(self, animate=''):
+        self.animate = animate
+        if animate:
+            self.counter = 0
+
     def load(self, data):
         self.processor = Computer(int_code=data)
 
     __lshift__ = load
 
-    def show(self):
+    def show(self, animate=False):
         xs = [x for x, _ in self.pixels]
         ys = [y for _, y in self.pixels]
 
@@ -22,8 +28,15 @@ class Arcade:
             location = tuple(np.array(location) - min_xy)
             self.screen[location] = pixel
 
-        plt.imshow(self.screen)
-        plt.show()
+        if animate:
+            self.counter += 1
+            if self.counter < 300:
+                cv2.imwrite(f'frames/{self.counter:03d}.png',
+                            cv2.resize(self.screen * 62, (350, 250),
+                                       interpolation=cv2.INTER_NEAREST))
+        else:
+            plt.imshow(self.screen)
+            plt.show()
 
     def start(self, quarters=None):
         self.pixels = {}
@@ -39,9 +52,14 @@ class Arcade:
                 else:
                     if z == 4:
                         ball_pos = x
-                    if z == 3:
+                    elif z == 3:
                         paddle_pos = x
                     self.pixels[(y, x)] = z
 
             if op == '03':
+                if self.animate:
+                    self.show(animate=True)
                 self.processor << np.sign(ball_pos - paddle_pos)
+
+        if self.animate:
+            stitch(self.animate, .01)
