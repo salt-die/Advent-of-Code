@@ -73,8 +73,11 @@ class Display:
 
     __call__ = show # Shortcut to show method
 
-    def text(self, message):
+    def text(self, message, blink=False):
         screen_h, screen_w = self.screen.getmaxyx()
-        self.screen.addstr(screen_h - 1, center(screen_w, len(message)), message)
+        if blink:
+            self.screen.addstr(screen_h - 1, center(screen_w, len(message)), message, curses.A_BLINK)
+        else:
+            self.screen.addstr(screen_h - 1, center(screen_w, len(message)), message)
         self.screen.refresh()
         self.screen.getch()

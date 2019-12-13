@@ -11,9 +11,9 @@ class Arcade:
     def start(self, quarters=None):
         if quarters is not None:
             self.processor.int_code[0] = 2
-            self.end_text = "GAME OVER"
+            self.end_text = "GAME OVER", False
         else:
-            self.end_text = "PLEASE INSERT CREDITS"
+            self.end_text = "PLEASE INSERT CREDITS", True
 
         self.run_game()
 
@@ -42,7 +42,7 @@ class Arcade:
                 self.processor << np.sign(ball_pos - paddle_pos)
 
         self.show()
-        self.display.text(self.end_text)
+        self.display.text(*self.end_text)
         self.display.stop()
 
     def show(self):
