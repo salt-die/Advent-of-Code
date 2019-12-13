@@ -43,7 +43,7 @@ class Arcade:
         if quarters is not None:
             self.processor.int_code[0] = 2
 
-        for _,op,_,_,_ in self.processor.compute_iter():
+        for _, op, _, _, _ in self.processor.compute_iter():
             if len(self.processor) == 3:
                 z, y, x = self.processor.out
                 self.processor.out.clear()

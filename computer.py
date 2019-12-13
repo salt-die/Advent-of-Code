@@ -155,6 +155,12 @@ class Computer:
             yield self.instruction_pointer - len(modes) - 1, op_code, modes, params, moded_params
             instruction(*moded_params)
 
+    def __iter__(self):
+        """
+        Iterator functionality.
+        """
+        return self.computer_iter()
+
     def compute(self, *args, **kwargs):
         """
         Returns the last item of compute_iter
