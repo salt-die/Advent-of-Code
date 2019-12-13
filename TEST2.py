@@ -87,6 +87,7 @@ class TEST:
         curses.init_pair(7, curses.COLOR_WHITE, curses.COLOR_CYAN)
         curses.init_pair(8, curses.COLOR_WHITE, curses.COLOR_MAGENTA)
         curses.init_pair(9, curses.COLOR_BLACK, curses.COLOR_RED)
+        curses.init_pair(10, curses.COLOR_RED, curses.COLOR_BLACK)
         self.screen.attron(curses.color_pair(1))
 
     def end_curses(self):
@@ -130,7 +131,7 @@ class TEST:
     def display(self, out, pause=True, save=True):
         self.output_win.erase()
         if save:
-            if len(self.output) and self.output[-1] == '':
+            if self.output and self.output[-1] == '':
                 self.output[-1] = out
             else:
                 self.output.append(out)
@@ -141,6 +142,8 @@ class TEST:
         for row, line in enumerate(self.output):
             if row != last_line:
                 self.output_win.addstr(row, 0, line)
+                if line[:13] == f"{'OUT':>13}":
+                    self.output_win.addstr(row, 0, f'{"OUT":>13}', curses.color_pair(10))
 
         if pause:
             for col, char in enumerate(out):
@@ -149,6 +152,8 @@ class TEST:
                 time.sleep(.01)
         else:
             self.output_win.addstr(last_line, 0, out)
+            if out[:13] == f"{'OUT':>13}":
+                self.output_win.addstr(last_line, 0, f'{"OUT":>13}', curses.color_pair(10))
             self.output_win.refresh()
 
     def draw_cells(self, init=False, slow=False):
@@ -213,7 +218,7 @@ class TEST:
         for i, mode in enumerate(modes, start=1):
             self.highlight(pointer + i, 6 + int(mode[0]))
         param_str = ' '.join(f'{moded_param}' for moded_param in moded_params)
-        self.display(f'{"":^13} {param_str}', pause=False)
+        self.display(f'{"":>13} {param_str}', pause=False)
         time.sleep(.1)
 
         #Highlight writes
@@ -225,9 +230,6 @@ class TEST:
         self.write_to(last_write, fill)
         self.highlight(last_write, 9)
         time.sleep(.1)
-
-        if op_code == 'OUT':
-            self.display(f'OUTPUT: {self.computer.pop()}')
 
         self.old_pointer = pointer
         self.old_nparams = len(modes)
