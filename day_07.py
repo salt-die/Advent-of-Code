@@ -21,8 +21,8 @@ for i in range(5): # Setup network
 
 outs = []
 for permutation in permutations(range(5, 10)):
-    programs = [amp.compute_iter(feed=digit) for amp, digit in zip(computers, permutation)]
     computers[0] << 0
+    programs = [amp.compute_iter(feed=digit) for amp, digit in zip(computers, permutation)]
 
     for program, computer in cycle(zip(programs, computers)):
         for _ in program:
