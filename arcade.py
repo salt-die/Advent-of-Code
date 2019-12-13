@@ -12,8 +12,7 @@ class Arcade:
         if isinstance(self.pixels, dict):
             self.pixels = array_from_dict(self.pixels)
 
-        self.display.info['Score'] = self.score
-        self.display(self.pixels)
+        self.display(self.pixels, Score=self.score)
 
     def start(self, quarters=None):
         self.pixels = {}
@@ -27,7 +26,7 @@ class Arcade:
 
     def run_game(self):
         self.score = 0
-        self.display = Display(Score=self.score)
+        self.display = Display()
         for _, op, _, _, _ in self.processor:
             if len(self.processor) == 3:
                 z, y, x = self.processor.out
