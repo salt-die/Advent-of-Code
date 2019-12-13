@@ -68,16 +68,14 @@ class Display:
 
         if kwargs:
             info = f"{' | '.join(f'{key}: {value}' for key, value in kwargs.items())}{' ' * 20}"
-            self.screen.addstr(max(0, screen_u - 1), screen_l, info)
+            self.screen.addstr(max(0, screen_u - 1), screen_l, info, curses.A_BOLD)
             self.screen.refresh()
 
     __call__ = show # Shortcut to show method
 
     def text(self, message, blink=False):
         screen_h, screen_w = self.screen.getmaxyx()
-        if blink:
-            self.screen.addstr(screen_h - 1, center(screen_w, len(message)), message, curses.A_BLINK)
-        else:
-            self.screen.addstr(screen_h - 1, center(screen_w, len(message)), message)
+        prop = curses.A_BOLD | (curses.A_BLINK if blink else 0)
+        self.screen.addstr(screen_h - 1, center(screen_w, len(message)), message, prop)
         self.screen.refresh()
         self.screen.getch()
