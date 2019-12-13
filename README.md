@@ -31,3 +31,7 @@ More info here: [Advent of Code - About](https://adventofcode.com/2019/about)
 **Painting Robot Animation, Day 11**
 
 ![day11 visualization](langtons_robot.gif)
+
+**Breaker Animation, Day 13**
+
+![day13 visualization](breaker.gif)
