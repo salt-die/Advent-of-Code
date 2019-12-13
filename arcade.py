@@ -8,12 +8,6 @@ class Arcade:
 
     __lshift__ = load
 
-    def show(self):
-        if isinstance(self.pixels, dict):
-            self.pixels = array_from_dict(self.pixels)
-
-        self.display(self.pixels, Score=self.score)
-
     def start(self, quarters=None):
         self.pixels = {}
 
@@ -47,3 +41,9 @@ class Arcade:
         self.show()
         self.display.text('GAME OVER')
         self.display.stop()
+
+    def show(self):
+        if isinstance(self.pixels, dict):
+            self.pixels = array_from_dict(self.pixels)
+
+        self.display(self.pixels, Score=self.score)
