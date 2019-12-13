@@ -159,7 +159,7 @@ class Computer:
         """
         Iterator functionality.
         """
-        return self.computer_iter()
+        return self.compute_iter()
 
     def compute(self, *args, **kwargs):
         """
