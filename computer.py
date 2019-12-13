@@ -123,16 +123,12 @@ class Computer:
         """
         return bool(self.out)
 
-    def compute_iter(self, *, noun=None, verb=None, feed=None):
+    def compute_iter(self, feed=None):
         """
         Returns an iterator, each item being (instruction_pointer, op_code, modes, parameters,
         pamaraters with modes applied) of the current state of computation.
         """
         self.reset()
-
-        if not (noun is None or verb is None):
-            self.write(noun, 1)
-            self.write(verb, 2)
 
         if feed is not None:
             self << feed
@@ -161,15 +157,15 @@ class Computer:
         """
         return self.compute_iter()
 
-    def compute(self, *args, **kwargs):
+    def compute(self, feed=None):
         """
         Returns the last item of compute_iter
         """
-        for result in self.compute_iter(*args, **kwargs):
+        for result in self.compute_iter(feed):
             pass
         return result
 
-    def compute_n(self, *, niter, feed=None):
+    def compute_n(self, niter, feed=None):
         """
         Run self.compute niter times; other than niter, only feed kwarg supported.
         """
