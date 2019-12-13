@@ -227,9 +227,7 @@ class TEST:
         time.sleep(.1)
 
         if op_code == 'OUT':
-            self.display(f'DIAGNOSTIC CODE: {self.computer.pop()}')
-            self.display('Any key to continue...')
-            self.input_win.getch()
+            self.display(f'OUTPUT: {self.computer.pop()}')
 
         self.old_pointer = pointer
         self.old_nparams = len(modes)
