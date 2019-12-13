@@ -9,8 +9,6 @@ class Arcade:
     __lshift__ = load
 
     def start(self, quarters=None):
-        self.pixels = {}
-
         if quarters is not None:
             self.processor.int_code[0] = 2
 
@@ -20,7 +18,9 @@ class Arcade:
 
     def run_game(self):
         self.score = 0
+        self.pixels = {}
         self.display = Display()
+
         for _, op, _, _, _ in self.processor:
             if len(self.processor) == 3:
                 z, y, x = self.processor.out
@@ -28,11 +28,11 @@ class Arcade:
                 if x == -1 and y == 0:
                     self.score = z
                 else:
+                    self.pixels[y, x] = z
                     if z == 4:
                         ball_pos = x
                     elif z == 3:
                         paddle_pos = x
-                    self.pixels[y, x] = z
 
             if op == '03':
                 self.show()
@@ -45,5 +45,4 @@ class Arcade:
     def show(self):
         if isinstance(self.pixels, dict):
             self.pixels = array_from_dict(self.pixels)
-
         self.display(self.pixels, Score=self.score)
