@@ -45,5 +45,5 @@ class Arcade:
                 self.processor << np.sign(ball_pos - paddle_pos)
 
         self.show()
-        self.display.getch()
+        self.display.text('GAME OVER')
         self.display.stop()

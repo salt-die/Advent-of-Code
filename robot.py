@@ -15,7 +15,7 @@ class Robot:
             self.display = Display()
 
     def show(self):
-        self.display(array_from_dict(self.colors))
+        self.display(pixels=array_from_dict(self.colors))
 
     @property
     def loc(self):
@@ -44,5 +44,5 @@ class Robot:
 
         if self.animate:
             self.show()
-            self.display.getch()
+            self.display.text('FINISHED')
             self.display.stop()
