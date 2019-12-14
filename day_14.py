@@ -44,7 +44,7 @@ while True:
     if ore_required > cargo:
         break
     else:
-        # n == acquire(m) → p <= acquire(m * p / n)
-        fuel = max(fuel + 1, (fuel + 1) * cargo // ore_required)
+        # n == acquire(m) → p = p / n * acquire(m) <= acquire(m * p / n)
+        fuel = (fuel + 1) * cargo // ore_required
 
 print(fuel) # Part 2
