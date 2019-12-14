@@ -34,17 +34,16 @@ def acquire(this_much):
         required[symbol] -= coef * ceiling_divide
         for symbol in equation.free_symbols: # Note: *new* symbol
             required[symbol] += equation.coeff(symbol) * ceiling_divide
-        print(required)
     return required[ORE]
 
 print(acquire(1)) # Part 1
-#
-#fuel, cargo = 1, 1e12
-#while True:
-#    ore_required = acquire(fuel + 1)
-#    if ore_required > cargo:
-#        break
-#    else:
-#        fuel = (fuel + 1) * cargo // ore_required
-#
-#print(fuel) # Part 2
+
+fuel, cargo = 1, 1e12
+while True:
+    ore_required = acquire(fuel + 1)
+    if ore_required > cargo:
+        break
+    else:
+        fuel = (fuel + 1) * cargo // ore_required
+
+print(fuel) # Part 2
