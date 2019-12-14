@@ -73,7 +73,7 @@ class Display:
 
     __call__ = show # Shortcut to show method
 
-    def text(self, message, blink=False):
+    def text(self, message='Any key to continue...', blink=False):
         screen_h, screen_w = self.screen.getmaxyx()
         prop = curses.A_BOLD | (curses.A_BLINK if blink else 0)
         self.screen.addstr(screen_h - 1, center(screen_w, len(message)), message, prop)
