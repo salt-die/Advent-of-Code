@@ -1,5 +1,4 @@
-from sympy import Symbol
-from math import ceil
+from sympy import Symbol, ceiling
 from collections import defaultdict
 
 with open("input14") as data:
@@ -31,7 +30,7 @@ def acquire(this_much):
         else:
             break
         coef, equation = equations[symbol]
-        ceiling_divide = ceil(required[symbol] / coef)
+        ceiling_divide = ceiling(required[symbol] / coef)
         required[symbol] -= coef * ceiling_divide
         for symbol in equation.free_symbols:
             required[symbol] += equation.coeff(symbol) * ceiling_divide
