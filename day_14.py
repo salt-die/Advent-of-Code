@@ -30,7 +30,7 @@ def acquire(this_much):
         else:
             break
         coef, equation = equations[symbol]
-        ceiling_divide = ceiling(required[symbol] / coef)
+        ceiling_divide = ceiling(amount / coef)
         required[symbol] -= coef * ceiling_divide
         for symbol in equation.free_symbols:
             required[symbol] += equation.coeff(symbol) * ceiling_divide
