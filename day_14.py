@@ -5,8 +5,8 @@ with open("input14") as data:
     data = data.readlines()
 
 def parse(token,out=False):
-    index = token.find(" ")
-    coeff, symbol = int(token[:index]), Symbol(token[index + 1:])
+    coeff, symbol = token.split()
+    coeff, symbol = int(coeff), Symbol(symbol)
     if out:
         return coeff, symbol
     return coeff * symbol
