@@ -4,7 +4,7 @@ from collections import defaultdict
 with open("input14") as data:
     data = data.readlines()
 
-def separate(term,out=False):
+def separate(term, out=False):
     coef, symbol = term.split()
     coef, symbol = int(coef), Symbol(symbol)
     if out:
