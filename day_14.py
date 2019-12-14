@@ -16,7 +16,7 @@ equations = {}
 for equation in data:
     in_, out = equation.strip().split(" => ")
     coef, symbol = parse(out, out=True)
-    equations[symbol] = coef, sum([parse(token) for token in in_.split(", ")])
+    equations[symbol] = coef, sum(parse(token) for token in in_.split(", "))
 
 FUEL, ORE = Symbol('FUEL'), Symbol('ORE')
 
