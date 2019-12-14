@@ -4,8 +4,8 @@ from collections import defaultdict
 with open("input14") as data:
     data = data.readlines()
 
-def parse(token,out=False):
-    coeff, symbol = token.split()
+def separate(term,out=False):
+    coeff, symbol = term.split()
     coeff, symbol = int(coeff), Symbol(symbol)
     if out:
         return coeff, symbol
@@ -14,8 +14,8 @@ def parse(token,out=False):
 equations = {}
 for equation in data:
     in_, out = equation.strip().split(" => ")
-    coef, symbol = parse(out, out=True)
-    equations[symbol] = coef, sum(parse(token) for token in in_.split(", "))
+    coef, symbol = separate(out, out=True)
+    equations[symbol] = coef, sum(separate(term) for term in in_.split(", "))
 
 FUEL, ORE = Symbol('FUEL'), Symbol('ORE')
 
