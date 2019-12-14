@@ -9,15 +9,15 @@ def parse(token,out=False):
     index = token.find(" ")
     symbols[x] = Symbol((x:= token[index + 1:]))
     if out:
-        return symbols[x], int(token[:index])
+        return int(token[:index]), symbols[x]
     return int(token[:index]) * symbols[x]
 
 symbols = {}
 equations = {}
 for equation in data:
     in_, out = equation.strip().split(" => ")
-    symbol, coef = parse(out, out=True)
-    equations[symbol] = sum([parse(token) for token in in_.split(", ")]), coef
+    coef, symbol = parse(out, out=True)
+    equations[symbol] = coef, sum([parse(token) for token in in_.split(", ")])
 
 def acquire(fuel):
     required = defaultdict(int)
@@ -29,7 +29,7 @@ def acquire(fuel):
                 break
         else:
             break
-        equation, coef = equations[symbol]
+        coef, equation = equations[symbol]
         ceiling_divide = ceil(required[symbol] / coef)
         required[symbol] -= coef * ceiling_divide
         for symbol in equation.free_symbols:
