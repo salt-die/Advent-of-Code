@@ -1,5 +1,4 @@
 import numpy as np
-from functools import reduce
 
 with open('input08', 'r') as data:
     data = np.fromiter(data.read().strip(), int).reshape((-1, 6, 25))
@@ -7,7 +6,8 @@ with open('input08', 'r') as data:
 fewest_zeros = data[(data == 0).sum(axis=(1, 2)).argmin()]
 print((fewest_zeros == 1).sum() * (fewest_zeros == 2).sum()) # Part 1
 
-decoded = reduce(lambda top, bottom: np.where(top != 2, top, bottom), data) # Part 2
+row, col = np.mgrid[:6, :25]
+decoded = data[(data != 2).argmax(axis=0), row, col] # Part 2
 print(*map(''.join, decoded.astype(str)), sep='\n')
 
 ## Alternative Part 2 -- animation
