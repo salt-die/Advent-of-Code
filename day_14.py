@@ -5,11 +5,11 @@ with open("input14") as data:
     data = data.readlines()
 
 def separate(term,out=False):
-    coeff, symbol = term.split()
-    coeff, symbol = int(coeff), Symbol(symbol)
+    coef, symbol = term.split()
+    coef, symbol = int(coef), Symbol(symbol)
     if out:
-        return coeff, symbol
-    return coeff * symbol
+        return coef, symbol
+    return coef * symbol
 
 equations = {}
 for equation in data:
