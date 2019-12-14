@@ -32,7 +32,7 @@ def acquire(this_much):
         coef, equation = equations[symbol]
         ceiling_divide = ceiling(amount / coef)
         required[symbol] -= coef * ceiling_divide
-        for symbol in equation.free_symbols:
+        for symbol in equation.free_symbols: # Note: symbol is changed
             required[symbol] += equation.coeff(symbol) * ceiling_divide
     return required[ORE]
 
