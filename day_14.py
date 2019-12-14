@@ -7,25 +7,26 @@ with open("input14") as data:
 
 def parse(token,out=False):
     index = token.find(" ")
-    symbols[x] = Symbol((x:= token[index + 1:]))
+    coeff, symbol = int(token[:index]), Symbol(token[index + 1:])
     if out:
-        return int(token[:index]), symbols[x]
-    return int(token[:index]) * symbols[x]
+        return coeff, symbol
+    return coeff * symbol
 
-symbols = {}
 equations = {}
 for equation in data:
     in_, out = equation.strip().split(" => ")
     coef, symbol = parse(out, out=True)
     equations[symbol] = coef, sum([parse(token) for token in in_.split(", ")])
 
-def acquire(fuel):
+FUEL, ORE = Symbol('FUEL'), Symbol('ORE')
+
+def acquire(this_much):
     required = defaultdict(int)
-    required[symbols['FUEL']] = fuel
+    required[FUEL] = this_much
 
     while True:
         for symbol, amount in required.items():
-            if amount > 0 and symbol != symbols['ORE']:
+            if amount > 0 and symbol != ORE:
                 break
         else:
             break
@@ -34,7 +35,7 @@ def acquire(fuel):
         required[symbol] -= coef * ceiling_divide
         for symbol in equation.free_symbols:
             required[symbol] += equation.coeff(symbol) * ceiling_divide
-    return required[symbols['ORE']]
+    return required[ORE]
 
 print(acquire(1)) # Part 1
 
