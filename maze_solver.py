@@ -3,7 +3,7 @@ from display import Display, array_from_dict
 import networkx as nx
 import numpy as np
 
-WALL, PATH, OXYGEN, ROBOT, START = 1, 2, 3, 4, 5
+WALL, OXYGEN, ROBOT, START = 1, 3, 4, 5
 UP, DOWN, LEFT, RIGHT = 1, 2, 3, 4
 
 directions = {(-1,  0): UP,
@@ -92,9 +92,9 @@ class Robot:
     def check(self):
         for direction in directions:
             if self.ahead(direction) not in self.map:
-                self >> np.array(direction)
+                self >> (tmp_arr := np.array(direction))
                 if self.previous != self.loc:
-                    self >> -np.array(direction)
+                    self >> -tmp_arr
         self.G.add_node(self.loc, checked=True)
 
     def start(self):
