@@ -35,3 +35,6 @@ More info here: [Advent of Code - About](https://adventofcode.com/2019/about)
 **Breaker Animation, Day 13**
 
 ![day13 visualization](breaker.gif)
+
+**Maze Solving Animation, Day 15**
+![day15 visualization](maze_solve.gif)
