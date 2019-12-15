@@ -29,34 +29,37 @@ class Robot:
 
     @property
     def loc(self):
+        """self.location as tuple for use as a key."""
         return tuple(self.location)
 
     def ahead(self, direction=None):
+        """Return location of cell ahead of Robot."""
         if direction is None:
             direction = self.direction
         return tuple(self.location + direction)
 
     def show(self):
+        """Recolor current location, show map, and un-color current location."""
         real_color = self.map[self.loc]
         self.map[self.loc] = ROBOT
         self.display(pixels=array_from_dict(self.map))
         self.map[self.loc] = real_color
 
-    def update_pos(self, output):
+    def update_pos(self, wall_ahead):
         self.previous = tuple(self.location)
-        if output != WALL:
+        if not wall_ahead:
             self.location += self.direction
 
     def update_map(self):
+        """Add new cells or walls to self.map."""
         output = self.brain.pop() + WALL
-        self.update_pos(output)
-        if output == WALL:
+        self.update_pos(is_wall:= output == WALL)
+        if is_wall:
             self.map[self.ahead()] = output
-        else:
-            if self.loc not in self.G:
-                self.G.add_node(self.loc, checked=False)
-                self.G.add_edge(self.previous, self.loc)
-                self.map[self.loc] = output
+        elif self.loc not in self.G:
+            self.G.add_node(self.loc, checked=False)
+            self.G.add_edge(self.previous, self.loc)
+            self.map[self.loc] = output
             if output == OXYGEN:
                 self.END = self.loc
 
@@ -76,20 +79,27 @@ class Robot:
         return nx.shortest_path_length(self.G, self.loc, node)
 
     def discover_maze(self):
-        unchecked = [node for node, checked in self.G.nodes(data='checked') if not checked]
-        if not unchecked:
-            return False
-        closest_unchecked = min(unchecked, key=self.path_length)
-        if closest_unchecked != self.loc:
-            self.move_to_node(closest_unchecked)
-        self.check()
-        return True
+        """
+        Move to closest unchecked cell and check it until there are no more unchecked cells.
+        """
+        while True:
+            unchecked = [node for node, checked in self.G.nodes(data='checked') if not checked]
+            if not unchecked:
+                return
+            closest_unchecked = min(unchecked, key=self.path_length)
+            if closest_unchecked != self.loc:
+                self.move_to_node(closest_unchecked)
+            self.check()
 
     def move_to_node(self, node):
         for direction in reduce_path(nx.shortest_path(self.G, self.loc, node)):
             self >> direction
 
     def check(self):
+        """
+        Move in each direction from a specific cell, returning to the cell if we don't
+        encounter a wall.
+        """
         for direction in directions:
             if self.ahead(direction) not in self.map:
                 self >> (tmp_arr := np.array(direction))
@@ -98,8 +108,7 @@ class Robot:
         self.G.add_node(self.loc, checked=True)
 
     def start(self):
-        while self.discover_maze():
-            pass
+        self.discover_maze()
         start_oxy = nx.shortest_path_length(self.G, self.START, self.END)
         fill_time = max(nx.shortest_path_length(self.G, source=self.END).values())
         self.display.text(f'Distance from START to OXYGEN is {start_oxy}. Fill time is {fill_time}.')
