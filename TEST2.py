@@ -225,8 +225,8 @@ class TEST:
         last_write = self.computer.last_write_to
         if self.old_write != -1:
             self.highlight(self.old_write, 1)
-        value = self.computer.read(last_write)
-        fill = BASE_2[0 if not value else int(log(value, 2))]
+        value = abs(self.computer.read(last_write))
+        fill = BASE_2[0 if value == 0 else int(log(value, 2))]
         self.write_to(last_write, fill)
         self.highlight(last_write, 9)
         time.sleep(.1)
