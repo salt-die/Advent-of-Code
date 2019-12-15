@@ -27,6 +27,7 @@ class TEST:
                  '2o':'REL'}
     old_pointer = old_nparams = 0
     old_write = -1
+    filename = 'Intcode'
 
     def __init__(self):
         self.init_scr()
@@ -42,7 +43,8 @@ class TEST:
 
         running = True
         while running:
-            with open(self.ask('Please Enter filename: ').strip(), 'r') as data:
+            self.filename = self.ask('Please Enter filename: ').strip()
+            with open(self.filename, 'r') as data:
                 data = list(map(int, data.read().split(',')))
                 self.computer.int_code = data + [0] * (self.cells - len(data))
 
@@ -54,7 +56,7 @@ class TEST:
 
             self.draw_cells(init=True, slow=False)
             self.draw_cells(slow=True)
-            self.display('Intcode Loaded...')
+            self.display(f'{self.filename} Loaded...')
             self.display('Any key to continue...')
             self.input_win.getch()
 
@@ -157,7 +159,7 @@ class TEST:
             self.output_win.refresh()
 
     def draw_cells(self, init=False, slow=False):
-        message = ('Loading Intcode', 'Initializing Memory')[init]
+        message = (f'Loading {self.filename}', 'Initializing Memory')[init]
         if slow:
             self.display(message)
         col = len(message)
