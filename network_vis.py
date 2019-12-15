@@ -8,17 +8,18 @@ from curses.textpad import Textbox, rectangle
 from itertools import cycle
 import time
 
-computers=[
-'    / ======= \         / ======= \         / ======= \         / ======= \         / ======= \    ',
-'   / __________\       / __________\       / __________\       / __________\       / __________\   ',
-'  | ___________ |     | ___________ |     | ___________ |     | ___________ |     | ___________ |  ',
-'  | |         | |     | |         | |     | |         | |     | |         | |     | |         | |  ',
-'  | |         | |     | |         | |     | |         | |     | |         | |     | |         | |  ',
-'  | |_________| |=-,  | |_________| |=-,  | |_________| |=-,  | |_________| |=-,  | |_________| |  ',
-"  \\=____________/   '=\\=____________/   '=\\=____________/   '=\\=____________/   '=\\=____________/  ",
-'  / """"""""""" \\     / """"""""""" \\     / """"""""""" \\     / """"""""""" \\     / """"""""""" \\  ',
-' / ::::::::::::: \\   / ::::::::::::: \\   / ::::::::::::: \\   / ::::::::::::: \\   / ::::::::::::: \\ ',
-'(_________________) (_________________) (_________________) (_________________) (_________________)']
+computer=['    / ======= \     ',
+          '   / __________\    ',
+          '  | ___________ |   ',
+          '  | |         | |   ',
+          '  | |         | |   ',
+          '  | |_________| |=-,',
+          "'=\\=____________/   ",
+          '  / """"""""""" \\   ',
+          ' / ::::::::::::: \\  ',
+          '(_________________) ']
+
+computers=[''.join(line) for line in zip(*([computer]*5))]
 
 class Window:
     def __init__(self):
@@ -60,24 +61,20 @@ class Window:
                 self.pre_compute()
 
     def send(self, computer):
-        if computer == 5:
-            return
-        for col in range(17, 20):
-            self.network_win.chgat(self.top + 5, self.left + col + 20 * computer, 1, curses.A_BOLD)
-            self.network_win.refresh()
-            time.sleep(.05)
-        for col in range(20, 22):
-            self.network_win.chgat(self.top + 6, self.left + col + 20 * computer, 1, curses.A_BOLD)
-            self.network_win.refresh()
-            time.sleep(.05)
-        for col in range(17, 20):
-            self.network_win.chgat(self.top + 5, self.left + col + 20 * computer, 1, curses.color_pair(1))
-            self.network_win.refresh()
-            time.sleep(.05)
-        for col in range(20, 22):
-            self.network_win.chgat(self.top + 6, self.left + col + 20 * computer, 1, curses.color_pair(1))
-            self.network_win.refresh()
-            time.sleep(.05)
+        if computer != 4:
+            widths = ((17, 20), (20, 22), (17, 20), (20, 22))
+        else:
+            widths = ((17, 20), (-80, -78), (17, 20), (-80, -78))
+        offsets = (5, 6, 5, 6)
+        colors = (curses.A_BOLD, curses.A_BOLD, curses.color_pair(1), curses.color_pair(1))
+
+        for width, offset, color in zip(widths, offsets, colors):
+            for col in range(*width):
+                self.network_win.chgat(self.top + offset,
+                                       self.left + col + 20 * computer,
+                                       1, color)
+                self.network_win.refresh()
+                time.sleep(.05)
 
     def dots(self, win, row, column, n=3, attributes=None):
         dots = n - round(2 * time.time()) % (n + 1)
