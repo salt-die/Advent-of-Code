@@ -189,10 +189,8 @@ class Window:
     def computer_display(self, computer, output):
         self.deques[computer].append(output)
         for row, line in enumerate(self.deques[computer]):
-            self.network_win.addstr(self.top + 3 + row, self.left + 5 + 20 * computer, ' ' * 9)
-        for row, line in enumerate(self.deques[computer]):
             self.network_win.addstr(self.top + 3 + row, self.left + 5 + 20 * computer,
-                                    line, curses.A_BOLD)
+                                    f'{line:<9}', curses.A_BOLD)
             self.network_win.refresh()
             time.sleep(.1)
         self.network_win.addstr(self.top + 3 + len(self.deques[computer]) - 1,
