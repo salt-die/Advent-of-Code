@@ -3,13 +3,13 @@ from display import Display, array_from_dict
 import networkx as nx
 import numpy as np
 
-WALL, PATH, OXYGEN, ROBOT, START = 1, 2, 3, 4, 5
+WALL, PATH, OXYGEN, ROBOT, START = 2, 3, 4, 5, 6
 UP, DOWN, LEFT, RIGHT = 1, 2, 3, 4
 
-directions = {(-1, 0):UP,
-              (1, 0):DOWN,
-              (0, -1):LEFT,
-              (0, 1):RIGHT}
+directions = {(-1,  0): UP,
+              ( 1,  0): DOWN,
+              ( 0, -1): LEFT,
+              ( 0,  1): RIGHT}
 
 def reduce_path(path):
     for start, end in zip(path, path[1:]):
@@ -48,7 +48,7 @@ class Robot:
             self.location += self.direction
 
     def update_map(self):
-        output = self.brain.pop() + 1
+        output = self.brain.pop() + WALL
         self.update_pos(output)
         if output == WALL:
             self.map[self.ahead()] = output
