@@ -56,7 +56,7 @@ class Robot:
             if self.loc not in self.G:
                 self.G.add_node(self.loc, checked=False)
                 self.G.add_edge(self.previous, self.loc)
-            if self.loc != self.start:
+            if self.loc != self.START:
                 self.map[self.loc] = output
             if output == OXYGEN:
                 self.END = self.loc
