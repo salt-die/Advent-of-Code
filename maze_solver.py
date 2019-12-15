@@ -93,7 +93,7 @@ class Robot:
 
     def check(self):
         """
-        Move in each direction from a specific cell, returning to the cell if we don't
+        Move in each direction from current location, returning immediately if we don't
         encounter a wall.
         """
         for direction in directions:
