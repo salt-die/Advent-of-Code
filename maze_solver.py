@@ -2,6 +2,7 @@ from computer import Computer
 from display import Display, array_from_dict
 import networkx as nx
 from vector import Vec
+from functools import partial
 
 WALL, OXYGEN, ROBOT, START = 1, 3, 4, 5
 UP, DOWN, LEFT, RIGHT = 1, 2, 3, 4
@@ -70,9 +71,6 @@ class Robot:
 
     __rshift__ = run_until_next_input
 
-    def path_length(self, node):
-        return nx.shortest_path_length(self.G, self.location, node)
-
     def discover_maze(self):
         """
         Move to closest unchecked cell and check it until there are no more unchecked cells.
@@ -80,7 +78,7 @@ class Robot:
         try:
             while True:
                 unchecked = (node for node, checked in self.G.nodes(data='checked') if not checked)
-                closest = min(unchecked, key=self.path_length)
+                closest = min(unchecked, key=partial(nx.shortest_path_length, self.G, self.location))
                 if closest != self.location:
                     self.move_to_node(closest)
                 self.check()
