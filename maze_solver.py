@@ -1,19 +1,19 @@
 from computer import Computer
 from display import Display, array_from_dict
 import networkx as nx
-import numpy as np
+from vector import Vec
 
 WALL, OXYGEN, ROBOT, START = 1, 3, 4, 5
 UP, DOWN, LEFT, RIGHT = 1, 2, 3, 4
 
-directions = {(-1,  0): UP,
-              ( 1,  0): DOWN,
-              ( 0, -1): LEFT,
-              ( 0,  1): RIGHT}
+directions = {Vec((-1,  0)): UP,
+              Vec(( 1,  0)): DOWN,
+              Vec(( 0, -1)): LEFT,
+              Vec(( 0,  1)): RIGHT}
 
 def reduce_path(path):
     for start, end in zip(path, path[1:]):
-        yield np.array(end) - start
+        yield end - start
 
 class Robot:
     def __init__(self, data):
@@ -24,31 +24,26 @@ class Robot:
         self.G.add_node(self.START, checked=False)
         self.brain = Computer(int_code=data)
         self.computation = self.brain.compute_iter()
-        self.location = np.array([0, 0])
+        self.location = Vec((0, 0))
         self.display = Display()
-
-    @property
-    def loc(self):
-        """self.location as tuple for use as a key."""
-        return tuple(self.location)
 
     def ahead(self, direction=None):
         """Return location of cell ahead of Robot."""
         if direction is None:
             direction = self.direction
-        return tuple(self.location + direction)
+        return self.location + direction
 
     def show(self):
         """Recolor current location, show map, and un-color current location."""
-        real_color = self.map[self.loc]
-        self.map[self.loc] = ROBOT
+        real_color = self.map[self.location]
+        self.map[self.location] = ROBOT
         self.display(pixels=array_from_dict(self.map))
-        self.map[self.loc] = real_color
+        self.map[self.location] = real_color
 
     def update_pos(self, wall_ahead):
-        self.previous = tuple(self.location)
+        self.previous = self.location
         if not wall_ahead:
-            self.location += self.direction
+            self.location = self.location + self.direction
 
     def update_map(self):
         """Add new cells or walls to self.map."""
@@ -56,16 +51,16 @@ class Robot:
         self.update_pos(is_wall:= output == WALL)
         if is_wall:
             self.map[self.ahead()] = output
-        elif self.loc not in self.G:
-            self.G.add_node(self.loc, checked=False)
-            self.G.add_edge(self.previous, self.loc)
-            self.map[self.loc] = output
+        elif self.location not in self.G:
+            self.G.add_node(self.location, checked=False)
+            self.G.add_edge(self.previous, self.location)
+            self.map[self.location] = output
             if output == OXYGEN:
-                self.END = self.loc
+                self.END = self.location
 
     def run_until_next_input(self, direction):
         self.direction = direction
-        self.brain << directions[tuple(direction)]
+        self.brain << directions[direction]
         for _, op, _, _, _ in self.computation:
             if self.brain:
                 self.update_map()
@@ -76,23 +71,24 @@ class Robot:
     __rshift__ = run_until_next_input
 
     def path_length(self, node):
-        return nx.shortest_path_length(self.G, self.loc, node)
+        return nx.shortest_path_length(self.G, self.location, node)
 
     def discover_maze(self):
         """
         Move to closest unchecked cell and check it until there are no more unchecked cells.
         """
-        while True:
-            unchecked = [node for node, checked in self.G.nodes(data='checked') if not checked]
-            if not unchecked:
-                return
-            closest_unchecked = min(unchecked, key=self.path_length)
-            if closest_unchecked != self.loc:
-                self.move_to_node(closest_unchecked)
-            self.check()
+        try:
+            while True:
+                closest = min((node for node, checked in self.G.nodes(data='checked')
+                                    if not checked), key=self.path_length)
+                if closest != self.location:
+                    self.move_to_node(closest)
+                self.check()
+        except:
+            return
 
     def move_to_node(self, node):
-        for direction in reduce_path(nx.shortest_path(self.G, self.loc, node)):
+        for direction in reduce_path(nx.shortest_path(self.G, self.location, node)):
             self >> direction
 
     def check(self):
@@ -102,10 +98,10 @@ class Robot:
         """
         for direction in directions:
             if self.ahead(direction) not in self.map:
-                self >> (tmp_arr := np.array(direction))
-                if self.previous != self.loc:
-                    self >> -tmp_arr
-        self.G.add_node(self.loc, checked=True)
+                self >> direction
+                if self.previous != self.location:
+                    self >> -direction
+        self.G.add_node(self.location, checked=True)
 
     def start(self):
         self.discover_maze()
