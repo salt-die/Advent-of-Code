@@ -1,8 +1,8 @@
+from functools import partial
+import networkx as nx
 from computer import Computer
 from display import Display, array_from_dict
-import networkx as nx
 from vector import Vec
-from functools import partial
 
 WALL, OXYGEN, ROBOT, START = 1, 3, 4, 5
 UP, DOWN, LEFT, RIGHT = 1, 2, 3, 4
