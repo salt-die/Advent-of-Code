@@ -3,7 +3,7 @@ from display import Display, array_from_dict
 import networkx as nx
 import numpy as np
 
-WALL, PATH, OXYGEN, ROBOT, START = 2, 3, 4, 5, 6
+WALL, PATH, OXYGEN, ROBOT, START = 1, 2, 3, 4, 5
 UP, DOWN, LEFT, RIGHT = 1, 2, 3, 4
 
 directions = {(-1,  0): UP,
@@ -56,7 +56,6 @@ class Robot:
             if self.loc not in self.G:
                 self.G.add_node(self.loc, checked=False)
                 self.G.add_edge(self.previous, self.loc)
-            if self.loc != self.START:
                 self.map[self.loc] = output
             if output == OXYGEN:
                 self.END = self.loc
@@ -80,15 +79,14 @@ class Robot:
         unchecked = [node for node, checked in self.G.nodes(data='checked') if not checked]
         if not unchecked:
             return False
-        node = min(unchecked, key=self.path_length)
-        if node != self.loc:
-            self.move_to_node(node)
+        closest_unchecked = min(unchecked, key=self.path_length)
+        if closest_unchecked != self.loc:
+            self.move_to_node(closest_unchecked)
         self.check()
         return True
 
     def move_to_node(self, node):
-        path = nx.shortest_path(self.G, self.loc, node)
-        for direction in reduce_path(path):
+        for direction in reduce_path(nx.shortest_path(self.G, self.loc, node)):
             self >> direction
 
     def check(self):
