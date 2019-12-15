@@ -79,12 +79,12 @@ class Robot:
         """
         try:
             while True:
-                closest = min((node for node, checked in self.G.nodes(data='checked')
-                                    if not checked), key=self.path_length)
+                unchecked = (node for node, checked in self.G.nodes(data='checked') if not checked)
+                closest = min(unchecked, key=self.path_length)
                 if closest != self.location:
                     self.move_to_node(closest)
                 self.check()
-        except:
+        except ValueError: # All cells checked.
             return
 
     def move_to_node(self, node):
