@@ -22,9 +22,9 @@ print(''.join(map(str, number[:8]))) # Part 1
 number = (list(map(int, data)) * 10000)[int(data[:7]):] # Slice at offset
 
 for i in range(100):
-    partial_sum = sum(number)
+    sum_ = sum(number) # Coefficients form upper-triangular matrix of all ones.
     for j, digit in enumerate(number):
-        number[j] = abs(partial_sum) % 10
-        partial_sum -= digit
+        number[j] = abs(sum_) % 10
+        sum_ -= digit
 
 print(''.join(map(str, number[:8]))) # Part 2
