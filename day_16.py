@@ -15,12 +15,11 @@ def phase(number):
         new_number.append(digit)
     return new_number
 
+number = data
+for _ in range(100):
+    number = phase(number)
 
-#number = data
-#for _ in range(100):
-#    number = phase(number)
-#
-#print(''.join(map(str, number[:8]))) # Part 1
+print(''.join(map(str, number[:8]))) # Part 1
 
 number = data
 offset = int(number[:7])
@@ -32,4 +31,4 @@ for i in range(100):
         number[j] = abs(partial_sum) % 10
         partial_sum -= digit
 
-print(''.join(map(str, number[offset: offset + 8])))
+print(''.join(map(str, number[offset: offset + 8]))) # Part 2
