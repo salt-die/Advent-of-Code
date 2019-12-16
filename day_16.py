@@ -1,4 +1,5 @@
 from itertools import cycle, repeat
+from functools import reduce
 
 with open('input16', 'r') as data:
     data = data.read().strip()
@@ -20,9 +21,9 @@ print(''.join(map(str, number[:8]))) # Part 1
 number = (list(map(int, data)) * 10000)[int(data[:7]):] # Slice at offset
 
 for i in range(100):
-    sum_of_digits = sum(number) # Coefficients form upper-triangular matrix of all ones.
-    for j, digit in enumerate(number):
-        number[j] = abs(sum_of_digits) % 10
-        sum_of_digits -= digit
+    sum_ = reduce(lambda x, y: (x + y) % 10, number) # We could use sum, but this is more memory efficient.
+    for j, digit in enumerate(number): # Would be more optimal to loop over reversed(number).
+        number[j] = sum_
+        sum_ = (sum_ - digit) % 10
 
 print(''.join(map(str, number[:8]))) # Part 2
