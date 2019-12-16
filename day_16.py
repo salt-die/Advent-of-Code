@@ -13,20 +13,19 @@ def phase(number):
         next(multiplier)
         new_number.append(abs(sum(digit * next(multiplier) for digit in number)) % 10)
     return new_number
+#
+#number = list(map(int, data))
+#for _ in range(100):
+#    number = phase(number)
+#
+#print(''.join(map(str, number[:8]))) # Part 1
 
-number = list(map(int, data))
-for _ in range(100):
-    number = phase(number)
-
-print(''.join(map(str, number[:8]))) # Part 1
-
-offset = int(data[:7])
-number = list(map(int, data)) * 10000
+number = (list(map(int, data)) * 10000)[int(data[:7]):] # Slice at offset
 
 for i in range(100):
-    partial_sum = sum(number[offset:])
-    for j, digit in enumerate(number[offset:], start=offset):
+    partial_sum = sum(number)
+    for j, digit in enumerate(number):
         number[j] = abs(partial_sum) % 10
         partial_sum -= digit
 
-print(''.join(map(str, number[offset: offset + 8]))) # Part 2
+print(''.join(map(str, number[:8]))) # Part 2
