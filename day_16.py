@@ -3,12 +3,10 @@ from itertools import cycle, repeat
 with open('input16', 'r') as data:
     data = data.read().strip()
 
-BASE = (0,1,0,-1)
-
 def phase(number):
     new_number = []
     for i, digit in enumerate(number, start=1):
-        coefficients = (coef for base in cycle(BASE) for coef in repeat(base, i))
+        coefficients = (coef for base in cycle((0,1,0,-1)) for coef in repeat(base, i))
         next(coefficients)
         new_number.append(abs(sum(digit * next(coefficients) for digit in number)) % 10)
     return new_number
