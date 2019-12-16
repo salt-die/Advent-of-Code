@@ -76,14 +76,11 @@ class Robot:
         """
         Move to closest unchecked cell and check it until all cells have been checked.
         """
-        try:
-            while True:
-                closest = self.stack.pop()
-                if closest != self.location:
-                    self.move_to_node(closest)
-                self.check()
-        except IndexError: # All cells checked.
-            return
+        while self.stack:
+            closest = self.stack.pop()
+            if closest != self.location:
+                self.move_to_node(closest)
+            self.check()
 
     def move_to_node(self, node):
         for direction in reduce_path(nx.shortest_path(self.G, self.location, node)):
