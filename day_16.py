@@ -8,7 +8,7 @@ BASE = (0,1,0,-1)
 def phase(number):
     new_number = []
     for i, digit in enumerate(number, start=1):
-        coefficients = (coef for factor in cycle(BASE) for coef in repeat(factor, i))
+        coefficients = (coef for base in cycle(BASE) for coef in repeat(base, i))
         next(coefficients)
         new_number.append(abs(sum(digit * next(coefficients) for digit in number)) % 10)
     return new_number
