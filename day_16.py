@@ -21,7 +21,7 @@ print(''.join(map(str, number[:8]))) # Part 1
 number = (list(map(int, data)) * 10000)[int(data[:7]):] # Slice at offset
 
 for i in range(100):
-    sum_ = reduce(lambda x, y: (x + y) % 10, number) # We could use sum, but this is more memory efficient.
+    sum_ = reduce(lambda x, y: (x + y) % 10, number) # We could use sum, but this is memory efficient.
     for j, digit in enumerate(number): # Would be more optimal to loop over reversed(number).
         number[j] = sum_
         sum_ = (sum_ - digit) % 10
