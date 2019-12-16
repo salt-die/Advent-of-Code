@@ -6,7 +6,7 @@ with open('input16', 'r') as data:
 def phase(number):
     new_number = []
     for i, digit in enumerate(number, start=1):
-        coefficients = (coef for base in cycle((0,1,0,-1)) for coef in repeat(base, i))
+        coefficients = (coef for base in cycle((0, 1, 0, -1)) for coef in repeat(base, i))
         next(coefficients)
         new_number.append(abs(sum(digit * next(coefficients) for digit in number)) % 10)
     return new_number
