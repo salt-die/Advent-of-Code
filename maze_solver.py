@@ -21,7 +21,7 @@ class Robot:
         self.END = None
         self.map = {self.START: START}
         self.G = nx.Graph()
-        self.stack = [self.START]
+        self.stack = []
         self.G.add_node(self.START)
         self.brain = Computer(int_code=data)
         self.computation = self.brain.compute_iter()
@@ -74,12 +74,11 @@ class Robot:
 
     def discover_maze(self):
         """
-        Move to closest unchecked cell and check it until all cells have been checked.
+        Move to next unchecked cell on the stack and check it until all cells have been checked.
         """
+        self.check()
         while self.stack:
-            closest = self.stack.pop()
-            if closest != self.location:
-                self.move_to_node(closest)
+            self.move_to_node(self.stack.pop())
             self.check()
 
     def move_to_node(self, node):
