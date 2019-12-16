@@ -20,9 +20,9 @@ print(''.join(map(str, number[:8]))) # Part 1
 number = (list(map(int, data)) * 10000)[int(data[:7]):] # Slice at offset
 
 for i in range(100):
-    sum_ = sum(number) # Coefficients form upper-triangular matrix of all ones.
+    sum_of_digits = sum(number) # Coefficients form upper-triangular matrix of all ones.
     for j, digit in enumerate(number):
-        number[j] = abs(sum_) % 10
-        sum_ -= digit
+        number[j] = abs(sum_of_digits) % 10
+        sum_of_digits -= digit
 
 print(''.join(map(str, number[:8]))) # Part 2

@@ -1,4 +1,3 @@
-from functools import partial
 import networkx as nx
 from computer import Computer
 from display import Display, array_from_dict
@@ -22,7 +21,8 @@ class Robot:
         self.END = None
         self.map = {self.START: START}
         self.G = nx.Graph()
-        self.G.add_node(self.START, checked=False)
+        self.stack = [self.START]
+        self.G.add_node(self.START)
         self.brain = Computer(int_code=data)
         self.computation = self.brain.compute_iter()
         self.location = Vec((0, 0))
@@ -53,7 +53,8 @@ class Robot:
         if is_wall:
             self.map[self.ahead()] = output
         elif self.location not in self.G:
-            self.G.add_node(self.location, checked=False)
+            self.stack.append(self.location)
+            self.G.add_node(self.location)
             self.G.add_edge(self.previous, self.location)
             self.map[self.location] = output
             if output == OXYGEN:
@@ -73,16 +74,15 @@ class Robot:
 
     def discover_maze(self):
         """
-        Move to closest unchecked cell and check it until there are no more unchecked cells.
+        Move to closest unchecked cell and check it until all cells have been checked.
         """
         try:
             while True:
-                unchecked = (node for node, checked in self.G.nodes(data='checked') if not checked)
-                closest = min(unchecked, key=partial(nx.shortest_path_length, self.G, self.location))
+                closest = self.stack.pop()
                 if closest != self.location:
                     self.move_to_node(closest)
                 self.check()
-        except ValueError: # All cells checked.
+        except IndexError: # All cells checked.
             return
 
     def move_to_node(self, node):
@@ -99,7 +99,6 @@ class Robot:
                 self >> direction
                 if self.previous != self.location:
                     self >> -direction
-        self.G.add_node(self.location, checked=True)
 
     def start(self):
         self.discover_maze()
