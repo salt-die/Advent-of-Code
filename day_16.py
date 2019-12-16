@@ -11,19 +11,17 @@ def phase(number):
         multiplier = (repeated_factor for factor in cycle(BASE)
                                       for repeated_factor in repeat(factor, i))
         next(multiplier)
-        digit = abs(sum(int(digit) * next(multiplier) for digit in number)) % 10
-        new_number.append(digit)
+        new_number.append(abs(sum(digit * next(multiplier) for digit in number)) % 10)
     return new_number
 
-number = data
+number = list(map(int, data))
 for _ in range(100):
     number = phase(number)
 
 print(''.join(map(str, number[:8]))) # Part 1
 
-number = data
-offset = int(number[:7])
-number = list(map(int, number)) * 10000
+offset = int(data[:7])
+number = list(map(int, data)) * 10000
 
 for i in range(100):
     partial_sum = sum(number[offset:])
