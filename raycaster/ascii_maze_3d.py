@@ -1,10 +1,17 @@
+"""
+Ray-caster for your intcode maze-solver.  One should make an ascii map of the maze before-hand.
+
+If you get an error when running, try increasing PAD --- large terminals might need a bigger
+buffer for the mini-map.
+"""
+
 import curses
 import os
 import signal
 import numpy as np
 from maze3d_solver import Robot
 
-UP, DOWN, LEFT, RIGHT, PAD = 1, 2, 3, 4, 50
+UP, DOWN, LEFT, RIGHT, PAD, FRAMES = 1, 2, 3, 4, 50, 10
 
 to_vector = {   UP: np.array([  0, -1]),
               DOWN: np.array([  0,  1]),
@@ -190,13 +197,16 @@ class Controller():
         elif direction == RIGHT and self.player.angle == to_angle[UP]:
             self.player.angle = -np.pi / 2
 
-        frames = 10 if abs((angle := to_angle[direction]) - self.player.angle) < np.pi else 20
+        if ((angle := to_angle[direction]) - self.player.angle) % (2 * np.pi) < np.pi:
+            frames = FRAMES
+        else:
+            frames = 2 * FRAMES
         if angle != self.player.angle:
             for theta in np.linspace(self.player.angle, angle, frames):
                 self.player.turn(theta)
                 self.update()
 
-        for position in np.linspace(self.player.pos, self.player.pos + to_vector[direction], 10):
+        for position in np.linspace(self.player.pos, self.player.pos + to_vector[direction], FRAMES):
             self.player.pos = position
             self.update()
 
