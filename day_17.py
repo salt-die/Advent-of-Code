@@ -6,17 +6,18 @@ with open('input17', 'r') as data:
 
 tape = Computer(int_code=data)
 tape.compute()
+tape.out.reverse()
 video = ''.join(map(chr, tape.out))
 print(video)
 
 video = video.splitlines()
 sum_ = 0
-for y, (top, mid, bot) in enumerate(zip(video, video[1:], video[2:]), start=1):
-    for x, (top_,(mid1, mid2, mid3), bot_) in enumerate(zip(top[1:],
-                                                            zip(mid, mid[1:], mid[2:]),
-                                                            bot[1:]), start=1):
-        if top_ == mid1 == mid2 == mid3 == bot_ == '#':
-            sum_ += (x + 1) * (y + 1)
+for y, (t, m, b) in enumerate(zip(video, video[1:], video[2:]), start=1):
+    for x, (    t_,
+           (m1, m2, m3),
+                b_    ) in enumerate(zip(t[1:], zip(m, m[1:], m[2:]), b[1:]), start=1):
+        if t_ == m1 == m2 == m3 == b_ == '#':
+            sum_ += x * y
 
 print(sum_) # Part 1
 
@@ -69,5 +70,5 @@ BBBBBBBBB.......A.AAAAAAAAA.................C......
 
 tape.int_code[0] = 2
 functions = 'B,A,B,A,C,C,A,B,A,C\nL,8,L,8,R,4,R,6,R,6\nL,12,L,6,L,8,R,6\nL,12,R,6,L,8\nn\n'
-tape.compute_n(1, feed=map(ord, functions))
+tape.compute(feed=map(ord, functions))
 print(tape.out.popleft()) # Part 2
