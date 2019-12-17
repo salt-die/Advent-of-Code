@@ -17,7 +17,7 @@ def reduce_path(path):
 
 class Robot:
     def __init__(self, data):
-        self.START = self.previous =  0, 0
+        self.START = self.previous = self.location = Vec((0, 0))
         self.END = None
         self.map = {self.START: START}
         self.G = nx.Graph()
@@ -25,7 +25,7 @@ class Robot:
         self.G.add_node(self.START)
         self.brain = Computer(int_code=data)
         self.computation = self.brain.compute_iter()
-        self.location = Vec((0, 0))
+
         self.display = Display()
 
     def ahead(self, direction=None):
