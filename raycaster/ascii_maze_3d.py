@@ -54,26 +54,19 @@ class Renderer:
     side_shade = (shades + 1) // 5
     shade_dif = shades - side_shade
 
-    def __init__(self, screen, player, game_map, textures):
+    def __init__(self, screen, player, game_map, texture):
         self.screen = screen
         self.resize()
         self.player = player
         self.game_map = game_map
         self.mini_map = np.pad(np.where(self.game_map.T, '#', ' '), PAD, constant_values=' ')
-        self._load_textures(textures)
+        self.texture = texture
 
     def resize(self):
         self.width, self.height = os.get_terminal_size()
         curses.resizeterm(self.height, self.width)
         self.angle_increment = 1 / self.width
         self.floor_y = self.height // 2
-
-    def _load_textures(self, textures):
-        self.textures = []
-        for name in textures:
-            with open(name + '.txt', 'r') as texture:
-                pre_load = [list(line.strip()) for line in texture]
-                self.textures.append(np.array(pre_load, dtype=int).T)
 
     def cast_ray(self, column):
         """
@@ -113,8 +106,7 @@ class Renderer:
 
         shade_buffer = np.full(line_height, shade)
 
-        tex_num = self.game_map[tuple(map_pos)] - 1
-        texture_width, texture_height = self.textures[tex_num].shape
+        texture_width, texture_height = self.texture.shape
 
         wall_x = (self.player.pos[1 - side] + wall_dis * ray_angle[1 - side]) % 1
         tex_x = int(wall_x * texture_width)
@@ -122,7 +114,7 @@ class Renderer:
             tex_x = texture_width - tex_x - 1
 
         tex_ys = (np.arange(line_height) * (texture_height / line_height)).astype(int)
-        shade_buffer += 2 * self.textures[tex_num][tex_x, tex_ys] - 12
+        shade_buffer += 2 * self.texture[tex_x, tex_ys] - 12
         np.clip(shade_buffer, 1, self.shades, out=shade_buffer)
 
         self.buffer[line_start:line_end, column] = self.ascii_map[shade_buffer]
@@ -211,11 +203,11 @@ def main(screen):
     curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
     screen.attron(curses.color_pair(1))
 
-    with open('map.txt', 'r') as file:
-        map_ = [list(line.strip()) for line in file]
-        map_ = np.array(map_, dtype=int).T
+    with open('map.txt', 'r') as map_, open('wall.txt', 'r') as wall:
+        map_, wall = [list(line.strip()) for line in map_], [list(line.strip()) for line in wall]
+        map_, wall = np.array(map_, dtype=int).T, np.array(wall, dtype=int).T
 
-    Controller(Renderer(screen, Player(), map_, ['wall']), Robot()).start()
+    Controller(Renderer(screen, Player(), map_, wall), Robot()).start()
 
     curses.endwin()
 
