@@ -146,7 +146,7 @@ class Renderer:
 
     def draw_minimap(self):
         start_col = 2 * (self.width // 3) - 2
-        start_row = 2 * (self.height // 3)
+        start_row = 2 * (self.height // 3) - 1
         x, y = self.player.pos.astype(int) + PAD
         half_w = self.width // 3 // 2
         half_h = self.height // 3 // 2
