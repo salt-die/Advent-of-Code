@@ -3,7 +3,6 @@ from computer import Computer
 with open('input17', 'r') as data:
     data = list(map(int, data.read().split(',')))
 
-
 tape = Computer(int_code=data)
 tape.compute()
 print(' '.join(map(chr, reversed(tape.out))))
@@ -17,7 +16,6 @@ for y, (t, m, b) in enumerate(zip(video, video[1:], video[2:]), start=1):
             sum_ += x * y
 
 print(sum_) # Part 1
-
 
 """
  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . B B B B B B B . . . . . .
@@ -60,6 +58,7 @@ print(sum_) # Part 1
  . . . . . . . . . . . . . . B . . . . . B . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
  . . . . . . . . . . . . . . B B B B B B B . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 """
+
 # Solved by hand
 'B,A,B,A,C,C,A,B,A,C\n' # Main
 'L,8,L,8,R,4,R,6,R,6\n' # A
