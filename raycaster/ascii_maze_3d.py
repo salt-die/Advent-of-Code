@@ -77,7 +77,7 @@ class Renderer:
         self.resize()
         self.player = player
         self.game_map = player.game_map
-        self.mini_map = np.pad(np.where(self.game_map.map == 0, ' ', '#'), PAD, constant_values=' ')
+        self.mini_map = np.pad(np.where(self.game_map.map.T == 0, ' ', '#'), PAD, constant_values=' ')
         self._load_textures(textures)
 
     def resize(self):
@@ -136,14 +136,14 @@ class Renderer:
 
         wall_x = (self.player.pos[1 - side] + wall_dis * ray_angle[1 - side]) % 1
         tex_x = int(wall_x * texture_width)
-        if (-1)**side * ray_angle[side] > 0:
+        if (-1)**side * ray_angle[side] < 0:
             tex_x = texture_width - tex_x - 1
 
         tex_ys = (np.arange(line_height) * (texture_height / line_height)).astype(int)
         shade_buffer += 2 * self.textures[tex_num][tex_x, tex_ys] - 12
         np.clip(shade_buffer, 1, self.shades, out=shade_buffer)
 
-        self.buffer[line_start:line_end, -column] = self.ascii_map[shade_buffer]
+        self.buffer[line_start:line_end, column] = self.ascii_map[shade_buffer]
 
     def draw_minimap(self):
         start_col = 2 * (self.width // 3) - 3
@@ -153,8 +153,8 @@ class Renderer:
         half_h = self.height // 3 // 2
 
         self.buffer[start_row: start_row + 2 * half_h,
-                    start_col: start_col + 2 * half_w] = self.mini_map[x - half_h: x + half_h,
-                                                                       y - half_w: y + half_w]
+                    start_col: start_col + 2 * half_w] = self.mini_map[y - half_h: y + half_h,
+                                                                       x - half_w: x + half_w]
         self.buffer[start_row + half_h, start_col + half_w] = '@'
 
     def update(self):
@@ -162,7 +162,7 @@ class Renderer:
 
         self.buffer[self.floor_y:, :] = self.ascii_map[1] # Draw floor
 
-        for column in range(1, self.width + 1): # Draw walls
+        for column in range(self.width): # Draw walls
             self.cast_ray(column)
 
         self.draw_minimap()
@@ -184,7 +184,6 @@ class Controller():
     def __init__(self, renderer, robot):
         self.player = renderer.player
         self.renderer = renderer
-        self.player = renderer.player
         self.commands = robot.discover_maze()
         signal.signal(signal.SIGWINCH, self.resize) # Our solution to curses resize bug
 
@@ -226,11 +225,9 @@ def main(screen):
     curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
     screen.attron(curses.color_pair(1))
 
-    game_map = Map('map')
-    player = Player(game_map)
-    textures = ['wall']
+    player = Player(Map('map'))
 
-    Controller(Renderer(screen, player, textures), Robot()).start()
+    Controller(Renderer(screen, player, ['wall']), Robot()).start()
 
     curses.endwin()
 
