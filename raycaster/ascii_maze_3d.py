@@ -82,7 +82,7 @@ class Renderer:
     def _load_textures(self, textures):
         self.textures = []
         for name in textures:
-            with open(name + ".txt", 'r') as texture:
+            with open(name + '.txt', 'r') as texture:
                 pre_load = [list(line.strip()) for line in texture]
                 self.textures.append(np.array(pre_load, dtype=int).T)
 
@@ -93,7 +93,7 @@ class Renderer:
         """
         ray_angle = self.player.cam.T @ np.array((1, 2 * column * self.angle_increment - 1))
         map_pos = self.player.pos.astype(int)
-        with np.errstate(divide="ignore"):
+        with np.errstate(divide='ignore'):
             delta = abs(1 / ray_angle)
         step = 2 * np.heaviside(ray_angle, 1) - 1  # Same as np.sign except 0 is mapped to 1
         side_dis = step * (map_pos + (step + 1) / 2 - self.player.pos) * delta
@@ -151,7 +151,7 @@ class Renderer:
         self.buffer[start_row + half_h, start_col + half_w] = '@'
 
     def update(self):
-        self.buffer = np.full((self.height, self.width), " ") # Clear buffer
+        self.buffer = np.full((self.height, self.width), ' ') # Clear buffer
 
         self.buffer[self.floor_y:, :] = self.ascii_map[1] # Draw floor
 
