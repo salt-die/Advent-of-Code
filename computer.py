@@ -111,6 +111,12 @@ class Computer:
         """
         return self.out.pop()
 
+    def last(self):
+        """
+        Shortcut to retrieve newest output.
+        """
+        return self.out.popleft()
+
     def __len__(self):
         """
         Shortcut to check length of self.out.
@@ -159,7 +165,7 @@ class Computer:
 
     def compute(self, feed=None):
         """
-        Returns the last item of compute_iter
+        Returns the last item of compute_iter.
         """
         for result in self.compute_iter(feed):
             pass
@@ -167,7 +173,7 @@ class Computer:
 
     def compute_n(self, niter, feed=None):
         """
-        Run self.compute niter times; other than niter, only feed kwarg supported.
+        Run self.compute niter times.
         """
         all_outs = []
         if feed is not None:

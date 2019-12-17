@@ -68,4 +68,4 @@ print(sum_) # Part 1
 tape.int_code[0] = 2
 functions = 'B,A,B,A,C,C,A,B,A,C\nL,8,L,8,R,4,R,6,R,6\nL,12,L,6,L,8,R,6\nL,12,R,6,L,8\nn\n'
 tape.compute(feed=map(ord, functions))
-print(tape.out.popleft()) # Part 2
+print(tape.last()) # Part 2
