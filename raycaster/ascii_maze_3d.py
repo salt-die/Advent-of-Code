@@ -191,15 +191,19 @@ class Controller():
         self.resized = True
 
     def movement(self, direction):
+        # Conditionals so we don't turn the wrong direction
         if direction == UP and self.player.angle == 0:
             self.player.angle = 2 * np.pi
         elif direction == RIGHT and self.player.angle == to_angle[UP]:
             self.player.angle = -np.pi / 2
 
-        if ((angle := to_angle[direction]) - self.player.angle) % (2 * np.pi) < np.pi:
+        angle = to_angle[direction]
+
+        if abs(to_angle[direction] - self.player.angle) < np.pi:
             frames = FRAMES
         else:
             frames = 2 * FRAMES
+
         if angle != self.player.angle:
             for theta in np.linspace(self.player.angle, angle, frames):
                 self.player.turn(theta)
