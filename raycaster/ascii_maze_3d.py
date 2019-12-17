@@ -30,27 +30,10 @@ def rotation_matrix(theta):
                      [-np.sin(theta), np.cos(theta)]])
 
 
-class Map:
-    """
-    A helper class for easy loading of maps.
-    """
-    def __init__(self, file_name):
-        self._load(file_name)
-
-    def _load(self, file_name):
-        with open(file_name + '.txt', 'r') as file:
-            map_ = [list(line.strip()) for line in file]
-            self.map = np.array(map_, dtype=int).T
-
-    def __getitem__(self, key):
-        return self.map[key]
-
-
 class Player:
     field_of_view = .6  # Somewhere between 0 and 1 is reasonable
 
-    def __init__(self, game_map, pos=np.array([21.5, 21.5]), angle=np.pi / 2):
-        self.game_map = game_map
+    def __init__(self, pos=np.array([21.5, 21.5]), angle=np.pi / 2):
         self.pos = pos
         self.angle = angle
         self.cam = np.array([[1, 0], [0, self.field_of_view]]) @ rotation_matrix(angle)
@@ -71,12 +54,12 @@ class Renderer:
     side_shade = (shades + 1) // 5
     shade_dif = shades - side_shade
 
-    def __init__(self, screen, player, textures):
+    def __init__(self, screen, player, game_map, textures):
         self.screen = screen
         self.resize()
         self.player = player
-        self.game_map = player.game_map
-        self.mini_map = np.pad(np.where(self.game_map.map.T == 0, ' ', '#'), PAD, constant_values=' ')
+        self.game_map = game_map
+        self.mini_map = np.pad(np.where(self.game_map.T, '#', ' '), PAD, constant_values=' ')
         self._load_textures(textures)
 
     def resize(self):
@@ -228,9 +211,11 @@ def main(screen):
     curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
     screen.attron(curses.color_pair(1))
 
-    player = Player(Map('map'))
+    with open('map.txt', 'r') as file:
+        map_ = [list(line.strip()) for line in file]
+        map_ = np.array(map_, dtype=int).T
 
-    Controller(Renderer(screen, player, ['wall']), Robot()).start()
+    Controller(Renderer(screen, Player(), map_, ['wall']), Robot()).start()
 
     curses.endwin()
 
