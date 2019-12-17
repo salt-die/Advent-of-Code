@@ -185,7 +185,6 @@ class Controller():
         self.player = renderer.player
         self.renderer = renderer
         self.player = renderer.player
-        self.robot = robot
         self.commands = robot.discover_maze()
         signal.signal(signal.SIGWINCH, self.resize) # Our solution to curses resize bug
 
