@@ -4,7 +4,6 @@ Ray-caster for your intcode maze-solver.  One should make an ascii map of the ma
 If you get an error when running, try increasing PAD --- large terminals might need a bigger
 buffer for the mini-map.
 """
-
 import curses
 import os
 import signal
@@ -146,8 +145,8 @@ class Renderer:
         self.buffer[line_start:line_end, column] = self.ascii_map[shade_buffer]
 
     def draw_minimap(self):
-        start_col = 2 * (self.width // 3) - 3
-        start_row = 2 * (self.height // 3) - 3
+        start_col = 2 * (self.width // 3) - 2
+        start_row = 2 * (self.height // 3)
         x, y = self.player.pos.astype(int) + PAD
         half_w = self.width // 3 // 2
         half_h = self.height // 3 // 2
