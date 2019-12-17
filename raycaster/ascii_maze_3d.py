@@ -30,6 +30,7 @@ def rotation_matrix(theta):
     return np.array([[np.cos(theta), np.sin(theta)],
                      [-np.sin(theta), np.cos(theta)]])
 
+
 class Map:
     """
     A helper class for easy loading of maps.
