@@ -67,7 +67,6 @@ class Renderer:
     def __init__(self, screen, player, textures):
         self.screen = screen
         self.resize()
-
         self.player = player
         self.game_map = player.game_map
         self.mini_map = np.pad(np.where(self.game_map.map == 0, ' ', '#'), PAD, constant_values=' ')
@@ -170,9 +169,8 @@ class Renderer:
 
 class Controller():
     """
-    Controller class handles user input and updates all other objects.
+    Controller class handles robot input and updates all other objects.
     """
-    running = True
     resized = False
 
     def __init__(self, renderer, robot):
@@ -203,9 +201,8 @@ class Controller():
             self.update()
 
     def start(self):
-        while self.running:
-            self.update()
-            self.movement(next(self.commands))
+        for command in self.commands:
+            self.movement(command)
 
     def update(self):
         if self.resized:
