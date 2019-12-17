@@ -41,4 +41,4 @@ More info here: [Advent of Code - About](https://adventofcode.com/2019/about)
 ![day15 visualization](maze_solver.gif)
 
 **Maze Solving in 2.5d, Day 15**
-![day15 visualization](maze_solve_2.gif)
+![day15 visualization](maze_solver_2.gif)
