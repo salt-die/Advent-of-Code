@@ -42,7 +42,7 @@ class Map:
 class Player:
     field_of_view = .6  # Somewhere between 0 and 1 is reasonable
 
-    def __init__(self, game_map, pos=np.array([21.5, 21.5]), angle= np.pi / 2):
+    def __init__(self, game_map, pos=np.array([21.5, 21.5]), angle=np.pi / 2):
         self.game_map = game_map
         self.pos = pos
         self.angle = angle
