@@ -188,14 +188,11 @@ class Controller():
 
     def movement(self, direction):
         if direction == UP and self.player.angle == 0:
-            angle = -np.pi / 2
+            self.player.angle = 2 * np.pi
         elif direction == RIGHT and self.player.angle == to_angle[UP]:
-            angle = to_angle[direction]
             self.player.angle = -np.pi / 2
-        else:
-            angle = to_angle[direction]
 
-        frames = 10 if abs(angle - self.player.angle) < np.pi else 20
+        frames = 10 if abs((angle := to_angle[direction]) - self.player.angle) < np.pi else 20
         if angle != self.player.angle:
             for theta in np.linspace(self.player.angle, angle, frames):
                 self.player.turn(theta)
