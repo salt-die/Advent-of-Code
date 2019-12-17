@@ -6,14 +6,14 @@ from maze3d_solver import Robot
 
 UP, DOWN, LEFT, RIGHT, PAD = 1, 2, 3, 4, 50
 
-to_vector = {UP:    np.array([  0, -1]),
-             DOWN:  np.array([  0,  1]),
-             LEFT:  np.array([ -1,  0]),
+to_vector = {   UP: np.array([  0, -1]),
+              DOWN: np.array([  0,  1]),
+              LEFT: np.array([ -1,  0]),
              RIGHT: np.array([  1,  0])}
 
-to_angle = {UP:    3 * np.pi / 2,
-            DOWN:      np.pi / 2,
-            LEFT:      np.pi,
+to_angle = {   UP: 3 * np.pi / 2,
+             DOWN:     np.pi / 2,
+             LEFT:     np.pi,
             RIGHT:       0}
 
 def rotation_matrix(theta):
