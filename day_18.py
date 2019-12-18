@@ -15,6 +15,7 @@ for coordinate in walls: # Remove walls from graph
 mapping = {node: name for node in G if (name := str(maze[node])) != '.'}
 G = nx.relabel_nodes(G, mapping, copy=False) # Nodes are named after their keys
 
+###### This section isn't necessary, but greatly reduces the size of our maze.######
 while True: # Prune dead-ends without keys
     for node, degree in nx.degree(G):
         if degree == 1 and not isinstance(node, str):
@@ -33,6 +34,7 @@ while True: # Contract paths, adding adjacent weights
             break
     else:
         break
+###################################################################################
 
 # At this point maze is very small with 75 nodes and 78 edges.
 KEYS = set(string.ascii_lowercase)
@@ -75,10 +77,7 @@ def best_walk(node, keys):
 
 print(best_walk(node='@', keys='')) # Part 1: 4700
 
-mapping = {(39, 39): '@1',
-           (39, 41): '@2',
-           (41, 39): '@3',
-           (41, 41): '@4'}
+mapping = {(39, 39): '@1', (39, 41): '@2', (41, 39): '@3', (41, 41): '@4'}
 G = nx.relabel_nodes(G, mapping, copy=False)
 for node in list(G.neighbors('@')):
     G.remove_node(node)
