@@ -77,11 +77,12 @@ def best_walk(node, keys):
 
 print(best_walk(node='@', keys='')) # Part 1: 4700
 
-mapping = {(39, 39): '@1', (39, 41): '@2', (41, 39): '@3', (41, 41): '@4'}
+# Split Graph into 4 components and relabel new entrances.
+mapping = {(39, 39): '@1', (39, 41): '@2', (41, 39): '@3', (41, 41): '@4'} # Found by inspection.
 G = nx.relabel_nodes(G, mapping, copy=False)
 for node in list(G.neighbors('@')):
     G.remove_node(node)
-G.remove_node('@') # Graph split into 4 components.
+G.remove_node('@')
 
 @lru_cache(maxsize=None)
 def reachable_by_robot(nodes, keys):
@@ -104,5 +105,5 @@ def best_walk_robots(nodes, keys): # Nearly identical to best_walk
         distances.append(distance + best_walk_robots(new_nodes, new_keys))
     return min(distances)
 
-reachable.cache_clear()
+reachable.cache_clear() # Graph changed, need to clear cache
 print(best_walk_robots(nodes=('@1','@2','@3','@4'), keys='')) # Part 2: 2260
