@@ -34,7 +34,7 @@ while True: # Contract paths, adding adjacent weights
             break
     else:
         break
-###################################################################################
+####################################################################################
 
 # At this point maze is very small with 75 nodes and 78 edges.
 KEYS = set(string.ascii_lowercase)
