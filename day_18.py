@@ -4,9 +4,8 @@ import networkx as nx
 import numpy as np
 
 with open('input18', 'r') as data:
-    data = [list(row.strip()) for row in data]
+    maze = np.array([list(row.strip()) for row in data])
 
-maze = np.array(data)
 G = nx.grid_graph(list(maze.shape))
 
 walls = np.vstack(np.where(maze == '#')).T
@@ -15,7 +14,6 @@ for coordinate in walls: # Remove walls from graph
 
 mapping = {node: name for node in G if (name := str(maze[node])) != '.'}
 G = nx.relabel_nodes(G, mapping, copy=False) # Nodes are named after their keys
-nx.set_edge_attributes(G, 1, name='weight')
 
 while True: # Prune dead-ends without keys
     for node, degree in nx.degree(G):
@@ -25,7 +23,8 @@ while True: # Prune dead-ends without keys
     else:
         break
 
-while True: # Contract paths
+nx.set_edge_attributes(G, 1, name='weight')
+while True: # Contract paths, adding adjacent weights
     for node, degree in nx.degree(G):
         if degree == 2 and not isinstance(node, str):
             weight = sum(weight for _, _, weight in G.edges(node, data='weight'))
@@ -40,27 +39,26 @@ KEYS = set(string.ascii_lowercase)
 DOORS = set(string.ascii_uppercase)
 
 @lru_cache(maxsize=None)
-def reachable(node, current_keys):
+def reachable(node, keys):
     """
-    Return a dictionary of {reachable_key: distance, current_keys + keys on path} from node
-    given current_keys.
+    Return a dictionary of {reachable_key: distance, keys + keys on path} from node
+    given keys.
     """
     can_reach = {}
     for key in KEYS:
-        if key not in current_keys:
-            try:
-                path = nx.shortest_paths.dijkstra_path(G, node, key)
+        if key not in keys:
+            try: # Added for part 2
+                distance, path = nx.shortest_paths.single_source_dijkstra(G, node, key)
             except nx.NetworkXNoPath:
                 continue
-            keys_on_path = set(current_keys)
+            new_keys = set(keys)
             for cell in path:
                 if cell in KEYS:
-                    keys_on_path.add(cell)
-                if cell in DOORS and cell.lower() not in keys_on_path:
+                    new_keys.add(cell)
+                if cell in DOORS and cell.lower() not in new_keys:
                     break
             else:
-                can_reach[key] = (nx.shortest_paths.dijkstra_path_length(G, node, key),
-                                  ''.join(keys_on_path))
+                can_reach[key] = distance, ''.join(new_keys)
     return can_reach
 
 @lru_cache(maxsize=None)
@@ -87,15 +85,15 @@ for node in list(G.neighbors('@')):
 G.remove_node('@') # Graph split into 4 components.
 
 @lru_cache(maxsize=None)
-def reachable_by_robot(nodes, current_keys):
+def reachable_by_robot(nodes, keys):
     can_reach = {}
     for robot, node in enumerate(nodes):
-        for key, (distance, new_keys) in reachable(node, current_keys).items():
+        for key, (distance, new_keys) in reachable(node, keys).items():
             can_reach[key] = distance, new_keys, robot
     return can_reach
 
 @lru_cache(maxsize=None)
-def best_walk_robots(nodes, keys):
+def best_walk_robots(nodes, keys): # Nearly identical to best_walk
     keys = ''.join(sorted(keys))
 
     if not (possible_walks := reachable_by_robot(nodes, keys)):
