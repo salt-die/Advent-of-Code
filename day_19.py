@@ -19,8 +19,8 @@ for _ in coordinates:
 screen.text(f'Number of pixels is: {pixels.sum()}') # Part 1
 screen.stop()
 
-# By inspection the slope of the outer lines is roughly 5/3 and 10/7, so y-coordinate should
-# be roughly in the 1000 range to fit a 100x100 box in the tractor beam, begin search there:
+# By inspection the slope of the outer lines is roughly 11/7 and 10/7, so x-coordinate should
+# be roughly in the 700 range to fit a 100x100 box in the tractor beam, begin search there:
 
 def is_beam(x, y):
     tape.compute(feed=(x, y))
