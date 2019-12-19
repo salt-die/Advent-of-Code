@@ -31,7 +31,7 @@ y = 1000
 while True:
     x = find_edge(x, y)
     if is_beam(x - 99, y + 99):
-        x = x - 99
+        x -= 99
         break
     else:
         y += 1
