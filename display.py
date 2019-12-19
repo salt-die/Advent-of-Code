@@ -21,8 +21,9 @@ def center(length_1, length_2):
 
 
 class Display:
-    def __init__(self, **info):
+    def __init__(self):
         self.init_scr()
+        self.buffer = []
 
     def init_scr(self):
         self.screen = curses.initscr()
@@ -79,3 +80,17 @@ class Display:
         self.screen.addstr(screen_h - 1, center(screen_w, len(message)), message, prop)
         self.screen.refresh()
         self.screen.getch()
+
+    def textpad(self, text, getch=False):
+        if text != '\n':
+            self.buffer.append(text.strip())
+        else:
+            screen_h, screen_w = self.screen.getmaxyx()
+            self.screen.erase()
+            for i, line in enumerate(self.buffer):
+                self.screen.addstr(center(screen_h, len(self.buffer)) + i,
+                                   center(screen_w, len(line)), line)
+            self.screen.refresh()
+            self.buffer = []
+            if getch:
+                self.screen.getch()
