@@ -57,7 +57,7 @@ G.remove_edges_from(portals.values()) # Un-connect portals
 inner, outer, outer_coords = {}, {}, set((2, height - 3, width - 3))
 for portal, nodes in portals.items():
     for node in nodes:
-        (inner if set(node).isdisjoint(outer_coords) else outer)[portal] = node
+        (inner if outer_coords.isdisjoint(node) else outer)[portal] = node
 
 H = nx.Graph()
 for level in range(26):
