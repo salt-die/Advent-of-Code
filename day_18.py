@@ -6,11 +6,10 @@ import numpy as np
 with open('input18', 'r') as data:
     maze = np.array([list(row.strip()) for row in data])
 
-G = nx.grid_graph(list(maze.shape))
+G = nx.grid_graph(list(maze.T.shape))
 
 walls = np.vstack(np.where(maze == '#')).T
-for coordinate in walls: # Remove walls from graph
-    G.remove_node(tuple(coordinate))
+G.remove_nodes_from(map(tuple, walls)) # Remove walls from graph
 
 mapping = {node: name for node in G if (name := str(maze[node])) != '.'}
 G = nx.relabel_nodes(G, mapping, copy=False) # Nodes are named after their keys
