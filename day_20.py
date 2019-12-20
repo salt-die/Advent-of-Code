@@ -30,21 +30,19 @@ for char in maze_iter: # This awful loop is just to find indices of portals.
         elif x > 1 and is_portal((portal := maze[y, x: x - 3: -1])): # Check left
              mapping[''.join(portal[1::-1])] += ((y, x - 2), )
 
-locations = set(chain(*mapping.values()))
+portals = set(chain(*mapping.values()))
 while True: # Prune dead-ends and isolated nodes that aren't portals.
-    for node, degree in nx.degree(G):
-        if degree <= 1 and node not in locations:
-            G.remove_node(node)
-            break
-    else:
+    dead = [node for node, degree in nx.degree(G) if node not in portals and degree <= 1]
+    if not dead:
         break
+    G.remove_nodes_from(dead)
 
 (AA, ), (ZZ, ) = mapping.pop('AA'), mapping.pop('ZZ')
 G.add_edges_from(mapping.values())
 nx.set_edge_attributes(G, 1, name='weight')
 while True: # Contract paths, adding adjacent weights.
     for node, degree in nx.degree(G):
-        if degree == 2 and node not in locations:
+        if degree == 2 and node not in portals:
             (*_, w1), (*_, w2) = G.edges(node, data='weight')
             G.add_edge(*G.neighbors(node), weight=w1 + w2)
             G.remove_node(node)

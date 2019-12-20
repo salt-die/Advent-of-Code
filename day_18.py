@@ -15,12 +15,10 @@ mapping = {node: name for node in G if (name := str(maze[node])) != '.'}
 G = nx.relabel_nodes(G, mapping, copy=False) # Nodes are named after their keys
 
 while True: # Prune dead-ends without keys
-    for node, degree in nx.degree(G):
-        if degree == 1 and not isinstance(node, str):
-            G.remove_node(node)
-            break
-    else:
+    dead = [node for node, degree in nx.degree(G) if degree == 1 and not isinstance(node, str)]
+    if not dead:
         break
+    G.remove_nodes_from(dead)
 
 nx.set_edge_attributes(G, 1, name='weight')
 while True: # Contract paths, adding adjacent weights
