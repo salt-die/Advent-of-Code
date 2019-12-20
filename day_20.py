@@ -65,8 +65,8 @@ def add_level(level):
     for start, end, weight in G.edges(data='weight'):
         H.add_edge((*start, level), (*end, level), weight=weight)
     if level: # > 0
-        for name, location in inner.items():
-            H.add_edge((*location, level - 1), (*outer[name], level), weight=1)
+        for portal, location in inner.items():
+            H.add_edge((*location, level - 1), (*outer[portal], level), weight=1)
 
 add_level(level := 0)
 while not nx.is_connected(H):
