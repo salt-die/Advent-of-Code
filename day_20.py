@@ -34,9 +34,6 @@ for char in maze_iter: # This awful loop is just to find indices of portals.
         elif x > 1 and is_portal((portal := maze[y, x: x - 3: -1])):
              mapping[''.join(portal[1::-1])] += ((y, x - 2), )
 
-(AA, ), (ZZ, ) = mapping.pop('AA'), mapping.pop('ZZ')
-G.add_edges_from(mapping.values())
-
 ###### This section isn't necessary, but greatly reduces the size of our maze.######
 notable_locations = set(chain(*mapping.values()))
 while True: # Prune dead-ends and isolated nodes that aren't portals.
@@ -47,6 +44,8 @@ while True: # Prune dead-ends and isolated nodes that aren't portals.
     else:
         break
 
+(AA, ), (ZZ, ) = mapping.pop('AA'), mapping.pop('ZZ')
+G.add_edges_from(mapping.values())
 nx.set_edge_attributes(G, 1, name='weight')
 while True: # Contract paths, adding adjacent weights.
     for node, degree in nx.degree(G):
