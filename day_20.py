@@ -19,16 +19,17 @@ def is_portal(portal):
 portals = defaultdict(tuple)
 maze_iter = np.nditer(maze, flags=['multi_index'])
 for char in maze_iter: # This awful loop is just to find indices of portals.
-    if str(char).isupper():
-        y, x = maze_iter.multi_index
-        if y < height - 2 and is_portal((portal := maze[y: y + 3, x])): # Check down
-            portals[''.join(portal[:-1])] += ((y + 2, x), )
-        elif y > 1 and is_portal((portal := maze[y: y - 3: -1, x])): # Check up
-            portals[''.join(portal[1::-1])] += ((y - 2, x), )
-        elif x < width - 2 and is_portal((portal := maze[y, x: x + 3])): # Check right
-            portals[''.join(portal[:-1])] += ((y, x + 2), )
-        elif x > 1 and is_portal((portal := maze[y, x: x - 3: -1])): # Check left
-             portals[''.join(portal[1::-1])] += ((y, x - 2), )
+    if not str(char).isupper():
+        continue
+    y, x = maze_iter.multi_index
+    if y < height - 2 and is_portal((portal := maze[y: y + 3, x])): # Check down
+        portals[''.join(portal[:-1])] += ((y + 2, x), )
+    elif y > 1 and is_portal((portal := maze[y: y - 3: -1, x])): # Check up
+        portals[''.join(portal[1::-1])] += ((y - 2, x), )
+    elif x < width - 2 and is_portal((portal := maze[y, x: x + 3])): # Check right
+        portals[''.join(portal[:-1])] += ((y, x + 2), )
+    elif x > 1 and is_portal((portal := maze[y, x: x - 3: -1])): # Check left
+         portals[''.join(portal[1::-1])] += ((y, x - 2), )
 
 portal_locations = set(chain(*portals.values()))
 while True: # Prune dead-ends and isolated nodes that aren't portal_locations.
