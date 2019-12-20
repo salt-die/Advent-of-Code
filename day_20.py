@@ -58,18 +58,13 @@ G.remove_edges_from(mapping.values())
 inner, outer, outer_coords = {}, {}, set((2, height - 3, width - 3))
 for portal, locations in mapping.items():
     for location in locations:
-        (outer if any(coor in outer_coords for coor in location) else inner)[portal] = location
+        (inner if set(location).isdisjoint(outer_coords) else outer)[portal] = location
 
 H = nx.Graph()
-def add_level(level):
+for level in range(26):
     for start, end, weight in G.edges(data='weight'):
         H.add_edge((*start, level), (*end, level), weight=weight)
-    if level: # > 0
-        for portal, location in inner.items():
-            H.add_edge((*location, level - 1), (*outer[portal], level), weight=1)
-
-add_level(level := 0)
-while not nx.is_connected(H):
-    add_level(level := level + 1)
+    for portal, location in inner.items():
+        H.add_edge((*location, level), (*outer[portal], level + 1), weight=1)
 
 print(nx.shortest_paths.dijkstra_path_length(H, (*AA, 0), (*ZZ, 0))) # Part 2
