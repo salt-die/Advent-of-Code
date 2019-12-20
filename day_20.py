@@ -38,7 +38,7 @@ while True: # Prune dead-ends and isolated nodes that aren't portal_locations.
     G.remove_nodes_from(dead)
 
 (AA, ), (ZZ, ) = portals.pop('AA'), portals.pop('ZZ')
-G.add_edges_from(portals.values()) # Connect portal_locations
+G.add_edges_from(portals.values()) # Connect portals
 
 nx.set_edge_attributes(G, 1, name='weight')
 while True: # Contract paths, adding adjacent weights.
