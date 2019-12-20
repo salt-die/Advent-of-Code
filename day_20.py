@@ -75,8 +75,7 @@ def add_level(level):
         for name, location in inner.items():
             H.add_edge((*location, level - 1), (*outer[name], level), weight=1)
 
-level = 0
-add_level(level)
+add_level(level := 0)
 while not nx.is_connected(H):
     add_level(level := level + 1)
 
