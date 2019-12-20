@@ -36,20 +36,16 @@ for char in maze_iter: # This awful loop is just to find indices of portals.
 (AA, ), (ZZ, ) = mapping.pop('AA'), mapping.pop('ZZ')
 G.add_edges_from(mapping.values())
 print(nx.shortest_path_length(G, AA, ZZ)) # Part 1
-
 G.remove_edges_from(mapping.values())
-inner = {}
-outer = {}
+
+inner, outer = {}, {}
 for name, locations in mapping.items():
     for location in locations:
         y, x = location
-        if any((y == 2, y == height - 3, x == 2, x == width - 3)):
-            outer[name] = location
-        else:
-            inner[name] = location
+        (outer if y == 2 or y == height - 3 or x == 2 or x == width - 3 else inner)[name] = location
 
 H = nx.Graph()
-for level in range(26): # Levels increased by hand until a path was found.
+for level in range(26):
     for start, end in G.edges:
         H.add_edge((*start, level), (*end, level))
     for name, location in inner.items():
