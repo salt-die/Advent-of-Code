@@ -68,10 +68,16 @@ for name, locations in mapping.items():
         (outer if 2 in location or y == height - 3 or x == width - 3 else inner)[name] = location
 
 H = nx.Graph()
-for level in range(26):
+def add_level(level):
     for start, end, weight in G.edges(data='weight'):
         H.add_edge((*start, level), (*end, level), weight=weight)
     if level: # > 0
         for name, location in inner.items():
             H.add_edge((*location, level - 1), (*outer[name], level), weight=1)
+
+level = 0
+add_level(level)
+while not nx.is_connected(H):
+    add_level(level := level + 1)
+
 print(nx.shortest_paths.dijkstra_path_length(H, (*AA, 0), (*ZZ, 0))) # Part 2
