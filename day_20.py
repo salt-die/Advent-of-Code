@@ -21,24 +21,20 @@ maze_iter = np.nditer(maze, flags=['multi_index'])
 for char in maze_iter: # This awful loop is just to find indices of portals.
     if str(char).isupper():
         y, x = maze_iter.multi_index
-        # Check down:
-        if y < height - 2 and is_portal((portal := maze[y: y + 3, x])):
+        if y < height - 2 and is_portal((portal := maze[y: y + 3, x])): # Check down
             mapping[''.join(portal[:-1])] += ((y + 2, x), )
-        # Check up:
-        elif y > 1 and is_portal((portal := maze[y: y - 3: -1, x])):
+        elif y > 1 and is_portal((portal := maze[y: y - 3: -1, x])): # Check up
             mapping[''.join(portal[1::-1])] += ((y - 2, x), )
-        # Check right:
-        elif x < width - 2 and is_portal((portal := maze[y, x: x + 3])):
+        elif x < width - 2 and is_portal((portal := maze[y, x: x + 3])): # Check right
             mapping[''.join(portal[:-1])] += ((y, x + 2), )
-        # Check left:
-        elif x > 1 and is_portal((portal := maze[y, x: x - 3: -1])):
+        elif x > 1 and is_portal((portal := maze[y, x: x - 3: -1])): # Check left
              mapping[''.join(portal[1::-1])] += ((y, x - 2), )
 
 ###### This section isn't necessary, but greatly reduces the size of our maze.######
-notable_locations = set(chain(*mapping.values()))
+locations = set(chain(*mapping.values()))
 while True: # Prune dead-ends and isolated nodes that aren't portals.
     for node, degree in nx.degree(G):
-        if degree <= 1 and node not in notable_locations:
+        if degree <= 1 and node not in locations:
             G.remove_node(node)
             break
     else:
@@ -49,8 +45,8 @@ G.add_edges_from(mapping.values())
 nx.set_edge_attributes(G, 1, name='weight')
 while True: # Contract paths, adding adjacent weights.
     for node, degree in nx.degree(G):
-        if degree == 2 and node not in notable_locations:
-            weight = sum(weight for _, _, weight in G.edges(node, data='weight'))
+        if degree == 2 and node not in locations:
+            weight = sum(weight for *_, weight in G.edges(node, data='weight'))
             G.add_edge(*G.neighbors(node), weight=weight)
             G.remove_node(node)
             break
@@ -61,11 +57,10 @@ while True: # Contract paths, adding adjacent weights.
 print(nx.shortest_paths.dijkstra_path_length(G, AA, ZZ)) # Part 1
 G.remove_edges_from(mapping.values())
 
-inner, outer = {}, {}
+inner, outer, outer_coords = {}, {}, set((2, height - 3, width - 3))
 for name, locations in mapping.items():
     for location in locations:
-        y, x = location
-        (outer if 2 in location or y == height - 3 or x == width - 3 else inner)[name] = location
+        (outer if outer_coords & set(location) else inner)[name] = location
 
 H = nx.Graph()
 def add_level(level):
