@@ -14,7 +14,6 @@ G.remove_nodes_from(map(tuple, walls)) # Remove walls from graph
 mapping = {node: name for node in G if (name := str(maze[node])) != '.'}
 G = nx.relabel_nodes(G, mapping, copy=False) # Nodes are named after their keys
 
-###### This section isn't necessary, but greatly reduces the size of our maze.######
 while True: # Prune dead-ends without keys
     for node, degree in nx.degree(G):
         if degree == 1 and not isinstance(node, str):
@@ -27,13 +26,12 @@ nx.set_edge_attributes(G, 1, name='weight')
 while True: # Contract paths, adding adjacent weights
     for node, degree in nx.degree(G):
         if degree == 2 and not isinstance(node, str):
-            weight = sum(weight for _, _, weight in G.edges(node, data='weight'))
-            G.add_edge(*G.neighbors(node), weight=weight)
+            (*_, w1), (*_, w2) = G.edges(node, data='weight')
+            G.add_edge(*G.neighbors(node), weight=w1 + w2)
             G.remove_node(node)
             break
     else:
         break
-####################################################################################
 
 # At this point maze is very small with 75 nodes and 78 edges.
 KEYS = set(string.ascii_lowercase)

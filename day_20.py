@@ -45,8 +45,8 @@ nx.set_edge_attributes(G, 1, name='weight')
 while True: # Contract paths, adding adjacent weights.
     for node, degree in nx.degree(G):
         if degree == 2 and node not in locations:
-            weight = sum(weight for *_, weight in G.edges(node, data='weight'))
-            G.add_edge(*G.neighbors(node), weight=weight)
+            (*_, w1), (*_, w2) = G.edges(node, data='weight')
+            G.add_edge(*G.neighbors(node), weight=w1 + w2)
             G.remove_node(node)
             break
     else:
