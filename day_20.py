@@ -56,9 +56,9 @@ print(nx.shortest_paths.dijkstra_path_length(G, AA, ZZ)) # Part 1
 G.remove_edges_from(mapping.values())
 
 inner, outer, outer_coords = {}, {}, set((2, height - 3, width - 3))
-for portal, locations in mapping.items():
-    for location in locations:
-        (inner if set(location).isdisjoint(outer_coords) else outer)[portal] = location
+for portal, nodes in mapping.items():
+    for node in nodes:
+        (inner if set(node).isdisjoint(outer_coords) else outer)[portal] = node
 
 H = nx.Graph()
 for level in range(26):
