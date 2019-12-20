@@ -71,6 +71,7 @@ H = nx.Graph()
 for level in range(26):
     for start, end, weight in G.edges(data='weight'):
         H.add_edge((*start, level), (*end, level), weight=weight)
-    for name, location in inner.items():
-        H.add_edge((*location, level), (*outer[name], level + 1), weight=1)
+    if level: # > 0
+        for name, location in inner.items():
+            H.add_edge((*location, level - 1), (*outer[name], level), weight=1)
 print(nx.shortest_paths.dijkstra_path_length(H, (*AA, 0), (*ZZ, 0))) # Part 2
