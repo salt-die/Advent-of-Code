@@ -42,7 +42,7 @@ inner, outer = {}, {}
 for name, locations in mapping.items():
     for location in locations:
         y, x = location
-        (outer if y == 2 or y == height - 3 or x == 2 or x == width - 3 else inner)[name] = location
+        (outer if 2 in location or y == height - 3 or x == width - 3 else inner)[name] = location
 
 H = nx.Graph()
 for level in range(26):
