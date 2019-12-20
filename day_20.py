@@ -30,7 +30,6 @@ for char in maze_iter: # This awful loop is just to find indices of portals.
         elif x > 1 and is_portal((portal := maze[y, x: x - 3: -1])): # Check left
              mapping[''.join(portal[1::-1])] += ((y, x - 2), )
 
-###### This section isn't necessary, but greatly reduces the size of our maze.######
 locations = set(chain(*mapping.values()))
 while True: # Prune dead-ends and isolated nodes that aren't portals.
     for node, degree in nx.degree(G):
@@ -52,7 +51,6 @@ while True: # Contract paths, adding adjacent weights.
             break
     else:
         break
-####################################################################################
 
 print(nx.shortest_paths.dijkstra_path_length(G, AA, ZZ)) # Part 1
 G.remove_edges_from(mapping.values())
@@ -60,7 +58,7 @@ G.remove_edges_from(mapping.values())
 inner, outer, outer_coords = {}, {}, set((2, height - 3, width - 3))
 for name, locations in mapping.items():
     for location in locations:
-        (outer if outer_coords & set(location) else inner)[name] = location
+        (outer if any(coor in outer_coords for coor in location) else inner)[name] = location
 
 H = nx.Graph()
 def add_level(level):
