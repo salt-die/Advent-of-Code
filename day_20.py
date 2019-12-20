@@ -23,15 +23,15 @@ for char in maze_iter: # This awful loop is just to find indices of portals.
         # Check down:
         if y < height - 2 and is_portal((portal := maze[y: y + 3, x])):
             mapping[''.join(portal[:-1])] += ((y + 2, x), )
-        # Check left:
-        elif x > 1 and is_portal((portal := maze[y, x: x - 3: -1])):
-             mapping[''.join(portal[1::-1])] += ((y, x - 2), )
-        # Check right:
-        elif x < width - 2 and is_portal((portal := maze[y, x: x + 3])):
-            mapping[''.join(portal[:-1])] += ((y, x + 2), )
         # Check up:
         elif y > 1 and is_portal((portal := maze[y: y - 3: -1, x])):
             mapping[''.join(portal[1::-1])] += ((y - 2, x), )
+        # Check right:
+        elif x < width - 2 and is_portal((portal := maze[y, x: x + 3])):
+            mapping[''.join(portal[:-1])] += ((y, x + 2), )
+        # Check left:
+        elif x > 1 and is_portal((portal := maze[y, x: x - 3: -1])):
+             mapping[''.join(portal[1::-1])] += ((y, x - 2), )
 
 (AA, ), (ZZ, ) = mapping.pop('AA'), mapping.pop('ZZ')
 G.add_edges_from(mapping.values())
