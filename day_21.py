@@ -17,7 +17,7 @@ WALK
 # NOT A OR (NOT B AND D) OR (NOT C AND D)
 brain << map(ord, instructions)
 
-for _, op, _, _, _ in brain:
+for _ in brain:
     if brain and brain.out[0] == ord('\n'):
         print(''.join(map(chr, reversed(brain.out))), end='')
         brain.out.clear()
@@ -41,7 +41,7 @@ RUN
 # (NOT C AND D AND (H OR E)) OR (NOT (B OR E) AND D) OR NOT A
 brain << map(ord, instructions)
 
-for _, op, _, _, _ in brain:
+for _ in brain:
     if brain and brain.out[0] == ord('\n'):
         print(''.join(map(chr, reversed(brain.out))), end='')
         brain.out.clear()
