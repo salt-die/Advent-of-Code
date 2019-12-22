@@ -59,7 +59,7 @@ def reachable(node, keys):
     return can_reach
 
 @lru_cache(maxsize=None)
-def best_walk(node, keys=''):
+def best_walk(node='@', keys=''):
     keys = ''.join(sorted(keys))
 
     if not (possible_walks := reachable(node, keys)):
@@ -70,7 +70,7 @@ def best_walk(node, keys=''):
         distances.append(distance + best_walk(key, new_keys))
     return min(distances)
 
-print(best_walk(node='@')) # Part 1: 4700
+print(best_walk()) # Part 1: 4700
 
 # Split Graph into 4 components and relabel new entrances.
 mapping = {(39, 39): '@1', (39, 41): '@2', (41, 39): '@3', (41, 41): '@4'} # Found by inspection.
@@ -86,7 +86,7 @@ def reachable_by_robot(nodes, keys):
     return can_reach
 
 @lru_cache(maxsize=None)
-def best_walk_robots(nodes, keys=''): # Nearly identical to best_walk
+def best_walk_robots(nodes=('@1', '@2', '@3', '@4'), keys=''): # Nearly identical to best_walk
     keys = ''.join(sorted(keys))
 
     if not (possible_walks := reachable_by_robot(nodes, keys)):
@@ -99,4 +99,4 @@ def best_walk_robots(nodes, keys=''): # Nearly identical to best_walk
     return min(distances)
 
 reachable.cache_clear() # Graph changed, need to clear cache
-print(best_walk_robots(nodes=('@1','@2','@3','@4'))) # Part 2: 2260
+print(best_walk_robots()) # Part 2: 2260
