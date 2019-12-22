@@ -75,9 +75,7 @@ print(best_walk(node='@', keys='')) # Part 1: 4700
 # Split Graph into 4 components and relabel new entrances.
 mapping = {(39, 39): '@1', (39, 41): '@2', (41, 39): '@3', (41, 41): '@4'} # Found by inspection.
 G = nx.relabel_nodes(G, mapping, copy=False)
-for node in list(G.neighbors('@')):
-    G.remove_node(node)
-G.remove_node('@')
+G.remove_nodes_from(list(G.neighbors('@')) + ['@'])
 
 @lru_cache(maxsize=None)
 def reachable_by_robot(nodes, keys):
