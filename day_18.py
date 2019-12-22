@@ -41,7 +41,7 @@ def reachable(start, keys):
     Return a dictionary of {reachable_key: distance, keys + keys on path} from start
     given keys.
     """
-    can_reach = {}
+    reachable_keys = {}
     for key in KEYS:
         if key not in keys:
             try: # Added for part 2
@@ -55,19 +55,14 @@ def reachable(start, keys):
                 elif node in DOORS and node.lower() not in new_keys:
                     break
             else:
-                can_reach[key] = distance, ''.join(new_keys)
-    return can_reach
+                reachable_keys[key] = distance, ''.join(sorted(new_keys))
+    return reachable_keys
 
 @lru_cache(maxsize=None)
 def best_walk(start='@', keys=''):
-    keys = ''.join(sorted(keys))
-
-    if not (possible_walks := reachable(start, keys)):
+    if not (paths := reachable(start, keys)):
         return 0
-
-    distances = []
-    for key, (distance, new_keys) in possible_walks.items():
-        distances.append(distance + best_walk(key, new_keys))
+    distances = [distance + best_walk(key, new_keys) for key, (distance, new_keys) in paths.items()]
     return min(distances)
 
 print(best_walk()) # Part 1: 4700
@@ -86,16 +81,15 @@ def reachable_by_robot(starts, keys):
     return can_reach
 
 @lru_cache(maxsize=None)
+def new_starts(starts, key, robot):
+    return tuple(start if robot != i else key for i, start in enumerate(starts))
+
+@lru_cache(maxsize=None)
 def best_walk_robots(starts=('@1', '@2', '@3', '@4'), keys=''): # Nearly identical to best_walk
-    keys = ''.join(sorted(keys))
-
-    if not (possible_walks := reachable_by_robot(starts, keys)):
+    if not (paths := reachable_by_robot(starts, keys)):
         return 0
-
-    distances = []
-    for key, (distance, new_keys, robot) in possible_walks.items():
-        new_nodes = tuple(start if robot != i else key for i, start in enumerate(starts))
-        distances.append(distance + best_walk_robots(new_nodes, new_keys))
+    distances = [distance + best_walk_robots(new_starts(starts, key, robot), new_keys)
+                 for key, (distance, new_keys, robot) in paths.items()]
     return min(distances)
 
 reachable.cache_clear() # Graph changed, need to clear cache
