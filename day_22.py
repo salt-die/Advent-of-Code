@@ -13,7 +13,7 @@ def reduce(MOD, NITER, POS):
         elif command == 'cut':
                 initial += int(N) * difference
         else:
-            difference *= mod_inverse(int(N), MOD)      
+            difference *= mod_inverse(int(N), MOD) # ...or just use Fermat's little theorem.      
 
     initial *= mod_inverse(1 - difference, MOD) # Geometric series
     difference = pow(difference, NITER, MOD)
