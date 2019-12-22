@@ -36,33 +36,33 @@ KEYS = set(string.ascii_lowercase)
 DOORS = set(string.ascii_uppercase)
 
 @lru_cache(maxsize=None)
-def reachable(node, keys):
+def reachable(start, keys):
     """
-    Return a dictionary of {reachable_key: distance, keys + keys on path} from node
+    Return a dictionary of {reachable_key: distance, keys + keys on path} from start
     given keys.
     """
     can_reach = {}
     for key in KEYS:
         if key not in keys:
             try: # Added for part 2
-                distance, path = nx.shortest_paths.single_source_dijkstra(G, node, key)
+                distance, path = nx.shortest_paths.single_source_dijkstra(G, start, key)
             except nx.NetworkXNoPath:
                 continue
             new_keys = set(keys)
-            for cell in path:
-                if cell in KEYS:
-                    new_keys.add(cell)
-                elif cell in DOORS and cell.lower() not in new_keys:
+            for node in path:
+                if node in KEYS:
+                    new_keys.add(node)
+                elif node in DOORS and node.lower() not in new_keys:
                     break
             else:
                 can_reach[key] = distance, ''.join(new_keys)
     return can_reach
 
 @lru_cache(maxsize=None)
-def best_walk(node='@', keys=''):
+def best_walk(start='@', keys=''):
     keys = ''.join(sorted(keys))
 
-    if not (possible_walks := reachable(node, keys)):
+    if not (possible_walks := reachable(start, keys)):
         return 0
 
     distances = []
@@ -78,23 +78,23 @@ G = nx.relabel_nodes(G, mapping, copy=False)
 G.remove_nodes_from(list(G.neighbors('@')) + ['@'])
 
 @lru_cache(maxsize=None)
-def reachable_by_robot(nodes, keys):
+def reachable_by_robot(starts, keys):
     can_reach = {}
-    for robot, node in enumerate(nodes):
-        for key, (distance, new_keys) in reachable(node, keys).items():
+    for robot, start in enumerate(starts):
+        for key, (distance, new_keys) in reachable(start, keys).items():
             can_reach[key] = distance, new_keys, robot
     return can_reach
 
 @lru_cache(maxsize=None)
-def best_walk_robots(nodes=('@1', '@2', '@3', '@4'), keys=''): # Nearly identical to best_walk
+def best_walk_robots(starts=('@1', '@2', '@3', '@4'), keys=''): # Nearly identical to best_walk
     keys = ''.join(sorted(keys))
 
-    if not (possible_walks := reachable_by_robot(nodes, keys)):
+    if not (possible_walks := reachable_by_robot(starts, keys)):
         return 0
 
     distances = []
     for key, (distance, new_keys, robot) in possible_walks.items():
-        new_nodes = tuple(node if robot != i else key for i, node in enumerate(nodes))
+        new_nodes = tuple(start if robot != i else key for i, start in enumerate(starts))
         distances.append(distance + best_walk_robots(new_nodes, new_keys))
     return min(distances)
 
