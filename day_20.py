@@ -17,8 +17,7 @@ def is_portal(portal):
     return A.isupper() and B.isupper() and C == '.'
 
 portals = defaultdict(tuple)
-maze_iter = np.nditer(maze, flags=['multi_index'])
-for char in maze_iter: # This awful loop is just to find indices of portals.
+for char in (maze_iter := np.nditer(maze, flags=['multi_index'])):
     if not str(char).isupper():
         continue
     y, x = maze_iter.multi_index
