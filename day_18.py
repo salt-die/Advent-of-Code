@@ -52,7 +52,7 @@ def reachable(node, keys):
             for cell in path:
                 if cell in KEYS:
                     new_keys.add(cell)
-                if cell in DOORS and cell.lower() not in new_keys:
+                elif cell in DOORS and cell.lower() not in new_keys:
                     break
             else:
                 can_reach[key] = distance, ''.join(new_keys)
