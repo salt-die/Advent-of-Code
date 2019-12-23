@@ -62,8 +62,7 @@ def reachable(start, keys):
 def best_walk(start='@', keys=''):
     if not (paths := reachable(start, keys)):
         return 0
-    distances = [distance + best_walk(key, new_keys) for key, (distance, new_keys) in paths.items()]
-    return min(distances)
+    return min(distance + best_walk(key, new_keys) for key, (distance, new_keys) in paths.items())
 
 print(best_walk()) # Part 1: 4700
 
@@ -88,9 +87,8 @@ def new_starts(starts, key, robot):
 def best_walk_robots(starts=('@1', '@2', '@3', '@4'), keys=''): # Nearly identical to best_walk
     if not (paths := reachable_by_robot(starts, keys)):
         return 0
-    distances = [distance + best_walk_robots(new_starts(starts, key, robot), new_keys)
-                 for key, (distance, new_keys, robot) in paths.items()]
-    return min(distances)
+    return min(distance + best_walk_robots(new_starts(starts, key, robot), new_keys)
+               for key, (distance, new_keys, robot) in paths.items())
 
 reachable.cache_clear() # Graph changed, need to clear cache
 print(best_walk_robots()) # Part 2: 2260
