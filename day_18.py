@@ -73,11 +73,11 @@ G.remove_nodes_from(list(G.neighbors('@')) + ['@'])
 
 @lru_cache(maxsize=None)
 def reachable_by_robot(starts, keys):
-    can_reach = {}
+    reachable_keys = {}
     for robot, start in enumerate(starts):
         for key, (distance, new_keys) in reachable(start, keys).items():
-            can_reach[key] = distance, new_keys, robot
-    return can_reach
+            reachable_keys[key] = distance, new_keys, robot
+    return reachable_keys[key]
 
 @lru_cache(maxsize=None)
 def new_starts(starts, key, robot):
