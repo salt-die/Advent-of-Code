@@ -28,7 +28,7 @@ powers = np.nditer(universe, flags=['c_index'])
 print(sum(2**powers.index for cooef in powers if cooef)) # Part 1: 18842609
 
 levels = defaultdict(lambda:np.zeros_like(universe), {0: np.array(data)})
-levels[-1]; levels[1] # Outer and inner level
+levels[-1]; levels[1] # First outer and inner level
 def new_states():
     new = {}
     for level in list(levels):
@@ -42,7 +42,7 @@ def new_states():
         still_alive = np.where((current == 1) & (neighbor_count == 1), 1, 0)
         new_borns = np.where((current == 0) & ((neighbor_count == 2) | (neighbor_count == 1)), 1, 0)
         new[level] = still_alive + new_borns
-        new[level][2, 2] = 0
+        new[level][2, 2] = 0 # Center stays empty
     levels.update(new)
         
 for _ in range(200):
