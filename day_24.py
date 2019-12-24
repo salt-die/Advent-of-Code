@@ -10,7 +10,7 @@ with open('input24', 'r') as data:
 bugs = np.array(data)
 states = set((bugs.tostring(), ))
 while True:
-    neighbor_count = nd.convolve(bugs.astype(int), KERNEL, mode="constant")
+    neighbor_count = nd.convolve(bugs.astype(np.uint8), KERNEL, mode="constant")
     still_alive = bugs & (neighbor_count == 1)
     new_borns = ~bugs & ((neighbor_count == 2) | (neighbor_count == 1))
     bugs = still_alive + new_borns
@@ -26,7 +26,7 @@ levels[-1]; levels[1] # First outer and inner level
 for _ in range(200):
     new = {}
     for level, bugs in tuple(levels.items()):
-        neighbor_count = nd.convolve(bugs.astype(int), KERNEL, mode="constant")
+        neighbor_count = nd.convolve(bugs.astype(np.uint8), KERNEL, mode="constant")
         for outer, inner in ((0, (1, 2)), ((..., 0), (2, 1)),
                              (4, (3, 2)), ((..., 4), (2, 3))):
             neighbor_count[outer] += levels[level - 1][inner]
