@@ -24,10 +24,8 @@ class NetworkedComputer(Computer):
                 return address, x, y
 
     def connect(self, *args, **kwargs):
+        Computer.connect(self, *args, **kwargs)
         self.idle = False
-        return Computer.connect(self, *args, **kwargs)
-
-    __lshift__ = connect
 
 
 class NAT:

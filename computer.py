@@ -103,7 +103,8 @@ class Computer:
         else:
             self.feed.append(new_feed) # We may appendleft in the future.
 
-    __lshift__ = connect # '<<' functionality for connect method
+    def __lshift__(self, *args, **kwargs): # '<<' functionality for connect
+        self.connect(*args, **kwargs)
 
     def pop(self):
         """
