@@ -13,7 +13,7 @@ class NetworkedComputer(Computer):
                 self << -1
                 if not self.produced:
                     self.idle = True
-                    return -1, -1, -1
+                    return
                 else:
                     self.produced = False
 
@@ -45,13 +45,13 @@ class NAT:
 
     def route(self):
         while self.running:
-            if not (packets := [next(computer) for computer in self.network if not computer.idle]):
+            packets = [packet for computer in self.network
+                       if not computer.idle and (packet := next(computer))]
+            if not packets:
                 self.wake()
                 continue
             for address, *xy in packets:
-                if address == -1: # Computer has become idle
-                    continue
-                elif address == 255:
+                if address == 255:
                     self.xy = xy
                 else:
                     self.network[address] << xy
