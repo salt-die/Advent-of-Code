@@ -24,7 +24,7 @@ while True:
 powers = np.nditer(universe, flags=['c_index'])
 print(sum(2**powers.index for cooef in powers if cooef)) # Part 1: 18842609
 
-levels = defaultdict(lambda:np.zeros_like(universe), {0: np.array(data)})
+levels = defaultdict(lambda:np.zeros_like(bugs), {0: np.array(data)})
 levels[-1]; levels[1] # First outer and inner level
 def new_states():
     new = {}
