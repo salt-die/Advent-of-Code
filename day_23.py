@@ -5,4 +5,4 @@ with open('input23', 'r') as data:
 
 router = NAT([NetworkedComputer(int_code=data, feed=i) for i in range(50)])
 router.route()
-print(router.first_y, router.last_y) #Part 1, Part 2
+print(router.first, router.last) #Part 1, Part 2

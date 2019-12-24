@@ -32,19 +32,20 @@ class NAT:
     def __init__(self, network):
         self.running = True
         self.network = network
-        self.x = self.y = self.first_y = self.last_y = None
+        self.xy = self.first = self.last = None
 
     def check_idle(self):
         if all(computer.idle for computer in self.network):
             self.wake()
 
     def wake(self):
-        if self.first_y is None:
-            self.first_y = self.y
-        if self.y == self.last_y:
+        _, y = self.xy
+        if self.first is None:
+            self.first = y
+        if self.last == y:
             self.running = False
-        self.last_y = self.y
-        self.network[0] << (self.x, self.y)
+        self.last = y
+        self.network[0] << self.xy
 
     def route(self):
         while self.running:
@@ -55,7 +56,7 @@ class NAT:
                 if address == -1: # Computer has become idle
                     continue
                 elif address == 255:
-                    self.x, self.y = xy
+                    self.xy = xy
                 else:
                     self.network[address] << xy
             self.check_idle()
