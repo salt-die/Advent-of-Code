@@ -33,18 +33,18 @@ def new_states():
     for level in list(levels):
         bugs = levels[level]
         neighbor_count = nd.convolve(bugs, KERNEL, mode="constant")
-        for outer, inner in ((0, (1, 2)), ((..., 0), (2, 1)), 
+        for outer, inner in ((0, (1, 2)), ((..., 0), (2, 1)),
                              (4, (3, 2)), ((..., 4), (2, 3))):
             neighbor_count[outer] += levels[level - 1][inner]
             neighbor_count[inner] += levels[level + 1][outer].sum()
-        
+
         still_alive = np.where((bugs == 1) & (neighbor_count == 1), 1, 0)
         new_borns = np.where((bugs == 0) & ((neighbor_count == 2) | (neighbor_count == 1)), 1, 0)
         new[level] = still_alive + new_borns
         new[level][2, 2] = 0 # Center stays empty
     levels.update(new)
-        
+
 for _ in range(200):
     new_states()
-    
+
 print(sum(array.sum() for array in levels.values())) # Part 2: 2059
