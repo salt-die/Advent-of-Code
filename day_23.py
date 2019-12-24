@@ -25,7 +25,8 @@ network = [Computer(int_code=data) for _ in range(50)]
 programs = [computer.compute_iter(feed=i) for i, computer in enumerate(network)]
 
 class NAT:
-    x = y = last_y = None
+    x = y = None
+    last_y = None
     def check_idle():
         if all(not bool(computer.feed) or computer.feed[-1] == -1 for computer in network):
             if NAT.last_y == NAT.y:
