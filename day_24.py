@@ -7,17 +7,14 @@ KERNEL = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
 with open('input24', 'r') as data:
     data = [[1 if char == '#' else 0 for char in line] for line in data.read().splitlines()]
 
-def new_state(bugs):
-    neighbor_count = nd.convolve(bugs, KERNEL, mode="constant")
-    still_alive = np.where((bugs == 1) & (neighbor_count == 1), 1, 0)
-    new_borns = np.where((bugs == 0) & ((neighbor_count == 2) | (neighbor_count == 1)), 1, 0)
-    return still_alive + new_borns
-
 bugs = np.array(data)
 states = set((bugs.tostring(), ))
 while True:
-    bugs = new_state(bugs)
-    if (as_string := universe.tostring()) in states:
+    neighbor_count = nd.convolve(bugs, KERNEL, mode="constant")
+    still_alive = np.where((bugs == 1) & (neighbor_count == 1), 1, 0)
+    new_borns = np.where((bugs == 0) & ((neighbor_count == 2) | (neighbor_count == 1)), 1, 0)
+    bugs = still_alive + new_borns
+    if (as_string := bugs.tostring()) in states:
         break
     states.add(as_string)
 
@@ -26,7 +23,7 @@ print(sum(2**powers.index for cooef in powers if cooef)) # Part 1: 18842609
 
 levels = defaultdict(lambda:np.zeros_like(bugs), {0: np.array(data)})
 levels[-1]; levels[1] # First outer and inner level
-def new_states():
+for _ in range(200):
     new = {}
     for level, bugs in tuple(levels.items()):
         neighbor_count = nd.convolve(bugs, KERNEL, mode="constant")
@@ -40,8 +37,5 @@ def new_states():
         new[level] = still_alive + new_borns
         new[level][2, 2] = 0 # Center stays empty
     levels.update(new)
-
-for _ in range(200):
-    new_states()
 
 print(sum(array.sum() for array in levels.values())) # Part 2: 2059
