@@ -17,7 +17,6 @@ def new_state(bugs):
 
 bugs = np.array(data)
 states = set((bugs.tostring(), ))
-
 while True:
     bugs = new_state(bugs)
     if (as_string := universe.tostring()) in states:
@@ -32,15 +31,15 @@ levels[-1]; levels[1] # First outer and inner level
 def new_states():
     new = {}
     for level in list(levels):
-        current = levels[level]
-        neighbor_count = nd.convolve(current, KERNEL, mode="constant")
+        bugs = levels[level]
+        neighbor_count = nd.convolve(bugs, KERNEL, mode="constant")
         for outer, inner in ((0, (1, 2)), ((..., 0), (2, 1)), 
                              (4, (3, 2)), ((..., 4), (2, 3))):
             neighbor_count[outer] += levels[level - 1][inner]
             neighbor_count[inner] += levels[level + 1][outer].sum()
         
-        still_alive = np.where((current == 1) & (neighbor_count == 1), 1, 0)
-        new_borns = np.where((current == 0) & ((neighbor_count == 2) | (neighbor_count == 1)), 1, 0)
+        still_alive = np.where((bugs == 1) & (neighbor_count == 1), 1, 0)
+        new_borns = np.where((bugs == 0) & ((neighbor_count == 2) | (neighbor_count == 1)), 1, 0)
         new[level] = still_alive + new_borns
         new[level][2, 2] = 0 # Center stays empty
     levels.update(new)
