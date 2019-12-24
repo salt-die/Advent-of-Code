@@ -39,8 +39,6 @@ class NAT:
             self.wake()
 
     def wake(self):
-        if self.y is None:
-            return
         if self.first_y is None:
             self.first_y = self.y
         if self.y == self.last_y:
@@ -53,11 +51,11 @@ class NAT:
             for computer in self.network:
                 if computer.idle:
                     continue
-                address, x, y, = next(computer)
+                address, *xy = next(computer)
                 if address == -1: # Computer has become idle
                     continue
                 elif address == 255:
-                    self.x, self.y = x, y
+                    self.x, self.y = xy
                 else:
-                    self.network[address] << (x, y)
+                    self.network[address] << xy
             self.check_idle()
