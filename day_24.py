@@ -5,7 +5,7 @@ import scipy.ndimage as nd
 KERNEL = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
 
 with open('input24', 'r') as data:
-    data = [[1 if char == '#' else 0 for char in line] for line in data.read().splitlines()]
+    data = [[int(char == '#') for char in line] for line in data.read().splitlines()]
 
 bugs = np.array(data)
 states = set((bugs.tostring(), ))
