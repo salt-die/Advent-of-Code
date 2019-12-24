@@ -11,14 +11,13 @@ bugs = np.array(data)
 states = set((bugs.tostring(), ))
 while True:
     neighbor_count = nd.convolve(bugs, KERNEL, mode="constant")
-    still_alive = bugs & (neighbor_count == 1)
-    new_borns = ~bugs & ((neighbor_count == 2) | (neighbor_count == 1))
-    bugs = (still_alive + new_borns).astype(int)
+    bugs = ((bugs & (neighbor_count == 1)) |
+            (~bugs & np.isin(neighbor_count, [1, 2]))).astype(int)
     if (as_string := bugs.tostring()) in states:
         break
     states.add(as_string)
 
-print((bugs.flatten() * np.logspace(0, 24, 25, base=2, dtype=int)).sum())
+print((bugs.flatten() * np.logspace(0, 24, 25, base=2, dtype=int)).sum()) # Part 1: 18842609
 
 levels = defaultdict(lambda:np.zeros_like(bugs), {0: np.array(data)})
 levels[-1]; levels[1] # First outer and inner level
@@ -31,9 +30,8 @@ for _ in range(200):
             neighbor_count[outer] += levels[level - 1][inner]
             neighbor_count[inner] += levels[level + 1][outer].sum()
 
-        still_alive = bugs & (neighbor_count == 1)
-        new_borns = ~bugs & ((neighbor_count == 2) | (neighbor_count == 1))
-        new[level] = (still_alive + new_borns).astype(int)
+        new[level] = ((bugs & (neighbor_count == 1)) |
+                      (~bugs & np.isin(neighbor_count, [1, 2]))).astype(int)
         new[level][2, 2] = 0 # Center stays empty
     levels.update(new)
 
