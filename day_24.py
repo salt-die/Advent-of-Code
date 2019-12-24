@@ -28,8 +28,7 @@ levels = defaultdict(lambda:np.zeros_like(universe), {0: np.array(data)})
 levels[-1]; levels[1] # First outer and inner level
 def new_states():
     new = {}
-    for level in list(levels):
-        bugs = levels[level]
+    for level, bugs in tuple(levels.items()):
         neighbor_count = nd.convolve(bugs, KERNEL, mode="constant")
         for outer, inner in ((0, (1, 2)), ((..., 0), (2, 1)),
                              (4, (3, 2)), ((..., 4), (2, 3))):
