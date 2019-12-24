@@ -18,8 +18,7 @@ while True:
         break
     states.add(as_string)
 
-powers = np.nditer(bugs, flags=['c_index'])
-print(sum(cooef * 2**powers.index for cooef in powers)) # Part 1: 18842609
+print((bugs.flatten() * np.logspace(0, 24, 25, base=2, dtype=int)).sum())
 
 levels = defaultdict(lambda:np.zeros_like(bugs), {0: np.array(data)})
 levels[-1]; levels[1] # First outer and inner level
