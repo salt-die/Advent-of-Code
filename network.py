@@ -24,8 +24,8 @@ class NetworkedComputer(Computer):
                 return address, x, y
 
     def connect(self, *args, **kwargs):
-        super().connect(*args, **kwargs)
         self.idle = False
+        return super().connect(*args, **kwargs)
 
 
 class NAT:
