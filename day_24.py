@@ -30,9 +30,7 @@ print(sum(2**powers.index for cooef in powers if cooef)) # Part 1: 18842609
 levels = defaultdict(lambda:np.zeros_like(universe), {0: np.array(data)})
 levels[-1]; levels[1] # Outer and inner level
 def new_states():
-    #Add two new levels
-
-    new = defaultdict(lambda:np.zeros_like(universe))    
+    new = {}
     for level in list(levels):
         current = levels[level]
         neighbor_count = nd.convolve(current, KERNEL, mode="constant")
