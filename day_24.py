@@ -9,18 +9,17 @@ KERNEL = np.array([[0, 1, 0],
 with open('input24', 'r') as data:
     data = [[1 if char == '#' else 0 for char in line] for line in data.read().splitlines()]
 
-def new_state(universe):
-    neighbor_count = nd.convolve(universe, KERNEL, mode="constant")
-    still_alive = np.where((universe == 1) & (neighbor_count == 1), 1, 0)
-    new_borns = np.where((universe == 0) & ((neighbor_count == 2) | (neighbor_count == 1)), 1, 0)
+def new_state(bugs):
+    neighbor_count = nd.convolve(bugs, KERNEL, mode="constant")
+    still_alive = np.where((bugs == 1) & (neighbor_count == 1), 1, 0)
+    new_borns = np.where((bugs == 0) & ((neighbor_count == 2) | (neighbor_count == 1)), 1, 0)
     return still_alive + new_borns
 
-universe = np.array(data)
-states = set()
-states.add(universe.tostring())
+bugs = np.array(data)
+states = set((bugs.tostring(), ))
 
 while True:
-    universe = new_state(universe)
+    bugs = new_state(bugs)
     if (as_string := universe.tostring()) in states:
         break
     states.add(as_string)
@@ -30,32 +29,25 @@ print(sum(2**powers.index for cooef in powers if cooef)) # Part 1: 18842609
 
 levels = defaultdict(lambda:np.zeros_like(universe), {0: np.array(data)})
 levels[-1]; levels[1] # Outer and inner level
-def new_states_recursive():
+def new_states():
     #Add two new levels
 
-    new_states = defaultdict(lambda:np.zeros_like(universe))    
+    new = defaultdict(lambda:np.zeros_like(universe))    
     for level in list(levels):
         current = levels[level]
         neighbor_count = nd.convolve(current, KERNEL, mode="constant")
-        #outer sums
-        neighbor_count[0] += levels[level - 1][1, 2]
-        neighbor_count[4] += levels[level - 1][3, 2]
-        neighbor_count[:,0] += levels[level - 1][2, 1]
-        neighbor_count[:,4] += levels[level - 1][2, 3]
-        
-        #inner sums
-        neighbor_count[1, 2] += levels[level + 1][0].sum()
-        neighbor_count[3, 2] += levels[level + 1][4].sum()
-        neighbor_count[2, 1] += levels[level + 1][:,0].sum()
-        neighbor_count[2, 3] += levels[level + 1][:,4].sum()
+        for outer, inner in ((0, (1, 2)), ((..., 0), (2, 1)), 
+                             (4, (3, 2)), ((..., 4), (2, 3))):
+            neighbor_count[outer] += levels[level - 1][inner]
+            neighbor_count[inner] += levels[level + 1][outer].sum()
         
         still_alive = np.where((current == 1) & (neighbor_count == 1), 1, 0)
         new_borns = np.where((current == 0) & ((neighbor_count == 2) | (neighbor_count == 1)), 1, 0)
-        new_levels[level] = still_alive + new_borns
-        new_levels[level][2, 2] = 0
-    levels.update(new_states)
+        new[level] = still_alive + new_borns
+        new[level][2, 2] = 0
+    levels.update(new)
         
 for _ in range(200):
-    new_state_recursive()
+    new_states()
     
 print(sum(array.sum() for array in levels.values())) # Part 2: 2059
