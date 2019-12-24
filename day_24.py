@@ -1,10 +1,8 @@
+from collections import defaultdict
 import numpy as np
 import scipy.ndimage as nd
-from collections import defaultdict
 
-KERNEL = np.array([[0, 1, 0],
-                   [1, 0, 1],
-                   [0, 1, 0]], dtype=np.uint8)
+KERNEL = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
 
 with open('input24', 'r') as data:
     data = [[1 if char == '#' else 0 for char in line] for line in data.read().splitlines()]
