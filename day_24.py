@@ -19,7 +19,7 @@ while True:
 print((bugs.flatten() * np.logspace(0, 24, 25, base=2, dtype=int)).sum()) # Part 1: 18842609
 
 levels = np.pad(np.array(data)[None], [(100,), (0,), (0,)])
-KERNEL3D = np.pad(KERNEL[None], [(1,),(0,),(0,)])
+KERNEL3D = np.pad(KERNEL[None], [(1,), (0,), (0,)])
 UP, dn = slice(1, None), slice(None, -1)
 
 for _ in range(200):
