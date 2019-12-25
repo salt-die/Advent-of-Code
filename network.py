@@ -10,12 +10,12 @@ class NetworkedComputer(Computer):
     def __next__(self):
         for _, op, *_ in self.iterator:
             if op == '03' and not self.feed:
-                self << -1
-                if not self.sending_packets:
+                if self.sending_packets:
+                    self << -1
+                    self.sending_packets = False
+                else:
                     self.idle = True
                     return
-                else:
-                    self.sending_packets = False
 
             if len(self.out) == 3:
                 self.sending_packets = True
