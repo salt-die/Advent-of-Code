@@ -5,20 +5,20 @@ class NetworkedComputer(Computer):
         super().__init__(*args, **kwargs)
         self.iterator = self.compute_iter(feed=feed)
         self.idle = False
-        self.produced = True
+        self.sending_packets = True
 
     def __next__(self):
         for _, op, *_ in self.iterator:
             if op == '03' and not self.feed:
                 self << -1
-                if not self.produced:
+                if not self.sending_packets:
                     self.idle = True
                     return
                 else:
-                    self.produced = False
+                    self.sending_packets = False
 
             if len(self.out) == 3:
-                self.produced = True
+                self.sending_packets = True
                 return self.pop(), self.pop(), self.pop()
 
     def connect(self, *args, **kwargs):
@@ -47,7 +47,6 @@ class NAT:
                        if not computer.idle and (packet := next(computer))]
             if not packets:
                 self.wake()
-                continue
             for address, *xy in packets:
                 if address == 255:
                     self.xy = xy
