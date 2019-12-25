@@ -22,8 +22,7 @@ KERNEL3D = np.pad(KERNEL[None], [(1,), (0,), (0,)])
 UP, dn = slice(1, None), slice(None, -1)
 
 for _ in range(200):
-    neighbor_count = convolve(levels, KERNEL3D, mode='same')
-    neighbor_count[:, 2, 2] = 0
+    (neighbor_count := convolve(levels, KERNEL3D, mode='same'))[:, 2, 2] = 0
     for outer, inner in ((( 0,), (1, 2)), ((...,  0), (2, 1)),
                          ((-1,), (3, 2)), ((..., -1), (2, 3))):
         neighbor_count[(UP, *outer)] += levels[(dn, *inner, None)]
