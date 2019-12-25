@@ -20,7 +20,7 @@ print((bugs.flatten() * np.logspace(0, 24, 25, base=2, dtype=int)).sum()) # Part
 
 levels = np.pad(np.array(data)[None], [(100,), (0,), (0,)])
 KERNEL3D = np.pad(KERNEL[None], [(1,),(0,),(0,)])
-UP, dn = slice(1, None, None), slice(None, -1, None)
+UP, dn = slice(1, None), slice(None, -1)
 
 for _ in range(200):
     neighbor_count = nd.convolve(levels, KERNEL3D, mode='constant')
