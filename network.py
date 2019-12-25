@@ -18,10 +18,8 @@ class NetworkedComputer(Computer):
                     self.produced = False
 
             if len(self.out) == 3:
-                y, x, address = self.out
-                self.out.clear()
                 self.produced = True
-                return address, x, y
+                return self.pop(), self.pop(), self.pop()
 
     def connect(self, *args, **kwargs):
         self.idle = False
