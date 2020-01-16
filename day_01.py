@@ -7,12 +7,12 @@ print(np.sum(numbers//3 - 2)) # Part 1
 
 total = 0
 fuel = numbers
-while np.any(fuel):
+while fuel.any():
     fuel = fuel // 3 - 2
-    np.clip(fuel, 0, None, out=fuel)
+    fuel.clip(0, None, out=fuel)
     total += fuel
 
-print(np.sum(total)) # Part 2
+print(total.sum()) # Part 2
 
 #Alternate solution -- one-line non-recursive for-loop
 from math import log
