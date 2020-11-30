@@ -14,7 +14,7 @@ with open(THIS_DIR / TOKEN_FILE) as f:
     token = {"session": f.read().strip()}
 
 def day(d):
-    """Return the input for day `d`. All inputs cached in INPUTS."""
+    """Return the input for day `d`. All inputs cached in INPUTS_FILE."""
     d = str(d)
 
     with open(THIS_DIR / INPUTS_FILE) as f:
