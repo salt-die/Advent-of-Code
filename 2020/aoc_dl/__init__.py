@@ -2,15 +2,15 @@ import json
 import pathlib
 import requests
 
-__all__ = "day", "today"
+__all__ = "day"
 
 THIS_DIR = pathlib.Path(__file__).parent
-TOKEN_FILE = ".token"
+TOKEN_FILE = ".token"  # Advent of Code session id
 INPUTS_FILE = "inputs.json"
-URL = "https://adventofcode.com/2020/day/{day}"
+URL = "https://adventofcode.com/2020/day/{day}"  # Reminder to future self:  Change the year!
 USER_AGENT = {"User-Agent": "aoc-dl"}
 
-with open(THIS_DIR / TOKEN_FILE) as f:  # Get session id
+with open(THIS_DIR / TOKEN_FILE) as f:
     token = {"session": f.read().strip()}
 
 def day(d):
