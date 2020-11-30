@@ -64,8 +64,8 @@ def submit(day, part, solution):
     color = None
     if "That's the right answer" in message:
         color = "green"
-        if part.lower() == "a":
-            webbrowser.open(response.url)  # View part b in browser
+        if part == "1":
+            webbrowser.open(response.url)  # View part 2 in browser
     elif "Did you already complete it" in message:
         color = "yellow"
     elif "That's not the right answer" in message:
