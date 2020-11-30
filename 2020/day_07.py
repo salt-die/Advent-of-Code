@@ -14,8 +14,8 @@ def part_two():
 if __name__ = "__main__":
     a = part_one()
     if a is not None:
-        aoc_helper.submit(7, "a", a)
+        aoc_helper.submit(day=7, part=1, a)
 
     b = part_two()
     if b is not None:
-        aoc_helper.submit(7, "b", b)
+        aoc_helper.submit(day=7, part=2, b)

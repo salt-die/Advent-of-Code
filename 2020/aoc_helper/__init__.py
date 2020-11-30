@@ -7,7 +7,7 @@ import webbrowser
 import bs4
 import rich
 
-YEAR = 2020
+YEAR = 2018
 THIS_DIR = pathlib.Path(__file__).parent
 TOKEN_FILE = ".token"  # Advent of Code session id
 INPUTS_FILE = "inputs.json"
@@ -43,21 +43,20 @@ def _pretty_print(color, message):
 
 def submit(day, part, solution):
     """Submit an AoC solution.  Submissions are cached -- Submitting an already submitted solution will return the previous response."""
-    day = str(day)
-    solution = str(solution)
+    day, part, solution = map(str, (day, part, solution))
 
     with open(THIS_DIR / SUBMISSIONS_FILE) as f:
         submissions = json.load(f)
 
     if day not in submissions:
-        submissions[day] = {"a": {}, "b": {}}
+        submissions[day] = {"1": {}, "2": {}}
 
     if solution in submissions[day][part]:
-        rich.print(f"Solution {solution} has already been submitted, response was:")
+        rich.print(f"Solution {solution} to part {part} has already been submitted, response was:")
         return _pretty_print(*submissions[day][part][solution])
 
-    level = {"a": 1, "b": 2}[part.lower()]
-    response = requests.post(url=URL.format(day=day) + "/answer", cookies=token, data={"level": level, "answer": solution})
+    rich.print(f"Submitting {solution} as solution to part {part}:")
+    response = requests.post(url=URL.format(day=day) + "/answer", cookies=token, data={"level": part, "answer": solution})
     if not response.ok:
         raise ValueError("Bad response")
 
@@ -72,7 +71,7 @@ def submit(day, part, solution):
     elif "That's not the right answer" in message:
         color = "red"
     elif "You gave an answer too recently" in message:
-        wait_re = r"You have (?:(\d+)m?(\d+)s left to wait"
+        wait_re = r"You have (?:(\d+)m )?(\d+)s left to wait"
         try:
             [(minutes, seconds)] = re.findall(wait_re, message)
         except ValueError as e:
