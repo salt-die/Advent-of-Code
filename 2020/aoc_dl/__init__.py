@@ -7,7 +7,7 @@ __all__ = "day"
 THIS_DIR = pathlib.Path(__file__).parent
 TOKEN_FILE = ".token"  # Advent of Code session id
 INPUTS_FILE = "inputs.json"
-URL = "https://adventofcode.com/2020/day/{day}"  # Reminder to future self:  Change the year!
+URL = "https://adventofcode.com/2020/day/{day}/input"  # Reminder to future self:  Change the year!
 USER_AGENT = {"User-Agent": "aoc-dl"}
 
 with open(THIS_DIR / TOKEN_FILE) as f:
@@ -23,7 +23,7 @@ def day(d):
     if d in inputs:
         return inputs[d]
 
-    response = requests.get(url=URL.format(day=d) + "/input", cookies=token, headers=USER_AGENT)
+    response = requests.get(url=URL.format(day=d), cookies=token, headers=USER_AGENT)
     if not response.ok:
         raise ValueError("Bad response")
 
