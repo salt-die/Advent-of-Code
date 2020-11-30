@@ -9,7 +9,7 @@ with open(TEMPLATE_FILE) as f:
 
 for i in range(1, 26):
     file = FILE_DIR / f"day_{i:02}.py"
-    #if file.exists():  # We don't overwrite what could be possible solutions.
-    #    continue
+    if file.exists():  # We don't overwrite what could be possible solutions.
+        continue
     with open(file, "w") as f:
         f.write(template.format(day=i))
