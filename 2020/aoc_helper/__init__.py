@@ -9,7 +9,7 @@ import rich
 
 YEAR = 2020
 THIS_DIR = pathlib.Path(__file__).parent
-TOKEN_FILE = ".token"  # Advent of Code session id
+TOKEN_FILE = ".token"  # Advent of Code session cookie
 INPUTS_FILE = "inputs.json"
 SUBMISSIONS_FILE = "submissions.json"
 URL = f"https://adventofcode.com/{YEAR}/day/{{day}}"
