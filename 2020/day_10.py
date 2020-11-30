@@ -3,7 +3,7 @@ import aoc_helper
 def parse_data(data):
     ...
 
-data = parse_date(aoc_helper.day(10))
+data = parse_data(aoc_helper.day(10))
 
 def part_one():
     ...
