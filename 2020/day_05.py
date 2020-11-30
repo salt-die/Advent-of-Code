@@ -1,9 +1,12 @@
 import aoc_helper
 
-def parse_data(data):
+raw = aoc_helper.day(5)
+print(raw)
+
+def parse_raw():
     ...
 
-data = parse_data(aoc_helper.day(5))
+data = parse_raw()
 
 def part_one():
     ...
@@ -11,9 +14,5 @@ def part_one():
 def part_two():
     ...
 
-if __name__ = "__main__":
-    if a := part_one():
-        aoc_helper.submit(day=5, part=1, a)
-
-    if b := part_two():
-        aoc_helper.submit(day=5, part=2, b)
+aoc_helper.submit(day=5, part=1, solution=part_one())
+aoc_helper.submit(day=5, part=2, solution=part_two())

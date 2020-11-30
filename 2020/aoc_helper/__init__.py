@@ -43,6 +43,9 @@ def _pretty_print(color, message):
 
 def submit(day, part, solution):
     """Submit an AoC solution.  Submissions are cached -- Submitting an already submitted solution will return the previous response."""
+    if solution is None:  # Our templated code when run will submit empty solutions.  Ignore these.
+        return
+
     day, part, solution = map(str, (day, part, solution))
 
     with open(THIS_DIR / SUBMISSIONS_FILE) as f:
@@ -61,26 +64,24 @@ def submit(day, part, solution):
         raise ValueError("Bad response")
 
     message = bs4.BeautifulSoup(response.text, "html.parser").article.text
-    color = None
-    if "That's the right answer" in message:
+    if message.startswith("That's the"):
         color = "green"
-        if part == "1":
-            webbrowser.open(response.url)  # View part 2 in browser
-    elif "Did you already complete it" in message:
+        if part == "1": webbrowser.open(response.url)  # View part 2 in browser
+    elif message.startswith("You don't"):
         color = "yellow"
-    elif "That's not the right answer" in message:
+    elif message.startswith("That's not"):
         color = "red"
-    elif "You gave an answer too recently" in message:
-        wait_re = r"You have (?:(\d+)m )?(\d+)s left to wait"
-        try:
-            [(minutes, seconds)] = re.findall(wait_re, message)
-        except ValueError as e:
-            raise ValueError("Regex failed on message") from e
-        else:
-            pause = 60 * int(minutes or 0) + int(seconds)
-            rich.print(f"Answer submitted recently, waiting {pause} seconds to retry...")
-            time.sleep(pause)
-            return submit(day, part, solution)
+    elif message.startswith("You gave"):
+        _pretty_print("red", message)
+        wait_re = r"You have (?:(\d+)m )?(\d+)s left to wait."
+        (minutes, seconds) ,= re.findall(wait_re, message)
+
+        pause = 60 * int(minutes or 0) + int(seconds)
+        rich.print(f"Waiting {pause} seconds to retry...")
+        time.sleep(pause)
+        return submit(day, part, solution)
+    else:
+        raise ValueError("Failed to parse server response.")
 
     submissions[day][part][solution] = color, message
     with open(THIS_DIR / SUBMISSIONS_FILE, "w") as f:
