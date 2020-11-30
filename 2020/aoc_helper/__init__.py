@@ -79,7 +79,7 @@ def submit(day, part, solution):
             raise ValueError("Regex failed on message") from e
         else:
             pause = 60 * int(minutes or 0) + int(seconds)
-            rich.print(f"Waiting {pause} seconds to retry...")
+            rich.print(f"Answer submitted recently, waiting {pause} seconds to retry...")
             time.sleep(pause)
             return submit(day, part, solution)
 
