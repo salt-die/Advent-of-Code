@@ -7,7 +7,7 @@ import webbrowser
 import bs4
 import rich
 
-YEAR = 2018
+YEAR = 2020
 THIS_DIR = pathlib.Path(__file__).parent
 TOKEN_FILE = ".token"  # Advent of Code session id
 INPUTS_FILE = "inputs.json"
