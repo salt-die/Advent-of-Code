@@ -1,1 +1,0 @@
-"""Utility functions for AoC 2020 solutions."""
