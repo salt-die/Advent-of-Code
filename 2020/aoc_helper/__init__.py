@@ -42,7 +42,9 @@ def _pretty_print(color, message):
     rich.print(f"[bold {color}]{message}[/bold {color}]")
 
 def submit(day, solv_func):
-    """Submit an AoC solution.  Submissions are cached -- Submitting an already submitted solution will return the previous response."""
+    """Submit an AoC solution.  Submissions are cached -- Submitting an already submitted solution will return the previous response.
+    solv_func is expected to be named "part_one" or "part_two".
+    """
     day = str(day)
     part == "1" if solv_func.__name__ == "part_one" else "2"
 
