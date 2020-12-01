@@ -41,18 +41,25 @@ def day(d):
 def _pretty_print(color, message):
     rich.print(f"[bold {color}]{message}[/bold {color}]")
 
-def submit(day, part, solution):
+def submit(day, solv_func):
     """Submit an AoC solution.  Submissions are cached -- Submitting an already submitted solution will return the previous response."""
-    if solution is None:  # Our templated code when run will submit empty solutions.  Ignore these.
-        return
-
-    day, part, solution = map(str, (day, part, solution))
+    day = str(day)
+    part == "1" if solv_func.__name__ == "part_one" else "2"
 
     with open(THIS_DIR / SUBMISSIONS_FILE) as f:
         submissions = json.load(f)
 
     if day not in submissions:
         submissions[day] = {"1": {}, "2": {}}
+
+    # We won't run the function if we already have the solution.
+    # If solv_func is slow this can save us time when running solution files multiple times.
+    if "solution" in submissions[day][part]:
+        return rich.print(f"Day {day} part {part} has already been solved.  The solution was: {submissions[day][part]["solution"]}.")
+
+    solution = str(solv_func())
+    if solution is None:  # Our templated code when run will submit empty solutions.  Ignore these.
+        return
 
     if solution in submissions[day][part]:
         rich.print(f"Solution {solution} to part {part} has already been submitted, response was:")
@@ -66,6 +73,7 @@ def submit(day, part, solution):
     message = bs4.BeautifulSoup(response.text, "html.parser").article.text
     if message.startswith("That's the"):
         color = "green"
+        submissions[day][part]["solution"] = solution
         if part == "1": webbrowser.open(response.url)  # View part 2 in browser
     elif message.startswith("You don't"):
         color = "yellow"
