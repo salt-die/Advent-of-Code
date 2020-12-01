@@ -46,7 +46,7 @@ def submit(day, solv_func):
     solv_func is expected to be named "part_one" or "part_two".
     """
     day = str(day)
-    part == "1" if solv_func.__name__ == "part_one" else "2"
+    part = "1" if solv_func.__name__ == "part_one" else "2"
 
     with open(THIS_DIR / SUBMISSIONS_FILE) as f:
         submissions = json.load(f)
@@ -57,41 +57,43 @@ def submit(day, solv_func):
     # We won't run the function if we already have the solution.
     # If solv_func is slow this can save us time when running solution files multiple times.
     if "solution" in submissions[day][part]:
-        return rich.print(f"Day {day} part {part} has already been solved.  The solution was: {submissions[day][part]["solution"]}.")
+        return rich.print(f"Day {day} part {part} has already been solved.  The solution was: {submissions[day][part]['solution']}.")
 
-    solution = str(solv_func())
-    if solution is None:  # Our templated code when run will submit empty solutions.  Ignore these.
+    if (solution :=  solv_func()) is None:  # Our templated code when run will submit empty solutions.  Ignore these.
         return
+    solution = str(solution)
 
     if solution in submissions[day][part]:
         rich.print(f"Solution {solution} to part {part} has already been submitted, response was:")
         return _pretty_print(*submissions[day][part][solution])
 
-    rich.print(f"Submitting {solution} as solution to part {part}:")
-    response = requests.post(url=URL.format(day=day) + "/answer", cookies=token, data={"level": part, "answer": solution})
-    if not response.ok:
-        raise ValueError("Bad response")
+    while True:  # Entire while loop is just for case where we have to wait before resubmitting.
+        rich.print(f"Submitting {solution} as solution to part {part}:")
+        response = requests.post(url=URL.format(day=day) + "/answer", cookies=token, data={"level": part, "answer": solution})
+        if not response.ok:
+            raise ValueError("Bad response")
 
-    message = bs4.BeautifulSoup(response.text, "html.parser").article.text
-    if message.startswith("That's the"):
-        color = "green"
-        submissions[day][part]["solution"] = solution
-        if part == "1": webbrowser.open(response.url)  # View part 2 in browser
-    elif message.startswith("You don't"):
-        color = "yellow"
-    elif message.startswith("That's not"):
-        color = "red"
-    elif message.startswith("You gave"):
-        _pretty_print("red", message)
-        wait_re = r"You have (?:(\d+)m )?(\d+)s left to wait."
-        (minutes, seconds) ,= re.findall(wait_re, message)
+        message = bs4.BeautifulSoup(response.text, "html.parser").article.text
+        if message.startswith("That's the"):
+            color = "green"
+            submissions[day][part]["solution"] = solution
+            if part == "1": webbrowser.open(response.url)  # View part 2 in browser
+        elif message.startswith("You don't"):
+            color = "yellow"
+        elif message.startswith("That's not"):
+            color = "red"
+        elif message.startswith("You gave"):
+            _pretty_print("red", message)
+            wait_re = r"You have (?:(\d+)m )?(\d+)s left to wait."
+            (minutes, seconds) ,= re.findall(wait_re, message)
 
-        pause = 60 * int(minutes or 0) + int(seconds)
-        rich.print(f"Waiting {pause} seconds to retry...")
-        time.sleep(pause)
-        return submit(day, part, solution)
-    else:
-        raise ValueError("Failed to parse server response.")
+            pause = 60 * int(minutes or 0) + int(seconds)
+            rich.print(f"Waiting {pause} seconds to retry...")
+            time.sleep(pause)
+            continue
+        else:
+            raise ValueError("Failed to parse server response.")
+        break
 
     submissions[day][part][solution] = color, message
     with open(THIS_DIR / SUBMISSIONS_FILE, "w") as f:
