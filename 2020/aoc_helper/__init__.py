@@ -67,22 +67,15 @@ def submit(day, solv_func):
         rich.print(f"Solution {solution} to part {part} has already been submitted, response was:")
         return _pretty_print(*submissions[day][part][solution])
 
-    while True:  # Entire while loop is just for case where we have to wait before resubmitting.
+    while True:
         rich.print(f"Submitting {solution} as solution to part {part}:")
         response = requests.post(url=URL.format(day=day) + "/answer", cookies=token, data={"level": part, "answer": solution})
         if not response.ok:
             raise ValueError("Bad response")
 
         message = bs4.BeautifulSoup(response.text, "html.parser").article.text
-        if message.startswith("That's the"):
-            color = "green"
-            submissions[day][part]["solution"] = solution
-            if part == "1": webbrowser.open(response.url)  # View part 2 in browser
-        elif message.startswith("You don't"):
-            color = "yellow"
-        elif message.startswith("That's not"):
-            color = "red"
-        elif message.startswith("You gave"):
+
+        if message.startswith("You gave"):
             _pretty_print("red", message)
             wait_re = r"You have (?:(\d+)m )?(\d+)s left to wait."
             (minutes, seconds) ,= re.findall(wait_re, message)
@@ -90,10 +83,19 @@ def submit(day, solv_func):
             pause = 60 * int(minutes or 0) + int(seconds)
             rich.print(f"Waiting {pause} seconds to retry...")
             time.sleep(pause)
-            continue
         else:
-            raise ValueError("Failed to parse server response.")
-        break
+            break
+
+    if message.startswith("That's the"):
+        color = "green"
+        submissions[day][part]["solution"] = solution
+        if part == "1": webbrowser.open(response.url)  # View part 2 in browser
+    elif message.startswith("You don't"):
+        color = "yellow"
+    elif message.startswith("That's not"):
+        color = "red"
+    else:
+        raise ValueError("Failed to parse server response.")
 
     submissions[day][part][solution] = color, message
     with open(THIS_DIR / SUBMISSIONS_FILE, "w") as f:
