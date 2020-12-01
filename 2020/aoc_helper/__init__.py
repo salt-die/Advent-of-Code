@@ -32,7 +32,7 @@ def day(d):
         raise ValueError("Bad response")
 
     # Save input data
-    inputs[d] = response.text
+    inputs[d] = response.text.strip()
     with open(THIS_DIR / INPUTS_FILE, "w") as f:
         json.dump(inputs, f)
 
