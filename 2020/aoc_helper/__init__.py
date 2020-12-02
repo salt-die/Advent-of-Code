@@ -102,3 +102,7 @@ def submit(day, solv_func):
         json.dump(submissions, f, indent=2)
 
     _pretty_print(color, message)
+
+    def extract_ints(raw):
+        """Utility function to extract all integers from some string."""
+        return re.findall(r'(\d+)', raw)
