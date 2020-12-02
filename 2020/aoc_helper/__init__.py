@@ -78,7 +78,7 @@ def submit(day, solv_func):
         if message.startswith("You gave"):
             _pretty_print("red", message)
             wait_re = r"You have (?:(\d+)m )?(\d+)s left to wait."
-            (minutes, seconds) ,= re.findall(wait_re, message)
+            minutes, seconds = re.match(wait_re, message).groups()
 
             pause = 60 * int(minutes or 0) + int(seconds)
             rich.print(f"Waiting {pause} seconds to retry...")
