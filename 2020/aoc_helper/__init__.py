@@ -110,4 +110,4 @@ def submit(day, solv_func):
 
 def extract_ints(raw):
     """Utility function to extract all integers from some string."""
-    return re.findall(r'(\d+)', raw)
+    return map(int, re.findall(r'(\d+)', raw))

@@ -4,7 +4,7 @@ from itertools import combinations
 raw = aoc_helper.day(1)
 
 def parse_raw():
-    return set(int(line) for line in raw.splitlines())
+    return set(aoc_helper.extract_ints(raw))
 
 data = parse_raw()
 
