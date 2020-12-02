@@ -15,6 +15,7 @@ def part_one():
 
 def part_two():
     # We know that at least two of the numbers must be less than half the target.
+    # Note len(filtered_data) is 5 for my input.  We only need to check 10 combinations!
     filtered_data = (i for i in data if i < 1010)
 
     for a, b in combinations(filtered_data, 2):
