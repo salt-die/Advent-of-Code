@@ -14,7 +14,10 @@ def part_one():
             return a * b
 
 def part_two():
-    for a, b in combinations(data, 2):
+    # We know that at least two of the numbers must be less than half the target.
+    filtered_data = (i for i in data if i < 1010)
+
+    for a, b in combinations(filtered_data, 2):
         if (c := (2020 - a - b)) in data:
             return a * b * c
 
