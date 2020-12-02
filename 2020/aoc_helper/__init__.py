@@ -34,7 +34,7 @@ def day(d):
     # Save input data
     inputs[d] = response.text.strip()
     with open(THIS_DIR / INPUTS_FILE, "w") as f:
-        json.dump(inputs, f)
+        json.dump(inputs, f, indent=2)
 
     return inputs[d]
 
@@ -99,6 +99,6 @@ def submit(day, solv_func):
 
     submissions[day][part][solution] = color, message
     with open(THIS_DIR / SUBMISSIONS_FILE, "w") as f:
-        json.dump(submissions, f)
+        json.dump(submissions, f, indent=2)
 
     _pretty_print(color, message)
