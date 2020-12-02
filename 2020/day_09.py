@@ -14,5 +14,5 @@ def part_one():
 def part_two():
     ...
 
-aoc_helper.submit(day=9, solv_func=part_one)
-aoc_helper.submit(day=9, solv_func=part_two)
+aoc_helper.submit(9, part_one)
+aoc_helper.submit(9, part_two)

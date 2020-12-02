@@ -15,5 +15,5 @@ def part_one():
 def part_two():
     return sum((pw[int(mi) - 1] == letter) ^ (pw[int(mx) - 1] == letter) for mi, mx, letter, pw in data)
 
-aoc_helper.submit(day=2, solv_func=part_one)
-aoc_helper.submit(day=2, solv_func=part_two)
+aoc_helper.submit(2, part_one)
+aoc_helper.submit(2, part_two)

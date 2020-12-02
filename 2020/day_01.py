@@ -22,5 +22,5 @@ def part_two():
         if (c := (2020 - a - b)) in data:
             return a * b * c
 
-aoc_helper.submit(day=1, solv_func=part_one)
-aoc_helper.submit(day=1, solv_func=part_two)
+aoc_helper.submit(1, part_one)
+aoc_helper.submit(1, part_two)
