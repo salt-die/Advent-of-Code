@@ -38,12 +38,25 @@ def day(d):
 
     return inputs[d]
 
-def _pretty_print(color, message):
+def _pretty_print(message):
+    # The first place the message differs between right and wrong answers is index 7; we differentiate messages with this index.
+    #   "green" indicates a correct answer
+    #   "yellow" indicates a submission to an already solved problem
+    #   "red" indicates a timeout or wrong answer
+    color = {"t": "green", "'": "yellow"}.get(message[7], "red")
     rich.print(f"[bold {color}]{message}[/bold {color}]")
 
 def submit(day, solv_func):
     """Submit an AoC solution.  Submissions are cached -- Submitting an already submitted solution will return the previous response.
-    solv_func is expected to be named "part_one" or "part_two".
+       solv_func is expected to be named "part_one" or "part_two"; the function is passed instead of the answer as we only run it in
+       cases where we haven't seen a solution yet.  (To save time running slow part_one funcs in cases where we run solution files
+       multiple times working on part two.)
+
+       Possible responses to submissions start with:
+            "That's the right answer! ..."
+            "You don't seem to be solving the right level. ..."
+            "That's not the right answer. If you're stuck, ..."
+            "You gave an answer too recently; you have to wait ..."
     """
     day = str(day)
     part = "1" if solv_func.__name__ == "part_one" else "2"
@@ -65,7 +78,7 @@ def submit(day, solv_func):
 
     if solution in submissions[day][part]:
         rich.print(f"Solution {solution} to part {part} has already been submitted, response was:")
-        return _pretty_print(*submissions[day][part][solution])
+        return _pretty_print(submissions[day][part][solution])
 
     while True:
         rich.print(f"Submitting {solution} as solution to part {part}:")
@@ -75,10 +88,9 @@ def submit(day, solv_func):
 
         message = bs4.BeautifulSoup(response.text, "html.parser").article.text
 
-        if message.startswith("You gave"):
-            _pretty_print("red", message)
-            wait_re = r"You have (?:(\d+)m )?(\d+)s left to wait."
-            minutes, seconds = re.match(wait_re, message).groups()
+        if message[4] == "g":
+            _pretty_print(message)
+            minutes, seconds = re.search(r"(?:(\d+)m )?(\d+)s", message).groups()
 
             pause = 60 * int(minutes or 0) + int(seconds)
             rich.print(f"Waiting {pause} seconds to retry...")
@@ -86,23 +98,16 @@ def submit(day, solv_func):
         else:
             break
 
-    if message.startswith("That's the"):
-        color = "green"
+    if message[7] == "t":  # Correct Solution:  We mark this part as solved by adding key `"solution"`.
         submissions[day][part]["solution"] = solution
         if part == "1": webbrowser.open(response.url)  # View part 2 in browser
-    elif message.startswith("You don't"):
-        color = "yellow"
-    elif message.startswith("That's not"):
-        color = "red"
-    else:
-        raise ValueError("Failed to parse server response.")
 
-    submissions[day][part][solution] = color, message
+    submissions[day][part][solution] = message
     with open(THIS_DIR / SUBMISSIONS_FILE, "w") as f:
         json.dump(submissions, f, indent=2)
 
-    _pretty_print(color, message)
+    _pretty_print(message)
 
-    def extract_ints(raw):
-        """Utility function to extract all integers from some string."""
-        return re.findall(r'(\d+)', raw)
+def extract_ints(raw):
+    """Utility function to extract all integers from some string."""
+    return re.findall(r'(\d+)', raw)
