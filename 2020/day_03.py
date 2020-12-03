@@ -11,18 +11,18 @@ def parse_raw():
 data = parse_raw()
 h, w = data.shape
 
-def visited(x, y):
-    """Return y-coordinates and x-coordinates visited given a slope (x, y)."""
+def trees_hit(x, y):
+    """Return number of trees hit given a slope (x, y)."""
     xs = tuple((x * i) % w for i in range(1, h // y + bool(h % y)))
     ys = tuple(range(y, h, y))
-    return ys, xs # Note order of ys, xs for indexing numpy arrays
+    return data[ys, xs].sum()
 
 def part_one():
-    return data[visited(3, 1)].sum()
+    return trees_hit(3, 1)
 
 def part_two():
     slopes = (1, 1), (3, 1), (5, 1), (7, 1), (1, 2)
-    return prod(data[visited(x, y)].sum() for x, y in slopes)
+    return prod(trees_hit(x, y) for x, y in slopes)
 
 aoc_helper.submit(3, part_one)
 aoc_helper.submit(3, part_two)
