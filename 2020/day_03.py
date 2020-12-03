@@ -13,8 +13,8 @@ h, w = data.shape
 
 def visited(x, y):
     """Return y-coordinates and x-coordinates visited given a slope (x, y)."""
-    xs = tuple((x * i) % w for i in range(h // y + bool(h % y)))
-    ys = tuple(range(0, h, y))
+    xs = tuple((x * i) % w for i in range(1, h // y + bool(h % y)))
+    ys = tuple(range(y, h, y))
     return ys, xs # Note order of ys, xs for indexing numpy arrays
 
 def part_one():
