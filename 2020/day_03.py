@@ -24,6 +24,5 @@ def part_two():
     slopes = (1, 1), (3, 1), (5, 1), (7, 1), (1, 2)
     return prod(data[visited(x, y)].sum() for x, y in slopes)
 
-print(part_one(), part_two())
 aoc_helper.submit(3, part_one)
 aoc_helper.submit(3, part_two)
