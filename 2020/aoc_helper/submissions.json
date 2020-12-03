@@ -18,5 +18,20 @@
       "solution": "562",
       "562": "That's the right answer!  You are one gold star closer to saving your vacation. You got rank 964 on this star's leaderboard.You have completed Day 2! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
     }
+  },
+  "3": {
+    "1": {
+      "3148": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Please wait one minute before trying again. (You guessed 3148.) [Return to Day 3]",
+      "88": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Please wait one minute before trying again. (You guessed 88.) [Return to Day 3]",
+      "94": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Please wait one minute before trying again. (You guessed 94.) [Return to Day 3]",
+      "87": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Because you have guessed incorrectly 4 times on this puzzle, please wait 5 minutes before trying again. (You guessed 87.) [Return to Day 3]",
+      "solution": "145",
+      "145": "That's the right answer!  You are one gold star closer to saving your vacation. [Continue to Part Two]"
+    },
+    "2": {
+      "22102531250": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Please wait one minute before trying again. (You guessed 22102531250.) [Return to Day 3]",
+      "solution": "3424528800",
+      "3424528800": "That's the right answer!  You are one gold star closer to saving your vacation.You have completed Day 3! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
+    }
   }
 }
