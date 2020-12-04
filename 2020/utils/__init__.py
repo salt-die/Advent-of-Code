@@ -5,3 +5,7 @@ def prod(iter, *, start=1, cast=int):
     for i in iter:
         m *= cast(i)
     return m
+
+class adict(dict):
+    def __getattr__(self, key):
+        return self[key]
