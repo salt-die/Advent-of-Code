@@ -7,15 +7,7 @@ raw = aoc_helper.day(4)
 FIELDS = "byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"
 
 def parse_raw():
-    passports = []
-    passport = {}
-    for line in raw.splitlines():
-        if not line:
-            passports.append(adict(passport))
-            passport = {}
-        else:
-            passport.update({field: match.group(1) for field in FIELDS if (match := re.search(rf"{field}:(\S+)", line))})
-    return passports
+    return [adict({field: match.group(1) for field in FIELDS if (match := re.search(rf"{field}:(\S+)", line))}) for line in raw.split("\n\n")]
 
 data = parse_raw()
 
