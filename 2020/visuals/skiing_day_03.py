@@ -148,8 +148,12 @@ class Skiing:
             x_pix = sx * w
             y_pix = sy * h
             for offset in range(max(x_pix, y_pix)):
-                shift_x = offset if x_pix > y_pix else round(offset * x_pix / y_pix)
-                shift_y = offset if y_pix > x_pix else round(offset * y_pix / x_pix)
+                if x_pix > y_pix:
+                    shift_x = offset
+                    shift_y = round(offset * y_pix / x_pix)
+                else:
+                    shift_x = round(offset * x_pix / y_pix)
+                    shift_y = offset
                 # Buffer to Screen
                 for i, line in enumerate(buffer[shift_y: (vh * h) + shift_y, shift_x: (vw * w) + shift_x]):
                     ski_win.addstr(i, 0, "".join(line))
