@@ -11,7 +11,7 @@ def parse_raw():
     passport = {}
     for line in raw.splitlines():
         if not line:
-            passports.append(adict(**passport))
+            passports.append(adict(passport))
             passport = {}
         else:
             passport.update({field: match.group(1) for field in FIELDS if (match := re.search(rf"{field}:(\S+)", line))})
