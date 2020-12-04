@@ -7,5 +7,7 @@ def prod(iter, *, start=1, cast=int):
     return m
 
 class adict(dict):
+    """A dictionary that allows key as if the key was an attribute.
+    """
     def __getattr__(self, key):
         return self[key]
