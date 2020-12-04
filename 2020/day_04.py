@@ -21,6 +21,5 @@ def part_two():
     )
     return sum(all(map(bool, map(re.fullmatch, RES, map(pp.__getitem__, FIELDS)))) for pp in passports)
 
-print(part_one(), part_two())
 aoc_helper.submit(4, part_one)
 aoc_helper.submit(4, part_two)
