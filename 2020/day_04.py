@@ -30,7 +30,7 @@ def part_two():
                and  2010 <= int(passport["iyr"]) <= 2020
                and  2020 <= int(passport["eyr"]) <= 2030
                and  (   passport["hgt"].endswith("cm") and 150 <= int(passport["hgt"][:-2]) <= 193
-                     or passport["hgt"].endswith("in") and  59 <= int(passport["hgt"][:-2]) <= 176)
+                     or passport["hgt"].endswith("in") and  59 <= int(passport["hgt"][:-2]) <= 76)
                and bool(HCL_RE.match(passport["hcl"]))
                and passport["ecl"] in {"amb", "blu", "brn", "gry", "grn", "hzl", "oth"}
                and bool(PID_RE.match(passport["pid"]))
