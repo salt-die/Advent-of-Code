@@ -46,13 +46,8 @@ splat = r"""
 
 def array_from_(art):
     """Convert ascii art to numpy array.
-       ::Warning:: Hard coded ascii-art dimensions!
     """
-    lines = []
-    for line in art.splitlines()[1:]:
-        line = list(line) + (6 - len(line)) * [" "]
-        lines.append(line)
-    return np.array(lines)
+    return np.array([list(line) + (ART_DIM[1] - len(line)) * [" "] for line in art.splitlines()[1:]])
 
 skiier_1, skiier_2, tree, splat = map(array_from_, (skiier_1, skiier_2, tree, splat))
 
