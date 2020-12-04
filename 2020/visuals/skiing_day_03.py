@@ -15,7 +15,7 @@ INPUT_OFFSET = 3  # Vertical offset of input box
 INPUT_PADDING = 30  # More padding will shrink the input box horizontally
 ART_DIM = 4, 6  # Dimensions of ascii art below
 DELAY = .06  # Time between frames
-LANDING_TIME = .3  # Time we show skiier has landed safely or splatted in seconds
+LANDING_TIME = .3  # Time we show skiier has landed safely or splatted, in seconds
 
 skiier_1 = r"""
  ,_ o
