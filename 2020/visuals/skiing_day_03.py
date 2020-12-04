@@ -1,5 +1,6 @@
-"""Press `q` to quit early!"""
-
+"""Press `q` to quit early!
+  ::Warning:: Still getting a different answer than my day 3 submission, so there's a bug somewhere!
+"""
 import curses
 from curses.textpad import Textbox, rectangle
 from itertools import cycle
@@ -8,11 +9,11 @@ import time
 import numpy as np
 
 
-SLOPE_RE = r"(\d+)"
+SLOPE_RE = r"(\d+)"  # For grabbing slope integers from input box
 INPUT_FILE = "day_03_input.txt"
-INPUT_OFFSET = 3
-INPUT_PADDING = 30
-ART_DIM = 4, 6
+INPUT_OFFSET = 3  # Vertical offset of input box
+INPUT_PADDING = 30  # More padding will shrink the input box horizontally
+ART_DIM = 4, 6  # Dimensions of ascii art below
 DELAY = .06  # Time between frames
 LANDING_TIME = .3  # Time we show skiier has landed safely or splatted in seconds
 
@@ -45,6 +46,9 @@ splat = r"""
 """
 
 def array_from_(art):
+    """Convert ascii art to numpy array.
+       ::Warning:: Hard coded ascii-art dimensions!
+    """
     lines = []
     for line in art.splitlines()[1:]:
         line = list(line) + (6 - len(line)) * [" "]
@@ -126,6 +130,7 @@ class Skiing:
             biome = np.array([[char == "#" for char in line] for line in f.readlines()])
 
         sx, sy = self.slope
+        # We have enough buffer to store our view plus trees to the right and down within slope of us.
         buffer = np.full(((vh + sy) * ART_DIM[0], (vw + sx) * ART_DIM[1]), " ")
         ski_y, ski_x = vh // 2, vw // 2  # Skiier coordinates
         ski_slope = np.roll(biome, (ski_y, ski_x), (0, 1))  # Note biome is rolled back so we can slice a view around the skiier
@@ -136,10 +141,11 @@ class Skiing:
             # Push trees to buffer
             it = np.nditer(ski_slope[: vh + sy, : vw + sx], flags=["multi_index"])
             for is_tree in it:
-                y, x = it.multi_index
                 if is_tree:
+                    y, x = it.multi_index
                     buffer[y * h: (y + 1) * h, x * w: (x + 1) * w] = tree
 
+            # This loop will "smooth-scroll" our buffer until we reach the next landing.
             x_pix = sx * w
             y_pix = sy * h
             for offset in range(max(x_pix, y_pix)):
@@ -155,17 +161,18 @@ class Skiing:
                     ski_win.addstr(i, ski_x * w, "".join(line), curses.color_pair(1))
 
                 ski_win.refresh()
-                if ski_win.getch() == ord("q"):
-                    return
+                if ski_win.getch() == ord("q"): return
                 time.sleep(DELAY)
 
+            # Reset buffer, update our count
             buffer[:] = " "
             count += ski_slope[ski_y, ski_x]
             ski_slope = np.roll(ski_slope, (-sy, -sx), (0, 1))
-            ski_win.erase()
+
+        ski_win.erase()
         ski_win.addstr(0, 0, str(count))
         ski_win.refresh()
-        screen.getch()
+        screen.getch() # Blocking getch
 
 if __name__ == "__main__":
     Skiing()
