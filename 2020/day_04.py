@@ -12,8 +12,8 @@ def part_one():
 def part_two():
     RES = (
         r"19[2-9][\d]|200[0-2]",                       # byr
-        r"201[\d]|2020",                               # iyr
-        r"202[\d]|2030",                               # eyr
+        r"20(1[\d]|20)",                               # iyr
+        r"20(2[\d]|30)",                               # eyr
         r"1([5-8][\d]|9[0-3])cm|(59|6[\d]|7[0-6])in",  # hgt
         r"#[0-9a-f]{6}",                               # hcl
         r"amb|blu|brn|gr(y|n)|hzl|oth",                # ecl
