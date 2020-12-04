@@ -1,9 +1,8 @@
 import aoc_helper
-from utils import adict
 import re
 
 raw = aoc_helper.day(4)
-passports = [adict(re.findall(r"(?!cid)([a-z]{3}):(\S+)", line)) for line in raw.split("\n\n")]
+passports = [dict(re.findall(r"(?!cid)([a-z]{3}):(\S+)", line)) for line in raw.split("\n\n")]
 FIELDS = "byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"
 
 def part_one():
