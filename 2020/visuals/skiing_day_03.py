@@ -3,7 +3,6 @@
 """
 import curses
 from curses.textpad import Textbox, rectangle
-from itertools import cycle
 import re
 import time
 import numpy as np
