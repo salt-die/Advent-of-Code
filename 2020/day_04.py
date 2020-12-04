@@ -22,7 +22,7 @@ def part_one():
     return sum(len(passport) == len(FIELDS) for passport in data)
 
 def part_two():
-    HCL_RE = re.compile(r"^#[0-9a-z]{6}$")
+    HCL_RE = re.compile(r"^#[0-9a-f]{6}$")
     PID_RE = re.compile(r"^\d{9}$")
 
     return sum(     len(passport) == len(FIELDS)
