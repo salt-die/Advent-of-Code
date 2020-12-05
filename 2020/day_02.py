@@ -3,11 +3,8 @@ import re
 
 raw = aoc_helper.day(2)
 
-def parse_raw():
-    pattern = r'(\d+)-(\d+) (\w): (\w+)'
-    return re.findall(pattern, raw)
-
-data = parse_raw()
+pattern = r'(\d+)-(\d+) (\w): (\w+)'
+data = re.findall(pattern, raw)
 
 def part_one():
     return sum(int(mi) <= pw.count(letter) <= int(mx) for mi, mx, letter, pw in data)

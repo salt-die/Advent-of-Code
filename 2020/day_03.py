@@ -4,11 +4,7 @@ from utils import prod
 
 raw = aoc_helper.day(3)
 
-def parse_raw():
-    # Turn input into a boolean array: True indicates a Tree
-    return np.array([[char == "#" for char in line] for line in raw.splitlines()])
-
-data = parse_raw()
+data = np.array([[char == "#" for char in line] for line in raw.splitlines()])
 h, w = data.shape
 
 def trees_hit(x, y):
