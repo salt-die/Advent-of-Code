@@ -15,8 +15,8 @@ def part_one():
     return max(data)
 
 def part_two():
-    l, m, s = len(data) + 1, min(data) - 1, sum(data)
-    return (l * (l + 1) // 2 + l * m) - s
+    l, m = len(data) + 1, min(data) - 1,
+    return l * (l + 1) // 2 + l * m - sum(data)
 
 aoc_helper.submit(5, part_one)
 aoc_helper.submit(5, part_two)
