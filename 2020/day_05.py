@@ -12,6 +12,5 @@ def part_two():
     l, m = len(data) + 1, min(data) - 1,
     return l * (l + 1) // 2 + l * m - sum(data)
 
-print(part_one(), part_two())
 aoc_helper.submit(5, part_one)
 aoc_helper.submit(5, part_two)
