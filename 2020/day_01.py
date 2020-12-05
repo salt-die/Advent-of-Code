@@ -2,11 +2,7 @@ import aoc_helper
 from itertools import combinations
 
 raw = aoc_helper.day(1)
-
-def parse_raw():
-    return set(aoc_helper.extract_ints(raw))
-
-data = parse_raw()
+data = set(aoc_helper.extract_ints(raw))
 
 def part_one():
     for a in data:
