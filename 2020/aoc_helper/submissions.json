@@ -45,5 +45,17 @@
       "solution": "172",
       "172": "That's the right answer!  You are one gold star closer to saving your vacation.You have completed Day 4! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
     }
+  },
+  "5": {
+    "1": {
+      "847": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Please wait one minute before trying again. (You guessed 847.) [Return to Day 5]",
+      "solution": "978",
+      "978": "That's the right answer!  You are one gold star closer to saving your vacation. You got rank 869 on this star's leaderboard. [Continue to Part Two]"
+    },
+    "2": {
+      "728": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Please wait one minute before trying again. (You guessed 728.) [Return to Day 5]",
+      "solution": "727",
+      "727": "That's the right answer!  You are one gold star closer to saving your vacation.You have completed Day 5! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
+    }
   }
 }
