@@ -9,7 +9,7 @@ def parse_raw():
         line = line.translate(trans)
         yield int(line[:-3], 2) * 8 + int(line[-3:], 2)
 
-data = set(parse_raw())
+data = list(parse_raw())
 
 def part_one():
     return max(data)
