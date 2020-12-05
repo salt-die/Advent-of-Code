@@ -88,7 +88,7 @@ def submit(day, solv_func):
 
         message = bs4.BeautifulSoup(response.text, "html.parser").article.text
 
-        if message[4] == "g":
+        if message[4] == "g":  # This rather esoteric check is really asking, "Is this the message 'You gave an answer too recently;...'?"
             _pretty_print(message)
             minutes, seconds = re.search(r"(?:(\d+)m )?(\d+)s", message).groups()
 
