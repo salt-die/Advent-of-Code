@@ -2,7 +2,7 @@ import aoc_helper
 from functools import reduce
 
 raw = aoc_helper.day(6)
-data = tuple(tuple(map(set, group.splitlines())) for group in raw.split('\n\n'))
+data = [list(map(set, group.splitlines())) for group in raw.split('\n\n')]
 
 def combine_with(func):
     return sum(len(reduce(func, group)) for group in data)
