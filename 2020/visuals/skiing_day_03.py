@@ -54,7 +54,6 @@ skiier_1, skiier_2, tree, splat = map(array_from_, (skiier_1, skiier_2, tree, sp
 class Skiing:
     def __init__(self):
         self.init_curses()
-        self.draw_border()
         self.ask()
         self.ski()
         self.end_curses()
@@ -73,10 +72,6 @@ class Skiing:
 
         self.screen.attron(curses.color_pair(2))
 
-    def draw_border(self):
-        h, w = self.screen.getmaxyx()
-        rectangle(self.screen, 0, 0, h - 1, w - 2)
-
     def end_curses(self):
         curses.nocbreak()
         self.screen.keypad(False)
@@ -89,6 +84,7 @@ class Skiing:
         screen = self.screen
         h, w = screen.getmaxyx()
 
+        screen.border()
         rectangle(screen, h // 2 - INPUT_OFFSET,  INPUT_PADDING, h // 2 - (INPUT_OFFSET - 2), w - INPUT_PADDING)
         input_win = curses.newwin(1, w - (2 * INPUT_PADDING + 2), h // 2 - (INPUT_OFFSET - 1), INPUT_PADDING + 1)
         input_win.attron(curses.color_pair(2))
@@ -106,8 +102,7 @@ class Skiing:
         # INIT
         screen = self.screen
         screen.erase()
-        self.draw_border()
-        screen.refresh()
+        screen.border()
 
         h, w = screen.getmaxyx()  # will shadow h, w a few times
         ski_win = curses.newwin(h - 2, w - 4, 1, 2)
