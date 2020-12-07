@@ -5,9 +5,9 @@ raw = aoc_helper.day(7)
 
 def parse_raw():
     bag_description = r"([a-z]+ [a-z]+) bags contain (.+)"
-    formula = r"(\d+) ([a-z]+ [a-z]+) bag"
+    formula = re.compile(r"(\d+) ([a-z]+ [a-z]+) bag")
     bags = re.findall(bag_description, raw)
-    return {bag: {description: int(n) for n, description in re.findall(formula, contents)} for bag, contents in bags}
+    return {bag: {description: int(n) for n, description in formula.findall(contents)} for bag, contents in bags}
 
 formulas = parse_raw()
 GOLD_BAG = "shiny gold"
