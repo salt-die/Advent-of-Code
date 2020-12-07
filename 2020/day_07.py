@@ -34,10 +34,8 @@ aoc_helper.submit(7, part_two)
 #             return True
 #         stack.extend(formulas[current])
 #     return False
-
-# Alternative part 2: stack-based, builds an arithmetic expression!
-# from collections import deque
-
+#
+# Alternatives part 2: Both stack-based, one builds an arithmetic expression, the other consumes output as soon as it can
 # def count(bag):
 #     tokens = deque(formulas[bag].items())
 #     stack = []
@@ -49,8 +47,31 @@ aoc_helper.submit(7, part_two)
 #             tokens.appendleft(")")
 #             tokens.extendleft(formulas[current].items())
 #             continue
-
+#
 #         while tokens and tokens[0] == ")":
 #             stack.append(tokens.popleft())
-
+#
 #     return eval("".join(stack))
+#
+# def count(bag):
+#     tokens = list(formulas[bag].items())
+#     output = []
+#     while tokens:
+#         current, amt = tokens.pop()
+#         output.append(amt)
+#         if formulas[current]:
+#             output.append(1)
+#             tokens.append(")")
+#             tokens.extend(formulas[current].items())
+#             continue
+#
+#         while tokens:
+#             if tokens[-1] == ")":
+#                 output.append((output.pop() + output.pop()) * output.pop())
+#                 tokens.pop()
+#             else:
+#                 if len(output) > 1:
+#                     output.append(output.pop() + output.pop())
+#                 break
+#
+#     return sum(output)
