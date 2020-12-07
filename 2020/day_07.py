@@ -37,24 +37,20 @@ aoc_helper.submit(7, part_two)
 
 # Alternative part 2: stack-based, builds an arithmetic expression!
 # from collections import deque
-#
+
 # def count(bag):
 #     tokens = deque(formulas[bag].items())
 #     stack = []
 #     while tokens:
 #         current, amt = tokens.popleft()
-#         stack.append(str(amt))
+#         stack.extend(f"+{amt}")
 #         if formulas[current]:
-#             stack.extend("*(")
+#             stack.extend("*(1+")
 #             tokens.appendleft(")")
 #             tokens.extendleft(formulas[current].items())
 #             continue
 
-#         while tokens:
-#             if tokens[0] == ")":
-#                 stack.extend("+1")
-#                 stack.append(tokens.popleft())
-#             else:
-#                 stack.append("+")
-#                 break
+#         while tokens and tokens[0] == ")":
+#             stack.append(tokens.popleft())
+
 #     return eval("".join(stack))
