@@ -20,7 +20,7 @@ def part_one():
     return sum(map(has_shiny, formulas))
 
 def part_two():
-    return count("shiny gold") - 1  # -1 since we don't count the GOLD_BAG itself!
+    return count("shiny gold") - 1  # -1 since we don't count the shiny gold bag itself!
 
 aoc_helper.submit(7, part_one)
 aoc_helper.submit(7, part_two)
