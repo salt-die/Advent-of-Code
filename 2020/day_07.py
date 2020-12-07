@@ -25,6 +25,5 @@ def part_one():
 def part_two():
     return count(GOLD_BAG) - 1  # -1 since we don't count the GOLD_BAG itself!
 
-print(part_one(), part_two())
 aoc_helper.submit(7, part_one)
 aoc_helper.submit(7, part_two)
