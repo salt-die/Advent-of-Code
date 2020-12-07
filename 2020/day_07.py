@@ -13,7 +13,19 @@ formulas = parse_raw()
 def has_shiny(bag):
     return "shiny gold" in formulas[bag] or any(map(has_shiny, formulas[bag]))
 
-# Alternative Iterative solution:
+def count(bag):
+    return 1 + sum(n * count(inner) for inner, n in formulas[bag].items())
+
+def part_one():
+    return sum(map(has_shiny, formulas))
+
+def part_two():
+    return count("shiny gold") - 1  # -1 since we don't count the shiny gold bag itself!
+
+aoc_helper.submit(7, part_one)
+aoc_helper.submit(7, part_two)
+
+# Alternative part 1, stack-based:
 # def has_shiny(bag):
 #     stack = [bag]
 #     while stack:
@@ -23,11 +35,7 @@ def has_shiny(bag):
 #         stack.extend(formulas[current])
 #     return False
 
-def count(bag):
-    return 1 + sum(n * count(inner) for inner, n in formulas[bag].items())
-
-
-#  How about another stack solution, but one that builds an very long arithmetic expression to eval?!
+# Alternative part 2: stack-based, builds an arithmetic expression!
 # from collections import deque
 #
 # def count(bag):
@@ -50,12 +58,3 @@ def count(bag):
 #                 stack.append("+")
 #                 break
 #     return eval("".join(stack))
-
-def part_one():
-    return sum(map(has_shiny, formulas))
-
-def part_two():
-    return count("shiny gold") - 1  # -1 since we don't count the shiny gold bag itself!
-print(part_two())
-aoc_helper.submit(7, part_one)
-aoc_helper.submit(7, part_two)
