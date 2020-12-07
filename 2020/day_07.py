@@ -13,6 +13,16 @@ formulas = parse_raw()
 def has_shiny(bag):
     return "shiny gold" in formulas[bag] or any(map(has_shiny, formulas[bag]))
 
+# Alternative Iterative solution:
+# def has_shiny(bag):
+#     stack = [bag]
+#     while stack:
+#         current = stack.pop()
+#         if "shiny gold" in formulas[current]:
+#             return True
+#         stack.extend(formulas[current])
+#     return False
+
 def count(bag):
     return 1 + sum(n * count(inner) for inner, n in formulas[bag].items())
 
