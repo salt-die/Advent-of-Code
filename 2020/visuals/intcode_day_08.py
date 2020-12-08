@@ -76,7 +76,6 @@ def setup_windows(screen):
     # Message window
     rectangle(screen, 0, 0, 2, width - INDEX_ACC_WINDOW_WIDTH - 2 - 1)
     messages = curses.newwin(1, width - INDEX_ACC_WINDOW_WIDTH - 2 - 2, 1, 1)
-    messages.immedok(True)
 
     # Address and accumulator window
     rectangle(screen, 0, width - INDEX_ACC_WINDOW_WIDTH - 2, 2, width)
@@ -123,6 +122,7 @@ def main(screen):
         message_win.clear()
         for i, letter in delayed(enumerate(message), delay):
             message_win.addstr(0, i, letter)
+            message_win.refresh()
 
     def dots(offset):
         n = 3
