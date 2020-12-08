@@ -1,16 +1,10 @@
 import aoc_helper
+import re
 import intcode as ic
 
 raw = aoc_helper.day(8)
-
-def parse_raw():
-    out = []
-    for line in raw.splitlines():
-        op, val = line.split()
-        out.append((op, int(val)))
-    return out
-
-boot_program = ic.Computer(parse_raw())
+data = [(op, int(val)) for op, val in re.findall(r"(.+) (.+)", raw)]
+boot_program = ic.Computer(data)
 
 def part_one():
     try:
@@ -21,5 +15,6 @@ def part_one():
 def part_two():
     return boot_program.fsck()
 
+print(part_one(), part_two())
 aoc_helper.submit(8, part_one)
 aoc_helper.submit(8, part_two)
