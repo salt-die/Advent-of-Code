@@ -94,7 +94,7 @@ def setup_windows(screen):
     rectangle(screen, 3, OP_WINDOW_WIDTH + 2 + 1, height - 3, width - VISITED_WINDOW_WIDTH - 2 - 1)
     array = curses.newwin(height - 3 - 2 - 2, width - OP_WINDOW_WIDTH - 2 - VISITED_WINDOW_WIDTH - 2 - 3, 4, OP_WINDOW_WIDTH + 2 + 2)
     # Draw cell for each instruction in data
-    y, w = array.getmaxyx()
+    _, w = array.getmaxyx()
     cell_per_row = w // len(CELL)
     for i, (op, _) in enumerate(DATA):
         row, col = divmod(i, cell_per_row)
@@ -168,9 +168,10 @@ def main(screen):
         visited_win.addstr(y - 1, 0, f"{ind:4}")
         visited_win.noutrefresh()
 
+    # Start of program
     highlighter = highlight(); next(highlighter)
-    dotter = dots(15)
     print_message("Detecting Cycle")
+    dotter = dots(15)  # Generator that updates the "..." in the message window
     for ind, acc, op, val in delayed(compute(), .2):
         update_ops(op, val)
         update_ind_acc(ind, acc)
