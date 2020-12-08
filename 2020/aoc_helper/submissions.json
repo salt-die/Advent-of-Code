@@ -84,5 +84,15 @@
       "solution": "4165",
       "4165": "That's the right answer!  You are one gold star closer to saving your vacation. You got rank 837 on this star's leaderboard.You have completed Day 7! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
     }
+  },
+  "8": {
+    "1": {
+      "solution": "1179",
+      "1179": "That's the right answer!  You are one gold star closer to saving your vacation. [Continue to Part Two]"
+    },
+    "2": {
+      "solution": "1089",
+      "1089": "That's the right answer!  You are one gold star closer to saving your vacation.You have completed Day 8! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
+    }
   }
 }
