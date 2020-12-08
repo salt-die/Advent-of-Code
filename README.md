@@ -46,3 +46,9 @@ More info here: [Advent of Code - About](https://adventofcode.com/2019/about)
 **Skiing, Day 3, 2020**
 
 ![day03 visualization](skiing.gif)
+
+**Bag Pretty Printer, Day 7, 2020**
+![day07 visualization](bag_pretty_printer.png)
+
+**Intcode callback, Day 8, 2020**
+![day08 visualization](intcode_callback.gif)
