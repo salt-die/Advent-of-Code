@@ -1,4 +1,3 @@
-from collections import deque
 import curses
 from curses.textpad import Textbox, rectangle
 import re
