@@ -1,5 +1,6 @@
-import aoc_helper
 import re
+
+import aoc_helper
 import intcode as ic
 
 raw = aoc_helper.day(8)

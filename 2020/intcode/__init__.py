@@ -1,3 +1,5 @@
+from collections import Counter
+
 ACC = "acc"
 JMP = "jmp"
 NOP = "nop"
@@ -23,18 +25,20 @@ class Computer:
             else:
                 raise ValueError("Bad OP: ", op)
 
-    def run(self):
+    def run(self, max_cycles=1):
         data = self.data
-        cycle_detector = set()
+        cycle_detector = Counter()
         program = self.load()
         head, acc = next(program)
 
         while True:
-            if head in cycle_detector:
-                raise CycleError(acc, cycle_detector)
             if head == len(data):
                 raise EOFError(acc)
-            cycle_detector.add(head)
+
+            cycle_detector[head] += 1
+            if cycle_detector[head] > max_cycles:
+                raise CycleError(acc, cycle_detector)
+
             head, acc = program.send(data[head])
 
     def fsck(self):
