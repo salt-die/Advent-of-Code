@@ -24,7 +24,7 @@ def compute():
         op, val = DATA[index]
         yield index, acc, op, val
 
-        if index in seen:
+        if index in seen or index > len(DATA):
             break
         seen.add(index)
 
@@ -124,12 +124,10 @@ def main(screen):
             message_win.refresh()
 
     def dots(offset):
-        n = 3
         while True:
+            n = -round(2 * time.time()) % 4
             message_win.addstr(0, offset, "...   "[n: n + 3])
             message_win.noutrefresh()
-            n -= 1
-            n %= 4
             yield
 
     def update_ind_acc(ind, acc):
@@ -167,21 +165,51 @@ def main(screen):
         visited_win.addstr(y - 1, 0, f"{ind:4}")
         visited_win.noutrefresh()
 
+    def visualize_computation(delay=DELAY):
+        for ind, acc, op, val in delayed(compute(), delay):
+            update_ops(op, val)
+            update_ind_acc(ind, acc)
+            update_visited(ind)
+
+            highlighter.send(ind)
+            next(dotter)
+
+            curses.doupdate()
+        return ind, acc, op, val
+
     # Start of program
     highlighter = highlight(); next(highlighter)
+
     print_message("Detecting Cycle")
     dotter = dots(15)  # Generator that updates the "..." in the message window
-    for ind, acc, op, val in delayed(compute(), .2):
-        update_ops(op, val)
-        update_ind_acc(ind, acc)
-        update_visited(ind)
+    ind, *_ = visualize_computation(.2)
 
-        highlighter.send(ind)
-        next(dotter)
-
-        curses.doupdate()
-
-    print_message(f"Cycle detected at address {ind}. Any key to exit...")
+    print_message(f"Cycle detected at address {ind}. Any key to continue...")
     screen.getch()
 
+    # Brute forcing ops. Note smaller delay.
+    print_message("Attempting to repair disk")
+    dotter = dots(25)
+    delay = .05
+    for i, (op, val) in enumerate(DATA):
+        if op == ACC:
+            continue
+
+        op_out_win.clear()
+        visited_win.clear()
+
+        DATA[i] = (JMP, val) if op == NOP else (NOP, val)
+        highlighter.send(i); highlighter.send(0) # Make sure the instruction is properly colored on screen.
+
+        ind, acc, op_, val_ = visualize_computation(delay)
+        if ind > len(DATA):
+            break
+
+        DATA[i] = op, val
+        highlighter.send(i); highlighter.send(0) # Reset to original color.
+
+        delay *= .9 # Get a little bit faster each iteration.
+
+    print_message(f"Corrupted instruction {op_} found at address {ind}. Data repaired. Any key to exit...")
+    screen.getch()
     end_curses(screen)
