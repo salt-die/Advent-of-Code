@@ -15,6 +15,5 @@ def part_one():
 def part_two():
     return boot_program.fsck()
 
-print(part_one(), part_two())
 aoc_helper.submit(8, part_one)
 aoc_helper.submit(8, part_two)

@@ -31,7 +31,7 @@ class Computer:
 
         while True:
             if head in cycle_detector:
-                raise CycleError(acc)
+                raise CycleError(acc, cycle_detector)
             if head == len(data):
                 raise EOFError(acc)
             cycle_detector.add(head)
@@ -40,15 +40,25 @@ class Computer:
     def fsck(self):
         """File-system check and repair."""
         data = self.data
-        for address, (instruction, value) in enumerate(data):
-            if instruction == ACC:
+
+        # Corruption must happen in some address we visit during the first run.
+        # We create a stack of these addresses:
+        try:
+            self.run()
+        except CycleError as e:
+            needs_check = list(e.args[1])
+
+        while needs_check:
+            address = needs_check.pop()
+            op, val = data[address]
+            if op == ACC:
                 continue
 
-            data[address] = (NOP, value) if instruction == JMP else (JMP, value)
+            data[address] = (NOP, val) if op == JMP else (JMP, val)
             try:
                 self.run()
             except CycleError:
                 pass
             except EOFError as e:
                 return e.args[0]
-            data[address] = (instruction, value)
+            data[address] = op, val
