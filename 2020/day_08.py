@@ -6,7 +6,8 @@ raw = aoc_helper.day(8)
 def parse_raw():
     out = []
     for line in raw.splitlines():
-        out.append((line.split()[0], int(line.split()[1])))
+        op, val = line.split()
+        out.append((op, int(val)))
     return out
 
 boot_program = ic.Computer(parse_raw())
