@@ -19,7 +19,7 @@ class Bag:
         return '\n'.join(
             (
                 self.name,
-                *(line for bag, n in body for line in prefix(' ├─', ' | ', f"{n} {bag}")),
+                *(line for bag, n in body for line in prefix(' ├─', ' │ ', f"{n} {bag}")),
                 *prefix(" ╰─", "   ", f"{last[1]} {last[0]}"),
             )
         )
