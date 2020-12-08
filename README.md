@@ -41,6 +41,7 @@ More info here: [Advent of Code - About](https://adventofcode.com/2019/about)
 ![day15 visualization](maze_solver.gif)
 
 **Maze Solving in 2.5d, Day 15, 2019**
+
 ![day15 visualization](maze_solver_2.gif)
 
 **Skiing, Day 3, 2020**
@@ -48,7 +49,9 @@ More info here: [Advent of Code - About](https://adventofcode.com/2019/about)
 ![day03 visualization](skiing.gif)
 
 **Bag Pretty Printer, Day 7, 2020**
+
 ![day07 visualization](bag_pretty_printer.png)
 
 **Intcode callback, Day 8, 2020**
+
 ![day08 visualization](intcode_callback.gif)
