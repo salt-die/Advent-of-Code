@@ -21,13 +21,10 @@ def compute():
     index = acc = 0
     seen = set()
     while True:
-        if index > len(DATA):
-            break
-
         op, val = DATA[index]
         yield index, acc, op, val
 
-        if index in seen:
+        if index in seen or index == len(DATA) - 1:
             break
         seen.add(index)
 
@@ -207,7 +204,7 @@ def main(screen):
         highlighter.send(i); highlighter.send(0) # Make sure the instruction is properly colored on screen.
 
         ind = visualize_computation(delay)
-        if ind > len(DATA):
+        if ind == len(DATA) - 1:
             break
 
         DATA[i] = op, val
