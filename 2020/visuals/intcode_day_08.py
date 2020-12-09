@@ -21,10 +21,13 @@ def compute():
     index = acc = 0
     seen = set()
     while True:
+        if index > len(DATA):
+            break
+
         op, val = DATA[index]
         yield index, acc, op, val
 
-        if index in seen or index > len(DATA):
+        if index in seen:
             break
         seen.add(index)
 
@@ -116,14 +119,18 @@ def main(screen):
     init_scr(screen)
     message_win, addr_win, acc_win, op_out_win, array_win, visited_win = setup_windows(screen)
 
-    def print_message(message, delay=DELAY):
+    def print_message(message, delay=DELAY, with_dots=False):
         """Print single-line messages to the message window"""
         message_win.clear()
         for i, letter in delayed(enumerate(message), delay):
             message_win.addstr(0, i, letter)
             message_win.refresh()
 
+        if with_dots:
+            return dots(len(message))
+
     def dots(offset):
+        """Generator that animates the "..." in the message window."""
         while True:
             n = -round(2 * time.time()) % 4
             message_win.addstr(0, offset, "...   "[n: n + 3])
@@ -175,21 +182,19 @@ def main(screen):
             next(dotter)
 
             curses.doupdate()
-        return ind, acc, op, val
+        return ind
 
     # Start of program
     highlighter = highlight(); next(highlighter)
 
-    print_message("Detecting Cycle")
-    dotter = dots(15)  # Generator that updates the "..." in the message window
-    ind, *_ = visualize_computation(.2)
+    dotter = print_message("Detecting Cycle", with_dots=True)
+    ind = visualize_computation(.2)
 
     print_message(f"Cycle detected at address {ind}. Any key to continue...")
     screen.getch()
 
     # Brute forcing ops. Note smaller delay.
-    print_message("Attempting to repair disk")
-    dotter = dots(25)
+    dotter = print_message("Attempting to repair disk", with_dots=True)
     delay = .05
     for i, (op, val) in enumerate(DATA):
         if op == ACC:
@@ -201,7 +206,7 @@ def main(screen):
         DATA[i] = (JMP, val) if op == NOP else (NOP, val)
         highlighter.send(i); highlighter.send(0) # Make sure the instruction is properly colored on screen.
 
-        ind, acc, op_, val_ = visualize_computation(delay)
+        ind = visualize_computation(delay)
         if ind > len(DATA):
             break
 
