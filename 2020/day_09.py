@@ -26,6 +26,5 @@ def part_two():
             i += 1
     return max(s := data[i: j + 1]) + min(s)
 
-print(part_two())
 aoc_helper.submit(9, part_one)
 aoc_helper.submit(9, part_two)
