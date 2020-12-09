@@ -2,17 +2,14 @@ import aoc_helper
 from itertools import combinations
 
 raw = aoc_helper.day(9)
-
-def parse_raw():
-    return [int(line) for line in raw.splitlines()]
-
-data = parse_raw()
+data = [int(line) for line in raw.splitlines()]
 
 def part_one():
+    s = set(data[:25])
     for i, n in enumerate(data[25:]):
-        s = set(data[i: i + 25])
         if not any(n - x in s for x in s):
             return n
+        s.symmetric_difference_update((data[i], data[i + 25]))
 
 def part_two():
     target = 3199139634
