@@ -19,14 +19,18 @@ def part_two():
     while i < len(data) - 2:
         i += 1       # start index
         j = i + 1    # end index
-        n = data[i]  # n is our sum
+        n = mn = mx = data[i]  # n is our sum, mn is minimun, mx is max
         while n < target:
+            if data[j] < mn:
+                mn = data[j]
+            elif data[j] > mx:
+                mx = data[j]
+
             n += data[j]
             if n > target:
                 break
             elif n == target:
-                r = data[i: j + 1]
-                return max(r) + min(r)
+                return mx + mn
             j += 1
 
 print(part_two())
