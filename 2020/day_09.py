@@ -10,7 +10,10 @@ data = parse_raw()
 
 def part_one():
     for i, n in enumerate(data[25:]):
-        if n not in {x + y for x, y in combinations(data[i: i + 25], 2)}:
+        for x in (s := set(data[i: i + 25])):
+            if n - x in s:
+                break
+        else:
             return n
 
 def part_two():
@@ -33,6 +36,5 @@ def part_two():
                 return mx + mn
             j += 1
 
-print(part_two())
 aoc_helper.submit(9, part_one)
 aoc_helper.submit(9, part_two)
