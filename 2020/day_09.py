@@ -2,7 +2,7 @@ import aoc_helper
 from itertools import combinations
 
 raw = aoc_helper.day(9)
-data = [int(line) for line in raw.splitlines()]
+data = list(aoc_helper.extract_ints(raw))
 
 def part_one():
     s = set(data[:25])
