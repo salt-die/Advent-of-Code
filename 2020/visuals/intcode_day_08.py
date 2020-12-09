@@ -1,5 +1,5 @@
 import curses
-from curses.textpad import Textbox, rectangle
+from curses.textpad import rectangle
 import re
 import time
 
