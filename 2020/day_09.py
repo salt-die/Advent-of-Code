@@ -10,10 +10,8 @@ data = parse_raw()
 
 def part_one():
     for i, n in enumerate(data[25:]):
-        for x in (s := set(data[i: i + 25])):
-            if n - x in s:
-                break
-        else:
+        s = set(data[i: i + 25])
+        if not any(n - x in s for x in s):
             return n
 
 def part_two():
@@ -35,6 +33,6 @@ def part_two():
             elif n == target:
                 return mx + mn
             j += 1
-
+print(part_one())
 aoc_helper.submit(9, part_one)
 aoc_helper.submit(9, part_two)
