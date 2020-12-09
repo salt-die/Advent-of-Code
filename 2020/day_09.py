@@ -16,23 +16,16 @@ def part_one():
 
 def part_two():
     target = 3199139634
-    i = -1
-    while i < len(data) - 2:
-        i += 1       # start index
-        j = i + 1    # end index
-        n = mn = mx = data[i]  # n is our sum, mn is minimun, mx is max
-        while n < target:
-            if data[j] < mn:
-                mn = data[j]
-            elif data[j] > mx:
-                mx = data[j]
-
-            n += data[j]
-            if n > target:
-                break
-            elif n == target:
-                return mx + mn
+    i, j, n = 0, 1, sum(data[:2])
+    while n != target:
+        if n < target:
             j += 1
-print(part_one())
+            n += data[j]
+        else:
+            n -= data[i]
+            i += 1
+    return max(s := data[i: j + 1]) + min(s)
+
+print(part_two())
 aoc_helper.submit(9, part_one)
 aoc_helper.submit(9, part_two)
