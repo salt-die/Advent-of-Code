@@ -142,3 +142,6 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# pony attempts
+2020/pony_intcode/*
