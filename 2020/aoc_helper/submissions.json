@@ -109,5 +109,24 @@
       "solution": "438559930",
       "438559930": "That's the right answer!  You are one gold star closer to saving your vacation.You have completed Day 9! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
     }
+  },
+  "10": {
+    "1": {
+      "2176": "That's not the right answer.  Curiously, it's the right answer for someone else; you might be logged in to the wrong account or just unlucky. In any case, you need to be using your puzzle input.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Please wait one minute before trying again. (You guessed 2176.) [Return to Day 10]",
+      "2244": "That's not the right answer.  Curiously, it's the right answer for someone else; you might be logged in to the wrong account or just unlucky. In any case, you need to be using your puzzle input.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Please wait one minute before trying again. (You guessed 2244.) [Return to Day 10]",
+      "167": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Please wait one minute before trying again. (You guessed 167.) [Return to Day 10]",
+      "-1504003197": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Because you have guessed incorrectly 4 times on this puzzle, please wait 5 minutes before trying again. (You guessed -1504003197.) [Return to Day 10]",
+      "6732": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Because you have guessed incorrectly 5 times on this puzzle, please wait 5 minutes before trying again. (You guessed 6732.) [Return to Day 10]",
+      "solution": "2277",
+      "2277": "That's the right answer!  You are one gold star closer to saving your vacation. [Continue to Part Two]"
+    },
+    "2": {
+      "330788544151938641225953028221253782145683251820934971170611926835411235700971565459250872320000000000000000": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Please wait one minute before trying again. [Return to Day 10]",
+      "20937441238753144133910528": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Please wait one minute before trying again. (You guessed 20937441238753144133910528.) [Return to Day 10]",
+      "2": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Please wait one minute before trying again. (You guessed 2.) [Return to Day 10]",
+      "1": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Because you have guessed incorrectly 4 times on this puzzle, please wait 5 minutes before trying again. (You guessed 1.) [Return to Day 10]",
+      "solution": "37024595836928",
+      "37024595836928": "That's the right answer!  You are one gold star closer to saving your vacation.You have completed Day 10! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
+    }
   }
 }
