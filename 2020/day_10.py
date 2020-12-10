@@ -1,4 +1,4 @@
-from functools import lru_cache
+from collections import deque
 
 import aoc_helper
 import numpy as np
@@ -16,14 +16,16 @@ def part_one():
     diffs = np.diff(data)
     return (diffs == 1).sum() * (diffs == 3).sum()
 
-@lru_cache
-def count_from_(i):
-    if i == len(data) - 1:
-        return 1
-    return sum(count_from_(i + k) for k in range(1, min(4, len(data) - i)) if data[i + k] - data[i] <= 3)
-
 def part_two():
-    return count_from_(0)
+    it = reversed(data)
+
+    counts = deque(maxlen=3)
+    counts.append((next(it), 1))
+
+    for i in it:
+        counts.append((i, s := sum(k for j, k in counts if j - i <= 3)))
+
+    return s
 
 aoc_helper.submit(10, part_one)
 aoc_helper.submit(10, part_two)
