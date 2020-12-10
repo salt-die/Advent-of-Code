@@ -7,7 +7,7 @@ raw = aoc_helper.day(10)
 
 def parse_raw():
     jolts = list(aoc_helper.extract_ints(raw))
-    jolts += [0, max(jolts) + 3]
+    jolts += 0, max(jolts) + 3
     return sorted(jolts)
 
 data = parse_raw()
