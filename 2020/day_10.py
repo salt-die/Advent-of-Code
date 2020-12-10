@@ -18,9 +18,7 @@ def part_one():
 
 def part_two():
     it = reversed(data)
-
-    counts = deque(maxlen=3)
-    counts.append((next(it), 1))
+    counts = deque(((next(it), 1), ), maxlen=3)
 
     for i in it:
         counts.append((i, s := sum(k for j, k in counts if j - i <= 3)))
