@@ -17,11 +17,11 @@ def part_one():
     return (diffs == 1).sum() * (diffs == 3).sum()
 
 def part_two():
-    it = reversed(data)
-    counts = deque(((next(it), 1), ), maxlen=3)
+    it = iter(data)
+    counts = deque([(next(it), 1)], maxlen=3)
 
     for i in it:
-        counts.append((i, s := sum(k for j, k in counts if j - i <= 3)))
+        counts.append((i, s := sum(k for j, k in counts if i - j <= 3)))
 
     return s
 
