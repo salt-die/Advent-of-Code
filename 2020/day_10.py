@@ -14,7 +14,7 @@ data = parse_raw()
 
 def part_one():
     diffs = np.diff(data)
-    return (diffs == 3).sum() * (diffs == 1).sum()
+    return (diffs == 1).sum() * (diffs == 3).sum()
 
 @lru_cache
 def count_from_(i):
