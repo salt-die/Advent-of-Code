@@ -111,3 +111,13 @@ def submit(day, solv_func):
 def extract_ints(raw):
     """Utility function to extract all integers from some string."""
     return map(int, re.findall(r'(\d+)', raw))
+
+def extract_maze(raw, empty_cell="."):
+    """Utility function to parse an ascii maze into a networkx graph."""
+    maze = np.array(list(map(list, raw.splitlines())))
+
+    import networkx as nx
+    G = nx.grid_graph(maze.shape[::-1])
+    walls = np.vstack(np.where(maze != empty_cell)).T
+    G.remove_nodes_from(map(tuple, walls))
+    return maze, G
