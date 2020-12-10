@@ -20,7 +20,7 @@ def part_one():
 def count_from_(i):
     if i == len(data) - 1:
         return 1
-    return sum(count_from_(i + k) for k in range(1, min(4, len(data) - i)) if data[k + i] - data[i] <= 3)
+    return sum(count_from_(i + k) for k in range(1, min(4, len(data) - i)) if data[i + k] - data[i] <= 3)
 
 def part_two():
     return count_from_(0)
