@@ -128,5 +128,17 @@
       "solution": "37024595836928",
       "37024595836928": "That's the right answer!  You are one gold star closer to saving your vacation.You have completed Day 10! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
     }
+  },
+  "11": {
+    "1": {
+      "solution": "2412",
+      "2412": "That's the right answer!  You are one gold star closer to saving your vacation. You got rank 865 on this star's leaderboard. [Continue to Part Two]"
+    },
+    "2": {
+      "2022": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Because you have guessed incorrectly 7 times on this puzzle, please wait 10 minutes before trying again. (You guessed 2022.) [Return to Day 11]",
+      "2094": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Because you have guessed incorrectly 8 times on this puzzle, please wait 10 minutes before trying again. (You guessed 2094.) [Return to Day 11]",
+      "solution": "2176",
+      "2176": "That's the right answer!  You are one gold star closer to saving your vacation.You have completed Day 11! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
+    }
   }
 }
