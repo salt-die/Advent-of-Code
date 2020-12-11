@@ -1,5 +1,5 @@
 from itertools import product, count
-from functools import partial
+from functools import partial, lru_cache
 
 import aoc_helper
 import numpy as np
@@ -30,25 +30,25 @@ def part_one():
 
     return (seats == OCCUPIED).sum()
 
-@partial(np.vectorize, excluded=[2])
-def seen(y, x, seats):
-    total = 0
+@lru_cache(maxsize=None)
+def neighborhood(y, x):
+    ys, xs = [], []
     for y_step, x_step in product((-1, 0, 1), repeat=2):
         if y_step == x_step == 0:
             continue
-
         for i in count(1):
             cell_y, cell_x = y + i * y_step, x + i * x_step
-            if cell_y not in range(0, h) or cell_x not in range(0, w):  # Out-of-bounds
+            if cell_y not in range(0, h) or cell_x not in range(0, w):
                 break
-            if (cell := seats[cell_y, cell_x]) != FLOOR:
-                total += cell
+            if no_floor[cell_y, cell_x]:
+                ys.append(cell_y)
+                xs.append(cell_x)
                 break
+    return tuple(ys), tuple(xs)
 
-        if total == 5:
-            return total
-
-    return total
+@partial(np.vectorize, excluded=[2])
+def seen(y, x, seats):
+    return seats[neighborhood(y, x)].sum()
 
 def part_two():
     last = None
