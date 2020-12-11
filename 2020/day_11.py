@@ -35,7 +35,7 @@ def check_line(y, x, y_step, x_step, seats):
         cell_y, cell_x = y + i * y_step, x + i * x_step
         if cell_y not in range(0, h) or cell_x not in range(0, w):
             return 0
-        if (cell := seats[cell_y, cell_x]) != -1:
+        if (cell := seats[cell_y, cell_x]) != FLOOR:
             return cell
 
 def part_two():
