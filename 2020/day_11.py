@@ -54,6 +54,6 @@ def part_two():
         seats = np.where(neighbors >= 5, EMPTY, np.where(neighbors == 0, OCCUPIED, seats))
 
     return (seats == OCCUPIED).sum()
-print(part_one(), part_two())
+
 aoc_helper.submit(11, part_one)
 aoc_helper.submit(11, part_two)
