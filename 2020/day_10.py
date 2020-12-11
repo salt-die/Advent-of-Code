@@ -21,5 +21,15 @@ def part_one():
 def part_two():
     return prod((n := ilen(s)) * (n - 1) // 2 + 1 for g, s in groupby(diffs) if g == 1)
 
+# Alternative solution with a deque of length 3:
+# def part_two():
+#     it = iter(data)
+#     counts = deque([(next(it), 1)], maxlen=3)
+
+#     for i in it:
+#         counts.append((i, s := sum(k for j, k in counts if i - j <= 3)))
+
+#     return s
+
 aoc_helper.submit(10, part_one)
 aoc_helper.submit(10, part_two)
