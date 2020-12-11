@@ -11,23 +11,23 @@ def parse_raw():
     trans = {".": FLOOR, "L": EMPTY}
     return np.array([[trans[char] for char in line] for line in raw.splitlines()])
 
-seats = parse_raw()
-floor = seats == -1
-h, w = seats.shape
+data = parse_raw()
+floor = data == -1
+h, w = data.shape
 
 def part_one():
     KERNEL = [[1, 1, 1],
               [1, 0, 1],
               [1, 1, 1]]
     last = None
-    data = seats
-    while (as_bytes := data.tobytes()) != last:
+    seats = data
+    while (as_bytes := seats.tobytes()) != last:
         last = as_bytes
-        neighbors = convolve(np.where(floor, 0, data), KERNEL, mode="constant")
-        data = np.where(floor, FLOOR, np.where(neighbors >= 4, EMPTY, np.where(neighbors == 0, OCCUPIED, data)))
-    return (data == OCCUPIED).sum()
+        neighbors = convolve(np.where(floor, 0, seats), KERNEL, mode="constant")
+        seats = np.where(floor, FLOOR, np.where(neighbors >= 4, EMPTY, np.where(neighbors == 0, OCCUPIED, seats)))
+    return (seats == OCCUPIED).sum()
 
-def check_line(y, x, y_step, x_step, data):
+def check_line(y, x, y_step, x_step, seats):
     if y_step == x_step == 0:
         return 0
 
@@ -35,13 +35,13 @@ def check_line(y, x, y_step, x_step, data):
         cell_y, cell_x = y + i * y_step, x + i * x_step
         if cell_y not in range(0, h) or cell_x not in range(0, w):
             return 0
-        if (cell := data[cell_y, cell_x]) != -1:
+        if (cell := seats[cell_y, cell_x]) != -1:
             return cell
 
 def part_two():
     last = None
-    data = seats.copy()
-    while (as_bytes := data.tobytes()) != last:
+    seats = data
+    while (as_bytes := seats.tobytes()) != last:
         last = as_bytes
         neighbors = np.zeros_like(data)
         it = np.nditer(data, flags=["multi_index"])
@@ -50,10 +50,10 @@ def part_two():
             if seat == FLOOR:
                 neighbors[y, x] = FLOOR
             else:
-                neighbors[y, x] = sum(check_line(y, x, i, j, data) for i, j in product((-1, 1, 0), repeat=2))
-        data = np.where(neighbors >= 5, EMPTY, np.where(neighbors == 0, OCCUPIED, data))
+                neighbors[y, x] = sum(check_line(y, x, i, j, seats) for i, j in product((-1, 1, 0), repeat=2))
+        seats = np.where(neighbors >= 5, EMPTY, np.where(neighbors == 0, OCCUPIED, seats))
 
-    return (data == OCCUPIED).sum()
-
+    return (seats == OCCUPIED).sum()
+print(part_one(), part_two())
 aoc_helper.submit(11, part_one)
 aoc_helper.submit(11, part_two)
