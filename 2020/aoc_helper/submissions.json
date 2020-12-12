@@ -140,5 +140,16 @@
       "solution": "2176",
       "2176": "That's the right answer!  You are one gold star closer to saving your vacation.You have completed Day 11! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
     }
+  },
+  "12": {
+    "1": {
+      "1024": "That's not the right answer; your answer is too high.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Please wait one minute before trying again. (You guessed 1024.) [Return to Day 12]",
+      "solution": "904",
+      "904": "That's the right answer!  You are one gold star closer to saving your vacation. [Continue to Part Two]"
+    },
+    "2": {
+      "solution": "18747",
+      "18747": "That's the right answer!  You are one gold star closer to saving your vacation.You have completed Day 12! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
+    }
   }
 }
