@@ -19,14 +19,17 @@ def parse_raw():
 data = parse_raw()
 
 def apply_mask(func):
-    memory = {}
-    for instruction in data:
-        if isinstance(instruction, str):
-            mask = instruction
-        else:
-            addr, val = instruction
-            func(memory, mask, addr, val)
-    return lambda: sum(memory.values())  # Just for giggles.
+    def wrapper():
+        memory = {}
+        for instruction in data:
+            if isinstance(instruction, str):
+                mask = instruction
+            else:
+                addr, val = instruction
+                func(memory, mask, addr, val)
+        return sum(memory.values())
+    wrapper.__name__ = func.__name__  # aoc_helper expects correct __name__
+    return wrapper
 
 @apply_mask
 def part_one(memory, mask, addr, val):
@@ -37,8 +40,8 @@ def part_one(memory, mask, addr, val):
 def part_two(memory, mask, addr, val):
     addr = bin(addr)[2:].zfill(36)
     masked = "".join(m if m in "1X" else a for m, a in zip(mask, addr)).replace("X", "{}")
-    for wer in product("01", repeat=mask.count("X")):
-        memory[masked.format(*wer)] = val
+    for bin_ in product("01", repeat=mask.count("X")):
+        memory[masked.format(*bin_)] = val
 
 aoc_helper.submit(14, part_one)
 aoc_helper.submit(14, part_two)
