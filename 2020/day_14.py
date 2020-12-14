@@ -21,30 +21,24 @@ data = parse_raw()
 def apply_mask(func):
     memory = {}
     for instruction in data:
-        if isinstance(instruction, str):  # mask
+        if isinstance(instruction, str):
             mask = instruction
         else:
             addr, val = instruction
             func(memory, mask, addr, val)
-    return sum(memory.values())
+    return lambda: sum(memory.values())  # Just for giggles.
 
 @apply_mask
-def masked_v1(memory, mask, addr, val):
+def part_one(memory, mask, addr, val):
     val = bin(val)[2:].zfill(36)
     memory[addr] = int("".join(m if m != "X" else b for m, b in zip(mask, val)), 2)
 
 @apply_mask
-def masked_v2(memory, mask, addr, val):
+def part_two(memory, mask, addr, val):
     addr = bin(addr)[2:].zfill(36)
     masked = "".join(m if m in "1X" else a for m, a in zip(mask, addr)).replace("X", "{}")
     for wer in product("01", repeat=mask.count("X")):
         memory[masked.format(*wer)] = val
-
-def part_one():
-    return masked_v1
-
-def part_two():
-    return masked_v2
 
 aoc_helper.submit(14, part_one)
 aoc_helper.submit(14, part_two)
