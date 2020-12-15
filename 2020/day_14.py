@@ -34,7 +34,7 @@ def apply_mask(func):
 @apply_mask
 def part_one(memory, mask, addr, val):
     val = bin(val)[2:].zfill(36)
-    memory[addr] = int("".join(m if m != "X" else b for m, b in zip(mask, val)), 2)
+    memory[addr] = int("".join(m if m != "X" else v for m, v in zip(mask, val)), 2)
 
 @apply_mask
 def part_two(memory, mask, addr, val):
