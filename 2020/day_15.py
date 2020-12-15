@@ -20,6 +20,5 @@ def part_one():
 def part_two():
     return van_eck(30_000_000)
 
-print(part_two())
 aoc_helper.submit(15, part_one)
 aoc_helper.submit(15, part_two)
