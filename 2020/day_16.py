@@ -4,6 +4,7 @@ from itertools import product
 from math import prod
 
 import aoc_helper
+from more_itertools import partition
 from real_ranges import RangeSet, Var
 
 raw = aoc_helper.day(16)
