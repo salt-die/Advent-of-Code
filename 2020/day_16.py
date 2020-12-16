@@ -5,7 +5,7 @@ from math import prod
 
 import aoc_helper
 from more_itertools import partition
-from real_ranges import RangeSet, Var
+from real_ranges import RangeSet, Var  # https://github.com/salt-die/real_ranges
 
 raw = aoc_helper.day(16)
 x = Var('x')
