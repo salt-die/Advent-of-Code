@@ -3,7 +3,7 @@ import numpy as np
 from scipy.signal import convolve
 
 raw = aoc_helper.day(17)
-data = np.array([[char=="#" for char in line] for line in raw.splitlines()])
+data = np.array([[char == "#" for char in line] for line in raw.splitlines()])
 
 def convolve_dimension_(n):
     KERNEL = np.ones((3, ) * n, dtype=np.uint8)
