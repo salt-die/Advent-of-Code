@@ -14,7 +14,7 @@ def convolve_dimension_(n):
 
     for _ in range(6):
         neighbors = convolve(universe, KERNEL)
-        universe = np.where((neighbors == 3) | (np.pad(universe, 1) & (neighbors==2)), 1, 0)
+        universe = np.where((neighbors == 3) | (np.pad(universe, 1) & (neighbors == 2)), 1, 0)
     return universe.sum()
 
 def part_one():
