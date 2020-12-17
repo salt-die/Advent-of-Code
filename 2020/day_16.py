@@ -13,12 +13,10 @@ x = Var('x')
 def parse_raw():
     rules, my_ticket, nearby_tickets = raw.split("\n\n")
 
-    rules_pattern = re.compile(r"(.+): (\d+)-(\d+) or (\d+)-(\d+)")
-    fields = {}
-    for line in rules.splitlines():
-        field, start_1, end_1, start_2, end_2 = rules_pattern.match(line).groups()
-        fields[field] = (int(start_1) <= x <= int(end_1)) | (int(start_2) <= x <= int(end_2))
-
+    fields = {
+        field: (int(p) <= x <= int(q)) | (int(r) <= x <= int(s))
+        for field, p, q, r, s in re.findall(r"(.+): (\d+)-(\d+) or (\d+)-(\d+)", rules)
+    }
     my_ticket = list(aoc_helper.extract_ints(my_ticket))
     nearby_tickets = [list(aoc_helper.extract_ints(line)) for line in nearby_tickets.splitlines()[1:]]
 
