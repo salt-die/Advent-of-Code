@@ -9,7 +9,7 @@ def convolve_dimension_(n):
     KERNEL = np.ones(tuple(3 for _ in range(n)), dtype=int)
     KERNEL[tuple(1 for _ in range(n))] = 0
 
-    universe = np.zeros((*(1 for _ in range(n - 2)), *data.shape), dtype=int)
+    universe = np.zeros(tuple(1 for _ in range(n - 2)) + data.shape, dtype=int)
     universe[...,:] = data
 
     for _ in range(6):
