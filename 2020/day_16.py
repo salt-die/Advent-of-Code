@@ -34,13 +34,12 @@ invalid_tickets, valid_tickets = map(list, partition(is_valid, nearby_tickets))
 def part_one():
     return sum(i for ticket in invalid_tickets for i in ticket if i not in valid_values)
 
+def valid_indices(field):
+    """Return all possible indices for `field`."""
+    return set(i for i in range(len(fields)) if all(ticket[i] in fields[field] for ticket in valid_tickets))
+
 def part_two():
-    # Create a list of (field, set of possible indices for field) pairs, sorted by length of set
-    possible_indices = [(field, set()) for field in fields]
-    for (field, indices), i in product(possible_indices, range(len(fields))):
-        if all(ticket[i] in fields[field] for ticket in valid_tickets):
-            indices.add(i)
-    possible_indices.sort(key=lambda tup: len(tup[1]), reverse=True)
+    possible_indices = sorted(((field, valid_indices(field)) for field in fields), key=lambda tup: -len(tup[1]))
 
     # Process of elimination to match fields to their index
     index_to_field = [None] * len(fields)
