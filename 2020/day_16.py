@@ -1,6 +1,5 @@
 import re
 from functools import reduce
-from itertools import product
 from math import prod
 
 import aoc_helper
