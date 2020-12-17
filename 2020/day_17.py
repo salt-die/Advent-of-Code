@@ -10,7 +10,7 @@ def convolve_dimension_(n):
     KERNEL[tuple(1 for _ in range(n))] = 0
 
     universe = np.zeros(tuple(1 for _ in range(n - 2)) + data.shape, dtype=int)
-    universe[...,:] = data
+    universe[..., :] = data
 
     for _ in range(6):
         neighbors = convolve(universe, KERNEL)
