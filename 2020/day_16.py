@@ -4,16 +4,15 @@ from math import prod
 
 import aoc_helper
 from more_itertools import partition
-from real_ranges import RangeSet, Var  # https://github.com/salt-die/real_ranges
+from real_ranges import Range, RangeSet # https://github.com/salt-die/real_ranges
 
 raw = aoc_helper.day(16)
-x = Var('x')
 
 def parse_raw():
     rules, my_ticket, nearby_tickets = raw.split("\n\n")
 
     fields = {
-        field: (int(p) <= x <= int(q)) | (int(r) <= x <= int(s))
+        field: Range(f"[{p}, {q}]") | Range(f"[{r}, {s}]")
         for field, p, q, r, s in re.findall(r"(.+): (\d+)-(\d+) or (\d+)-(\d+)", rules)
     }
     my_ticket = list(aoc_helper.extract_ints(my_ticket))
