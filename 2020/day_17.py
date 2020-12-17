@@ -3,7 +3,7 @@ import numpy as np
 from scipy.ndimage import convolve
 
 raw = aoc_helper.day(17)
-data = np.array([[char=="#" for char in line] for line in raw.splitlines()], dtype=int)
+data = np.array([[char=="#" for char in line] for line in raw.splitlines()])
 
 def part_one():
     KERNEL = np.ones((3, 3, 3))
