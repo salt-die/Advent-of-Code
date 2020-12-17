@@ -6,15 +6,14 @@ raw = aoc_helper.day(17)
 data = np.array([[char=="#" for char in line] for line in raw.splitlines()])
 
 def convolve_dimension_(n):
-    KERNEL = np.ones(tuple(3 for _ in range(n)), dtype=int)
-    KERNEL[tuple(1 for _ in range(n))] = 0
+    KERNEL = np.ones((3, ) * n, dtype=np.uint8)
+    KERNEL[(1, ) * n] = 0
 
-    universe = np.zeros(tuple(1 for _ in range(n - 2)) + data.shape, dtype=int)
-    universe[..., :] = data
+    universe = data[(None, ) * (n - 2) + (..., )]
 
     for _ in range(6):
         neighbors = convolve(universe, KERNEL)
-        universe = np.where((neighbors == 3) | (np.pad(universe, 1) & (neighbors == 2)), 1, 0)
+        universe = (neighbors == 3) | (np.pad(universe, 1) & (neighbors == 2))
     return universe.sum()
 
 def part_one():
