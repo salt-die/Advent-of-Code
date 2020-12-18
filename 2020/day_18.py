@@ -44,37 +44,6 @@ class MathParser(Parser):
     def expr(self, p):
         return p.NUMBER
 
-
-class AdvancedMathParser(Parser):
-    tokens = MathLexer.tokens
-
-    precedence = (
-        ('left', '*'),
-        ('left', '+'),
-        ('left', '(', ')'),
-    )
-
-    @_('expr')
-    def statement(self, p):
-        return p.expr
-
-    @_('"(" expr ")"')
-    def expr(self, p):
-        return p.expr
-
-    @_('expr "+" expr')
-    def expr(self, p):
-        return p.expr0 + p.expr1
-
-    @_('expr "*" expr')
-    def expr(self, p):
-        return p.expr0 * p.expr1
-
-    @_('NUMBER')
-    def expr(self, p):
-        return p.NUMBER
-
-
 lexer = MathLexer()
 raw = aoc_helper.day(18)
 tokens_a, tokens_b = unzip(tee(lexer.tokenize(line)) for line in raw.splitlines())
@@ -84,7 +53,15 @@ def part_one():
     return sum(map(parser.parse, tokens_a))
 
 def part_two():
-    parser = AdvancedMathParser()
+    # Patch parser and rebuild
+    MathParser.precedence = (
+        ('left', '*'),
+        ('left', '+'),
+        ('left', '(', ')'),
+    )
+    MathParser._build(MathParser.__dict__.items())
+
+    parser = MathParser()
     return sum(map(parser.parse, tokens_b))
 
 aoc_helper.submit(18, part_one)
