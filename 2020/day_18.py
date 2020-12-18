@@ -10,8 +10,6 @@ class MathLexer(Lexer):
     ignore = ' '
     literals = {'+', '*', '(', ')'}
 
-    NUMBER = r'\d+'
-
     @_(r'\d+')
     def NUMBER(self, t):
         t.value = int(t.value)
