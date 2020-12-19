@@ -3,18 +3,18 @@ from lark import Lark, LarkError
 
 raw = aoc_helper.day(19)
 rules, messages = raw.split("\n\n")
+messages = messages.splitlines()
 
 def valid_messages(rules):
-    grammar = rules.translate(str.maketrans("0123456789", "abcdefghij"))  # Rule names can't be numeric
-    parser = Lark(grammar, start="a")
-    valid = 0
-    for message in messages.splitlines():
+    grammar = rules.translate(str.maketrans("0123456789", "qwertyuiop"))  # Rule names can't be numeric
+    parser = Lark(grammar, start="q")
+    valid = len(messages)
+
+    for message in messages:
         try:
             parser.parse(message)
         except LarkError:
-            pass
-        else:
-            valid += 1
+            valid -= 1
     return valid
 
 def part_one():
