@@ -221,5 +221,17 @@
       "solution": "323912478287549",
       "323912478287549": "That's the right answer!  You are one gold star closer to saving your vacation. You got rank 211 on this star's leaderboard.You have completed Day 18! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
     }
+  },
+  "19": {
+    "1": {
+      "433": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Please wait one minute before trying again. (You guessed 433.) [Return to Day 19]",
+      "solution": "230",
+      "230": "That's the right answer!  You are one gold star closer to saving your vacation. You got rank 1155 on this star's leaderboard. [Continue to Part Two]"
+
+    },
+    "2": {
+      "solution": "341",
+      "341": "That's the right answer!  You are one gold star closer to saving your vacation. You got rank 378 on this star's leaderboard.You have completed Day 18! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
+    }
   }
 }
