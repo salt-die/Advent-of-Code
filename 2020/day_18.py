@@ -1,3 +1,4 @@
+"""Also see shunting_yard.py for an alternative method of solving."""
 from itertools import tee
 
 import aoc_helper
