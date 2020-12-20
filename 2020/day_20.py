@@ -49,7 +49,6 @@ def part_two():
     # Orient the corner
     for tile in orientations(tiles[node]):
         if [len(border_to_tiles[border]) for border in borders(tile)] == [1, 2, 2, 1]:
-            del tiles[node]
             break
 
     grid = {}
@@ -58,8 +57,6 @@ def part_two():
     for y, x in product(range(12), repeat=2):
         node, tile = grid[y, x]
         for neighbor in G[node]:
-            if neighbor not in tiles:
-                continue
             for neighbor_tile in orientations(tiles[neighbor]):
                 if np.array_equal(tile[-1], neighbor_tile[0]):
                     grid[y + 1, x] = neighbor, neighbor_tile
@@ -67,7 +64,7 @@ def part_two():
                 if np.array_equal(tile[:, -1], neighbor_tile[:, 0]):
                     grid[y, x + 1] = neighbor, neighbor_tile
                     break
-            del tiles[neighbor]
+        G.remove_node(node)
 
     image = np.block([[grid[y, x][1][1: -1, 1: -1] for x in range(12)] for y in range(12)])
     lochness = np.array([[char == "#" for char in line] for line in
