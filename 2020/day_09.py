@@ -1,5 +1,4 @@
 import aoc_helper
-from itertools import combinations
 
 raw = aoc_helper.day(9)
 data = list(aoc_helper.extract_ints(raw))
