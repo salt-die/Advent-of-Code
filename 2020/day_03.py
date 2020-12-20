@@ -9,8 +9,8 @@ h, w = data.shape
 
 def trees_hit(x, y):
     """Return number of trees hit given a slope (x, y)."""
-    xs = tuple((x * i) % w for i in range(h // y + bool(h % y)))
     ys = tuple(range(0, h, y))
+    xs = tuple((x * i) % w for i in range(len(ys)))
     return data[ys, xs].sum()
 
 def part_one():
