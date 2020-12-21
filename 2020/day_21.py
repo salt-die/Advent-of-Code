@@ -33,7 +33,7 @@ def part_two():
         for _, possible in stack:
             possible.discard(ingredient)
         stack.sort(key=lambda tup: -len(tup[1]))
-    return ",".join(ingredient for _, ingredient in sorted(canonical, key=lambda tup: tup[0]))
+    return ",".join(ingredient for _, ingredient in sorted(canonical))
 
 aoc_helper.submit(21, part_one)
 aoc_helper.submit(21, part_two)
