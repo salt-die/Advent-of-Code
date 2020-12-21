@@ -7,8 +7,6 @@ import networkx as nx
 import numpy as np
 from scipy.ndimage import convolve
 
-raw = aoc_helper.day(20)
-
 def parse_raw():
     tiles = {}
     for tile in raw.split("\n\n"):
@@ -17,21 +15,9 @@ def parse_raw():
         tiles[number] = np.array([[char == "#" for char in line ] for line in it])
     return tiles
 
-tiles = parse_raw()
-
 def borders(tile):
     for i in (0, (..., -1), -1, (..., 0)):
         yield min(tile[i].tobytes(), tile[i][::-1].tobytes())
-
-border_to_tiles = defaultdict(list)  # Build a network of connected tiles from this
-
-def part_one():
-    # Build dict of connections between tiles
-    for n, tile in tiles.items():
-        for border in borders(tile):
-            border_to_tiles[border].append(n)
-
-    return prod(n for n, tile in tiles.items() if sum(len(border_to_tiles[border]) for border in borders(tile)) == 6)
 
 def orientations(tile):
     for _ in range(4):
@@ -39,9 +25,17 @@ def orientations(tile):
         yield tile
         yield tile.T
 
-def part_two():
-    G = nx.Graph(edge for edge in border_to_tiles.values() if len(edge) == 2)
+def build_graph():
+    border_to_tiles = defaultdict(list)
+    for n, tile in tiles.items():
+        for border in borders(tile):
+            border_to_tiles[border].append(n)
+    return border_to_tiles, nx.Graph(edge for edge in border_to_tiles.values() if len(edge) == 2)
 
+def part_one():
+    return prod(node for node in G if len(G[node]) == 2)
+
+def part_two():
     # Get a corner
     for node in G:
         if len(G[node]) == 2:
@@ -67,6 +61,7 @@ def part_two():
         G.remove_node(node)
 
     image = np.block([[grid[y, x][1][1: -1, 1: -1] for x in range(12)] for y in range(12)])
+
     lochness = np.array([[char == "#" for char in line] for line in
         "                  #  \n"
         "#    ##    ##    ### \n"
@@ -76,6 +71,9 @@ def part_two():
         if count := (convolve(image, lochness, output=int, mode="constant") == lochness.sum()).sum():
             return image.sum() - count * lochness.sum()
 
+raw = aoc_helper.day(20)
+tiles = parse_raw()
+border_to_tiles, G = build_graph()
+
 aoc_helper.submit(20, part_one)
-part_one() # Must be run for part two to work.
 aoc_helper.submit(20, part_two)
