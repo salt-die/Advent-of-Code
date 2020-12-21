@@ -212,6 +212,6 @@ def main(screen):
 
         delay *= .9 # Get a little bit faster each iteration.
 
-    print_message(f"Corrupted instruction {op_} found at address {ind}. Data repaired. Any key to exit...")
+    print_message(f"Corrupted instruction {op} found at address {ind}. Data repaired. Any key to exit...")
     screen.getch()
     end_curses(screen)
