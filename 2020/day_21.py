@@ -1,5 +1,4 @@
 from collections import defaultdict
-from functools import reduce
 import re
 
 import aoc_helper
@@ -16,12 +15,12 @@ def parse_raw():
         foods.append(ingredients)
         for allergen in allergens.split(", "):
             contaminated[allergen].append(ingredients)
-    return foods, {k: reduce(set.intersection, v) for k, v in contaminated.items()}
+    return foods, {k: set.intersection(*v) for k, v in contaminated.items()}
 
 foods, allergens = parse_raw()
 
 def part_one():
-    safe = reduce(set.union, foods) - reduce(set.union, allergens.values())
+    safe = set.union(*foods) - set.union(*allergens.values())
     return sum(ingredient in safe for food in foods for ingredient in food)
 
 def part_two():
