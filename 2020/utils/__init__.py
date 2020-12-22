@@ -11,3 +11,8 @@ class adict(dict):
     """
     def __getattr__(self, key):
         return self[key]
+
+def matching(items):
+    import networkx as nx
+    G = nx.from_dict_of_lists(items)
+    return tuple((k, v) for k, v in nx.bipartite.maximum_matching(G, top_nodes=items).items() if k in items)

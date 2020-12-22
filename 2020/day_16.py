@@ -4,8 +4,8 @@ from math import prod
 
 import aoc_helper
 from more_itertools import partition
-import networkx as nx
 from real_ranges import Range, RangeSet # https://github.com/salt-die/real_ranges
+from utils import matching
 
 raw = aoc_helper.day(16)
 
@@ -38,9 +38,8 @@ def valid_indices(field):
     return set(i for i in range(len(fields)) if all(ticket[i] in fields[field] for ticket in valid_tickets))
 
 def part_two():
-    possible_indices = {field: valid_indices(field) for field in fields}
-    G = nx.from_dict_of_lists(possible_indices)
-    return prod(my_ticket[i] for i, field in nx.bipartite.maximum_matching(G).items() if field in fields and field.startswith("departure"))
+    matched = matching({field: valid_indices(field) for field in fields})
+    return prod(my_ticket[i] for field, i in matched if field.startswith("departure"))
 
 aoc_helper.submit(16, part_one)
 aoc_helper.submit(16, part_two)
