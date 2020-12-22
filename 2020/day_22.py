@@ -5,12 +5,7 @@ import aoc_helper
 import numpy as np
 
 raw = aoc_helper.day(22)
-
-def parse_raw():
-    alice, bob = raw.split("\n\n")
-    return deque(map(int, alice.splitlines()[1:])), deque(map(int, bob.splitlines()[1:]))
-
-alice, bob = parse_raw()
+alice, bob = (deque(map(int, p.splitlines()[1:])) for p in raw.split("\n\n"))
 enum = np.arange(len(alice) + len(bob), 0, -1)
 
 def part_one():
