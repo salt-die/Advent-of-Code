@@ -253,5 +253,17 @@
       "solution": "bqkndvb,zmb,bmrmhm,snhrpv,vflms,bqtvr,qzkjrtl,rkkrx",
       "bqkndvb,zmb,bmrmhm,snhrpv,vflms,bqtvr,qzkjrtl,rkkrx": "That's the right answer!  You are one gold star closer to saving your vacation. You got rank 496 on this star's leaderboard.You have completed Day 21! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
     }
+  },
+  "22": {
+    "1": {
+      "solution": "34324",
+      "34324": "That's the right answer!  You are one gold star closer to saving your vacation. [Continue to Part Two]"
+    },
+    "2": {
+      "34025": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Please wait one minute before trying again. (You guessed 34025.) [Return to Day 22]",
+      "33383": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Because you have guessed incorrectly 4 times on this puzzle, please wait 5 minutes before trying again. (You guessed 33383.) [Return to Day 22]",
+      "solution": "33259",
+      "33259": "That's the right answer!  You are one gold star closer to saving your vacation.You have completed Day 22! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
+    }
   }
 }
