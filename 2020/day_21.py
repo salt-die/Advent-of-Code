@@ -2,7 +2,7 @@ from collections import defaultdict
 import re
 
 import aoc_helper
-import networkx as nx
+from utils import matching
 
 raw = aoc_helper.day(21)
 
@@ -25,9 +25,7 @@ def part_one():
     return sum(ingredient in safe for food in foods for ingredient in food)
 
 def part_two():
-    G = nx.from_dict_of_lists(allergens)
-    canonical = sorted(nx.bipartite.maximum_matching(G).items())
-    return ",".join(ingredient for allergen, ingredient in canonical if allergen in allergens)
+    return ",".join(ingredient for _, ingredient in sorted(matching(allergens)))
 
 aoc_helper.submit(21, part_one)
 aoc_helper.submit(21, part_two)
