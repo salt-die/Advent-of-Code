@@ -4,11 +4,9 @@ from snippets.q import q
 
 class Block(q):
     val
-    r = None
-
 
 class Linked:
-    head = None
+    current = None
     blocks = {}
 
     def __init__(self, iterable):
@@ -17,17 +15,16 @@ class Linked:
     def append(self, value):
         block = self.blocks[value] = Block(value) # Fast look up of blocks by value
 
-        if self.head is None:
-            self.head = self.current = block
+        if self.current is None:
+            self.current = block
         else:
             self.tail.r = block
-            block.r = self.head
 
+        block.r = self.current
         self.tail = block
 
     def next(self, until=None):
-        while True:
-            val = self.current.val
+        while val := self.current.val:
             self.current = self.current.r
             if until is None or until == val:
                 return val
@@ -39,18 +36,14 @@ class Linked:
 def move(n):
     for _ in range(n):
         cur = cups.current
-        next_3 = first, m, last = cur.r, cur.r.r, cur.r.r.r
-        vals = first.val, m.val, last.val
-
-        cur.r = last.r
+        head, cur.r = cur.r, cur.r.r.r.r
 
         dest = cups.next() - 1 or len(cups.blocks)
-        while dest in vals:
+        while dest in (head.val, head.r.val, head.r.r.val):
             dest = dest - 1 or len(cups.blocks)
         dest = cups.blocks[dest]
 
-        last.r = dest.r
-        dest.r = first
+        dest.r, head.r.r.r = head, dest.r
 
 def part_one():
     move(100)
