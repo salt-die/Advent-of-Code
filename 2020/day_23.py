@@ -1,9 +1,5 @@
 import aoc_helper
-from snippets.q import q
 
-
-class Block(q):
-    val
 
 class Linked:
     current = None
@@ -13,7 +9,7 @@ class Linked:
         self.extend(iterable)
 
     def append(self, value):
-        block = self.blocks[value] = Block(value) # Fast look up of blocks by value
+        block = self.blocks[value] = type('', (), {"val": value})()  # Fast look up of blocks by value
 
         if self.current is None:
             self.current = block
