@@ -265,5 +265,16 @@
       "solution": "33259",
       "33259": "That's the right answer!  You are one gold star closer to saving your vacation.You have completed Day 22! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
     }
+  },
+  "23": {
+    "1": {
+      "143896725": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Please wait one minute before trying again. (You guessed 143896725.) [Return to Day 23]",
+      "solution": "43896725",
+      "43896725": "That's the right answer!  You are one gold star closer to saving your vacation. [Continue to Part Two]"
+    },
+    "2": {
+      "solution": "2911418906",
+      "2911418906": "That's the right answer!  You are one gold star closer to saving your vacation. You got rank 517 on this star's leaderboard.You have completed Day 23! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
+    }
   }
 }
