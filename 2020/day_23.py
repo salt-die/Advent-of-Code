@@ -1,18 +1,10 @@
 import aoc_helper
+from snippets.q import q
 
 
-class Block:
-    def __init__(self, val):
-        self.val = val
-
-    @property
-    def r(self):
-        return self._r
-
-    @r.setter
-    def r(self, value):
-        self._r = value
-        self._r.l = self
+class Block(q):
+    val
+    r = None
 
 
 class Linked:
@@ -35,13 +27,13 @@ class Linked:
 
     def next(self, until=None):
         while True:
+            val = self.current.val
             self.current = self.current.r
-            if until is None or until == self.current.l.val:
-                return self.current.l.val
+            if until is None or until == val:
+                return val
 
     def extend(self, iterable):
-        for i in iterable:
-            self.append(i)
+        for i in iterable: self.append(i)
 
 
 def move(n):
@@ -62,13 +54,13 @@ def move(n):
 
 def part_one():
     move(100)
-    cups.next(1)
+    cups.next(until=1)
     return "".join(str(cups.next()) for _ in range(len(cups.blocks) - 1))
 
 def part_two():
     cups.extend(range(10, 1_000_001))
     move(10_000_000)
-    cups.next(1)
+    cups.next(until=1)
     return cups.next() * cups.next()
 
 raw = aoc_helper.day(23)
