@@ -9,7 +9,7 @@ class Linked:
         self.extend(iterable)
 
     def append(self, value):
-        block = self.blocks[value] = type('', (), {"val": value})()  # Fast look up of blocks by value
+        block = self.blocks[value] = type('', (), {"val": value})()  # Fast look up of blocks by value; vals are all unique
 
         if self.current is None:
             self.current = block
@@ -20,7 +20,7 @@ class Linked:
         self.tail = block
 
     def next(self, until=None):
-        while val := self.current.val:
+        while val := self.current.val:  # All vals are truth-y
             self.current = self.current.r
             if until is None or until == val:
                 return val
