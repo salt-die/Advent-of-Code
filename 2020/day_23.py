@@ -19,11 +19,10 @@ class Linked:
         block.r = self.current
         self.tail = block
 
-    def next(self, until=None):
-        while val := self.current.val:  # All vals are truth-y
-            self.current = self.current.r
-            if until is None or until == val:
-                return val
+    def next(self):
+        val = self.current.val
+        self.current = self.current.r
+        return val
 
     def extend(self, iterable):
         for i in iterable: self.append(i)
@@ -43,13 +42,13 @@ def move(n):
 
 def part_one():
     move(100)
-    cups.next(until=1)
+    cups.current = cups.blocks[1].r
     return "".join(str(cups.next()) for _ in range(len(cups.blocks) - 1))
 
 def part_two():
     cups.extend(range(10, 1_000_001))
     move(10_000_000)
-    cups.next(until=1)
+    cups.current = cups.blocks[1].r
     return cups.next() * cups.next()
 
 raw = aoc_helper.day(23)
