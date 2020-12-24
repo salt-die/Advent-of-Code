@@ -29,7 +29,7 @@ def neighbors(tile, with_self=False):
 
 def update(n):
     seen = set()
-    flip = set()
+    flipped = list()
     for _ in range(n):
         for tile in black:
             for neighbor in neighbors(tile, with_self=True):
@@ -39,11 +39,11 @@ def update(n):
 
                 s = sum(map(black.__contains__, neighbors(neighbor)))
                 if neighbor in black and (s == 0 or s > 2) or neighbor not in black and s == 2:
-                    flip.add(neighbor)
+                    flipped.append(neighbor)
 
-        black.symmetric_difference_update(flip)
+        black.symmetric_difference_update(flipped)
         seen.clear()
-        flip.clear()
+        flipped.clear()
 
 def part_one():
     return len(black)
