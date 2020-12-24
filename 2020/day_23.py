@@ -1,4 +1,5 @@
 import aoc_helper
+from utils import adict
 
 
 class Linked:
@@ -9,7 +10,7 @@ class Linked:
         self.extend(iterable)
 
     def append(self, value):
-        block = self.blocks[value] = type('', (), {"val": value})()  # Fast look up of blocks by value; vals are all unique
+        block = self.blocks[value] = adict(val=value)
 
         if self.current is None:
             self.current = block
