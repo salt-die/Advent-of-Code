@@ -3,8 +3,18 @@ import re
 import aoc_helper
 import numpy as np
 
+raw = aoc_helper.day(24)
+STEPS = {
+    "e" : ( 0,  2),
+    "w" : ( 0, -2),
+    "se": ( 1,  1),
+    "sw": ( 1, -1),
+    "ne": (-1,  1),
+    "nw": (-1, -1),
+}
+
 def decode(tile):
-    return tuple(sum((steps[direction] for direction in tile), start=np.array([0, 0])))
+    return tuple(sum((STEPS[direction] for direction in tile), start=np.array([0, 0])))
 
 def init_config():
     DIRECTION_RE = re.compile(r"nw|ne|sw|se|w|e")
@@ -17,7 +27,7 @@ def init_config():
 
 def neighbors(tile, with_self=False):
     if with_self: yield tile
-    yield from (tuple(np.array(tile) + neighbor) for neighbor in steps.values())
+    yield from (tuple(np.array(tile) + neighbor) for neighbor in STEPS.values())
 
 def update(n):
     seen = set()
@@ -43,17 +53,6 @@ def part_one():
 def part_two():
     update(100)
     return len(black)
-
-raw = aoc_helper.day(24)
-
-steps = {
-    "e" : ( 0,  2),
-    "w" : ( 0, -2),
-    "se": ( 1,  1),
-    "sw": ( 1, -1),
-    "ne": (-1,  1),
-    "nw": (-1, -1),
-}
 
 black = init_config()
 
