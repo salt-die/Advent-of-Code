@@ -12,7 +12,7 @@ STEPS = {
 }
 
 def decode(tile):
-    return sum((STEPS[direction] for direction in tile))
+    return sum(map(STEPS.__getitem__, tile))
 
 def init_config():
     DIRECTION_RE = re.compile(r"nw|ne|sw|se|w|e")
