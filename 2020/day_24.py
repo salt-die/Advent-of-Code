@@ -3,12 +3,12 @@ import aoc_helper
 
 raw = aoc_helper.day(24)
 STEPS = {
-    "e" :  0 +  2j,
-    "w" :  0 + -2j,
-    "se":  1 +  1j,
-    "sw":  1 + -1j,
-    "ne": -1 +  1j,
-    "nw": -1 + -1j,
+    "e" :  0 + 2j,
+    "w" :  0 - 2j,
+    "se":  1 + 1j,
+    "sw":  1 - 1j,
+    "ne": -1 + 1j,
+    "nw": -1 - 1j,
 }
 
 def decode(tile):
