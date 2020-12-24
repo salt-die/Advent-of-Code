@@ -12,6 +12,9 @@ class adict(dict):
     def __getattr__(self, key):
         return self[key]
 
+    def __setattr(self, key, value):
+        self[key] = value
+
 def matching(items):
     import networkx as nx
     G = nx.from_dict_of_lists(items)
