@@ -12,15 +12,15 @@ STEPS = {
 }
 
 def decode(tile):
-    return sum(map(STEPS.__getitem__, tile))
+    return sum(STEPS[direction] for direction in tile)
 
 def init_config():
     DIRECTION_RE = re.compile(r"nw|ne|sw|se|w|e")
-    tiles = (DIRECTION_RE.findall(line) for line in raw.splitlines())
+    tiles = map(DIRECTION_RE.findall, raw.splitlines())
 
     black = set()
     for tile in tiles:
-        black.symmetric_difference_update((decode(tile), ))
+        black.symmetric_difference_update({decode(tile)})
     return black
 
 def neighbors(tile, with_self=False):
@@ -29,7 +29,7 @@ def neighbors(tile, with_self=False):
 
 def update(n):
     seen = set()
-    flipped = list()
+    flipped = set()
     for _ in range(n):
         for tile in black:
             for neighbor in neighbors(tile, with_self=True):
@@ -37,9 +37,9 @@ def update(n):
                     continue
                 seen.add(neighbor)
 
-                s = sum(map(black.__contains__, neighbors(neighbor)))
+                s = sum(neighbors_neighbor in black for neighbors_neighbor in neighbors(neighbor))
                 if neighbor in black and (s == 0 or s > 2) or neighbor not in black and s == 2:
-                    flipped.append(neighbor)
+                    flipped.add(neighbor)
 
         black.symmetric_difference_update(flipped)
         seen.clear()
