@@ -31,7 +31,7 @@ def day(d):
 
     response = requests.get(url=URL.format(day=d) + "/input", cookies=TOKEN)
     if not response.ok:
-        raise ValueError("Bad response")
+        raise ValueError("Request failed.")
 
     # Save input data
     inputs[d] = response.text.strip()
@@ -40,9 +40,7 @@ def day(d):
 
 def submit(day, solution: Callable):
     """
-    Submit an AoC solution.
-
-    Submissions are cached.
+    Submit an AoC solution. Submissions are cached.
     """
     day = str(day)
 
@@ -85,7 +83,7 @@ def submit(day, solution: Callable):
         )
 
         if not response.ok:
-            raise ValueError("Bad response")
+            raise ValueError("Request failed.")
 
         message = bs4.BeautifulSoup(response.text, "html.parser").article.text
         _pretty_print(message)
@@ -121,7 +119,7 @@ def _pretty_print(message):
             # "That's not the right answer. If you're stuck, ..."
             COLOR = "\x1b[31m"  # Red
         case _:
-            ValueError("Unexpected Response.")
+            raise ValueError("Unexpected message.", message)
     print(
         "\x1b[1m",  # Bold
         COLOR,
