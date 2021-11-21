@@ -38,33 +38,11 @@ def day(d):
     INPUTS_FILE.write_text(json.dumps(inputs, indent=2))
     return inputs[d]
 
-def _pretty_print(message):
-    match message[7]:
-        case "t":
-            # "That's the right answer! ..."
-            COLOR = "\x1b[32m"  # Green
-        case "'" | "e":
-            # "You don't seem to be solving the right level. ..."
-            # "You gave an answer too recently; you have to wait ..."
-            COLOR = "\x1b[33m"  # Yellow
-        case "n":
-            # "That's not the right answer. If you're stuck, ..."
-            COLOR = "\x1b[31m"  # Red
-        case _:
-            ValueError("Unexpected Response.")
-    print(
-        "\x1b[1m",  # Bold
-        COLOR,
-        message,
-        "\x1b[0m",  # Reset
-        sep="",
-    )
-
 def submit(day, solution: Callable):
     """
     Submit an AoC solution.
 
-    Submissions are cached -- Submitting an already submitted solution will return the previous response.
+    Submissions are cached.
     """
     day = str(day)
 
@@ -129,6 +107,28 @@ def submit(day, solution: Callable):
 
     current[solution] = message
     SUBMISSIONS_FILE.write_text(json.dumps(submissions, indent=2))
+
+def _pretty_print(message):
+    match message[7]:
+        case "t":
+            # "That's the right answer! ..."
+            COLOR = "\x1b[32m"  # Green
+        case "'" | "e":
+            # "You don't seem to be solving the right level. ..."
+            # "You gave an answer too recently; you have to wait ..."
+            COLOR = "\x1b[33m"  # Yellow
+        case "n":
+            # "That's not the right answer. If you're stuck, ..."
+            COLOR = "\x1b[31m"  # Red
+        case _:
+            ValueError("Unexpected Response.")
+    print(
+        "\x1b[1m",  # Bold
+        COLOR,
+        message,
+        "\x1b[0m",  # Reset
+        sep="",
+    )
 
 # Utilities
 ############
