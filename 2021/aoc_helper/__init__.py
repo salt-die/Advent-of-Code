@@ -7,13 +7,12 @@ import webbrowser
 from typing import Callable
 
 from .constants import *
+from . import utils
 
 __all__ = (
     "day",
     "submit",
-    "extract_ints",
-    "extract_maze",
-    "matching",
+    "utils",
 )
 
 TOKEN = {"session": TOKEN_FILE.read_text().strip()}
@@ -126,45 +125,4 @@ def _pretty_print(message):
         message,
         "\x1b[0m",  # Reset
         sep="",
-    )
-
-# Utilities
-############
-
-def extract_ints(raw):
-    """
-    Extract integers from a string.
-    """
-    return map(int, re.findall(r'(\d+)', raw))
-
-def extract_maze(raw, empty_cell=".", largest_component=False):
-    """
-    Parse an ascii maze into a networkx graph.
-    """
-    maze = np.array(list(map(list, raw.splitlines())))
-
-    import networkx as nx
-
-    G = nx.grid_graph(maze.shape[::-1])
-
-    walls = np.stack(np.where(maze != empty_cell)).T
-    G.remove_nodes_from(map(tuple, walls))
-
-    if largest_component:
-        G.remove_nodes_from(G.nodes - max(nx.connected_components(G), key=lambda g: len(g)))
-
-    return maze, G
-
-def matching(items):
-    """
-    Return a maximum matching from a dict of lists.
-    """
-    import networkx as nx
-
-    G = nx.from_dict_of_lists(items)
-
-    return tuple(
-        (k, v)
-        for k, v in nx.bipartite.maximum_matching(G, top_nodes=items).items()
-        if k in items
     )
