@@ -57,8 +57,8 @@ def submit(day, solution: Callable):
 
     if "solution" in current:
         print(
-            f"Day {day} part {part} has already been solved."
-            f"  The solution was: {current['solution']}."
+            f"Day {day} part {part} has already been solved. "
+            f"The solution was:\n{current['solution']}."
         )
         return
 
