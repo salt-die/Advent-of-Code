@@ -60,9 +60,9 @@ def get_direction_enum():
     """
     Return an enum for Directions with a rotate method.
     """
-    from enum import IntFlag
+    from enum import IntEnum
 
-    class Direction(IntFlag):
+    class Direction(IntEnum):
         EAST  = E = 0
         NORTH = N = 1
         WEST  = W = 2
@@ -80,9 +80,7 @@ def chinese_remainder_theorem(moduli, residues):
 
     N = prod(moduli)
 
-    X = sum(
+    return sum(
         (div := (N // modulus)) * pow(div, -1, modulus) * residue
         for modulus, residue in zip(moduli, residues)
-    )
-
-    return X % N
+    ) % N
