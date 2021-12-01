@@ -25,6 +25,7 @@ class AutoGeometryImage(AutoSizeBehavior, AutoPositionBehavior, Image):
 class AutoSizeGraphicWidget(AutoSizeBehavior, GraphicWidget):
     ...
 
+
 class AutoSizeParallax(AutoSizeBehavior, Parallax):
     ...
 
