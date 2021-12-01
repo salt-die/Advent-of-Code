@@ -1,12 +1,18 @@
+import json
+from pathlib import Path
+
 import cv2
 import numpy as np
 
 from nurses_2.colors import AColor
 
-from .depths import DEPTHS
+_THIS_DIR = Path(__file__).parent
+_INPUTS = _THIS_DIR.parent.parent.parent / "aoc_helper" / "inputs.json"
+_RAW = json.loads(_INPUTS.read_text())["1"]
 
-SCALE = 10
+DEPTHS = list(map(int, _RAW.splitlines()))
 FLOOR_COLOR = AColor.from_hex("050423ff")
+SCALE = 10  # Stretch texture horizontally by this scale.
 
 def create_floor_texture():
     """
