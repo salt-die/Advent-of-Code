@@ -36,8 +36,6 @@ class OceanFloor(AutoSizeBehavior, AutoPositionBehavior, GraphicWidget):
         asyncio.create_task(self.travel())
 
     async def travel(self):
-        texture = self.texture
-
         entire_ocean_floor = create_floor_texture()
         entire_ocean_floor_width = entire_ocean_floor.shape[1]
 
@@ -55,7 +53,8 @@ class OceanFloor(AutoSizeBehavior, AutoPositionBehavior, GraphicWidget):
             for y in np.linspace(current_depth, depth, SCALE).astype(int):
                 x += 1
                 self.root.children[0].horizontal_offset += 1
-                texture[:] = entire_ocean_floor[y: y + 2 * h, x: x + w]
+                h, w = self.size
+                self.texture[:] = entire_ocean_floor[y: y + 2 * h, x: x + w]
 
                 await asyncio.sleep(.05)
 
@@ -78,11 +77,11 @@ class SubmarineApp(App):
 
         self.root.add_widgets(
             background,
+            submarine,
             AutoSizeGraphicWidget(
                 default_color_pair=color_pair(WATER_COLOR, WATER_COLOR),
                 alpha=.5,
             ),
-            submarine,
             OceanFloor(),
         )
 
