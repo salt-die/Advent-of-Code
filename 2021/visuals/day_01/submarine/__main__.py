@@ -30,7 +30,7 @@ class AutoSizeParallax(AutoSizeBehavior, Parallax):
     ...
 
 
-class OceanFloor(AutoSizeBehavior, AutoPositionBehavior, GraphicWidget):
+class OceanFloor(AutoSizeBehavior, GraphicWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -66,9 +66,8 @@ class SubmarineApp(App):
     async def on_start(self):
         background = AutoSizeParallax(
             layers=[AutoGeometryImage(path=path) for path in PARALLAX_IMAGES],
-            speeds=[1/(NIMAGES - i) for i in range(NIMAGES)],
-
         )
+
         submarine = AutoGeometryImage(
             path=Path("submarine.png"),
             pos_hint=(.2, .4),
@@ -79,11 +78,11 @@ class SubmarineApp(App):
         self.root.add_widgets(
             background,
             submarine,
+            OceanFloor(),
             AutoSizeGraphicWidget(
                 default_color_pair=color_pair(WATER_COLOR, WATER_COLOR),
                 alpha=.5,
             ),
-            OceanFloor(),
         )
 
 
