@@ -1,12 +1,12 @@
 import aoc_helper
 
-raw = aoc_helper.day(4)
-print(raw)
+RAW = aoc_helper.day(4)
+print(RAW)
 
 def parse_raw():
     ...
 
-data = parse_raw()
+DATA = parse_raw()
 
 def part_one():
     ...
