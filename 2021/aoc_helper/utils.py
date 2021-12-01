@@ -68,10 +68,10 @@ def get_direction_enum():
         WEST  = W = 2
         SOUTH = S = 3
 
-        def rotate(self, steps=1, clockwise=True):
+        def rotate(self, steps=1, clockwise=False):
             if clockwise:
                 return Direction((self - steps) % 4)
-            return Directions((self + steps) % 4)
+            return Direction((self + steps) % 4)
 
     return Direction
 
