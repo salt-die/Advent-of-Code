@@ -17,6 +17,8 @@ NIMAGES = len(PARALLAX_IMAGES)
 
 WATER_COLOR = Color.from_hex("0805bf")
 
+SCROLL_FPS = .05
+
 
 class AutoGeometryImage(AutoSizeBehavior, AutoPositionBehavior, Image):
     ...
@@ -45,8 +47,6 @@ class OceanFloor(AutoSizeBehavior, GraphicWidget):
         h, w = self.size
         current_depth = np.argwhere(np.any(entire_ocean_floor[:, x + w // 2], axis=-1)).min() - int(1.5 * h)
 
-        await asyncio.sleep(0)
-
         while x + self.width < entire_ocean_floor_width:
             h, w = self.size
             depth = np.argwhere(np.any(entire_ocean_floor[:, x + w // 2], axis=-1)).min() - int(1.5 * h)
@@ -57,7 +57,10 @@ class OceanFloor(AutoSizeBehavior, GraphicWidget):
                 h, w = self.size
                 self.texture[:] = entire_ocean_floor[y: y + 2 * h, x: x + w]
 
-                await asyncio.sleep(.05)
+                try:
+                    await asyncio.sleep(SCROLL_FPS)
+                except asyncio.CancelledError:
+                    return
 
             current_depth = depth
 
@@ -75,14 +78,16 @@ class SubmarineApp(App):
             size_hint=(.2, .2),
         )
 
+        water_mask = AutoSizeGraphicWidget(
+            default_color_pair=color_pair(WATER_COLOR, WATER_COLOR),
+            alpha=.5,
+        )
+
         self.root.add_widgets(
             background,
             submarine,
             OceanFloor(),
-            AutoSizeGraphicWidget(
-                default_color_pair=color_pair(WATER_COLOR, WATER_COLOR),
-                alpha=.5,
-            ),
+            water_mask,
         )
 
 
