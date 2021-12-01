@@ -72,7 +72,7 @@ class SubmarineApp(App):
             path=Path("submarine.png"),
             pos_hint=(.2, .4),
             anchor=Anchor.CENTER,
-            size_hint=(.2, .2)
+            size_hint=(.2, .2),
         )
 
         self.root.add_widgets(
