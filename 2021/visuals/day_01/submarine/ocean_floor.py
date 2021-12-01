@@ -1,6 +1,3 @@
-"""
-Script to generate the image for the ocean floor.
-"""
 import cv2
 import numpy as np
 
@@ -12,6 +9,9 @@ SCALE = 10
 FLOOR_COLOR = AColor.from_hex("050423ff")
 
 def create_floor_texture():
+    """
+    Create a texture array from puzzle input using cv2's `fillPoly`.
+    """
     min_depth = min(DEPTHS)
     height = max(DEPTHS) - min_depth
     width = len(DEPTHS) * SCALE
