@@ -12,7 +12,8 @@ from nurses_2.widgets.parallax import Parallax
 
 from .ocean_floor import SCALE, create_floor_texture
 
-PARALLAX_IMAGES = sorted(Path("parallax_frames").iterdir())
+ASSETS = Path("assets")
+PARALLAX_IMAGES = sorted((ASSETS / "parallax_frames").iterdir())
 NIMAGES = len(PARALLAX_IMAGES)
 
 WATER_COLOR = Color.from_hex("0805bf")
@@ -72,7 +73,7 @@ class SubmarineApp(App):
         )
 
         submarine = AutoGeometryImage(
-            path=Path("submarine.png"),
+            path=ASSETS / "submarine.png",
             pos_hint=(.2, .4),
             anchor=Anchor.CENTER,
             size_hint=(.2, .2),
