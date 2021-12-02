@@ -12,6 +12,7 @@ __all__ = (
     "maximum_matching",
     "get_direction_enum",
     "chinese_remainder_theorem",
+    "pairwise",
 )
 
 def extract_ints(raw: str):
@@ -84,3 +85,16 @@ def chinese_remainder_theorem(moduli, residues):
         (div := (N // modulus)) * pow(div, -1, modulus) * residue
         for modulus, residue in zip(moduli, residues)
     ) % N
+
+def pairwise(iterator, offset=1):
+    """
+    Return successive pairs from iterable.
+    """
+    from collections import deque
+    from itertools import islice
+
+    stored = deque(islice(iterator, offset), maxlen=offset)
+
+    for item in iterator:
+        yield stored[0], item
+        stored.append(item)
