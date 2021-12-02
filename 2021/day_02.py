@@ -3,6 +3,7 @@ import re
 import aoc_helper
 
 RAW = aoc_helper.day(2)
+
 DATA = [
     (direction, int(amount))
     for direction, amount in re.findall(r"(\w+) (\d+)", RAW)
