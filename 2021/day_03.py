@@ -14,9 +14,9 @@ def part_one():
     gamma_digits = DATA.sum(axis=0) > h >> 1
 
     gamma = gamma_digits @ BIN_POWERS
-    episilon = ~gamma_digits @ BIN_POWERS
+    epsilon = ~gamma_digits @ BIN_POWERS
 
-    return gamma * episilon
+    return gamma * epsilon
 
 def gas_filter(mask_bit, cmp):
     ratings = DATA
