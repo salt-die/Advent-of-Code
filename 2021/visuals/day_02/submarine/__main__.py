@@ -18,7 +18,7 @@ from .stable_fluid import StableFluid
 
 ASSETS = Path("assets")
 PARALLAX_IMAGES = sorted((ASSETS / "parallax_frames").iterdir())
-VELOCITY_SCALE = .1
+VELOCITY_SCALE = .2
 WATER_COLOR = Color.from_hex("0805bf")
 LABEL_COLOR = tuple(i//2 for i in WATER_COLOR)
 
