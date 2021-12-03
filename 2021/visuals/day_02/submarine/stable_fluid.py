@@ -25,10 +25,10 @@ PRESSURE_KERNEL = np.array([
     [.25, 0.0, .25],
     [0.0, .25, 0.0],
 ])
-CURL = 3.0
+CURL = 6.0
 POKE_RADIUS = 3.0
 DISSIPATION = .99
-PRESSURE = .1
+PRESSURE = .6
 PRESSURE_ITERATIONS = 10
 RAINBOW_COLORS = cycle(rainbow_gradient(100))
 EPSILON = np.finfo(float).eps
@@ -89,10 +89,10 @@ class StableFluid(AutoSizeBehavior, GraphicWidget):
 
         curl = div_y - div_x
 
-        vort_y = convolve(curl, DIF_KERNEL[None, ::-1])
+        vort_y = convolve(curl, DIF_KERNEL[None])
         vort_x = convolve(curl, DIF_KERNEL[:, None])
 
-        vorticity = np.stack((vort_y, vort_x))
+        vorticity = np.stack((vort_x, vort_y))
         vorticity /= np.linalg.norm(vorticity, axis=0) + EPSILON
         vorticity *= curl * CURL
 
@@ -104,7 +104,7 @@ class StableFluid(AutoSizeBehavior, GraphicWidget):
 
         pressure = np.full_like(div_y, PRESSURE)
         for _ in range(PRESSURE_ITERATIONS):
-            convolve(pressure, PRESSURE_KERNEL, output=pressure)
+            convolve(pressure, PRESSURE_KERNEL, output=pressure, mode="constant")
             pressure -= div
 
         # Project
@@ -120,8 +120,8 @@ class StableFluid(AutoSizeBehavior, GraphicWidget):
         map_coordinates(vx, coords, output=vx, prefilter=False)
 
         # Remove checkboard divergence and diffuse velocity.
-        convolve(vy, GAUSSIAN_KERNEL, output=vy)
-        convolve(vx, GAUSSIAN_KERNEL, output=vx)
+        convolve(vy, GAUSSIAN_KERNEL, output=vy, mode="constant")
+        convolve(vx, GAUSSIAN_KERNEL, output=vx, mode="constant")
 
         r, g, b = dye = self.dye
         map_coordinates(r, coords, output=r)
