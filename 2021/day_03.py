@@ -8,7 +8,7 @@ RAW = aoc_helper.day(3)
 DATA = np.array([list(map(int, line)) for line in RAW.splitlines()])
 h, w = DATA.shape
 
-BIN_POWERS = np.geomspace(2**(w - 1), 1, w, dtype=int)
+BIN_POWERS = (2**np.arange(w))[::-1]
 
 def part_one():
     gamma_digits = DATA.sum(axis=0) > h >> 1
