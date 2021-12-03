@@ -13,6 +13,7 @@ __all__ = (
     "get_direction_enum",
     "chinese_remainder_theorem",
     "pairwise",
+    "sliding_window",
 )
 
 def extract_ints(raw: str):
@@ -90,13 +91,21 @@ def pairwise(iterable, offset=1):
     """
     Return successive pairs from iterable.
     """
-    from collections import deque
-    from itertools import islice
+    from itertools import islice, tee
 
-    it = iter(iterable)
+    a, b = tee(iterable)
 
-    stored = deque(islice(it, offset), maxlen=offset)
+    return zip(a, islice(b, offset, None))
 
-    for item in it:
-        yield stored[0], item
-        stored.append(item)
+def sliding_window(iterable, length=2):
+    """
+    Return a sliding window over iterable.
+    """
+    from itertools import islice, tee
+
+    its = (
+        islice(it, i, None)
+        for i, it in enumerate(tee(iterable, length))
+    )
+
+    return zip(*its)
