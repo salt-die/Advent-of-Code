@@ -1,3 +1,5 @@
+from operator import ge, le
+
 import numpy as np
 
 import aoc_helper
@@ -16,20 +18,19 @@ def part_one():
 
     return gamma * episilon
 
-def part_two():
-    oxy_rating = co2_rating = DATA
+def gas_filter(mask_bit, cmp):
+    ratings = DATA
 
     for i in range(w):
-        if half_sum := len(oxy_rating) >> 1:
-            mask = oxy_rating[:, i]
-            oxy_rating = oxy_rating[mask == (mask.sum() >= half_sum)]
+        if half_sum := len(ratings) >> 1:
+            mask = ratings[:, i] == mask_bit
+            ratings = ratings[mask == cmp(mask.sum(), half_sum)]
 
-        if half_sum := len(co2_rating) >> 1:
-            mask = co2_rating[:, i] == 0
-            co2_rating = co2_rating[mask == (mask.sum() <= half_sum)]
+    return ratings[0]
 
-    oxy_rating = oxy_rating[0] @ BIN_POWERS
-    co2_rating = co2_rating[0] @ BIN_POWERS
+def part_two():
+    oxy_rating = gas_filter(1, ge) @ BIN_POWERS
+    co2_rating = gas_filter(0, le) @ BIN_POWERS
 
     return oxy_rating * co2_rating
 
