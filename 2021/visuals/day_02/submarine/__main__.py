@@ -18,7 +18,7 @@ from .stable_fluid import StableFluid
 
 ASSETS = Path("assets")
 PARALLAX_IMAGES = sorted((ASSETS / "parallax_frames").iterdir())
-VELOCITY_SCALE = .2
+VELOCITY_SCALE = .035
 WATER_COLOR = Color.from_hex("0805bf")
 LABEL_COLOR = tuple(i//2 for i in WATER_COLOR)
 
@@ -44,8 +44,6 @@ class SubmarineApp(App):
         background = AutoSizeParallax(
             layers=[AutoGeometryImage(path=path) for path in PARALLAX_IMAGES],
         )
-        background.command = "forward"
-        background.amount = 0
 
         fluid = StableFluid(alpha=.5)
 
@@ -53,7 +51,7 @@ class SubmarineApp(App):
             path=ASSETS / "submarine.png",
             size_hint=(.2, .2),
             pos_hint=(.5, .5),
-            anchor=Anchor.CENTER,
+            anchor=Anchor.TOP_CENTER,
         )
 
         water_mask = AutoSizeGraphicWidget(
@@ -71,54 +69,33 @@ class SubmarineApp(App):
 
         self.root.add_widgets(background, fluid, submarine, water_mask, label)
 
-        async def parallax_move():
+        async def background_update():
             while True:
-                match background.command:
+                fluid.poke()
+
+                match command:
                     case "forward":
-                        background.horizontal_offset += background.amount
+                        fluid.velocity[1] -= amount * VELOCITY_SCALE
+                        background.horizontal_offset += amount
                     case "up":
-                        background.vertical_offset -= background.amount
+                        fluid.velocity[0] += amount * VELOCITY_SCALE
+                        background.vertical_offset -= amount
                     case "down":
-                        background.vertical_offset += background.amount
+                        fluid.velocity[0] -= amount * VELOCITY_SCALE
+                        background.vertical_offset += amount
 
                 try:
                     await asyncio.sleep(0)
                 except asyncio.CancelledError:
                     return
 
-        async def fluid_update():
-            while True:
-                fluid.poke()
-
-                try:
-                    await asyncio.sleep(.1)
-                except asyncio.CancelledError:
-                    return
-
-        parallax_task = asyncio.create_task(parallax_move())
-        fluid_task = asyncio.create_task(fluid_update())
+        background_task = asyncio.create_task(background_update())
 
         for command, amount in COMMANDS:
-            background.command = command
-            background.amount = int(amount)
-
-            match command:
-                case "forward":
-                    fluid.velocity[1] -= float(amount) * VELOCITY_SCALE
-                case "up":
-                    fluid.velocity[0] += float(amount) * VELOCITY_SCALE
-                case "down":
-                    fluid.velocity[0] -= float(amount) * VELOCITY_SCALE
-
             label.add_text(f'{f"{command} {amount}":<10}', column=9)
+            await asyncio.sleep(1)
 
-            try:
-                await asyncio.sleep(1)
-            except asyncio.CancelledError:
-                return
-
-        parallax_task.cancel()
-        fluid_task.cancel()
+        background_task.cancel()
 
 
 SubmarineApp().run()
