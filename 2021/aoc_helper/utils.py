@@ -86,15 +86,17 @@ def chinese_remainder_theorem(moduli, residues):
         for modulus, residue in zip(moduli, residues)
     ) % N
 
-def pairwise(iterator, offset=1):
+def pairwise(iterable, offset=1):
     """
     Return successive pairs from iterable.
     """
     from collections import deque
     from itertools import islice
 
-    stored = deque(islice(iterator, offset), maxlen=offset)
+    it = iter(iterable)
 
-    for item in iterator:
+    stored = deque(islice(it, offset), maxlen=offset)
+
+    for item in it:
         yield stored[0], item
         stored.append(item)
