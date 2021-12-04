@@ -58,13 +58,32 @@ class BingoCard(Widget):
                     canvas[i, column: column + 2] = tuple(f"{k:>2}")
 
         if self._is_won:
-            self.parent.FINISHED += 1
+            parent = self.parent
 
-            self.add_text(f"{f'FINISHED {ordinal(self.parent.FINISHED)}':^14}", row=1)
+            parent.FINISHED += 1
+
+            if parent.FINISHED in (1, 100):
+                # Creating visual markers on ScrollView's scrollbars
+                y, x = self.pos
+                cy, cx = self.center
+                h, w = parent.size
+
+                py = (y + cy) / h
+                px = (x + cx) / w
+
+                vbar, hbar = parent.parent.children
+
+                vbar.colors[int(vbar.fill_height * py), :, 3:] = ROW_COLOR
+                h_index = int(hbar.fill_width * px)
+                hbar.colors[:, h_index: h_index + 2, 3:] = ROW_COLOR
+
+                self.colors[1:4, :, :3] = ROW_COLOR
+            else:
+                self.colors[1:4, :, :3] = SCORE_COLOR
+
+            self.add_text(f"{f'FINISHED {ordinal(parent.FINISHED)}':^14}", row=1)
             self.add_text(f"{'SCORE:':^14}", row=2)
             self.add_text(f"{(card * ~(card == MARKED)).sum() * n:^14}", row=3)
-
-            self.colors[1:4, :, :3] = ROW_COLOR if self.parent.FINISHED in (1, 100) else SCORE_COLOR
 
 
 class BingoFolder(Widget):
