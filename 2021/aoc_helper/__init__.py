@@ -1,9 +1,9 @@
 import bs4
-import json
 import re
 import requests
 import time
 import webbrowser
+import yaml
 from typing import Callable
 
 from .constants import *
@@ -23,7 +23,7 @@ def day(d):
     """
     d = str(d)
 
-    inputs = json.loads(INPUTS_FILE.read_text())
+    inputs = yaml.full_load(INPUTS_FILE.read_text())
 
     if d in inputs:
         return inputs[d]
@@ -34,7 +34,7 @@ def day(d):
 
     # Save input data
     inputs[d] = response.text.strip()
-    INPUTS_FILE.write_text(json.dumps(inputs, indent=2))
+    INPUTS_FILE.write_text(yaml.dump(inputs, default_style="|"))
     return inputs[d]
 
 def submit(day, solution: Callable):
@@ -51,7 +51,7 @@ def submit(day, solution: Callable):
         case _:
             raise ValueError(f"solution callable has bad name, {solution.__name__}")
 
-    submissions = json.loads(SUBMISSIONS_FILE.read_text())
+    submissions = yaml.full_load(SUBMISSIONS_FILE.read_text())
 
     current = submissions.setdefault(day, {"1": {}, "2": {}})[part]
 
@@ -103,7 +103,7 @@ def submit(day, solution: Callable):
             webbrowser.open(response.url)  # View part 2 in browser
 
     current[solution] = message
-    SUBMISSIONS_FILE.write_text(json.dumps(submissions, indent=2))
+    SUBMISSIONS_FILE.write_text(yaml.dump(submissions))
 
 def _pretty_print(message):
     match message[7]:
