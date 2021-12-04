@@ -17,9 +17,6 @@ def parse_raw():
 
 NUMBERS, BOARDS = parse_raw()
 
-def score(board, number):
-    return np.where(board == -1, 0, board).sum() * number
-
 def part_one():
     boards = BOARDS.copy()
 
@@ -28,8 +25,11 @@ def part_one():
 
         for i in range(10):
             rows = np.all(boards[:, i//2] == -1, axis=1)
+
             if rows.any():
-                return score(boards[np.argwhere(rows)], number)
+                board = boards[np.argwhere(rows)]
+                board[board == -1] = 0
+                return board.sum() * number
 
             boards = np.swapaxes(boards, 1, 2)
 
@@ -45,7 +45,9 @@ def part_two():
             if len(boards) > 1:
                 boards = boards[~rows]
             elif rows[0]:
-                return score(boards[0], number)
+                board = boards[0]
+                board[board == -1] = 0
+                return board.sum() * number
 
             boards = np.swapaxes(boards, 1, 2)
 
