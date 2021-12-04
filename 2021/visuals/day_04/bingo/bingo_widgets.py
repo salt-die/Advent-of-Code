@@ -1,4 +1,3 @@
-from numpy import spacing
 from nurses_2.colors import Color, color_pair, WHITE
 from nurses_2.widgets.widget import Widget
 
@@ -6,6 +5,17 @@ MARKED = -1
 DEFAULT_COLOR_PAIR = color_pair(WHITE, Color.from_hex("#340744"))
 SCORE_COLOR = Color.from_hex("#debad6")
 ROW_COLOR = Color.from_hex("#e2d114")
+
+ORDINAL_SUFFIX = {
+    1: "st",
+    2: "nd",
+    3: "rd",
+}
+
+def ordinal(value):
+    if value % 100 in (11, 12, 13):
+        return f"{value}th"
+    return f"{value}{ORDINAL_SUFFIX.get(value % 10, 'th')}"
 
 
 class BingoCard(Widget):
@@ -48,13 +58,18 @@ class BingoCard(Widget):
                     canvas[i, column: column + 2] = tuple(f"{k:>2}")
 
         if self._is_won:
-            self.add_text(f"{'SCORE:':^14}", row=1)
-            self.add_text(f"{(card * ~(card == MARKED)).sum() * n:^14}", row=2)
+            self.parent.FINISHED += 1
 
-            self.colors[[1, 2], :, :3] = SCORE_COLOR
+            self.add_text(f"{f'FINISHED {ordinal(self.parent.FINISHED)}':^14}", row=1)
+            self.add_text(f"{'SCORE:':^14}", row=2)
+            self.add_text(f"{(card * ~(card == MARKED)).sum() * n:^14}", row=3)
+
+            self.colors[1:4, :, :3] = ROW_COLOR if self.parent.FINISHED in (1, 100) else SCORE_COLOR
 
 
 class BingoFolder(Widget):
+    FINISHED = 0
+
     def __init__(self, cards, **kwargs):
         super().__init__(
             size=(61, 151),
