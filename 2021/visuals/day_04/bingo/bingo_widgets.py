@@ -22,7 +22,7 @@ class BingoCard(Widget):
     def __init__(self, index, card, **kwargs):
         self.card = card
 
-        y, x = divmod(index, 10)
+        self._grid_pos = y, x = divmod(index, 10)
 
         super().__init__(
             size=(5, 14),
@@ -64,11 +64,14 @@ class BingoCard(Widget):
 
             if parent.FINISHED in (1, 100):
                 # Creating visual markers on ScrollView's scrollbars
-                y, x = self.pos
+                # These will be in an incorrect position if the window is re-sized.
+                # To do this correctly, subclass ScrollView's scrollbars and
+                # implement a `resize` method that moves these markers.
+                y, x = self._grid_pos
                 vbar, hbar = parent.parent.children
 
-                vbar.colors[int(vbar.height * (y - 1) / 60), :, 3:] = ROW_COLOR
-                h_index = int(hbar.width * (x - 1) / 150)
+                vbar.colors[int((vbar.height - 2) * y / 9), :, 3:] = ROW_COLOR
+                h_index = int((hbar.width - 4) * x / 9)
                 hbar.colors[:, h_index: h_index + 2, 3:] = ROW_COLOR
 
                 self.colors[1:4, :, :3] = ROW_COLOR
