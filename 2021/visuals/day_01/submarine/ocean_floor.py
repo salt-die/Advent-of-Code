@@ -1,4 +1,4 @@
-import json
+import yaml
 from pathlib import Path
 
 import cv2
@@ -7,8 +7,8 @@ import numpy as np
 from nurses_2.colors import AColor
 
 _THIS_DIR = Path(__file__).parent
-_INPUTS = _THIS_DIR.parent.parent.parent / "aoc_helper" / "inputs.json"
-_RAW = json.loads(_INPUTS.read_text())["1"]
+_INPUTS = _THIS_DIR.parent.parent.parent / "aoc_helper" / "inputs.yaml"
+_RAW = yaml.full_load(_INPUTS.read_text())["1"]
 
 DEPTHS = list(map(int, _RAW.splitlines()))
 FLOOR_COLOR = AColor.from_hex("050423ff")

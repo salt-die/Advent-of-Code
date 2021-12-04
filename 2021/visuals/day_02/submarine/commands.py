@@ -1,10 +1,10 @@
-import json
+import yaml
 import re
 from pathlib import Path
 
 _THIS_DIR = Path(__file__).parent
-_INPUTS = _THIS_DIR.parent.parent.parent / "aoc_helper" / "inputs.json"
-_RAW = json.loads(_INPUTS.read_text())["2"]
+_INPUTS = _THIS_DIR.parent.parent.parent / "aoc_helper" / "inputs.yaml"
+_RAW = yaml.full_load(_INPUTS.read_text())["2"]
 
 COMMANDS = [
     (command, int(amount))
