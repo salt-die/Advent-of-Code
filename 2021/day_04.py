@@ -11,8 +11,8 @@ def parse_raw():
     return (
         tuple(extract_ints(numbers)),
         np.array(
-            [np.fromiter(extract_ints(board), dtype=int).reshape(5, 5) for board in boards]
-        ),
+            [np.fromiter(extract_ints(board), dtype=int) for board in boards]
+        ).reshape(-1, 5, 5),
     )
 
 NUMBERS, BOARDS = parse_raw()
@@ -26,14 +26,12 @@ def part_one():
     for number in NUMBERS:
         boards[boards == number] = -1
 
-        for i in range(5):
-            rows = np.all(boards[:, i] == -1, axis=1)
+        for i in range(10):
+            rows = np.all(boards[:, i//2] == -1, axis=1)
             if rows.any():
                 return score(boards[np.argwhere(rows)], number)
 
-            columns = np.all(boards[..., i] == -1, axis=-1)
-            if columns.any():
-                return score(boards[np.argwhere(columns)], number)
+            boards = np.swapaxes(boards, 1, 2)
 
 def part_two():
     boards = BOARDS.copy()
@@ -41,18 +39,15 @@ def part_two():
     for number in NUMBERS:
         boards[boards == number] = -1
 
-        for i in range(5):
-            rows = np.all(boards[:, i] == -1, axis=1)
+        for i in range(10):
+            rows = np.all(boards[:, i//2] == -1, axis=1)
+
             if len(boards) > 1:
                 boards = boards[~rows]
             elif rows[0]:
                 return score(boards[0], number)
 
-            columns = np.all(boards[..., i] == -1, axis=-1)
-            if len(boards) > 1:
-                boards = boards[~columns]
-            elif columns[0]:
-                return score(boards[0], number)
+            boards = np.swapaxes(boards, 1, 2)
 
 aoc_helper.submit(4, part_one)
 aoc_helper.submit(4, part_two)
