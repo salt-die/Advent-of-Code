@@ -1,8 +1,8 @@
 from io import StringIO
+
 import numpy as np
 
 import aoc_helper
-from aoc_helper.utils import extract_ints
 
 RAW = aoc_helper.day(4)
 
@@ -10,7 +10,7 @@ def parse_raw():
     numbers, boards = RAW.split("\n\n", 1)
 
     return (
-        tuple(extract_ints(numbers)),
+        tuple(aoc_helper.utils.extract_ints(numbers)),
         np.loadtxt(StringIO(boards), dtype=int).reshape(-1, 5, 5),
     )
 
