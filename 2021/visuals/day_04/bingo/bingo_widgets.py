@@ -65,16 +65,10 @@ class BingoCard(Widget):
             if parent.FINISHED in (1, 100):
                 # Creating visual markers on ScrollView's scrollbars
                 y, x = self.pos
-                cy, cx = self.center
-                h, w = parent.size
-
-                py = (y + cy) / h
-                px = (x + cx) / w
-
                 vbar, hbar = parent.parent.children
 
-                vbar.colors[int(vbar.fill_height * py), :, 3:] = ROW_COLOR
-                h_index = int(hbar.fill_width * px)
+                vbar.colors[int(vbar.height * (y - 1) / 60), :, 3:] = ROW_COLOR
+                h_index = int(hbar.width * (x - 1) / 150)
                 hbar.colors[:, h_index: h_index + 2, 3:] = ROW_COLOR
 
                 self.colors[1:4, :, :3] = ROW_COLOR
