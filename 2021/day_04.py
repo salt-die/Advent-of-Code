@@ -11,12 +11,7 @@ def parse_raw():
     return (
         tuple(extract_ints(numbers)),
         np.array(
-            [
-                np.array(
-                    list(extract_ints(board))
-                ).reshape(5, 5)
-                for board in boards
-            ]
+            [np.fromiter(extract_ints(board), dtype=int).reshape(5, 5) for board in boards]
         ),
     )
 
@@ -29,7 +24,7 @@ def part_one():
     boards = BOARDS.copy()
 
     for number in NUMBERS:
-        boards[boards==number] = -1
+        boards[boards == number] = -1
 
         for i in range(5):
             rows = np.all(boards[:, i] == -1, axis=1)
@@ -44,7 +39,7 @@ def part_two():
     boards = BOARDS.copy()
 
     for number in NUMBERS:
-        boards[boards==number] = -1
+        boards[boards == number] = -1
 
         for i in range(5):
             rows = np.all(boards[:, i] == -1, axis=1)
