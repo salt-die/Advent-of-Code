@@ -46,4 +46,5 @@ class BingoApp(App):
             label.add_text(f"{f'Draw: {number}':^{label.width}}")
             await asyncio.sleep(.5)
 
+
 BingoApp().run()
