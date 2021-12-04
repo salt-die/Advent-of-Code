@@ -24,12 +24,11 @@ def part_one():
         boards[boards == number] = -1
 
         for i in range(10):
-            rows = np.all(boards[:, i//2] == -1, axis=1)
+            winners = np.all(boards[:, i//2] == -1, axis=1)
 
-            if rows.any():
-                board = boards[np.argwhere(rows)]
-                board[board == -1] = 0
-                return board.sum() * number
+            if winners.any():
+                boards[boards == -1] = 0
+                return boards[winners.argmax()].sum() * number
 
             boards = np.swapaxes(boards, 1, 2)
 
@@ -40,14 +39,13 @@ def part_two():
         boards[boards == number] = -1
 
         for i in range(10):
-            rows = np.all(boards[:, i//2] == -1, axis=1)
+            winners = np.all(boards[:, i//2] == -1, axis=1)
 
             if len(boards) > 1:
-                boards = boards[~rows]
-            elif rows[0]:
-                board = boards[0]
-                board[board == -1] = 0
-                return board.sum() * number
+                boards = boards[~winners]
+            elif winners[0]:
+                boards[boards == -1] = 0
+                return boards.sum() * number
 
             boards = np.swapaxes(boards, 1, 2)
 
