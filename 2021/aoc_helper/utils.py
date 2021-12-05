@@ -22,8 +22,7 @@ def extract_ints(raw: str):
     """
     import re
 
-    for match in re.findall(r'(\d+)', raw):
-        yield int(match)
+    return map(int, re.findall(r'(\d+)', raw))
 
 def extract_maze(raw: str, empty_cell=".", largest_component=False):
     """
