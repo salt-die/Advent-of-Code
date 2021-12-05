@@ -19,7 +19,7 @@ SHAPE = (
     max(max(a, b) for (a, _), (b, _) in DATA),
 )
 
-def intersects_from_lines(lines):
+def intersections(lines):
     image = np.zeros(SHAPE, dtype=int)
 
     for pt1, pt2 in lines:
@@ -32,10 +32,10 @@ def is_not_diagonal(line):
     return x1 == x2 or y1 == y2
 
 def part_one():
-    return intersects_from_lines(filter(is_not_diagonal, DATA))
+    return intersections(filter(is_not_diagonal, DATA))
 
 def part_two():
-    return intersects_from_lines(DATA)
+    return intersections(DATA)
 
 aoc_helper.submit(5, part_one)
 aoc_helper.submit(5, part_two)
