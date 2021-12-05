@@ -11,6 +11,41 @@ h, w = DATA.shape
 BIN_POWERS = 2**np.arange(w)[::-1]
 
 def part_one():
+    """
+    A fun alternate way of getting gamma is to run the "traffic" cellular automata
+    on the data to sort all the bits. Then gamma is the middle array.
+    ```
+    from scipy.ndimage import convolve
+
+    KERNEL = np.array([[0], [0], [1]])
+
+    def step(universe):
+        return np.where(
+            universe,
+            convolve(universe, KERNEL),
+            convolve(universe, KERNEL[::-1]),
+        )
+
+    universe = DATA
+
+    while (universe != (universe := step(universe))).any():
+        pass
+
+    gamma = universe[h // 2] @ BIN_POWERS
+    ```
+
+    The evolution of this automata on a 1d array over time looks like:
+    ```
+    t = 0: [1 0 0 1 0 1 1 1 0 1]
+    t = 1: [1 0 1 0 1 0 1 1 1 0]
+    t = 2: [1 1 0 1 0 1 0 1 1 0]
+    t = 3: [1 1 1 0 1 0 1 0 1 0]
+    t = 4: [1 1 1 1 0 1 0 1 0 0]
+    t = 5: [1 1 1 1 1 0 1 0 0 0]
+    t = 6: [1 1 1 1 1 1 0 0 0 0]
+    ```
+    All the ones shuffle to one side and the zeros to the other.
+    """
     gamma_digits = DATA.sum(axis=0) > h >> 1
 
     gamma = gamma_digits @ BIN_POWERS
