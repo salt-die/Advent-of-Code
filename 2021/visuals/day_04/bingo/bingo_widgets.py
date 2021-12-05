@@ -1,3 +1,5 @@
+import numpy as np
+
 from nurses_2.colors import Color, color_pair, WHITE
 from nurses_2.widgets.widget import Widget
 
@@ -12,7 +14,10 @@ ORDINAL_SUFFIX = {
     3: "rd",
 }
 
-def ordinal(value):
+def ordinal(value: int) -> str:
+    """
+    Return natural language ordinal of value.
+    """
     if value % 100 in (11, 12, 13):
         return f"{value}th"
     return f"{value}{ORDINAL_SUFFIX.get(value % 10, 'th')}"
@@ -32,32 +37,38 @@ class BingoCard(Widget):
         )
 
         self._is_won = False
-        self.card_to_canvas(-1)
 
-    def card_to_canvas(self, n):
+        for y, row in enumerate(card):
+            for x, k in enumerate(row):
+                self.add_text(f"{k:>2}", y, 3 * x)
+
+    def draw(self, n):
         if self._is_won:
             return
 
         card = self.card
-        canvas = self.canvas
+        marked = card == n
 
-        card[card == n] = MARKED
+        if not marked.any():
+            return
 
-        for i, row in enumerate(card):
-            for j, k in enumerate(row):
-                column = 3 * j
-                if k == MARKED:
-                    canvas[i, column: column + 2] = " ", "✗"
+        card[marked] = MARKED
 
-                    # Temporary bright full columns or rows.
-                    if (card[i] == MARKED).all() or (card[:, j] == MARKED).all():
-                        self._is_won = True
-                        self.colors[i, column + 1, :3] = ROW_COLOR
+        y, x = np.argwhere(marked).squeeze()
 
-                elif not self._is_won:
-                    canvas[i, column: column + 2] = tuple(f"{k:>2}")
+        self.add_text(" ✗", y, 3 * x)
+
+        if (card[y] == MARKED).all():
+            self._is_won = True
+            self.colors[y, :, :3] = ROW_COLOR
+
+        if (card[:, x] == MARKED).all():
+            self._is_won = True
+            self.colors[:, 3 * x + 1, :3] = ROW_COLOR
 
         if self._is_won:
+            card[card == MARKED] = 0
+
             parent = self.parent
 
             parent.FINISHED += 1
@@ -80,7 +91,7 @@ class BingoCard(Widget):
 
             self.add_text(f"{f'FINISHED {ordinal(parent.FINISHED)}':^14}", row=1)
             self.add_text(f"{'SCORE:':^14}", row=2)
-            self.add_text(f"{(card * ~(card == MARKED)).sum() * n:^14}", row=3)
+            self.add_text(f"{card.sum() * n:^14}", row=3)
 
 
 class BingoFolder(Widget):
@@ -124,4 +135,4 @@ class BingoFolder(Widget):
         Mark the number n for each bingo card.
         """
         for card in self.cards:
-            card.card_to_canvas(n)
+            card.draw(n)
