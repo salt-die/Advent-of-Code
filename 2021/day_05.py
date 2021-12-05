@@ -14,25 +14,20 @@ def parse_raw():
 
 DATA = tuple(parse_raw())
 
-SHAPE = (
-    max(max(a, b) for (_, a), (_, b) in DATA),
-    max(max(a, b) for (a, _), (b, _) in DATA),
-)
-
 def intersections(lines):
-    image = np.zeros(SHAPE, dtype=int)
+    image = np.zeros((1000, 1000), dtype=int)
 
-    for pt1, pt2 in lines:
-        image += cv2.line(np.zeros_like(image), pt1, pt2, 1)
+    for a, b in lines:
+        image += cv2.line(np.zeros_like(image), a, b, 1)
 
     return (image > 1).sum()
 
-def is_not_diagonal(line):
-    (x1, y1), (x2, y2) = line
-    return x1 == x2 or y1 == y2
-
 def part_one():
-    return intersections(filter(is_not_diagonal, DATA))
+    return intersections(
+        ((a, b), (c, d))
+        for ((a, b), (c, d)) in DATA
+        if a == c or b == d
+    )
 
 def part_two():
     return intersections(DATA)
