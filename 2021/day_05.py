@@ -14,34 +14,28 @@ def parse_raw():
 
 DATA = tuple(parse_raw())
 
-def init_image():
-    max_x = max(max(a, b) for (a, _), (b, _) in DATA)
-    max_y = max(max(a, b) for (_, a), (_, b) in DATA)
+SHAPE = (
+    max(max(a, b) for (_, a), (_, b) in DATA),
+    max(max(a, b) for (a, _), (b, _) in DATA),
+)
 
-    return np.zeros((max_y, max_x), dtype=int)
+def intersects_from_lines(lines):
+    image = np.zeros(SHAPE, dtype=int)
 
-def add_line(image, pt1, pt2, no_diagonal=True):
-    x1, y1 = pt1
-    x2, y2 = pt2
-
-    if not no_diagonal or x1 == x2 or y1 == y2:
+    for pt1, pt2 in lines:
         image += cv2.line(np.zeros_like(image), pt1, pt2, 1)
 
-def part_one():
-    image = init_image()
-
-    for pt1, pt2 in DATA:
-        add_line(image, pt1, pt2, no_diagonal=True)
-
     return (image > 1).sum()
+
+def is_not_diagonal(line):
+    (x1, y1), (x2, y2) = line
+    return x1 == x2 or y1 == y2
+
+def part_one():
+    return intersects_from_lines(filter(is_not_diagonal, DATA))
 
 def part_two():
-    image = init_image()
-
-    for pt1, pt2 in DATA:
-        add_line(image, pt1, pt2, no_diagonal=False)
-
-    return (image > 1).sum()
+    return intersects_from_lines(DATA)
 
 aoc_helper.submit(5, part_one)
 aoc_helper.submit(5, part_two)
