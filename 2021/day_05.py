@@ -23,8 +23,9 @@ def init_image():
 def add_line(image, pt1, pt2, no_diagonal=True):
     x1, y1 = pt1
     x2, y2 = pt2
+
     if not no_diagonal or x1 == x2 or y1 == y2:
-        image += cv2.line(np.zeros_like(image), (x1, y1), (x2, y2), 1)
+        image += cv2.line(np.zeros_like(image), pt1, pt2, 1)
 
 def part_one():
     image = init_image()
