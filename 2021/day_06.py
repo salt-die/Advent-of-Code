@@ -1,21 +1,20 @@
-import numpy as np
-
 import aoc_helper
 
 RAW = aoc_helper.day(6)
 
-FISH = np.full(9, 0, dtype=object)
+NSTATES = 9
+FISH = [0] * NSTATES
 
 for n in aoc_helper.utils.extract_ints(RAW):
     FISH[n] += 1
 
-def nfish(steps):
+def nfish(days):
     all_fish = FISH.copy()
 
-    for i in range(steps):
-        all_fish[(i + 7) % 9] += all_fish[i % 9]
+    for i in range(days):
+        all_fish[(i + 7) % NSTATES] += all_fish[i % NSTATES]
 
-    return all_fish.sum()
+    return sum(all_fish)
 
 def part_one():
     return nfish(80)
@@ -25,5 +24,3 @@ def part_two():
 
 aoc_helper.submit(6, part_one)
 aoc_helper.submit(6, part_two)
-
-print(part_one(), part_two())
