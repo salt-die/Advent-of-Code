@@ -22,6 +22,9 @@ def part_one():
         lambda x: x,
     )
 
+def triangular(x):
+    return x * (x + 1) // 2
+
 def part_two():
     """
     Given:
@@ -32,20 +35,22 @@ def part_two():
     We need to minimize the following cost function:
         Cost(x) = Sum_i triangular(|x - i|) =>
 
-        (Absolute values dropped as (x - i) and (x - i + 1) have same sign or one is 0.)
-        Sum_i (x - i) * (x - i + 1) / 2  =>
-        Sum_i (x**2 - (2i - 1)x + i(i - 1)) / 2
+        (Absolute values dropped as we approximate (x - i + 1) as (x - i) and the signs cancel.)
+        Sum_i (x - i) * (x - i) / 2  =>
+        Sum_i (x**2 - 2ix + i**2) / 2
 
     To minimize we use gradient descent. Take the derivative with respect to x and set to 0:
-        0 = Sum_i x - i + .5  =>  0 = (Sum_i -i) + n * (x + .5)
-        (x + .5) * n = Sum_i i  =>
-        x = (Sum_i i) / n - .5
+        0 = Sum_i x - i =>  0 = (Sum_i -i) + n * x
+        x * n = Sum_i i  =>
+        x = (Sum_i i) / n
 
     Where n is length of positions. x is approximately the mean of the positions.
     """
-    return fuel_cost(
-        int(mean(CRAB_POSITIONS) - .5),
-        lambda x: x * (x + 1) // 2,
+    approx_mean = int(mean(CRAB_POSITIONS))
+
+    return min(
+        fuel_cost(m, triangular)
+        for m in range(approx_mean - 1, approx_mean + 2)
     )
 
 aoc_helper.submit(7, part_one)
