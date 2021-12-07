@@ -108,3 +108,30 @@ def sliding_window(iterable, length=2):
     )
 
     return zip(*its)
+
+def oscillate_range(start=None, stop=None, step=None, /):
+    """
+    Yield values around start.
+    """
+    match start, stop, step:
+        case (int(), None, None):
+            start, stop, step = 0, start, 1 if start > 0 else -1
+        case (int(), int(), None):
+            step = 1 if start < stop else -1
+        case (int(), int(), int()) if step != 0:
+            pass
+        case _:
+            ValueError(f"non-integer values or 0 step ({start=}, {stop=}, {step=})")
+
+    stop_n = (stop - start) // step
+
+    if stop_n <= 0:
+        return
+
+    yield start
+
+    n = 1
+    while n < stop_n:
+        yield start + step * n
+        yield start - step * n
+        n += 1
