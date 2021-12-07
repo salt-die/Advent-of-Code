@@ -9,7 +9,7 @@ CRAB_POSITIONS = np.fromiter(aoc_helper.utils.extract_ints(RAW), dtype=int)
 
 def part_one():
     median = np.median(CRAB_POSITIONS).astype(int)
-    return np.abs(CRAB_POSITIONS - median).sum(axis=-1)
+    return np.abs(CRAB_POSITIONS - median).sum()
 
 def part_two():
     """
@@ -25,14 +25,14 @@ def part_two():
         Sum_i (x - i) * (x - i) / 2  =>
         Sum_i (x**2 - 2ix + i**2) / 2
 
-    To minimize we use gradient descent. Take the derivative with respect to x and set to 0:
+    To minimize, look for local minimum, i.e., take the derivative with respect to x and set to 0:
         0 = Sum_i x - i =>  0 = (Sum_i -i) + n * x
         x * n = Sum_i i  =>
         x = (Sum_i i) / n
 
     x is approximately the mean of the positions.
     """
-    guess = np.mean(CRAB_POSITIONS).astype(int)
+    guess = np.mean(CRAB_POSITIONS, dtype=int)
     guesses = np.arange(guess - 1, guess + 2)
 
     dif = np.abs(CRAB_POSITIONS - guesses[:, None])
