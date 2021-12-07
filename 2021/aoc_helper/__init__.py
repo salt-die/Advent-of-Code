@@ -4,6 +4,7 @@ import requests
 import time
 import webbrowser
 import yaml
+from datetime import datetime
 from typing import Callable
 
 from .constants import *
@@ -21,21 +22,23 @@ def day(d):
     """
     Return the input for day `d`. Inputs are cached.
     """
-    d = str(d)
+    day = str(d)
 
     inputs = yaml.full_load(INPUTS_FILE.read_text())
 
-    if d in inputs:
-        return inputs[d]
+    if day in inputs:
+        return inputs[day]
+
+    _wait_for_unlock(d)
 
     response = requests.get(url=URL.format(day=d) + "/input", cookies=TOKEN)
     if not response.ok:
         raise ValueError("Request failed.")
 
     # Save input data
-    inputs[d] = response.text.strip()
+    inputs[day] = response.text.strip()
     INPUTS_FILE.write_text(yaml.dump(inputs, default_style="|"))
-    return inputs[d]
+    return inputs[day]
 
 def submit(day, solution: Callable):
     """
@@ -104,6 +107,35 @@ def submit(day, solution: Callable):
 
     current[solution] = message
     SUBMISSIONS_FILE.write_text(yaml.dump(submissions))
+
+def _wait_for_unlock(d):
+    now = datetime.now().astimezone()
+    unlock = now.replace(day=d, **UNLOCK)
+
+    if (
+        now.year == YEAR
+        and now.month == 12
+        and now < unlock
+    ):
+        try:
+            print("\x1b[?25l")  # Hide cursor.
+
+            while True:
+                now = datetime.now().astimezone()
+
+                if (delay := (unlock - now).total_seconds()) <= 0:
+                    break
+
+                bold_yellow_delay = f"\x1b[1m\x1b[33m{delay:.2f}\x1b[0m"
+
+                print(
+                    f'{f"Waiting {bold_yellow_delay} seconds for puzzle input to unlock...":<50}',
+                    end="\r",
+                )
+
+                time.sleep(.1)
+        finally:
+            print("\x1b[?25h")  # Show cursor.
 
 def _pretty_print(message):
     match message[7]:
