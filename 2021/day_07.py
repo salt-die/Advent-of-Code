@@ -1,29 +1,15 @@
 
-from statistics import median, mean
+import numpy as np
 
 import aoc_helper
 
 RAW = aoc_helper.day(7)
 
-CRAB_POSITIONS = tuple(aoc_helper.utils.extract_ints(RAW))
-
-def fuel_cost(p, cost_function):
-    """
-    Return total cost of fuel to move each crab to p given a cost_function.
-    """
-    return sum(
-        cost_function(abs(i - p))
-        for i in CRAB_POSITIONS
-    )
+CRAB_POSITIONS = np.fromiter(aoc_helper.utils.extract_ints(RAW), dtype=int)
 
 def part_one():
-    return fuel_cost(
-        int(median(CRAB_POSITIONS)),
-        lambda x: x,
-    )
-
-def triangular(x):
-    return x * (x + 1) // 2
+    median = np.median(CRAB_POSITIONS).astype(int)
+    return np.abs(CRAB_POSITIONS - median).sum(axis=-1)
 
 def part_two():
     """
@@ -46,12 +32,12 @@ def part_two():
 
     x is approximately the mean of the positions.
     """
-    guess = int(mean(CRAB_POSITIONS))
+    guess = np.mean(CRAB_POSITIONS).astype(int)
+    guesses = np.arange(guess - 1, guess + 2)
 
-    return min(
-        fuel_cost(m, triangular)
-        for m in range(guess - 1, guess + 2)
-    )
+    dif = np.abs(CRAB_POSITIONS - guesses[:, None])
+
+    return (dif * (dif + 1) // 2).sum(-1).min()
 
 aoc_helper.submit(7, part_one)
 aoc_helper.submit(7, part_two)
