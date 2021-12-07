@@ -34,7 +34,7 @@ def part_two():
 
         (Absolute values dropped as (x - i) and (x - i + 1) have same sign or one is 0.)
         Sum_i (x - i) * (x - i + 1) / 2  =>
-        Sum_i (x**2 - (2i - 1)x + i(i + 1)) / 2
+        Sum_i (x**2 - (2i - 1)x + i(i - 1)) / 2
 
     To minimize we use gradient descent. Take the derivative with respect to x and set to 0:
         0 = Sum_i x - i + .5  =>  0 = (Sum_i -i) + n * (x + .5)
