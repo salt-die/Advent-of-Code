@@ -32,8 +32,8 @@ def part_two():
 
     x is approximately the mean of the positions.
     """
-    guess = np.mean(CRAB_POSITIONS, dtype=int)
-    guesses = np.arange(guess - 1, guess + 2)
+    mean = np.mean(CRAB_POSITIONS, dtype=int)
+    guesses = np.arange(mean - 1, mean + 2)
 
     dif = np.abs(CRAB_POSITIONS - guesses[:, None])
 
