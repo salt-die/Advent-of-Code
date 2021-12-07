@@ -44,13 +44,13 @@ def part_two():
         x * n = Sum_i i  =>
         x = (Sum_i i) / n
 
-    Where n is length of positions. x is approximately the mean of the positions.
+    x is approximately the mean of the positions.
     """
-    approx_mean = int(mean(CRAB_POSITIONS))
+    guess = int(mean(CRAB_POSITIONS))
 
     return min(
         fuel_cost(m, triangular)
-        for m in range(approx_mean - 1, approx_mean + 2)
+        for m in range(guess - 1, guess + 2)
     )
 
 aoc_helper.submit(7, part_one)
