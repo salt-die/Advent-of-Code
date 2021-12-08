@@ -72,9 +72,6 @@ class DigitFolder(AutoPositionBehavior, Widget):
         for i in range(14):
             self.add_widget(DigitDisplay(pos=(1, i * 7 + (1 if i < 10 else 3))))
 
-        canvas = self.canvas
-        canvas[(0, 0, -1, -1), (0, -1, 0, -1)] = "┏", "┓", "┗", "┛"
-        canvas[1: -1, [0, -1]] = "┃"
-        canvas[[0, -1], 1: -1] = "━"
-        canvas[1: -1, 71] = "┃"
-        canvas[[0, -1], 71] = "┳", "┻"
+        self.add_border(*"┏┓┗┛┃━")
+        self.canvas[1: -1, 71] = "┃"
+        self.canvas[[0, -1], 71] = "┳", "┻"
