@@ -11,7 +11,7 @@ BRIGHT_GREEN = Color.from_hex("33e860")
 DIM_GREEN_ON_BLACK = ColorPair.from_colors(DIM_GREEN, BLACK)
 BRIGHT_GREEN_ON_BLACK = ColorPair.from_colors(BRIGHT_GREEN, BLACK)
 
-GREEN_TO_WHITE = gradient(BRIGHT_GREEN, WHITE, 40)
+GREEN_TO_WHITE = gradient(BRIGHT_GREEN, WHITE, 40) + gradient(WHITE, BRIGHT_GREEN, 40)
 
 SEGMENT_SLICES = {
  "a": np.s_[ 0, 1: -1, :3],
@@ -47,7 +47,7 @@ class DigitDisplay(Widget):
         mask = np.all(colors==BRIGHT_GREEN, axis=-1)
         for color in GREEN_TO_WHITE:
             colors[mask] = color
-            await asyncio.sleep(.02)
+            await asyncio.sleep(.01)
 
     def reset(self):
         for segment in "abcdefg":
