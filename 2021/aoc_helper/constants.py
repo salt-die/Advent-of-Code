@@ -29,7 +29,7 @@ UNLOCK_TIME_INFO = {
     "month": 12,
     "hour": 0,
     "minute": 0,
-    "second": 0,
+    "second": 5,
     "microsecond": 0,
     "tzinfo": timezone(timedelta(hours=-5), 'Eastern US'),
 }
