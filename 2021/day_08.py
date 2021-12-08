@@ -1,5 +1,4 @@
 import re
-from itertools import chain
 
 import aoc_helper
 
