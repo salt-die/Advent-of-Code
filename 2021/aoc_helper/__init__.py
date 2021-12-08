@@ -18,7 +18,7 @@ __all__ = (
 
 TOKEN = {"session": TOKEN_FILE.read_text().strip()}
 
-def day(d):
+def day(d: int) -> str:
     """
     Return the input for day `d`. Inputs are cached.
     """
@@ -40,7 +40,7 @@ def day(d):
     INPUTS_FILE.write_text(yaml.dump(inputs, default_style="|"))
     return inputs[day]
 
-def submit(day, solution: Callable):
+def submit(day: int, solution: Callable):
     """
     Submit an AoC solution. Submissions are cached.
     """
@@ -110,13 +110,9 @@ def submit(day, solution: Callable):
 
 def _wait_for_unlock(d):
     now = datetime.now().astimezone()
-    unlock = now.replace(day=d, **UNLOCK)
+    unlock = datetime(year=YEAR, day=d, **UNLOCK_TIME_INFO)
 
-    if (
-        now.year == YEAR
-        and now.month == 12
-        and now < unlock
-    ):
+    if now < unlock:
         try:
             print("\x1b[?25l")  # Hide cursor.
 

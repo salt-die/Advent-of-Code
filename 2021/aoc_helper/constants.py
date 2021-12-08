@@ -9,7 +9,7 @@ __all__ = (
     "INPUTS_FILE",
     "SUBMISSIONS_FILE",
     "TOKEN_FILE",
-    "UNLOCK",
+    "UNLOCK_TIME_INFO",
 )
 
 YEAR = 2021
@@ -23,8 +23,10 @@ SUBMISSIONS_FILE = THIS_DIR / "submissions.yaml"
 
 TOKEN_FILE = THIS_DIR / ".token"
 
-# AoC puzzle inputs unlock at midnight -5 UTC.
-UNLOCK = {
+# AoC puzzle inputs unlock at midnight -5 UTC
+# during month of December.
+UNLOCK_TIME_INFO = {
+    "month": 12,
     "hour": 0,
     "minute": 0,
     "second": 0,
