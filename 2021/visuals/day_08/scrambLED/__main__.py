@@ -54,33 +54,20 @@ class Scrambled(App):
         computer_animation.play()
         sonar_animation.play()
 
-        pattern_displays = digits.children[:-4]
-        output_displays = digits.children[-4:]
+        displays = digits.children
 
         for data in DATA:
             for trans in TRANSLATIONS:
-                patterns, output_digits = data[: -4], data[-4:]
-
-                # Update Display
-                for pattern, pattern_display in zip(patterns, pattern_displays):
-                    pattern_display.reset()
-                    for segment in pattern:
-                        setattr(pattern_display, trans[segment], segment)
-
-                for output_digit, output_display in zip(output_digits, output_displays):
-                    output_display.reset()
-                    for segment in output_digit:
-                        setattr(output_display, trans[segment], True)
+                for datum, display in zip(data, displays):
+                    display.reset()
+                    for segment in datum:
+                        setattr(display, trans[segment], segment)
 
                 if all(
                     frozenset(trans[segment] for segment in pattern) in DIGITS
-                    for pattern in patterns
+                    for pattern in data[:-4]
                 ):
-                    for display in pattern_displays:
-                        display.flash()
-                        await asyncio.sleep(.05)
-
-                    for display in output_displays:
+                    for display in displays:
                         display.flash()
                         await asyncio.sleep(.05)
 
