@@ -21,10 +21,10 @@ def part_one():
     return (CAVE_MAP[mask] + 1).sum()
 
 def part_two():
-    labels, nlabels = label(CAVE_MAP != 9)
+    labels, nbins = label(CAVE_MAP != 9)
     labels = labels.reshape(-1)
 
-    return np.partition(np.bincount(labels, labels != 0), nlabels - 3)[-3:].prod().astype(int)
+    return np.partition(np.bincount(labels, labels != 0), nbins - 3)[-3:].prod().astype(int)
 
 aoc_helper.submit(9, part_one)
 aoc_helper.submit(9, part_two)
