@@ -41,7 +41,7 @@ aoc_helper.submit(9, part_two)
 #         G.nodes[i, j]["height"] = int(n)
 
 # def height(node):
-#     return  G.nodes[node]["height"]
+#     return G.nodes[node]["height"]
 
 # def part_one():
 #     return sum(
