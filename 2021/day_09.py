@@ -28,3 +28,30 @@ def part_two():
 
 aoc_helper.submit(9, part_one)
 aoc_helper.submit(9, part_two)
+
+# An alternative solution using networkx:
+
+# from math import prod
+
+# import networkx as nx
+
+# G = nx.grid_graph((100, 100))
+# for i, line in enumerate(RAW.splitlines()):
+#     for j, n in enumerate(line):
+#         G.nodes[i, j]["height"] = int(n)
+
+# height(node) = lambda node: G.nodes[node]["height"]
+
+# def part_one():
+#     return sum(
+#         height(G.nodes[u]) + 1
+#         for u in G
+#         if all(height(u) < height(v) for v in G[u])
+#     )
+
+# def part_two():
+#     G.remove_nodes_from([node for node in G if height(node) == 9])
+
+#     return prod(
+#         sorted(map(len, nx.connected_components(G)))[-3:]
+#     )
