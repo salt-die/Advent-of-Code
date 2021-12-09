@@ -105,3 +105,14 @@
       \ Day 8! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your\
       \ Advent Calendar]."
     solution: '1043101'
+'9':
+  '1':
+    '572': That's the right answer!  You are one gold star closer to finding the sleigh
+      keys. [Continue to Part Two]
+    solution: '572'
+  '2':
+    '847044': "That's the right answer!  You are one gold star closer to finding the\
+      \ sleigh keys. You got rank 415 on this star's leaderboard.You have completed\
+      \ Day 9! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your\
+      \ Advent Calendar]."
+    solution: '847044'
