@@ -40,7 +40,8 @@ aoc_helper.submit(9, part_two)
 #     for j, n in enumerate(line):
 #         G.nodes[i, j]["height"] = int(n)
 
-# height(node) = lambda node: G.nodes[node]["height"]
+# def height(node):
+#     return  G.nodes[node]["height"]
 
 # def part_one():
 #     return sum(
