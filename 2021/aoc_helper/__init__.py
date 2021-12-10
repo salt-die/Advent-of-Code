@@ -40,7 +40,7 @@ def day(d: int) -> str:
     INPUTS_FILE.write_text(yaml.dump(inputs, default_style="|"))
     return inputs[day]
 
-def submit(day: int, solution: Callable):
+def submit(day: int, solution: Callable, sanity_check=True):
     """
     Submit an AoC solution. Submissions are cached.
     """
@@ -74,6 +74,12 @@ def submit(day: int, solution: Callable):
     if solution in current:
         print(f"Solution {solution} to part {part} has already been submitted, response was:")
         _pretty_print(current[solution])
+        return
+
+    if (
+        sanity_check
+        and input(f"Submit {solution}? [y]/n\n").startswith(("n", "N"))
+    ):
         return
 
     while True:
