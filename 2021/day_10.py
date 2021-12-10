@@ -1,4 +1,3 @@
-from collections import deque
 from functools import reduce
 
 import aoc_helper
@@ -27,24 +26,25 @@ INCOMPLETE_POINTS = {
 }
 
 def syntax_scores(error):
-    def tally(total, point):
-        return 5 * total + point
-
     for line in DATA:
-        close_queue = deque()
+        close_queue = []
 
         for token in line:
             if token in CLOSING:
-                close_queue.appendleft(CLOSING[token])
-            elif close_queue[0] == token:
-                close_queue.popleft()
+                close_queue.append(CLOSING[token])
+            elif close_queue[-1] == token:
+                close_queue.pop()
             else:
                 if error == "corrupted":
                     yield CORRUPTED_POINTS[token]
                 break
         else:
             if error == "incomplete":
-                yield reduce(tally, map(INCOMPLETE_POINTS.get, close_queue), 0)
+                yield reduce(
+                    lambda total, points: 5 * total + points,
+                    map(INCOMPLETE_POINTS.get, reversed(close_queue)),
+                    0,
+                )
 
 def part_one():
      return sum(syntax_scores(error="corrupted"))
@@ -55,3 +55,5 @@ def part_two():
 
 aoc_helper.submit(10, part_one)
 aoc_helper.submit(10, part_two)
+
+print(part_two(), part_one())
