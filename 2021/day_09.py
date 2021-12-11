@@ -1,13 +1,9 @@
-import re
-
 import numpy as np
 from scipy.ndimage import label
 
 import aoc_helper
 
-RAW = aoc_helper.day(9)
-
-CAVE_MAP = np.fromiter(map(int, re.findall(r"\d", RAW)), dtype=int).reshape(100, 100)
+CAVE_MAP = aoc_helper.utils.int_grid(aoc_helper.day(9))
 
 def part_one():
     border_map = np.pad(CAVE_MAP, 1, mode="constant", constant_values=9)
@@ -36,9 +32,9 @@ aoc_helper.submit(9, part_two)
 # import networkx as nx
 
 # G = nx.grid_graph((100, 100))
-# for i, line in enumerate(RAW.splitlines()):
-#     for j, n in enumerate(line):
-#         G.nodes[i, j]["height"] = int(n)
+# for i in range(100):
+#     for j in range(100):
+#         G.nodes[i, j]["height"] = CAVE_MAP[i, j]
 
 # def height(node):
 #     return G.nodes[node]["height"]
