@@ -1,9 +1,10 @@
+from itertools import count
+
 import numpy as np
 
 import aoc_helper
 
-RAW = aoc_helper.day(11).replace("\n", "")
-OCTOPI = np.fromiter(map(int, RAW), dtype=int).reshape(10, 10)
+OCTOPI = aoc_helper.utils.int_grid(aoc_helper.day(11))
 
 KERNEL = np.array([
     [1, 1, 1],
@@ -36,14 +37,11 @@ def part_two():
     padded_octos = np.pad(OCTOPI, 1)
     octos = padded_octos[1: -1, 1: -1]
 
-    steps = 0
-    while (octos != 0).any():
-        step(padded_octos)
-        steps += 1
+    for i in count():
+        if (octos == 0).all():
+            return i
 
-    return steps
+        step(padded_octos)
 
 aoc_helper.submit(11, part_one)
 aoc_helper.submit(11, part_two)
-
-print(part_one(), part_two())
