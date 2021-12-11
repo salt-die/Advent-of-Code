@@ -136,9 +136,12 @@ def oscillate_range(start=None, stop=None, step=None, /):
         yield start - step * n
         n += 1
 
-def int_grid(raw, np=True):
+def int_grid(raw, np=True, separator=""):
+    """
+    Parse a grid of ints into a 2d list or numpy array (if np==True).
+    """
     array = [
-        [int(i) for i in line]
+        [int(i) for i in (line.split(separator) if separator else line)]
         for line in raw.splitlines()
     ]
 
