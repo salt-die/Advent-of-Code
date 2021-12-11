@@ -135,3 +135,14 @@ def oscillate_range(start=None, stop=None, step=None, /):
         yield start + step * n
         yield start - step * n
         n += 1
+
+def int_grid(raw, np=True):
+    array = [
+        [int(i) for i in line]
+        for line in raw.splitlines()
+    ]
+
+    if np:
+        import numpy as np
+
+        return np.array(array)
