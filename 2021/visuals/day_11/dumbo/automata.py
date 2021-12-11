@@ -10,8 +10,8 @@ _KERNEL = np.ones((3, 3), dtype=int)
 
 colorify = np.vectorize(
     gradient(
-        AColor.from_hex("1a54bf"),
-        AColor.from_hex("d7dd2c"),
+        AColor.from_hex("092d63"),
+        AColor.from_hex("1651aa"),
         10,
     ).__getitem__,
     otypes=[np.uint8] * 4,
