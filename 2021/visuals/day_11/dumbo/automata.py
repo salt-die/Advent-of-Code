@@ -6,21 +6,46 @@ from nurses_2.io import MouseButton
 from nurses_2.widgets.behaviors import AutoPositionBehavior, AutoSizeBehavior
 from nurses_2.widgets.graphic_widget import GraphicWidget
 
-_KERNEL = np.ones((3, 3), dtype=int)
+BLUISH = AColor.from_hex("1651aa")
 
-colorify = np.vectorize(
-    gradient(
-        AColor.from_hex("1651aa"),
-        ABLACK,
-        10,
-    ).__getitem__,
-    otypes=[np.uint8] * 4,
-)
 
 class Automata(AutoSizeBehavior, AutoPositionBehavior, GraphicWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.nstates = 10  # Octopuses flash when they reach this level.
+        self.energy =   1  # Amount of energy a flashing octopus shares with each of its neighbors.
+
         self.reset()
+
+    @property
+    def nstates(self):
+        return self._nstates
+
+    @nstates.setter
+    def nstates(self, n):
+        self._nstates = n
+
+        self._gradient = gradient(
+            BLUISH,
+            ABLACK,
+            n,
+        )
+
+        self.colorify = np.vectorize(
+            lambda n: self._gradient[max(0, n)],
+            otypes=[np.uint8] * 4,
+        )
+
+    @property
+    def energy(self):
+        return self._energy
+
+    @energy.setter
+    def energy(self, e):
+        self._energy = e
+        self.kernel = np.full((3, 3), e, dtype=int)
+        self.kernel[1, 1] = 0
 
     def resize(self, size):
         super().resize(size)
@@ -28,8 +53,8 @@ class Automata(AutoSizeBehavior, AutoPositionBehavior, GraphicWidget):
 
     def reset(self):
         h, w = self.size
-        self._state = np.random.randint(0, 10, (2 * h, w))
-        self.texture = np.dstack(colorify(self._state))
+        self._state = np.random.randint(0, self.nstates, (2 * h, w))
+        self.texture = np.dstack(self.colorify(self._state))
 
     def step(self):
         state = self._state
@@ -37,8 +62,8 @@ class Automata(AutoSizeBehavior, AutoPositionBehavior, GraphicWidget):
         state += 1
 
         flashed = np.zeros_like(state, dtype=bool)
-        while (flashing := ((state > 9) & ~flashed)).any():
-            state += convolve(flashing.astype(int), _KERNEL, mode="constant")
+        while (flashing := ((state >= self.nstates) & ~flashed)).any():
+            state += convolve(flashing.astype(int), self.kernel, mode="constant")
             flashed |= flashing
 
         state[flashed] = 0
@@ -68,6 +93,6 @@ class Automata(AutoSizeBehavior, AutoPositionBehavior, GraphicWidget):
 
     def render(self, canvas_view, colors_view, rect):
         self.step()
-        self.texture = np.dstack(colorify(self._state))
+        self.texture = np.dstack(self.colorify(self._state))
 
         super().render(canvas_view, colors_view, rect)
