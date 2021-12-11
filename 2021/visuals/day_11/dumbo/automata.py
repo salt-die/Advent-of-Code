@@ -2,6 +2,7 @@ import numpy as np
 from scipy.ndimage import convolve
 
 from nurses_2.colors import gradient, AColor
+from nurses_2.io import MouseButton
 from nurses_2.widgets.behaviors import AutoPositionBehavior, AutoSizeBehavior
 from nurses_2.widgets.graphic_widget import GraphicWidget
 
@@ -48,6 +49,20 @@ class Automata(AutoSizeBehavior, AutoPositionBehavior, GraphicWidget):
                 self.reset()
             case _:
                 return False
+
+        return True
+
+    def on_click(self, mouse_event):
+        if (
+            mouse_event.button is MouseButton.NO_BUTTON
+            or not self.collides_coords(mouse_event.position)
+        ):
+            return False
+
+        y, x = self.absolute_to_relative_coords(mouse_event.position)
+        y *= 2
+
+        self._state[y: y + 2, x] = 0
 
         return True
 
