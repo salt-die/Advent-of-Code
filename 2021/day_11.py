@@ -35,4 +35,3 @@ def part_two():
 
 aoc_helper.submit(11, part_one)
 aoc_helper.submit(11, part_two)
-print(part_one(), part_two())
