@@ -3,13 +3,13 @@ from scipy.ndimage import convolve
 
 from nurses_2.colors import gradient, AColor, ABLACK
 from nurses_2.io import MouseButton
-from nurses_2.widgets.behaviors import AutoPositionBehavior, AutoSizeBehavior
+from nurses_2.widgets.behaviors import AutoSizeBehavior
 from nurses_2.widgets.graphic_widget import GraphicWidget
 
 BLUISH = AColor.from_hex("1651aa")
 
 
-class Automata(AutoSizeBehavior, AutoPositionBehavior, GraphicWidget):
+class Automata(AutoSizeBehavior, GraphicWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

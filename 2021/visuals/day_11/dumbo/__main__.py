@@ -16,7 +16,7 @@ class AutoPositionWidget(AutoPositionBehavior, Widget):
 
 class Dumbo(App):
     async def on_start(self):
-        automata = Automata(pos_hint=(.5, .5), anchor=Anchor.CENTER)
+        automata = Automata()
 
         container = AutoPositionWidget(
             size=(4, 63),
