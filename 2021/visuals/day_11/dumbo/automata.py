@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.ndimage import convolve
 
-from nurses_2.colors import gradient, AColor
+from nurses_2.colors import gradient, AColor, ABLACK
 from nurses_2.io import MouseButton
 from nurses_2.widgets.behaviors import AutoPositionBehavior, AutoSizeBehavior
 from nurses_2.widgets.graphic_widget import GraphicWidget
@@ -10,8 +10,8 @@ _KERNEL = np.ones((3, 3), dtype=int)
 
 colorify = np.vectorize(
     gradient(
-        AColor.from_hex("092d63"),
         AColor.from_hex("1651aa"),
+        ABLACK,
         10,
     ).__getitem__,
     otypes=[np.uint8] * 4,
