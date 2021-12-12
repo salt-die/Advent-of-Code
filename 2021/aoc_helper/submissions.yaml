@@ -36,6 +36,22 @@
       \ Day 11! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to\
       \ Your Advent Calendar]."
     solution: '242'
+'12':
+  '1':
+    '5576': That's the right answer!  You are one gold star closer to finding the
+      sleigh keys. You got rank 883 on this star's leaderboard. [Continue to Part
+      Two]
+    solution: '5576'
+  '2':
+    '152837': "That's the right answer!  You are one gold star closer to finding the\
+      \ sleigh keys. You got rank 943 on this star's leaderboard.You have completed\
+      \ Day 12! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to\
+      \ Your Advent Calendar]."
+    '173688': That's not the right answer.  If you're stuck, make sure you're using
+      the full input data; there are also some general tips on the about page, or
+      you can ask for hints on the subreddit.  Please wait one minute before trying
+      again. (You guessed 173688.) [Return to Day 12]
+    solution: '152837'
 '2':
   '1':
     '1383564': That's the right answer!  You are one gold star closer to finding the
