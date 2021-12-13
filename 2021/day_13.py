@@ -11,29 +11,28 @@ def parse_raw():
     for x, y in re.findall(r"(\d+),(\d+)", _points):
         paper[int(y), int(x)] = 1
 
-    instructions = [
-        (axis, int(coord))
-        for axis, coord in re.findall(r"fold along ([xy])=(\d+)", _instructions)
-    ]
+    instructions = re.findall(r"fold along ([xy])=\d+", _instructions)
 
     return paper, instructions
 
 PAPER, INSTRUCTIONS = parse_raw()
 
-def fold(paper, axis, coord):
+def fold(paper, axis):
     match axis:
         case "x":
-            return paper[:, :coord] | paper[:, -1: coord: -1]
+            w = paper.shape[1] >> 1
+            return paper[:, :w] | paper[:, -1: w: -1]
         case "y":
-            return paper[:coord] | paper[-1: coord: -1]
+            h = paper.shape[0] >> 1
+            return paper[:h] | paper[-1: h: -1]
 
 def part_one():
-    return fold(PAPER, *INSTRUCTIONS[0]).sum()
+    return fold(PAPER, INSTRUCTIONS[0]).sum()
 
 def part_two():
     paper = PAPER
     for instruction in INSTRUCTIONS:
-        paper = fold(paper, *instruction)
+        paper = fold(paper, instruction)
 
     aoc_helper.utils.dot_print(paper)
 
