@@ -52,6 +52,20 @@
       you can ask for hints on the subreddit.  Please wait one minute before trying
       again. (You guessed 173688.) [Return to Day 12]
     solution: '152837'
+'13':
+  '1':
+    '684': That's the right answer!  You are one gold star closer to finding the sleigh
+      keys. [Continue to Part Two]
+    '786': That's not the right answer.  If you're stuck, make sure you're using the
+      full input data; there are also some general tips on the about page, or you
+      can ask for hints on the subreddit.  Please wait one minute before trying again.
+      (You guessed 786.) [Return to Day 13]
+    solution: '684'
+  '2':
+    JRZBLGKH: "That's the right answer!  You are one gold star closer to finding\
+      \ the sleigh keys.You have completed Day 13! You can [Shareon\n  Twitter\nMastodon]\
+      \ this victory or [Return to Your Advent Calendar]."
+    solution: JRZBLGKH
 '2':
   '1':
     '1383564': That's the right answer!  You are one gold star closer to finding the

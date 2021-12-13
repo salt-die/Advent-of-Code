@@ -149,3 +149,10 @@ def int_grid(raw, np=True, separator=""):
         import numpy as np
 
         return np.array(array)
+
+def dot_print(array):
+    """
+    Pretty print a binary or boolean array.
+    """
+    for row in array:
+        print("".join(" #"[i] for i in row))
