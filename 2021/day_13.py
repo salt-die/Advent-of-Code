@@ -4,13 +4,21 @@ import numpy as np
 
 import aoc_helper
 
-_points, _instructions = aoc_helper.day(13).split("\n\n")
+def parse_raw():
+    _points, _instructions = aoc_helper.day(13).split("\n\n")
 
-PAPER = np.zeros((895, 1311), dtype=bool)
-for x, y in re.findall(r"(\d+),(\d+)", _points):
-    PAPER[int(y), int(x)] = 1
+    paper = np.zeros((895, 1311), dtype=bool)
+    for x, y in re.findall(r"(\d+),(\d+)", _points):
+        paper[int(y), int(x)] = 1
 
-INSTRUCTIONS = [(axis, int(coord)) for axis, coord in re.findall(r"fold along ([xy])=(\d+)", _instructions)]
+    instructions = [
+        (axis, int(coord))
+        for axis, coord in re.findall(r"fold along ([xy])=(\d+)", _instructions)
+    ]
+
+    return paper, instructions
+
+PAPER, INSTRUCTIONS = parse_raw()
 
 def fold(paper, axis, coord):
     match axis:
