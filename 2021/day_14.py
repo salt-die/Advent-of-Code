@@ -7,7 +7,13 @@ from aoc_helper.utils import pairwise
 def parse_raw():
     template, rules = aoc_helper.day(14).split("\n\n")
 
-    return template, {tuple(k): v for k, v in re.findall(r"(\w+) -> (\w)", rules)}
+    return (
+        template,
+        {
+            (a, b): ((a, c), (c, b))
+            for (a, b), c in re.findall(r"(\w+) -> (\w)", rules)
+        },
+    )
 
 TEMPLATE, RULES = parse_raw()
 
@@ -17,21 +23,18 @@ def apply_rules(n):
     for _ in range(n):
         new_pairs = Counter()
 
-        for pair in pair_counts:
-            a, b = pair
+        for pair, count in pair_counts.items():
+            a, b = RULES[pair]
 
-            c = RULES[pair]
-            pair_count = pair_counts[pair]
-
-            new_pairs[a, c] += pair_count
-            new_pairs[c, b] += pair_count
+            new_pairs[a] += count
+            new_pairs[b] += count
 
         pair_counts = new_pairs
 
     single_counts = Counter()
 
-    for a, b in pair_counts:
-        single_counts[a] += pair_counts[a, b]
+    for (a, b), count in pair_counts.items():
+        single_counts[a] += count
 
     single_counts[TEMPLATE[-1]] += 1
 
