@@ -10,10 +10,7 @@ def parse_raw():
 
     G = nx.DiGraph()
     for i, j in product(range(500), repeat=2):
-        idiv, imod = divmod(i, 100)
-        jdiv, jmod = divmod(j, 100)
-
-        weight = grid[imod, jmod] + idiv + jdiv
+        weight = grid[i % 100, j % 100] + i // 100 + j // 100
 
         for u, v in DELTAS_4:
             G.add_edge((i + u, j + v), (i , j), weight=weight % 9 or weight)
