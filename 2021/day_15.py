@@ -1,4 +1,5 @@
 from itertools import product
+
 import networkx as nx
 
 import aoc_helper
@@ -13,7 +14,6 @@ def parse_raw():
         jdiv, jmod = divmod(j, 100)
 
         weight = grid[imod, jmod] + idiv + jdiv
-
         if weight > 9:
             weight -= 9
 
