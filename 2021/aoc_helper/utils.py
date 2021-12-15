@@ -14,7 +14,16 @@ __all__ = (
     "chinese_remainder_theorem",
     "pairwise",
     "sliding_window",
+    "DELTAS_4",
+    "DELTAS_5",
+    "DELTAS_8",
+    "DELTAS_9",
 )
+
+DELTAS_4 = (0, 1), (0, -1), (1, 0), (-1, 0)
+DELTAS_5 = DELTAS_4 + ((0, 0),)
+DELTAS_8 = DELTAS_4 + ((1, 1), (-1, -1), (1, -1), (-1, 1))
+DELTAS_9 = DELTAS_8 + ((0, 0),)
 
 def extract_ints(raw: str):
     """
