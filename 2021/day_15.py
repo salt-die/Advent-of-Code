@@ -14,11 +14,9 @@ def parse_raw():
         jdiv, jmod = divmod(j, 100)
 
         weight = grid[imod, jmod] + idiv + jdiv
-        if weight > 9:
-            weight -= 9
 
         for u, v in DELTAS_4:
-            G.add_edge((i + u, j + v), (i , j), weight=weight)
+            G.add_edge((i + u, j + v), (i , j), weight=weight % 9 or weight)
 
     return G
 
