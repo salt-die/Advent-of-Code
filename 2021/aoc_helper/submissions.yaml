@@ -103,6 +103,16 @@
       \ Day 15! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to\
       \ Your Advent Calendar]."
     solution: '2846'
+'16':
+  '1':
+    '984': That's the right answer!  You are one gold star closer to finding the sleigh
+      keys. [Continue to Part Two]
+    solution: '984'
+  '2':
+    '1015320896946': "That's the right answer!  You are one gold star closer to finding\
+      \ the sleigh keys.You have completed Day 16! You can [Shareon\n  Twitter\nMastodon]\
+      \ this victory or [Return to Your Advent Calendar]."
+    solution: '1015320896946'
 '2':
   '1':
     '1383564': That's the right answer!  You are one gold star closer to finding the
