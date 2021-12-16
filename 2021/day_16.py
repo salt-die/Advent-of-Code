@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from io import StringIO
-from itertools import islice
 from math import prod
 from operator import gt, lt, eq
 
@@ -16,7 +15,7 @@ TYPE_IDS = {
     7: lambda args: eq(*args),
 }
 
-BIT_STREAM = StringIO(
+PACKET = StringIO(
     bin(int(aoc_helper.day(16), 16))[2:]
 )
 
@@ -44,47 +43,37 @@ class Packet:
 def decimal(bits):
     return int(bits, 2)
 
-def decoder(stream: StringIO):
-    version = decimal(stream.read(3) or "0")
-    type_id = decimal(stream.read(3) or "0")
+def decode(packet: StringIO):
+    version = decimal(packet.read(3))
+    type_id = decimal(packet.read(3))
 
     if type_id == 4:
         value = ""
 
-        while stream.read(1) == "1":
-            value += stream.read(4)
+        while packet.read(1) == "1":
+            value += packet.read(4)
 
-        value += stream.read(4)
+        value += packet.read(4)
 
-        yield Packet(version, type_id, decimal(value))
+        return Packet(version, type_id, decimal(value))
 
-    else:
-        match stream.read(1):
-            case "":
-                return
+    match packet.read(1):
+        case "0":
+            bit_length = decimal(packet.read(15))
+            subpacket = StringIO(packet.read(bit_length))
 
-            case "0":
-                bit_length = decimal(stream.read(15))
-                sub_stream = StringIO(stream.read(bit_length))
+            subpackets = [ ]
+            while subpacket.tell() != bit_length:
+                subpackets.append(decode(subpacket))
 
-                yield Packet(
-                    version,
-                    type_id,
-                    list(decoder(sub_stream)),
-                )
+            return Packet(version, type_id, subpackets)
 
-            case "1":
-                npackets = decimal(stream.read(11))
+        case "1":
+            npackets = decimal(packet.read(11))
 
-                yield Packet(
-                    version,
-                    type_id,
-                    list(islice(decoder(stream), npackets)),
-                )
+            return Packet(version, type_id, [decode(packet) for _ in range(npackets)])
 
-    yield from decoder(stream)
-
-DECODED = next(decoder(BIT_STREAM))
+DECODED = decode(PACKET)
 
 def part_one():
     return sum(DECODED.versions())
