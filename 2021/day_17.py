@@ -42,4 +42,3 @@ def part_two():
 
 aoc_helper.submit(17, part_one)
 aoc_helper.submit(17, part_two)
-print(part_two())
