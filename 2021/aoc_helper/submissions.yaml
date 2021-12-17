@@ -113,6 +113,16 @@
       \ the sleigh keys.You have completed Day 16! You can [Shareon\n  Twitter\nMastodon]\
       \ this victory or [Return to Your Advent Calendar]."
     solution: '1015320896946'
+'17':
+  '1':
+    '15931': That's the right answer!  You are one gold star closer to finding the
+      sleigh keys. [Continue to Part Two]
+    solution: '15931'
+  '2':
+    '2555': "That's the right answer!  You are one gold star closer to finding the\
+      \ sleigh keys.You have completed Day 17! You can [Shareon\n  Twitter\nMastodon]\
+      \ this victory or [Return to Your Advent Calendar]."
+    solution: '2555'
 '2':
   '1':
     '1383564': That's the right answer!  You are one gold star closer to finding the
