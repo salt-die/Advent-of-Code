@@ -29,15 +29,12 @@ def integrate(dx, dy):
     return -inf
 
 def part_one():
-    return max(
-        integrate(dx, dy)
-        for dx, dy in product(range(XMAX + 1), range(YMIN, 200))
-    )
+    return YMIN * (YMIN + 1) // 2
 
 def part_two():
     return sum(
         1 if integrate(dx, dy) != -inf else 0
-        for dx, dy in product(range(XMAX + 1), range(YMIN, 200))
+        for dx, dy in product(range(XMAX + 1), range(YMIN, abs(YMIN)))
     )
 
 aoc_helper.submit(17, part_one)
