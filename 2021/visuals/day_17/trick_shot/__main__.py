@@ -88,4 +88,4 @@ class TrickShot(App):
         submarine.play()
 
 
-TrickShot().run()
+TrickShot(title="Trick Shot!").run()
