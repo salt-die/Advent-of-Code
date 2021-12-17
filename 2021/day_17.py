@@ -34,7 +34,7 @@ def part_one():
 def part_two():
     return sum(
         1 if integrate(dx, dy) != -inf else 0
-        for dx, dy in product(range(XMAX + 1), range(YMIN, abs(YMIN)))
+        for dx, dy in product(range(int(XMAX**.5), XMAX + 1), range(YMIN, abs(YMIN)))
     )
 
 aoc_helper.submit(17, part_one)
