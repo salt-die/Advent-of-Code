@@ -4,7 +4,7 @@ from pathlib import Path
 import numpy as np
 
 from nurses_2.app import App
-from nurses_2.colors import Color, color_pair
+from nurses_2.colors import AColor
 from nurses_2.widgets.behaviors import AutoSizeBehavior, AutoPositionBehavior, Anchor
 from nurses_2.widgets.graphic_widget import GraphicWidget
 from nurses_2.widgets.image import Image
@@ -15,7 +15,7 @@ from .ocean_floor import SCALE, create_floor_texture
 ASSETS = Path("assets")
 PARALLAX_IMAGES = sorted((ASSETS / "parallax_frames").iterdir())
 
-WATER_COLOR = Color.from_hex("0805bf")
+WATER_COLOR = AColor.from_hex("0805bf")
 
 SCROLL_FPS = .05
 
@@ -79,7 +79,7 @@ class SubmarineApp(App):
         )
 
         water_mask = AutoSizeGraphicWidget(
-            default_color_pair=color_pair(WATER_COLOR, WATER_COLOR),
+            default_color=WATER_COLOR,
             alpha=.5,
         )
 
