@@ -1,3 +1,6 @@
+# Script to create initial files for daily visualization.
+new_day.py
+
 # Advent of Code Session Token
 .token
 
