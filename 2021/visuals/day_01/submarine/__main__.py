@@ -14,7 +14,6 @@ from .ocean_floor import SCALE, create_floor_texture
 
 ASSETS = Path("assets")
 PARALLAX_IMAGES = sorted((ASSETS / "parallax_frames").iterdir())
-NIMAGES = len(PARALLAX_IMAGES)
 
 WATER_COLOR = Color.from_hex("0805bf")
 
