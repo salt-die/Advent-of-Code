@@ -1,4 +1,5 @@
 import asyncio
+from pathlib import Path
 
 import cv2
 import numpy as np
@@ -6,8 +7,14 @@ import numpy as np
 from nurses_2.colors import AColor
 from nurses_2.widgets.behaviors import AutoSizeBehavior
 from nurses_2.widgets.graphic_widget import GraphicWidget
+from nurses_2.widgets.image import Image
 
+DRONE_PATH = Path("assets") / "drone.png"
 TRAJECTORY_COLOR = AColor.from_hex("13ddd3")
+
+
+class AutoSizeImage(AutoSizeBehavior, Image):
+    ...
 
 
 class Trajectory(AutoSizeBehavior, GraphicWidget):
@@ -30,15 +37,19 @@ class Trajectory(AutoSizeBehavior, GraphicWidget):
         old_x = self.width // 4
         old_y = self.height
 
-        while old_y < 2 * self.height:
+        drone = AutoSizeImage(pos=(old_y, old_x), path=DRONE_PATH, size_hint=(.1, .05))
+        self.add_widget(drone)
+
+        while old_y < 2 * self.height + drone.height:
             new_x, new_y = old_x + dx, old_y + dy
 
-            cv2.line(self.texture, (old_x, old_y), (new_x, new_y), TRAJECTORY_COLOR)
+            cv2.line(self.texture, (old_x, old_y), (new_x, new_y), TRAJECTORY_COLOR, 2)
 
             dx -= 1 if dx > 0 else -1 if dx < 0 else 0
             dy += 1
 
             old_x, old_y = new_x, new_y
+            drone.pos = new_y // 2 - drone.height // 2, new_x - drone.width // 2
 
             await asyncio.sleep(.1)
 
