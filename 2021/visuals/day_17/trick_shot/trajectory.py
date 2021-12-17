@@ -14,13 +14,17 @@ class Trajectory(AutoSizeBehavior, GraphicWidget):
     def __init__(self, *args, dx, dy, **kwargs):
         super().__init__(*args, **kwargs)
 
-        asyncio.create_task(self._dim())
+        self._dim_task = asyncio.create_task(self._dim())
         asyncio.create_task(self._shoot(dx, dy))
 
     async def _dim(self):
         while True:
             self.texture = (self.texture * .99).astype(np.uint8)
-            await asyncio.sleep(.01)
+
+            try:
+                await asyncio.sleep(.01)
+            except asyncio.CancelledError:
+                return
 
     async def _shoot(self, dx, dy):
         old_x = self.width // 4
@@ -41,4 +45,5 @@ class Trajectory(AutoSizeBehavior, GraphicWidget):
         while self.texture.any() and self.right > 0:
             await asyncio.sleep(.1)
 
+        self._dim_task.cancel()
         self.parent.remove_widget(self)
