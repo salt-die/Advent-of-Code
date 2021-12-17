@@ -35,7 +35,7 @@ def part_two():
     return sum(
         1 if integrate(dx, dy) != -inf else 0
         for dx, dy in product(
-            range(int((2 * XMIN)**.5), XMAX + 1),   # Solve: x * (x - 1) / 2 == XMIN => x = .5 + (.25 + 2 * XMIN)**.5
+            range(int((2 * XMIN)**.5), XMAX + 1),   # Solve: x * (x + 1) / 2 == XMIN => x ~~ (2 * XMIN)**.5
             range(YMIN, abs(YMIN)),
         )
     )
