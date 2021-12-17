@@ -31,7 +31,7 @@ def extract_ints(raw: str):
     """
     import re
 
-    return map(int, re.findall(r'(\d+)', raw))
+    return map(int, re.findall(r'(-?\d+)', raw))
 
 def extract_maze(raw: str, empty_cell=".", largest_component=False):
     """
