@@ -123,6 +123,24 @@
       \ sleigh keys.You have completed Day 17! You can [Shareon\n  Twitter\nMastodon]\
       \ this victory or [Return to Your Advent Calendar]."
     solution: '2555'
+'18':
+  '1':
+    '3691': That's the right answer!  You are one gold star closer to finding the
+      sleigh keys. [Continue to Part Two]
+    solution: '3691'
+  '2':
+    '4663': That's not the right answer; your answer is too low.  If you're stuck,
+      make sure you're using the full input data; there are also some general tips
+      on the about page, or you can ask for hints on the subreddit.  Please wait one
+      minute before trying again. (You guessed 4663.) [Return to Day 18]
+    '4756': "That's the right answer!  You are one gold star closer to finding the\
+      \ sleigh keys.You have completed Day 18! You can [Shareon\n  Twitter\nMastodon]\
+      \ this victory or [Return to Your Advent Calendar]."
+    '4815': That's not the right answer; your answer is too high.  If you're stuck,
+      make sure you're using the full input data; there are also some general tips
+      on the about page, or you can ask for hints on the subreddit.  Please wait one
+      minute before trying again. (You guessed 4815.) [Return to Day 18]
+    solution: '4756'
 '2':
   '1':
     '1383564': That's the right answer!  You are one gold star closer to finding the
