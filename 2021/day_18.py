@@ -39,11 +39,15 @@ class BinaryNode:
         return self.right.rightmost if isnode(self.right) else self
 
     @property
-    def previous_node(self):
-        parent = self.parent
+    def is_root(self):
+        return self.parent is None
 
-        if parent is None:
+    @property
+    def previous_node(self):
+        if self.is_root:
             return None
+
+        parent = self.parent
 
         if parent.left is self:
             return parent.previous_node
@@ -55,10 +59,10 @@ class BinaryNode:
 
     @property
     def next_node(self):
-        parent = self.parent
-
-        if parent is None:
+        if self.is_root:
             return None
+
+        parent = self.parent
 
         if parent.right is self:
             return parent.next_node
@@ -70,7 +74,7 @@ class BinaryNode:
 
     @property
     def depth(self):
-        if self.parent is None:
+        if self.is_root:
             return 0
 
         return self.parent.depth + 1
@@ -101,14 +105,14 @@ class BinaryNode:
         return True
 
     def split(self):
-        if not isnode(self.left) and self.left >= 10:
-            a = self.left / 2
-            self.left = BinaryNode(floor(a), ceil(a), parent=self)
+        left = self.left
+        if not isnode(left) and left >= 10:
+            self.left = BinaryNode(floor(left / 2), ceil(left / 2), parent=self)
             return True
 
-        if not isnode(self.right) and self.right >= 10:
-            a = self.right / 2
-            self.right = BinaryNode(floor(a), ceil(a), parent=self)
+        right = self.right
+        if not isnode(right) and right >= 10:
+            self.right = BinaryNode(floor(right / 2), ceil(right / 2), parent=self)
             return True
 
         return False
