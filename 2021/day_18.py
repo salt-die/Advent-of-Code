@@ -21,14 +21,16 @@ class BinaryNode:
 
         self.parent = parent
 
-    def iter_nodes(self):
-        if isnode(self.left):
-            yield from self.left.iter_nodes()
+    @property
+    def is_root(self):
+        return self.parent is None
 
-        yield self
+    @property
+    def depth(self):
+        if self.is_root:
+            return 0
 
-        if isnode(self.right):
-            yield from self.right.iter_nodes()
+        return self.parent.depth + 1
 
     @property
     def leftmost(self):
@@ -37,10 +39,6 @@ class BinaryNode:
     @property
     def rightmost(self):
         return self.right.rightmost if isnode(self.right) else self
-
-    @property
-    def is_root(self):
-        return self.parent is None
 
     @property
     def previous_node(self):
@@ -72,12 +70,14 @@ class BinaryNode:
 
         return parent
 
-    @property
-    def depth(self):
-        if self.is_root:
-            return 0
+    def iter_nodes(self):
+        if isnode(self.left):
+            yield from self.left.iter_nodes()
 
-        return self.parent.depth + 1
+        yield self
+
+        if isnode(self.right):
+            yield from self.right.iter_nodes()
 
     def explode(self):
         if self.depth != 4:
