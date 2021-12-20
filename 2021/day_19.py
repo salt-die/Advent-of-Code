@@ -1,5 +1,6 @@
 from itertools import product
 
+import cv2
 import numpy as np
 
 import aoc_helper
@@ -34,25 +35,6 @@ def parse_raw():
 
 SCANNERS = parse_raw()
 
-def find_transform(a, b):
-    N = 4  # Points needed to find transform
-    M = np.zeros((3 * N, 12))
-    I = np.eye(3)
-
-    M_t = M[:, 9:].reshape(N, 3, 3)
-    M_t[:] = I
-
-    for i, p in enumerate(b):
-        M[i * 3: (i + 1) * 3, :9] = np.kron(I, p)
-
-    x = (
-        np.linalg.inv(M.T @ M)
-        @ M.T
-        @ a.reshape(-1, 1)
-    ).round().astype(int)
-
-    return x[:9].reshape(3, 3).T, x[9:].flatten()
-
 def coalesce(a, b):
     js, ks = [ ], [ ]
     for (j, p), (k, q) in product(
@@ -70,9 +52,11 @@ def coalesce(a, b):
     else:
         return False
 
-    orientation, translation = find_transform(a.coords[js], b.coords[ks])
 
-    transformed = b.coords @ orientation + translation
+    M = cv2.estimateAffine3D(b.coords[ks], a.coords[js])[1].round().astype(int)
+    orientation, translation = M[:, :3], M[:, 3]
+
+    transformed = b.coords @ orientation.T + translation
 
     a.coords = np.unique(
         np.concatenate((a.coords, transformed)),
