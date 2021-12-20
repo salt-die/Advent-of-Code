@@ -10,13 +10,9 @@ from aoc_helper.utils import extract_ints
 class Scanner:
     def __init__(self, coords):
         self.coords = coords
-
-        pairwise_distances = np.linalg.norm(coords[:, None] - coords[None], axis=-1)
-
-        self.distances = {
-            tuple(coord): set(distances)
-            for coord, distances in zip(coords, pairwise_distances)
-        }
+        self.distances = np.array(
+            list(map(set, np.linalg.norm(coords[:, None] - coords[None], axis=-1)))
+        )
 
 
 def parse_raw():
@@ -37,13 +33,12 @@ SCANNERS = parse_raw()
 
 def coalesce(a, b):
     js, ks = [ ], [ ]
+
     for (j, p), (k, q) in product(
-        enumerate(a.coords),
-        enumerate(b.coords),
+        enumerate(a.distances),
+        enumerate(b.distances),
     ):
-        p_distances = a.distances[tuple(p)]
-        q_distances = b.distances[tuple(q)]
-        if len(p_distances & q_distances) >= 12:
+        if len(p & q) >= 12:
             js.append(j)
             ks.append(k)
 
@@ -57,18 +52,13 @@ def coalesce(a, b):
 
     transformed = b.coords @ orientation.T + translation
 
-    a.coords = np.unique(
-        np.concatenate((a.coords, transformed)),
-        axis=0,
-    )
+    check = (a.coords[:, None] == transformed[None]).all(-1)
+    where_a_equal_b, where_b_equal_a = np.where(check)
+    b_not_equal_a_mask = ~check.any(0)
 
-    for old, new in zip(b.coords, transformed):
-        (
-            a
-            .distances
-            .setdefault(tuple(new), set())
-            .update(b.distances[tuple(old)])
-        )
+    a.distances[where_a_equal_b] |= b.distances[where_b_equal_a]
+    a.distances = np.concatenate((a.distances, b.distances[b_not_equal_a_mask]))
+    a.coords = np.concatenate((a.coords, transformed[b_not_equal_a_mask]))
 
     a.scanners.append(translation)
 
