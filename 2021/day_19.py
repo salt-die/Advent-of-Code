@@ -97,7 +97,5 @@ def part_two():
     scanners = np.array(ORIGIN.scanners)
     return np.abs(scanners[:, None] - scanners[None]).sum(axis=-1).max()
 
-print(part_one(), part_two())
-
 aoc_helper.submit(19, part_one)
 aoc_helper.submit(19, part_two)
