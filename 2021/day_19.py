@@ -52,7 +52,6 @@ def coalesce(a, b):
     else:
         return False
 
-
     M = cv2.estimateAffine3D(b.coords[ks], a.coords[js])[1].round().astype(int)
     orientation, translation = M[:, :3], M[:, 3]
 
