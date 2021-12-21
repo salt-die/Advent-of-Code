@@ -168,14 +168,12 @@ def dot_print(array):
 
 def shiftmod(n, m, shift=1):
     """
-    Returns n % m and then shifts the result so that
-    it falls between shift and m + shift. Most often
-    used for puzzles that wrap some set of values back
-    to 1 instead of 0 (where a normal mod would work).
+    Simlar to n % m except the result lies within [shift, m + shift).
 
     Example:
-        shiftmod(10, 10) == 10
-        shiftmod(11, 10) == 1
-        shiftmod(11, 10, 2) == 11
+        shiftmod(10, 10, shift=1) == 10
+        shiftmod(11, 10, shift=1) == 1
+        shiftmod(11, 10, shift=2) == 11
+        shiftmod(12, 10, shift=2) == 2
     """
     return (n - shift) % m + shift
