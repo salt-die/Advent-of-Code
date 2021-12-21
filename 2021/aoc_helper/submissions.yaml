@@ -183,6 +183,18 @@
       \ sleigh keys.You have completed Day 20! You can [Shareon\n  Twitter\nMastodon]\
       \ this victory or [Return to Your Advent Calendar]."
     solution: '15088'
+'21':
+  '1':
+    '998088': That's the right answer!  You are one gold star closer to finding the
+      sleigh keys. You got rank 875 on this star's leaderboard. [Continue to Part
+      Two]
+    solution: '998088'
+  '2':
+    '306621346123766': "That's the right answer!  You are one gold star closer to\
+      \ finding the sleigh keys. You got rank 195 on this star's leaderboard.You have\
+      \ completed Day 21! You can [Shareon\n  Twitter\nMastodon] this victory or [Return\
+      \ to Your Advent Calendar]."
+    solution: '306621346123766'
 '3':
   '1':
     '3923414': That's the right answer!  You are one gold star closer to finding the

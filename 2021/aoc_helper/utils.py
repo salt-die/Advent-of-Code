@@ -165,3 +165,17 @@ def dot_print(array):
     """
     for row in array:
         print("".join(" #"[i] for i in row))
+
+def shiftmod(n, m, shift=1):
+    """
+    Returns n % m and then shifts the result so that
+    it falls between shift and m + shift. Most often
+    used for puzzles that wrap some set of values back
+    to 1 instead of 0 (where a normal mod would work).
+
+    Example:
+        shiftmod(10, 10) == 10
+        shiftmod(11, 10) == 1
+        shiftmod(11, 10, 2) == 11
+    """
+    return (n - shift) % m + shift
