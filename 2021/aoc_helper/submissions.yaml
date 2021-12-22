@@ -195,6 +195,29 @@
       \ completed Day 21! You can [Shareon\n  Twitter\nMastodon] this victory or [Return\
       \ to Your Advent Calendar]."
     solution: '306621346123766'
+'22':
+  '1':
+    '557904': That's not the right answer.  If you're stuck, make sure you're using
+      the full input data; there are also some general tips on the about page, or
+      you can ask for hints on the subreddit.  Please wait one minute before trying
+      again. (You guessed 557904.) [Return to Day 22]
+    '580810': That's the right answer!  You are one gold star closer to finding the
+      sleigh keys. [Continue to Part Two]
+    '600611': That's not the right answer.  If you're stuck, make sure you're using
+      the full input data; there are also some general tips on the about page, or
+      you can ask for hints on the subreddit.  Please wait one minute before trying
+      again. (You guessed 600611.) [Return to Day 22]
+    solution: '580810'
+  '2':
+    '1265621119006734': "That's the right answer!  You are one gold star closer to\
+      \ finding the sleigh keys. You got rank 685 on this star's leaderboard.You have\
+      \ completed Day 22! You can [Shareon\n  Twitter\nMastodon] this victory or [Return\
+      \ to Your Advent Calendar]."
+    '1631057934': That's not the right answer; your answer is too low.  If you're
+      stuck, make sure you're using the full input data; there are also some general
+      tips on the about page, or you can ask for hints on the subreddit.  Please wait
+      one minute before trying again. (You guessed 1631057934.) [Return to Day 22]
+    solution: '1265621119006734'
 '3':
   '1':
     '3923414': That's the right answer!  You are one gold star closer to finding the
