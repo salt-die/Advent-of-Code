@@ -33,20 +33,22 @@ def extract_ints(raw: str):
 
     return map(int, re.findall(r'(-?\d+)', raw))
 
-def extract_maze(raw: str, empty_cell=".", largest_component=False):
+def extract_maze(raw: str, wall="#", largest_component=False):
     """
     Parse an ascii maze into a networkx graph. Return a tuple `(np.array, nx.Graph)`.
     """
     import numpy as np
     import networkx as nx
 
+    lines = raw.splitlines()
+    max_width = max(map(len, lines))
     maze = np.array(
-        [[*line] for line in raw.splitlines()]
+        [list(line + " " * (max_width - len(line))) for line in lines]
     )
 
     G = nx.grid_graph(maze.shape[::-1])
 
-    walls = np.stack(np.where(maze != empty_cell)).T
+    walls = np.stack(np.where(maze == wall)).T
     G.remove_nodes_from(map(tuple, walls))
 
     if largest_component:
