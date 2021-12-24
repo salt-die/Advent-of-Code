@@ -12,6 +12,7 @@ class State(NamedTuple):
     def __lt__(self, other: "State"):
         return self.cost < other.cost
 
+
 ROOMS = {
     "A": 2,
     "B": 4,
@@ -29,8 +30,15 @@ COSTS = {
 def tuple_replace(tup, index, item=None):
     return tuple(item if i == index else j for i, j in enumerate(tup))
 
-def all_is_none(iterable):
-    return all(i is None for i in iterable)
+def pod_index(room):
+    """
+    Return index of first pod in room.
+    """
+    for i, pod in enumerate(room):
+        if pod:
+            return i
+
+    return len(room)
 
 def shortest_path(*rooms):
     depth = len(rooms[0])
@@ -53,26 +61,23 @@ def shortest_path(*rooms):
 
         # room to hallway
         for i, (room, goal) in enumerate(zip(rooms, goals)):
-            if room == goal:
+            if room == goal or (j := pod_index(room)) == depth:
                 continue
 
-            for distance_to_hall, pod in enumerate(room):
-                if pod:
-                    break
-            else:
-                continue
+            pod = room[j]
 
             for stop in STOPS:
                 room_index = 2 * (i + 1)
                 start, end = sorted((room_index, stop))
+                if any(hallway[start: end + 1]):
+                    continue
 
-                if all_is_none(hallway[start: end + 1]):
-                    new_room = tuple_replace(room, distance_to_hall)
-                    new_rooms = tuple_replace(rooms, i, new_room)
-                    new_hallway = tuple_replace(hallway, stop, pod)
-                    new_cost = cost + COSTS[pod] * (distance_to_hall + end - start + 1)
+                new_room = tuple_replace(room, j)
+                new_rooms = tuple_replace(rooms, i, new_room)
+                new_hallway = tuple_replace(hallway, stop, pod)
+                new_cost = cost + COSTS[pod] * (j + end - start + 1)
 
-                    heappush(queue, State(new_rooms, new_hallway, new_cost))
+                heappush(queue, State(new_rooms, new_hallway, new_cost))
 
         # hallway to room
         for stop in STOPS:
@@ -84,20 +89,17 @@ def shortest_path(*rooms):
             room = rooms[room_index]
 
             path = hallway[pod_dest: stop] if pod_dest < stop else hallway[stop + 1: pod_dest + 1]
-            if all_is_none(path) and all(i in (None, pod) for i in room):
-                for i, state in enumerate(room):
-                    if state is not None:
-                        i -= 1
-                        break
+            if any(path) or not all(i in (None, pod) for i in room):
+                continue
 
-                assert i != -1, "can't move to destination"
+            i = pod_index(room) - 1
 
-                new_room = tuple_replace(room, i, pod)
-                new_rooms = tuple_replace(rooms, room_index, new_room)
-                new_hallway = tuple_replace(hallway, stop)
-                new_cost = cost + COSTS[pod] * (i + abs(pod_dest - stop) + 1)
+            new_room = tuple_replace(room, i, pod)
+            new_rooms = tuple_replace(rooms, room_index, new_room)
+            new_hallway = tuple_replace(hallway, stop)
+            new_cost = cost + COSTS[pod] * (i + abs(pod_dest - stop) + 1)
 
-                heappush(queue, State(new_rooms, new_hallway, new_cost))
+            heappush(queue, State(new_rooms, new_hallway, new_cost))
 
 def part_one():
     return shortest_path(
