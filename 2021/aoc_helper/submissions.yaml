@@ -228,6 +228,16 @@
       \ sleigh keys.You have completed Day 23! You can [Shareon\n  Twitter\nMastodon]\
       \ this victory or [Return to Your Advent Calendar]."
     solution: '55136'
+'24':
+  '1':
+    '94992992796199': That's the right answer!  You are one gold star closer to finding
+      the sleigh keys. [Continue to Part Two]
+    solution: '94992992796199'
+  '2':
+    '11931881141161': "That's the right answer!  You are one gold star closer to finding\
+      \ the sleigh keys.You have completed Day 24! You can [Shareon\n  Twitter\nMastodon]\
+      \ this victory or [Return to Your Advent Calendar]."
+    solution: '11931881141161'
 '3':
   '1':
     '3923414': That's the right answer!  You are one gold star closer to finding the
