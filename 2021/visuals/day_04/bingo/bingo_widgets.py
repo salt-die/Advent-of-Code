@@ -1,7 +1,7 @@
 import numpy as np
 
 from nurses_2.colors import Color, color_pair, WHITE
-from nurses_2.widgets.widget import Widget
+from nurses_2.widgets.text_widget import TextWidget
 
 MARKED = -1
 DEFAULT_COLOR_PAIR = color_pair(WHITE, Color.from_hex("#340744"))
@@ -23,7 +23,7 @@ def ordinal(value: int) -> str:
     return f"{value}{ORDINAL_SUFFIX.get(value % 10, 'th')}"
 
 
-class BingoCard(Widget):
+class BingoCard(TextWidget):
     def __init__(self, index, card, **kwargs):
         self.card = card
 
@@ -94,7 +94,7 @@ class BingoCard(Widget):
             self.add_text(f"{card.sum() * n:^14}", row=3)
 
 
-class BingoFolder(Widget):
+class BingoFolder(TextWidget):
     FINISHED = 0
 
     def __init__(self, cards, **kwargs):

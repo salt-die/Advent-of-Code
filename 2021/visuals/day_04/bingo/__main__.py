@@ -2,8 +2,7 @@ import asyncio
 
 from nurses_2.app import App
 from nurses_2.colors import Color, color_pair, WHITE
-from nurses_2.widgets import Widget
-from nurses_2.widgets.behaviors import AutoSizeBehavior
+from nurses_2.widgets.text_widget import TextWidget
 from nurses_2.widgets.scroll_view import ScrollView
 
 from . import NUMBERS, CARDS
@@ -13,14 +12,10 @@ DEFAULT_COLOR_PAIR = color_pair(Color.from_hex("#741aac"), Color.from_hex("#3407
 LABEL_DEFAULT_COLOR_PAIR = color_pair(WHITE, Color.from_hex("#340744"))
 
 
-class AutoSizeScrollView(AutoSizeBehavior, ScrollView):
+class OffByOneScrollView(ScrollView):
     def resize(self, size):
         h, w = size
         super().resize((h - 1, w))
-
-
-class AutoSizeWidget(AutoSizeBehavior, Widget):
-    ...
 
 
 class BingoApp(App):
@@ -30,16 +25,16 @@ class BingoApp(App):
             default_color_pair=DEFAULT_COLOR_PAIR,
         )
 
-        label = AutoSizeWidget(
+        label = TextWidget(
             size=(1, 10),
             size_hint=(None, 1),
             default_color_pair=LABEL_DEFAULT_COLOR_PAIR,
         )
 
-        scroll_view = AutoSizeScrollView(pos=(1, 0))
+        scroll_view = OffByOneScrollView(pos=(1, 0), size_hint=(1.0, 1.0))
         scroll_view.add_widget(folder)
 
-        self.root.add_widgets(label, scroll_view)
+        self.add_widgets(label, scroll_view)
 
         for number in NUMBERS:
             folder.draw(number)

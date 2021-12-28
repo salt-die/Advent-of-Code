@@ -7,10 +7,9 @@ import numpy as np
 from scipy.ndimage import map_coordinates
 from scipy.ndimage.filters import convolve
 
-from nurses_2.colors import rainbow_gradient, Color
+from nurses_2.colors import rainbow_gradient, ABLACK
 from nurses_2.data_structures import Point
 from nurses_2.io import MouseEvent, MouseButton
-from nurses_2.widgets.behaviors import AutoSizeBehavior
 from nurses_2.widgets.graphic_widget import GraphicWidget
 
 DIF_KERNEL = np.array([-.5, 0.0, .5])
@@ -34,9 +33,9 @@ RAINBOW_COLORS = cycle(rainbow_gradient(100))
 EPSILON = np.finfo(float).eps
 
 
-class StableFluid(AutoSizeBehavior, GraphicWidget):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+class StableFluid(GraphicWidget):
+    def __init__(self, *args, default_color=ABLACK, **kwargs):
+        super().__init__(*args, default_color=default_color, **kwargs)
         self.resize(self.size)
 
     def resize(self, size):
@@ -69,12 +68,12 @@ class StableFluid(AutoSizeBehavior, GraphicWidget):
         """
         if (
             mouse_event.button is MouseButton.NO_BUTTON
-            or not self.collides_coords(mouse_event.position)
+            or not self.collides_point(mouse_event.position)
         ):
             return False
 
         self.poke(
-            self.absolute_to_relative_coords(mouse_event.position),
+            self.to_local(mouse_event.position),
         )
 
         return True

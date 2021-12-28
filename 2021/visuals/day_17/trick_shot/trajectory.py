@@ -5,7 +5,6 @@ import cv2
 import numpy as np
 
 from nurses_2.colors import AColor
-from nurses_2.widgets.behaviors import AutoSizeBehavior
 from nurses_2.widgets.graphic_widget import GraphicWidget
 from nurses_2.widgets.image import Image
 
@@ -13,11 +12,7 @@ DRONE_PATH = Path("assets") / "drone.png"
 TRAJECTORY_COLOR = AColor.from_hex("13ddd3")
 
 
-class AutoSizeImage(AutoSizeBehavior, Image):
-    ...
-
-
-class Trajectory(AutoSizeBehavior, GraphicWidget):
+class Trajectory(GraphicWidget):
     def __init__(self, *args, dx, dy, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -37,7 +32,7 @@ class Trajectory(AutoSizeBehavior, GraphicWidget):
         old_x = self.width // 4
         old_y = self.height
 
-        drone = AutoSizeImage(pos=(old_y, old_x), path=DRONE_PATH, size_hint=(.1, .05))
+        drone = Image(pos=(old_y, old_x), path=DRONE_PATH, size_hint=(.1, .05))
         self.add_widget(drone)
 
         while old_y < 2 * self.height + drone.height:

@@ -3,8 +3,8 @@ import asyncio
 import cv2
 import numpy as np
 from scipy.ndimage import convolve
+
 from nurses_2.widgets.graphic_widget import GraphicWidget
-from nurses_2.widgets.behaviors import AutoSizeBehavior
 
 from . import YELLOW_TO_WHITE, PAPER
 
@@ -12,7 +12,7 @@ def lerp(start, end, proportion):
     return int(start * (1 - proportion) + end * proportion)
 
 
-class FoldingWidget(AutoSizeBehavior, GraphicWidget):
+class FoldingWidget(GraphicWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -45,15 +45,15 @@ class FoldingWidget(AutoSizeBehavior, GraphicWidget):
             interpolation=self.interpolation,
         )
 
-        self.texture[:] = self.default_bg_color
-        self.texture[resized_paper.astype(bool), :3] = next(YELLOW_TO_WHITE)
+        self.texture[:] = self.default_color
+        self.texture[resized_paper.astype(bool)] = next(YELLOW_TO_WHITE)
 
     async def fold(self, axis):
         self._nfolds += 1
 
         texture = self.texture
         copy = texture.copy()
-        bg_color = self.default_bg_color
+        default_color = self.default_color
 
         h, w, _ = texture.shape
 
@@ -75,13 +75,13 @@ class FoldingWidget(AutoSizeBehavior, GraphicWidget):
                 self._paper = (self._paper[:ph] | self._paper[-1: ph: -1])
 
         for proportion in np.linspace(0, 1, 25, endpoint=True):
-            texture[:] = bg_color
+            texture[:] = default_color
             texture[:length] = copy[:length]
 
             for start, end in zip(range(length + 1, length << 1), reversed(range(length))):
                 i = lerp(start, end, proportion)
 
-                mask = np.all(texture[i] == bg_color, axis=-1)
+                mask = np.all(texture[i] == default_color, axis=-1)
 
                 texture[i][mask] = copy[start][mask]
 
@@ -99,8 +99,7 @@ class FoldingWidget(AutoSizeBehavior, GraphicWidget):
         self.update_geometry()
 
     def render(self, canvas_view, colors_view, rect):
-        mask = np.any(self.texture != self.default_bg_color, axis=-1)
-
-        self.texture[..., :3][mask] = next(YELLOW_TO_WHITE)
+        mask = np.any(self.texture != self.default_color, axis=-1)
+        self.texture[mask] = next(YELLOW_TO_WHITE)
 
         super().render(canvas_view, colors_view, rect)

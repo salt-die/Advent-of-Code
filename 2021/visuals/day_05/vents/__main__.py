@@ -4,23 +4,14 @@ import cv2
 import numpy as np
 
 from nurses_2.app import App
-from nurses_2.colors import Color, color_pair
-from nurses_2.widgets.behaviors import AutoSizeBehavior
+from nurses_2.colors import AColor
 from nurses_2.widgets.graphic_widget import GraphicWidget
 from nurses_2.widgets.image import Image
 
 from . import VENTS
 from .stable_fluid import StableFluid
 
-WATER_COLOR = Color.from_hex("0805bf")
-
-
-class AutoSizeGraphicWidget(AutoSizeBehavior, GraphicWidget):
-    ...
-
-
-class AutoSizeImage(AutoSizeBehavior, Image):
-    ...
+WATER_COLOR = AColor.from_hex("0805bf")
 
 
 class VentFluid(StableFluid):
@@ -47,16 +38,18 @@ class VentFluid(StableFluid):
 
 class VentApp(App):
     async def on_start(self):
-        self.root.add_widgets(
-            VentFluid(),
-            AutoSizeImage(
+        self.add_widgets(
+            VentFluid(size_hint=(1.0, 1.0)),
+            Image(
                 path=Path("vents.png"),
                 is_visible=False,
                 alpha=.5,
+                size_hint=(1.0, 1.0),
             ),
-            AutoSizeGraphicWidget(
-                default_color_pair=color_pair(WATER_COLOR, WATER_COLOR),
+            GraphicWidget(
+                default_color=WATER_COLOR,
                 alpha=.5,
+                size_hint=(1.0, 1.0),
             ),
         )
 

@@ -1,8 +1,7 @@
 from nurses_2.app import App
 from nurses_2.colors import color_pair, WHITE, BLACK
-from nurses_2.widgets.behaviors import Anchor, AutoPositionBehavior
 from nurses_2.widgets.slider import Slider
-from nurses_2.widgets import Widget
+from nurses_2.widgets.text_widget import TextWidget, Anchor
 
 from .automata import Automata, BLUISH
 
@@ -10,15 +9,11 @@ WHITE_ON_BLUISH = color_pair(WHITE, BLUISH)
 BLACK_ON_BLUISH = color_pair(BLACK, BLUISH)
 
 
-class AutoPositionWidget(AutoPositionBehavior, Widget):
-    ...
-
-
 class Dumbo(App):
     async def on_start(self):
-        automata = Automata()
+        automata = Automata(size_hint=(1.0, 1.0))
 
-        container = AutoPositionWidget(
+        container = TextWidget(
             size=(4, 63),
             pos_hint=(1.0, .5),
             default_color_pair=WHITE_ON_BLUISH,
@@ -26,7 +21,7 @@ class Dumbo(App):
         )
         container.add_border()
 
-        label = Widget(size=(2, 11), pos=(1, 1), default_color_pair=WHITE_ON_BLUISH)
+        label = TextWidget(size=(2, 11), pos=(1, 1), default_color_pair=WHITE_ON_BLUISH)
         label.add_text("STATES:")
         label.add_text("ENERGY:", row=1)
 
@@ -62,7 +57,7 @@ class Dumbo(App):
 
         container.add_widgets(label, nstates, energy)
 
-        self.root.add_widgets(automata, container)
+        self.add_widgets(automata, container)
 
 
 Dumbo().run()
