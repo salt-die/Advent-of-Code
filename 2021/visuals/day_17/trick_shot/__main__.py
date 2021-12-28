@@ -3,7 +3,7 @@ from pathlib import Path
 
 from nurses_2.app import App
 from nurses_2.io import MouseButton
-from nurses_2.widgets.behaviors import AutoSizeBehavior, AutoPositionBehavior, Anchor
+from nurses_2.widgets.widget_data_structures import Anchor
 from nurses_2.widgets.image import Image
 from nurses_2.widgets.animation import Animation
 from nurses_2.widgets.parallax import Parallax
@@ -17,7 +17,7 @@ SCROLL_FPS = .05
 SHOOT_TIMEOUT = .5
 
 
-class AutoSizeParallax(AutoSizeBehavior, Parallax):
+class AutoScrollParallax(Parallax):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -34,11 +34,7 @@ class AutoSizeParallax(AutoSizeBehavior, Parallax):
             await asyncio.sleep(SCROLL_FPS)
 
 
-class AutoGeometryImage(AutoSizeBehavior, Image):
-    ...
-
-
-class Submarine(AutoSizeBehavior, AutoPositionBehavior, Animation):
+class Submarine(Animation):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._can_shoot = True
@@ -60,20 +56,21 @@ class Submarine(AutoSizeBehavior, AutoPositionBehavior, Animation):
         cy, cx = self.center
         cy *= 2
 
-        y, x = self.absolute_to_relative_coords(mouse_event.position)
+        y, x = self.to_local(mouse_event.position)
         y *= 2
 
         dx = int(POWER * (x - cx))
         dy = int(POWER * (y - cy))
 
         self.parent.add_widget(Trajectory(size_hint=(1.0, 2.0), dx=dx, dy=dy))
-        self.parent.pull_to_front(self)
+        self.pull_to_front()
 
 
 class TrickShot(App):
     async def on_start(self):
-        background = AutoSizeParallax(
-            layers=[AutoGeometryImage(path=path) for path in PARALLAX_IMAGES],
+        background = AutoScrollParallax(
+            layers=[Image(path=path, size_hint=(1.0, 1.0)) for path in PARALLAX_IMAGES],
+            size_hint=(1.0, 1.0),
         )
 
         submarine = Submarine(
@@ -83,7 +80,7 @@ class TrickShot(App):
             size_hint=(.4, .4),
         )
 
-        self.root.add_widgets(background, submarine)
+        self.add_widgets(background, submarine)
 
         submarine.play()
 

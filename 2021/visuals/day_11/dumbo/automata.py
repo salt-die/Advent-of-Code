@@ -3,15 +3,14 @@ from scipy.ndimage import convolve
 
 from nurses_2.colors import gradient, AColor, ABLACK
 from nurses_2.io import MouseButton
-from nurses_2.widgets.behaviors import AutoSizeBehavior
 from nurses_2.widgets.graphic_widget import GraphicWidget
 
 BLUISH = AColor.from_hex("1651aa")
 
 
-class Automata(AutoSizeBehavior, GraphicWidget):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+class Automata(GraphicWidget):
+    def __init__(self, *args, default_color=ABLACK, **kwargs):
+        super().__init__(*args, default_color=default_color, **kwargs)
 
         self.nstates = 10  # Octopuses flash when they reach this level.
         self.energy =   1  # Amount of energy a flashing octopus shares with each of its neighbors.

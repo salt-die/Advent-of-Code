@@ -2,8 +2,7 @@ import asyncio
 import numpy as np
 
 from nurses_2.colors import Color, ColorPair, BLACK, WHITE, gradient
-from nurses_2.widgets import Widget
-from nurses_2.widgets.behaviors import AutoPositionBehavior
+from nurses_2.widgets.text_widget import TextWidget
 
 DIM_GREEN = Color.from_hex("062b0f")
 BRIGHT_GREEN = Color.from_hex("33e860")
@@ -24,7 +23,7 @@ SEGMENT_SLICES = {
 }
 
 
-class DigitDisplay(Widget):
+class DigitDisplay(TextWidget):
     def __init__(self, pos=(0, 0), **kwargs):
         super().__init__(
             size=(7, 6),
@@ -60,7 +59,7 @@ class DigitDisplay(Widget):
             return super().__setattr__(attr, value)
 
 
-class DigitFolder(AutoPositionBehavior, Widget):
+class DigitFolder(TextWidget):
     def __init__(self, pos=(0, 0), default_color_pair=BRIGHT_GREEN_ON_BLACK, **kwargs):
         super().__init__(
             size=(9, 14 * 7 + 3),

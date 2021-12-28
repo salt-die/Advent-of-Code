@@ -2,9 +2,8 @@ import asyncio
 from itertools import permutations
 
 from nurses_2.app import App
-from nurses_2.widgets.graphic_widget import Interpolation
+from nurses_2.widgets.graphic_widget import Interpolation, Anchor
 from nurses_2.widgets.animation import Animation
-from nurses_2.widgets.behaviors import AutoSizeBehavior, AutoPositionBehavior, Anchor
 
 from . import DATA, COMPUTER_FRAMES, SONAR_FRAMES
 from .digit_display import DigitFolder
@@ -25,18 +24,15 @@ DIGITS = frozenset((
 ))
 
 
-class AutoGeometryAnimation(AutoSizeBehavior, AutoPositionBehavior, Animation):
-    ...
-
-
 class Scrambled(App):
     async def on_start(self):
-        computer_animation = AutoGeometryAnimation(
+        computer_animation = Animation(
             paths=COMPUTER_FRAMES,
             interpolation=Interpolation.NEAREST,
+            size_hint=(1.0, 1.0),
         )
 
-        sonar_animation = AutoGeometryAnimation(
+        sonar_animation = Animation(
             size_hint=(.39, .28),
             pos_hint=(.48, .67),
             paths=SONAR_FRAMES,
@@ -45,7 +41,7 @@ class Scrambled(App):
 
         digits = DigitFolder(pos_hint=(.24, .5), anchor=Anchor.CENTER)
 
-        self.root.add_widgets(
+        self.add_widgets(
             computer_animation,
             sonar_animation,
             digits,
