@@ -79,11 +79,11 @@ class Automata(GraphicWidget):
     def on_click(self, mouse_event):
         if (
             mouse_event.button is MouseButton.NO_BUTTON
-            or not self.collides_coords(mouse_event.position)
+            or not self.collides_point(mouse_event.position)
         ):
             return False
 
-        y, x = self.absolute_to_relative_coords(mouse_event.position)
+        y, x = self.to_local(mouse_event.position)
         y *= 2
 
         self._state[y: y + 2, x] = 0
