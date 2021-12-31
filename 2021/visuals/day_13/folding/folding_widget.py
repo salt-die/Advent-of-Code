@@ -98,8 +98,8 @@ class FoldingWidget(GraphicWidget):
 
         self.update_geometry()
 
-    def render(self, canvas_view, colors_view, rect):
+    def render(self, canvas_view, colors_view, source_slices):
         mask = np.any(self.texture != self.default_color, axis=-1)
         self.texture[mask] = next(YELLOW_TO_WHITE)
 
-        super().render(canvas_view, colors_view, rect)
+        super().render(canvas_view, colors_view, source_slices)

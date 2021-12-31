@@ -90,8 +90,8 @@ class Automata(GraphicWidget):
 
         return True
 
-    def render(self, canvas_view, colors_view, rect):
+    def render(self, canvas_view, colors_view, source_slices: tuple[slice, slice]):
         self.step()
         self.texture = np.dstack(self.colorify(self._state))
 
-        super().render(canvas_view, colors_view, rect)
+        super().render(canvas_view, colors_view, source_slices)
