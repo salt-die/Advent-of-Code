@@ -31,9 +31,9 @@ class VentFluid(StableFluid):
             case "r":
                 self.dye[:] = 0
 
-    def render(self, canvas_view, colors_view, source_slices: tuple[slice, slice]):
+    def render(self, canvas_view, colors_view, source: tuple[slice, slice]):
         self.velocity += self._vent_field
-        super().render(canvas_view, colors_view, source_slices)
+        super().render(canvas_view, colors_view, source)
 
 
 class VentApp(App):
