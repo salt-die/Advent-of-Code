@@ -27,7 +27,7 @@ DIGITS = frozenset((
 class Scrambled(App):
     async def on_start(self):
         computer_animation = Animation(
-            paths=COMPUTER_FRAMES,
+            path=COMPUTER_FRAMES,
             interpolation=Interpolation.NEAREST,
             size_hint=(1.0, 1.0),
         )
@@ -35,7 +35,7 @@ class Scrambled(App):
         sonar_animation = Animation(
             size_hint=(.39, .28),
             pos_hint=(.48, .67),
-            paths=SONAR_FRAMES,
+            path=SONAR_FRAMES,
             interpolation=Interpolation.NEAREST,
         )
 
