@@ -74,7 +74,7 @@ class TrickShot(App):
         )
 
         submarine = Submarine(
-            paths=ASSETS / "submarine",
+            path=ASSETS / "submarine",
             pos_hint=(.5, .4),
             anchor=Anchor.CENTER,
             size_hint=(.4, .4),
