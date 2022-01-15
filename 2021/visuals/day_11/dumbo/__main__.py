@@ -1,12 +1,12 @@
 from nurses_2.app import App
-from nurses_2.colors import color_pair, WHITE, BLACK
+from nurses_2.colors import ColorPair, WHITE, BLACK
 from nurses_2.widgets.slider import Slider
 from nurses_2.widgets.text_widget import TextWidget, Anchor
 
 from .automata import Automata, BLUISH
 
-WHITE_ON_BLUISH = color_pair(WHITE, BLUISH)
-BLACK_ON_BLUISH = color_pair(BLACK, BLUISH)
+WHITE_ON_BLUISH = ColorPair.from_colors(WHITE, BLUISH)
+BLACK_ON_BLUISH = ColorPair.from_colors(BLACK, BLUISH)
 
 
 class Dumbo(App):
