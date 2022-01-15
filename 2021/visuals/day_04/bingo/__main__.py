@@ -1,15 +1,15 @@
 import asyncio
 
 from nurses_2.app import App
-from nurses_2.colors import Color, color_pair, WHITE
+from nurses_2.colors import Color, ColorPair, WHITE
 from nurses_2.widgets.text_widget import TextWidget
 from nurses_2.widgets.scroll_view import ScrollView
 
 from . import NUMBERS, CARDS
 from .bingo_widgets import BingoCard, BingoFolder
 
-DEFAULT_COLOR_PAIR = color_pair(Color.from_hex("#741aac"), Color.from_hex("#340744"))
-LABEL_DEFAULT_COLOR_PAIR = color_pair(WHITE, Color.from_hex("#340744"))
+DEFAULT_COLOR_PAIR = ColorPair.from_colors(Color.from_hex("#741aac"), Color.from_hex("#340744"))
+LABEL_DEFAULT_COLOR_PAIR = ColorPair.from_colors(WHITE, Color.from_hex("#340744"))
 
 
 class OffByOneScrollView(ScrollView):

@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 import yaml
 
-from nurses_2.colors import AColor, color_pair, gradient, AWHITE
+from nurses_2.colors import AColor, ColorPair, gradient, AWHITE
 
 def _parse_raw():
     this_dir = Path(__file__).parent
@@ -27,5 +27,5 @@ PAPER, INSTRUCTIONS = _parse_raw()
 NAVY_BLUE = AColor.from_hex("0F0F23")
 STAR_YELLOW = AColor.from_hex("F2F762")
 
-YELLOW_ON_BLUE = color_pair(STAR_YELLOW, NAVY_BLUE)
+YELLOW_ON_BLUE = ColorPair.from_colors(STAR_YELLOW, NAVY_BLUE)
 YELLOW_TO_WHITE = cycle(gradient(STAR_YELLOW, AWHITE, 30) + gradient(AWHITE, STAR_YELLOW, 30))

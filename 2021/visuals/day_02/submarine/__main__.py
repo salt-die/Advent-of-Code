@@ -2,7 +2,7 @@ import asyncio
 from pathlib import Path
 
 from nurses_2.app import App
-from nurses_2.colors import AColor, color_pair, WHITE
+from nurses_2.colors import AColor, ColorPair, WHITE
 from nurses_2.widgets.text_widget import TextWidget
 from nurses_2.widgets.graphic_widget import GraphicWidget, Anchor
 from nurses_2.widgets.image import Image
@@ -42,7 +42,7 @@ class SubmarineApp(App):
 
         label = TextWidget(
             size=(1, 18),
-            default_color_pair=color_pair(WHITE, LABEL_COLOR),
+            default_color_pair=ColorPair.from_colors(WHITE, LABEL_COLOR),
             pos_hint=(None, .5),
             anchor=Anchor.TOP_CENTER,
         )

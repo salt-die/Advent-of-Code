@@ -1,10 +1,10 @@
 import numpy as np
 
-from nurses_2.colors import Color, color_pair, WHITE
+from nurses_2.colors import Color, ColorPair, WHITE
 from nurses_2.widgets.text_widget import TextWidget
 
 MARKED = -1
-DEFAULT_COLOR_PAIR = color_pair(WHITE, Color.from_hex("#340744"))
+DEFAULT_COLOR_PAIR = ColorPair.from_colors(WHITE, Color.from_hex("#340744"))
 SCORE_COLOR = Color.from_hex("#debad6")
 ROW_COLOR = Color.from_hex("#e2d114")
 
