@@ -36,13 +36,12 @@ EPSILON = np.finfo(float).eps
 class StableFluid(GraphicWidget):
     def __init__(self, *args, default_color=ABLACK, **kwargs):
         super().__init__(*args, default_color=default_color, **kwargs)
-        self.resize(self.size)
 
-    def resize(self, size):
-        super().resize(size)
+    def on_size(self):
+        h, w = self._size
+        h *= 2
 
-        h, w, _ = self.texture.shape
-
+        self.texture = np.full((h, w, 4), self.default_color, np.uint8)
         self.dye = np.zeros((3, h, w))
         self.indices = np.indices((h, w))
         self.velocity = np.zeros((2, h, w))

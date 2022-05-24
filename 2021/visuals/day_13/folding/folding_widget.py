@@ -29,8 +29,8 @@ class FoldingWidget(GraphicWidget):
             np.ones((3, 3)),
         ]
 
-    def resize(self, size):
-        super().resize(size)
+    def on_size(self):
+        super().on_size()
 
         if self._nfolds < 7:
             paper = convolve(self._paper, self._kernels[self._nfolds], mode="constant")
@@ -92,7 +92,7 @@ class FoldingWidget(GraphicWidget):
             (h // 2, w),
             15,
         ).astype(int):
-            self.resize((h, w))
+            self.size = h, w
 
             await asyncio.sleep(.05)
 

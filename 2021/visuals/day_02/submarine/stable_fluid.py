@@ -36,13 +36,13 @@ EPSILON = np.finfo(float).eps
 class StableFluid(GraphicWidget):
     def __init__(self, *args, default_color=ABLACK, **kwargs):
         super().__init__(*args, default_color=default_color, **kwargs)
-        self.resize(self.size)
+        self.on_size()
 
-    def resize(self, size):
-        super().resize(size)
+    def on_size(self):
+        h, w = self._size
+        h *= 2
 
-        h, w, _ = self.texture.shape
-
+        self.texture = np.full((h, w, 4), self.default_color, dtype=np.uint8)
         self.dye = np.zeros((3, h, w))
         self.indices = np.indices((h, w))
         self.velocity = np.zeros((2, h, w))
@@ -118,7 +118,7 @@ class StableFluid(GraphicWidget):
         map_coordinates(vy, coords, output=vy, prefilter=False)
         map_coordinates(vx, coords, output=vx, prefilter=False)
 
-        # Remove checkboard divergence and diffuse velocity.
+        # Remove checkerboard divergence and diffuse velocity.
         convolve(vy, GAUSSIAN_KERNEL, output=vy, mode="constant")
         convolve(vx, GAUSSIAN_KERNEL, output=vx, mode="constant")
 

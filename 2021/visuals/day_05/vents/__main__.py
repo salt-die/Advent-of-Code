@@ -15,10 +15,10 @@ WATER_COLOR = AColor.from_hex("0805bf")
 
 
 class VentFluid(StableFluid):
-    def resize(self, size):
-        super().resize(size)
+    def on_size(self):
+        super().on_size()
 
-        h, w = size
+        h, w = self._size
 
         vent_y = cv2.resize(VENTS[0], (w, 2 * h))
         vent_x = cv2.resize(VENTS[1], (w, 2 * h))
