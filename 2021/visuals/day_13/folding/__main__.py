@@ -23,4 +23,4 @@ class Folding(App):
             await paper.fold(axis)
 
 
-Folding(default_color_pair=YELLOW_ON_BLUE).run()
+Folding(background_color_pair=YELLOW_ON_BLUE).run()

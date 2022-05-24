@@ -15,8 +15,6 @@ class Automata(GraphicWidget):
         self.nstates = 10  # Octopuses flash when they reach this level.
         self.energy =   1  # Amount of energy a flashing octopus shares with each of its neighbors.
 
-        self.reset()
-
     @property
     def nstates(self):
         return self._nstates
@@ -46,11 +44,7 @@ class Automata(GraphicWidget):
         self.kernel = np.full((3, 3), e, dtype=int)
         self.kernel[1, 1] = 0
 
-    def resize(self, size):
-        super().resize(size)
-        self.reset()
-
-    def reset(self):
+    def on_size(self):
         h, w = self.size
         self._state = np.random.randint(0, self.nstates, (2 * h, w))
         self.texture = np.dstack(self.colorify(self._state))
@@ -70,7 +64,7 @@ class Automata(GraphicWidget):
     def on_press(self, key_press_event):
         match key_press_event.key:
             case "r" | "R":
-                self.reset()
+                self.on_size()
             case _:
                 return False
 

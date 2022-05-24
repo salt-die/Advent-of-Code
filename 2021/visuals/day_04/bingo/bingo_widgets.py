@@ -74,17 +74,6 @@ class BingoCard(TextWidget):
             parent.FINISHED += 1
 
             if parent.FINISHED in (1, 100):
-                # Creating visual markers on ScrollView's scrollbars
-                # These will be in an incorrect position if the window is re-sized.
-                # To do this correctly, subclass ScrollView's scrollbars and
-                # implement a `resize` method that moves these markers.
-                y, x = self._grid_pos
-                vbar, hbar = parent.parent.children
-
-                vbar.colors[int((vbar.height - 2) * y / 9), :, 3:] = ROW_COLOR
-                h_index = int((hbar.width - 4) * x / 9)
-                hbar.colors[:, h_index: h_index + 2, 3:] = ROW_COLOR
-
                 self.colors[1:4, :, :3] = ROW_COLOR
             else:
                 self.colors[1:4, :, :3] = SCORE_COLOR

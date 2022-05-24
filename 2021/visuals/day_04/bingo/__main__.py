@@ -12,12 +12,6 @@ DEFAULT_COLOR_PAIR = ColorPair.from_colors(Color.from_hex("#741aac"), Color.from
 LABEL_DEFAULT_COLOR_PAIR = ColorPair.from_colors(WHITE, Color.from_hex("#340744"))
 
 
-class OffByOneScrollView(ScrollView):
-    def resize(self, size):
-        h, w = size
-        super().resize((h - 1, w))
-
-
 class BingoApp(App):
     async def on_start(self):
         folder = BingoFolder(
@@ -31,7 +25,12 @@ class BingoApp(App):
             default_color_pair=LABEL_DEFAULT_COLOR_PAIR,
         )
 
-        scroll_view = OffByOneScrollView(pos=(1, 0), size_hint=(1.0, 1.0))
+        scroll_view = ScrollView(pos=(1, 0), size=(self.root.height - 1, self.root.width))
+        scroll_view.subscribe(
+            self.root,
+            "size",
+            lambda: setattr(scroll_view, "size", (self.root.height - 1, self.root.width)),
+        )
         scroll_view.add_widget(folder)
 
         self.add_widgets(label, scroll_view)
