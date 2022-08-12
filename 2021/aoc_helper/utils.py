@@ -160,6 +160,8 @@ def int_grid(raw, np=True, separator=""):
         import numpy as np
 
         return np.array(array)
+    else:
+        return array
 
 def dot_print(array):
     """
