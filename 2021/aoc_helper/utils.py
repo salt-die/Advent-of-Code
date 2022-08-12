@@ -161,6 +161,8 @@ def int_grid(raw, np=True, separator=""):
 
         return np.array(array)
 
+    return array
+
 def dot_print(array):
     """
     Pretty print a binary or boolean array.
