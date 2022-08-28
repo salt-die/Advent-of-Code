@@ -5,7 +5,6 @@ Requirements:
     * networkx
     * numpy
 """
-
 __all__ = (
     "extract_ints",
     "extract_maze",
@@ -188,3 +187,17 @@ def shiftmod(n, m, shift=1):
         shiftmod(12, 10, shift=2) == 2
     """
     return (n - shift) % m + shift
+
+def ilen(it):
+    """
+    Return length of `iterable`.
+    """
+    return sum(1 for _ in it)
+
+def nth(iterable, n):
+    """
+    Return nth item of `iterable`.
+    """
+    from itertools import islice
+
+    return next(islice(iterable, n, None))

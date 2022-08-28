@@ -7,6 +7,16 @@
     '1771': You don't seem to be solving the right level.  Did you already complete
       it? [Return to Day 1]
     solution: '1771'
+'10':
+  '1':
+    '360154': That's the right answer!  You are one gold star closer to powering the
+      weather machine. [Continue to Part Two]
+    solution: '360154'
+  '2':
+    '5103798': "That's the right answer!  You are one gold star closer to powering\
+      \ the weather machine.You have completed Day 10! You can [Shareon\n  Twitter\n\
+      Mastodon] this victory or [Return to Your Advent Calendar]."
+    solution: '5103798'
 '2':
   '1':
     '1588178': That's the right answer!  You are one gold star closer to powering
