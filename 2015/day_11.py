@@ -1,20 +1,35 @@
 import aoc_helper
+from aoc_helper.utils import sliding_window
+
+A, H, K, N, Z = map(ord, "ahknz")
+
+def incr(ords):
+    for i in range(7, -1, -1):
+        if ords[i] == Z:
+            ords[i] = A
+        else:
+            ords[i] += 1 + (ords[i] in {H, K, N})
+            break
+
+def is_valid(ords):
+    has_increasing = ndoubles = 0
+
+    for a, b, c in sliding_window(ords, 3):
+        has_increasing |= a + 2 == b + 1 == c
+        ndoubles += a == b != c
+
+    ndoubles += a != b == c
+
+    return has_increasing and ndoubles >= 2
 
 def get_next_valid(password):
-    # This isn't a general solution: Since we only need to generate two valid passwords,
-    # we assume no invalid characters at the start of the string, and no doubles or ascending
-    # characters in the initial password (which is true for our puzzle input, by inspection).
-    as_int = list(map(ord, password))
-    if as_int[3] <= as_int[4]:
-        as_int[3] += 1
+    ords = list(map(ord, password))
 
-    if (i := as_int[3]) <= ord("x"):
-        as_int[3:] = i, i, i + 1, i + 2, i + 2
-    else:
-        as_int[2] += 1
-        as_int[3:] = map(ord, "aabcc")
+    incr(ords)
+    while not is_valid(ords):
+        incr(ords)
 
-    return "".join(map(chr, as_int))
+    return "".join(map(chr, ords))
 
 def part_one():
     return get_next_valid(aoc_helper.day(11))
