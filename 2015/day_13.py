@@ -2,20 +2,13 @@ import re
 from itertools import permutations
 
 import aoc_helper
+from aoc_helper.utils import pairwise_cycle
 
 RE = r"(.*) would (gain|lose) (.*) happiness units by sitting next to (.*)."
 
 G = {}
 for a, sign, happiness, b in re.findall(RE, aoc_helper.day(13)):
     G.setdefault(a, {})[b] = int(happiness) * (1 if sign == "gain" else -1)
-
-def pairwise_cycle(iterable):
-    it = iter(iterable)
-    first = last_item = next(it)
-    for item in it:
-        yield last_item, item
-        last_item = item
-    yield last_item, first
 
 def optimal_score():
     return max(

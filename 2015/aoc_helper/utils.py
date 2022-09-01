@@ -201,3 +201,16 @@ def nth(iterable, n):
     from itertools import islice
 
     return next(islice(iterable, n, None))
+
+def pairwise_cycle(iterable):
+    """
+    Successive pairs from an iterable + (last_item, first_item).
+    """
+    it = iter(iterable)
+    first = last_item = next(it)
+
+    for item in it:
+        yield last_item, item
+        last_item = item
+
+    yield last_item, first
