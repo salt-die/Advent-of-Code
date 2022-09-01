@@ -27,6 +27,16 @@
       \ the weather machine.You have completed Day 11! You can [Shareon\n  Twitter\n\
       Mastodon] this victory or [Return to Your Advent Calendar]."
     solution: hxcaabcc
+'12':
+  '1':
+    '191164': That's the right answer!  You are one gold star closer to powering the
+      weather machine. [Continue to Part Two]
+    solution: '191164'
+  '2':
+    '87842': "That's the right answer!  You are one gold star closer to powering the\
+      \ weather machine.You have completed Day 12! You can [Shareon\n  Twitter\nMastodon]\
+      \ this victory or [Return to Your Advent Calendar]."
+    solution: '87842'
 '2':
   '1':
     '1588178': That's the right answer!  You are one gold star closer to powering
