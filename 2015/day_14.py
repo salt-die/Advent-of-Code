@@ -16,7 +16,7 @@ def part_one():
     return distances(2503).max()
 
 def part_two():
-    traveled = np.array([distances(i) for i in range(1, 2504)])
+    traveled = distances(np.arange(1, 2504)[:, None])
     return (traveled == traveled.max(axis=1)[:, None]).sum(axis=0).max()
 
 aoc_helper.submit(14, part_one)
