@@ -214,3 +214,15 @@ def pairwise_cycle(iterable):
         last_item = item
 
     yield last_item, first
+
+def partitions(n, r=None):
+    """
+    Generate integer partitions of  `n` into `r` parts.
+    """
+    if r == 1:
+        yield (n,)
+        return
+
+    for i in range(n + 1):
+        for j in partitions(n - i, r - 1):
+            yield i, *j
