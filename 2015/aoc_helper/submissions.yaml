@@ -65,6 +65,16 @@
       on the about page, or you can ask for hints on the subreddit.  Please wait one
       minute before trying again. (You guessed 1257.) [Return to Day 14]
     solution: '1256'
+'15':
+  '1':
+    '21367368': That's the right answer!  You are one gold star closer to powering
+      the weather machine. [Continue to Part Two]
+    solution: '21367368'
+  '2':
+    '1766400': "That's the right answer!  You are one gold star closer to powering\
+      \ the weather machine.You have completed Day 15! You can [Shareon\n  Twitter\n\
+      Mastodon] this victory or [Return to Your Advent Calendar]."
+    solution: '1766400'
 '2':
   '1':
     '1588178': That's the right answer!  You are one gold star closer to powering

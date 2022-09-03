@@ -73,6 +73,11 @@
   Dasher can fly 14 km/s for 3 seconds, but then must rest for 38 seconds.
   Dancer can fly 3 km/s for 16 seconds, but then must rest for 37 seconds.
   Prancer can fly 25 km/s for 6 seconds, but then must rest for 143 seconds.
+"15": |-
+  Sprinkles: capacity 2, durability 0, flavor -2, texture 0, calories 3
+  Butterscotch: capacity 0, durability 5, flavor -3, texture 0, calories 3
+  Chocolate: capacity 0, durability 0, flavor 5, texture -1, calories 8
+  Candy: capacity 0, durability -1, flavor 0, texture 5, calories 8
 "2": |-
   3x11x24
   13x5x19
