@@ -215,7 +215,7 @@ def pairwise_cycle(iterable):
 
     yield last_item, first
 
-def partitions(n, r=None):
+def partitions(n, r):
     """
     Generate integer partitions of  `n` into `r` parts.
     """
