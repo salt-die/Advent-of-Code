@@ -19,13 +19,13 @@ def containerize():
 
     yield from _backtracker(0)
 
-COMBINATIONS = list(containerize())
+NCONTAINERS_USED = list(containerize())
 
 def part_one():
-    return len(COMBINATIONS)
+    return len(NCONTAINERS_USED)
 
 def part_two():
-    return COMBINATIONS.count(min(COMBINATIONS))
+    return NCONTAINERS_USED.count(min(NCONTAINERS_USED))
 
 aoc_helper.submit(17, part_one)
 aoc_helper.submit(17, part_two)
