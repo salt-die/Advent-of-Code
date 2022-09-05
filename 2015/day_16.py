@@ -1,4 +1,5 @@
 import re
+from operator import lt, gt, eq
 
 import aoc_helper
 
@@ -26,18 +27,9 @@ def part_one():
             return i
 
 def part_two():
+    ops = dict(cats=gt, trees=gt, pomeranians=lt, goldfish=lt)
     for i, sue in enumerate(SUES, start=1):
-        for k, v in sue.items():
-            match k:
-                case "cats" | "trees":
-                    cond = v > MFCSAM[k]
-                case "pomeranians" | "goldfish":
-                    cond = v < MFCSAM[k]
-                case _:
-                    cond = v == MFCSAM[k]
-            if not cond:
-                break
-        else:
+        if all(ops.get(k, eq)(v, MFCSAM[k]) for k, v in sue.items()):
             return i
 
 aoc_helper.submit(16, part_one)
