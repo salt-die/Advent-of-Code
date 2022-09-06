@@ -6,17 +6,26 @@ Requirements:
     * numpy
 """
 __all__ = (
+    "DELTAS_4",
+    "DELTAS_5",
+    "DELTAS_8",
+    "DELTAS_9",
     "extract_ints",
+    "chunk",
     "extract_maze",
     "maximum_matching",
     "get_direction_enum",
     "chinese_remainder_theorem",
     "pairwise",
     "sliding_window",
-    "DELTAS_4",
-    "DELTAS_5",
-    "DELTAS_8",
-    "DELTAS_9",
+    "oscillate_range",
+    "int_grid",
+    "dot_print",
+    "shiftmod",
+    "ilen",
+    "nth",
+    "pairwise_cycle",
+    "partitions",
 )
 
 DELTAS_4 = (0, 1), (0, -1), (1, 0), (-1, 0)
@@ -188,11 +197,11 @@ def shiftmod(n, m, shift=1):
     """
     return (n - shift) % m + shift
 
-def ilen(it):
+def ilen(iterable):
     """
     Return length of `iterable`.
     """
-    return sum(1 for _ in it)
+    return sum(1 for _ in iterable)
 
 def nth(iterable, n):
     """
