@@ -2,8 +2,8 @@
 Useful functions for AoC. Note deferred imports.
 
 Requirements:
-    * networkx
-    * numpy
+* networkx
+* numpy
 """
 __all__ = (
     "DELTAS_4",
