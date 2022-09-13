@@ -95,6 +95,16 @@
       \ weather machine.You have completed Day 17! You can [Shareon\n  Twitter\nMastodon]\
       \ this victory or [Return to Your Advent Calendar]."
     solution: '57'
+'18':
+  '1':
+    '768': That's the right answer!  You are one gold star closer to powering the
+      weather machine. [Continue to Part Two]
+    solution: '768'
+  '2':
+    '781': "That's the right answer!  You are one gold star closer to powering the\
+      \ weather machine.You have completed Day 18! You can [Shareon\n  Twitter\nMastodon]\
+      \ this victory or [Return to Your Advent Calendar]."
+    solution: '781'
 '2':
   '1':
     '1588178': That's the right answer!  You are one gold star closer to powering
