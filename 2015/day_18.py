@@ -10,7 +10,7 @@ def step_grid(corners):
     grid = GRID.copy()
     for _ in range(100):
         neighbors = filter2D(grid.astype(np.uint8), -1, KERNEL, borderType=BORDER_CONSTANT)
-        grid = (grid & (neighbors > 1) & (neighbors < 4)) | (~grid & (neighbors == 3))
+        grid = (grid & np.isin(neighbors, (2, 3))) | (~grid & (neighbors == 3))
         if corners:
             grid[(0, -1, 0, -1), (0, 0, -1, -1)] = 1
 
