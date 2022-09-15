@@ -13,11 +13,19 @@ TRAJECTORY_COLOR = AColor.from_hex("13ddd3")
 
 
 class Trajectory(GraphicWidget):
-    def __init__(self, *args, dx, dy, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, dx, dy, **kwargs):
+        super().__init__(**kwargs)
+        self.dxdy = dx, dy
 
+    def on_add(self):
+        super().on_add()
         self._dim_task = asyncio.create_task(self._dim())
-        asyncio.create_task(self._shoot(dx, dy))
+        self._shoot_task = asyncio.create_task(self._shoot(*self.dxdy))
+
+    def on_remove(self):
+        super().on_remove()
+        self._dim_task.cancel()
+        self._shoot_task.cancel()
 
     async def _dim(self):
         while True:
@@ -51,5 +59,4 @@ class Trajectory(GraphicWidget):
         while self.texture.any() and self.right > 0:
             await asyncio.sleep(.1)
 
-        self._dim_task.cancel()
-        self.parent.remove_widget(self)
+        self.destroy()

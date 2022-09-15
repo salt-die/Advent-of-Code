@@ -2,8 +2,9 @@ import asyncio
 from itertools import permutations
 
 from nurses_2.app import App
-from nurses_2.widgets.graphic_widget import Interpolation, Anchor
 from nurses_2.widgets.animation import Animation
+from nurses_2.widgets.graphic_widget import Interpolation, Anchor
+from nurses_2.widgets.widget import Widget
 
 from . import DATA, COMPUTER_FRAMES, SONAR_FRAMES
 from .digit_display import DigitFolder
@@ -29,23 +30,22 @@ class Scrambled(App):
         computer_animation = Animation(
             path=COMPUTER_FRAMES,
             interpolation=Interpolation.NEAREST,
-            size_hint=(1.0, 1.0),
+            size=(40, 131),
+            pos_hint=(.5, .5),
+            anchor="center",
         )
 
         sonar_animation = Animation(
-            size_hint=(.39, .28),
-            pos_hint=(.48, .67),
+            size=(20, 40),
+            pos=(17, 86),
             path=SONAR_FRAMES,
             interpolation=Interpolation.NEAREST,
         )
 
-        digits = DigitFolder(pos_hint=(.24, .5), anchor=Anchor.CENTER)
+        digits = DigitFolder(pos=(6, 15))
 
-        self.add_widgets(
-            computer_animation,
-            sonar_animation,
-            digits,
-        )
+        computer_animation.add_widgets(sonar_animation, digits)
+        self.add_widget(computer_animation)
 
         computer_animation.play()
         sonar_animation.play()

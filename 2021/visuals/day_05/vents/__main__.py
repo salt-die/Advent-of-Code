@@ -1,3 +1,4 @@
+import asyncio
 from pathlib import Path
 
 import cv2
@@ -24,16 +25,28 @@ class VentFluid(StableFluid):
         vent_x = cv2.resize(VENTS[1], (w, 2 * h))
         self._vent_field = np.stack((vent_y, vent_x))
 
-    def on_press(self, key_press_event):
-        match key_press_event.key:
+    def on_add(self):
+        super().on_add()
+        self._update_task = asyncio.create_task(self._update_forever())
+
+    def on_remove(self):
+        super().on_remove()
+        self._update_task.cancel()
+
+    def on_key(self, key_event):
+        match key_event.key:
             case " ":
                 self.parent.children[1].is_visible ^= True
             case "r":
                 self.dye[:] = 0
 
-    def render(self, canvas_view, colors_view, source: tuple[slice, slice]):
-        self.velocity += self._vent_field
-        super().render(canvas_view, colors_view, source)
+    async def _update_forever(self):
+        while True:
+            self.velocity += self._vent_field
+            try:
+                await asyncio.sleep(0)
+            except asyncio.CancelledError:
+                return
 
 
 class VentApp(App):

@@ -11,17 +11,20 @@ from nurses_2.widgets.parallax import Parallax
 from .trajectory import Trajectory
 
 ASSETS = Path("assets")
-PARALLAX_IMAGES = sorted((ASSETS / "parallax_frames").iterdir())
+PARALLAX_IMAGES = ASSETS / "parallax_frames"
 POWER = .3
 SCROLL_FPS = .05
 SHOOT_TIMEOUT = .5
 
 
 class AutoScrollParallax(Parallax):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def on_add(self):
+        super().on_add()
+        self._scroll_task = asyncio.create_task(self._scroll())
 
-        asyncio.create_task(self._scroll())
+    def on_remove(self):
+        super().on_remove()
+        self._scroll_task.cancel()
 
     async def _scroll(self):
         while True:
@@ -43,7 +46,7 @@ class Submarine(Animation):
         await asyncio.sleep(SHOOT_TIMEOUT)
         self._can_shoot = True
 
-    def on_click(self, mouse_event):
+    def on_mouse(self, mouse_event):
         if (
             mouse_event.button == MouseButton.NO_BUTTON
             or not self._can_shoot
@@ -62,16 +65,13 @@ class Submarine(Animation):
         dx = int(POWER * (x - cx))
         dy = int(POWER * (y - cy))
 
-        self.parent.add_widget(Trajectory(size_hint=(1.0, 2.0), dx=dx, dy=dy))
+        self.parent.add_widget(Trajectory(dx, dy, size_hint=(1.0, 2.0)))
         self.pull_to_front()
 
 
 class TrickShot(App):
     async def on_start(self):
-        background = AutoScrollParallax(
-            layers=[Image(path=path, size_hint=(1.0, 1.0)) for path in PARALLAX_IMAGES],
-            size_hint=(1.0, 1.0),
-        )
+        background = AutoScrollParallax(path=PARALLAX_IMAGES, size_hint=(1.0, 1.0))
 
         submarine = Submarine(
             path=ASSETS / "submarine",

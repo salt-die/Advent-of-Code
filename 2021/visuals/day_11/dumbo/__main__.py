@@ -26,11 +26,11 @@ class Dumbo(App):
         label.add_text("ENERGY:", row=1)
 
         nstates = Slider(
-            width=50,
+            size=(1, 50),
             pos=(1, 12),
             min=5,
             max=100,
-            proportion=.06,
+            start_value=automata.nstates,
             fill_color=WHITE,
             default_color_pair=BLACK_ON_BLUISH,
             handle_color=WHITE,
@@ -41,11 +41,11 @@ class Dumbo(App):
         )
 
         energy = Slider(
-            width=50,
+            size=(1, 50),
             pos=(2, 12),
             min=-24,
             max=25,
-            proportion=.52,
+            start_value=automata.energy,
             fill_color=WHITE,
             default_color_pair=BLACK_ON_BLUISH,
             handle_color=WHITE,

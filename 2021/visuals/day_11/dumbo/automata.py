@@ -1,3 +1,5 @@
+import asyncio
+
 import numpy as np
 from scipy.ndimage import convolve
 
@@ -11,9 +13,16 @@ BLUISH = AColor.from_hex("1651aa")
 class Automata(GraphicWidget):
     def __init__(self, *args, default_color=ABLACK, **kwargs):
         super().__init__(*args, default_color=default_color, **kwargs)
-
         self.nstates = 10  # Octopuses flash when they reach this level.
         self.energy =   1  # Amount of energy a flashing octopus shares with each of its neighbors.
+
+    def on_add(self):
+        super().on_add()
+        self._update_task = asyncio.create_task(self._step_forever())
+
+    def on_remove(self):
+        super().on_remove()
+        self._update_task.cancel()
 
     @property
     def nstates(self):
@@ -61,8 +70,8 @@ class Automata(GraphicWidget):
 
         state[flashed] = 0
 
-    def on_press(self, key_press_event):
-        match key_press_event.key:
+    def on_key(self, key_event):
+        match key_event.key:
             case "r" | "R":
                 self.on_size()
             case _:
@@ -70,7 +79,7 @@ class Automata(GraphicWidget):
 
         return True
 
-    def on_click(self, mouse_event):
+    def on_mouse(self, mouse_event):
         if (
             mouse_event.button is MouseButton.NO_BUTTON
             or not self.collides_point(mouse_event.position)
@@ -84,8 +93,12 @@ class Automata(GraphicWidget):
 
         return True
 
-    def render(self, canvas_view, colors_view, source: tuple[slice, slice]):
-        self.step()
-        self.texture = np.dstack(self.colorify(self._state))
+    async def _step_forever(self):
+        while True:
+            self.step()
+            self.texture = np.dstack(self.colorify(self._state))
 
-        super().render(canvas_view, colors_view, source)
+            try:
+                await asyncio.sleep(0)
+            except asyncio.CancelledError:
+                return

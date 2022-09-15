@@ -1,6 +1,7 @@
 """
 Stable fluid simulation.
 """
+import asyncio
 from itertools import cycle
 
 import numpy as np
@@ -37,6 +38,14 @@ class StableFluid(GraphicWidget):
     def __init__(self, *args, default_color=ABLACK, **kwargs):
         super().__init__(*args, default_color=default_color, **kwargs)
 
+    def on_add(self):
+        super().on_add()
+        self._update_task = asyncio.create_task(self._step_forever())
+
+    def on_remove(self):
+        super().on_remove()
+        self._update_task.cancel()
+
     def on_size(self):
         h, w = self._size
         h *= 2
@@ -61,7 +70,7 @@ class StableFluid(GraphicWidget):
         poke_force = np.e**(-d / POKE_RADIUS)
         self.dye += np.moveaxis(poke_force[..., None] * next(RAINBOW_COLORS), -1, 0)
 
-    def on_click(self, mouse_event: MouseEvent):
+    def on_mouse(self, mouse_event: MouseEvent):
         """
         Add dye on click.
         """
@@ -77,7 +86,7 @@ class StableFluid(GraphicWidget):
 
         return True
 
-    def render(self, canvas_view, colors_view, source: tuple[slice, slice]):
+    def _step(self):
         vy, vx = velocity = self.velocity
 
         # Vorticity
@@ -131,4 +140,10 @@ class StableFluid(GraphicWidget):
 
         self.texture[..., :3] = np.moveaxis(dye, 0, -1)
 
-        super().render(canvas_view, colors_view, source)
+    async def _step_forever(self):
+        while True:
+            self._step()
+            try:
+                await asyncio.sleep(0)
+            except asyncio.CancelledError:
+                return

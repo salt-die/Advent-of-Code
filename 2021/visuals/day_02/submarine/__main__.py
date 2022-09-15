@@ -12,7 +12,7 @@ from .commands import COMMANDS
 from .stable_fluid import StableFluid
 
 ASSETS = Path("assets")
-PARALLAX_IMAGES = sorted((ASSETS / "parallax_frames").iterdir())
+PARALLAX_IMAGES = ASSETS / "parallax_frames"
 VELOCITY_SCALE = .035
 WATER_COLOR = AColor.from_hex("0805bf")
 LABEL_COLOR = tuple(i//2 for i in WATER_COLOR[:3])
@@ -21,7 +21,7 @@ LABEL_COLOR = tuple(i//2 for i in WATER_COLOR[:3])
 class SubmarineApp(App):
     async def on_start(self):
         background = Parallax(
-            layers=[Image(path=path, size_hint=(1.0, 1.0)) for path in PARALLAX_IMAGES],
+            path=PARALLAX_IMAGES,
             size_hint=(1.0, 1.0),
         )
 

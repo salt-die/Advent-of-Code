@@ -12,7 +12,7 @@ from nurses_2.widgets.parallax import Parallax
 from .ocean_floor import SCALE, create_floor_texture
 
 ASSETS = Path("assets")
-PARALLAX_IMAGES = sorted((ASSETS / "parallax_frames").iterdir())
+PARALLAX_IMAGES = ASSETS / "parallax_frames"
 
 WATER_COLOR = AColor.from_hex("0805bf")
 
@@ -55,7 +55,7 @@ class OceanFloor(GraphicWidget):
 class SubmarineApp(App):
     async def on_start(self):
         background = Parallax(
-            layers=[Image(path=path, size_hint=(1.0, 1.0)) for path in PARALLAX_IMAGES],
+            path=PARALLAX_IMAGES,
             size_hint=(1.0, 1.0),
         )
 
@@ -63,7 +63,7 @@ class SubmarineApp(App):
             path=ASSETS / "submarine.png",
             pos_hint=(.2, .4),
             anchor=Anchor.CENTER,
-            size_hint=(.2, .2),
+            size_hint=(.25, .24),
         )
 
         water_mask = GraphicWidget(
