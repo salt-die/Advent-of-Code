@@ -12,13 +12,11 @@ for a, b in re.findall(r"(.) => (.*)", productions):
     PRODUCE[a].append(b)
 
 def part_one():
-    seen = set()
-    for i, char in enumerate(FRUITS):
-        if subs := PRODUCE.get(char):
-            for sub in subs:
-                seen.add(f"{FRUITS[:i]}{sub}{FRUITS[i + 1:]}")
-
-    return len(seen)
+    return len({
+        FRUITS[:i] + produce + FRUITS[i + 1:]
+        for i, fruit in enumerate(FRUITS)
+        for produce in PRODUCE[fruit]
+    })
 
 def part_two():
     return len(FRUITS) - 2 * FRUITS.count("🍒") - 2 * FRUITS.count("🍋") - 1
