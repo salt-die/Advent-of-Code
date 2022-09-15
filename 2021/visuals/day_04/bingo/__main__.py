@@ -31,7 +31,7 @@ class BingoApp(App):
             "size",
             lambda: setattr(scroll_view, "size", (self.root.height - 1, self.root.width)),
         )
-        scroll_view.add_widget(folder)
+        scroll_view.view = folder
 
         self.add_widgets(label, scroll_view)
 

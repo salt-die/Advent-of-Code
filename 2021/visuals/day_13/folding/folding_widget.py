@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 from scipy.ndimage import convolve
 
-from nurses_2.widgets.graphic_widget import GraphicWidget
+from nurses_2.widgets.graphic_widget import GraphicWidget, Interpolation
 
 from . import YELLOW_TO_WHITE, PAPER
 
@@ -42,7 +42,7 @@ class FoldingWidget(GraphicWidget):
         resized_paper = cv2.resize(
             paper,
             (w, h),
-            interpolation=self.interpolation,
+            interpolation=Interpolation._to_cv_enum[self.interpolation],
         )
 
         self.texture[:] = self.default_color

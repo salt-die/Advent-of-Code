@@ -62,7 +62,7 @@ class StableFluid(GraphicWidget):
         poke_force = np.e**(-d / POKE_RADIUS)
         self.dye += np.moveaxis(poke_force[..., None] * next(RAINBOW_COLORS), -1, 0)
 
-    def on_click(self, mouse_event: MouseEvent):
+    def on_mouse(self, mouse_event: MouseEvent):
         """
         Add dye on click.
         """
