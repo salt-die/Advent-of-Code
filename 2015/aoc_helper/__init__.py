@@ -44,6 +44,10 @@ def submit(day: int, solution: Callable, sanity_check=True):
     """
     Submit an AoC solution. Submissions are cached.
     """
+    # TODO: Grab the day automatically:
+    # import __main__
+    # if hasattr(__main__, "__file__"):
+    #     print(__main__.__file__)
     day = str(day)
 
     match solution.__name__:
