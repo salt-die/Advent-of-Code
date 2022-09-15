@@ -4,7 +4,6 @@ from pathlib import Path
 from nurses_2.app import App
 from nurses_2.io import MouseButton
 from nurses_2.widgets.widget_data_structures import Anchor
-from nurses_2.widgets.image import Image
 from nurses_2.widgets.animation import Animation
 from nurses_2.widgets.parallax import Parallax
 
