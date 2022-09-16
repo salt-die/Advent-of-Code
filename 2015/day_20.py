@@ -30,7 +30,6 @@ def least_n(target):
 
     return min - min % STEP  # Return a multiple of STEP. STEP has lots of small prime divisors.
 
-
 def part_one():
     target = N // 10
     for i in count(least_n(target), STEP):
