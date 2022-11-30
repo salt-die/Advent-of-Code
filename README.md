@@ -1,57 +1,58 @@
-This repository is for sharing my Advent of Code solutions (or attempts).
+This repository is for sharing my Advent of Code solutions (or attempts) and visualizations.
 
-Advent of Code is a yearly programming puzzle event.
+Advent of Code is a yearly programming puzzle event. More info here: [Advent of Code - About](https://adventofcode.com/2019/about)
 
-More info here: [Advent of Code - About](https://adventofcode.com/2019/about)
+Many solutions use a fetch/submit helper that now lives in its own repository: https://github.com/salt-die/aoc_lube.
 
-**Terminal IntCode Computer, Day 5, 2019**
+Several visualizations were created with my terminal graphics library, [nurses_2](https://github.com/salt-die/nurses_2).
 
-![day05 visualization](Computer.gif)
 
-**Visualization of Day 6 Orbits, 2019:**
+# Terminal Visualizations
 
-![day06 visualization](day06.png)
+**Packet Printer, Day 16, 2021**
 
-**Visualization of Day 7 Part 2 Network, 2019**
+![2021, Day 16 Visualization](visuals_media/packet_printer.png)
 
-![day07 visualization](network_vis.gif)
+**Dumbo Octopuses, Day 11, 2021**
 
-**Visualization of Incoming Transmission, Day 8, 2019**
+![2021, Day 11 Visualization](visuals_media/dumbo_octos.gif)
 
-![day08 visualization](transmission.gif)
+**Scrambled LED, Day 8, 2021**
 
-**AOC19 in the form of Day 8 transmission, 2019**
+![2021, Day 8 Visualization](visuals_media/scrambled_led.gif)
 
-![AOC19 transmission visualization](AOC19.gif)
+**Submarine Commands, Day 2, 2021**
 
-**Terminal Intcode Computer v2, Day 9, 2019**
+![2021, Day 2 Visualizations](visuals_media/submarine_commands.gif)
 
-![day09 visualization](Computer2.gif)
+**Ocean Floor, Day 1, 2021**
 
-**Painting Robot Animation, Day 11, 2019**
+![2021, Day 1 Visualization](visuals_media/ocean_floor.gif)
 
-![day11 visualization](langtons_robot.gif)
+**Intcode Callback, Day 8, 2020**
 
-**Breaker Animation, Day 13, 2019**
-
-![day13 visualization](breaker.gif)
-
-**Maze Solving Animation, Day 15, 2019**
-
-![day15 visualization](maze_solver.gif)
-
-**Maze Solving in 2.5d, Day 15, 2019**
-
-![day15 visualization](maze_solver_2.gif)
-
-**Skiing, Day 3, 2020**
-
-![day03 visualization](skiing.gif)
+![2020, Day 8 Visualization](visuals_media/intcode_callback.gif)
 
 **Bag Pretty Printer, Day 7, 2020**
 
-![day07 visualization](bag_pretty_printer.png)
+![2020, Day 7 Visualization](visuals_media/bag_pretty_printer.png)
 
-**Intcode callback, Day 8, 2020**
+**Skiing, Day 3, 2020**
 
-![day08 visualization](intcode_callback.gif)
+![2020, Day 3 Visualization](visuals_media/skiing.gif)
+
+**Maze Solving in 2.5d, Day 15, 2019**
+
+![2019, Day 15 Visualization 2](visuals_media/maze_solver_2.gif)
+
+**Maze Solving Animation, Day 15, 2019**
+
+![2019, Day 15 Visualization 1](visuals_media/maze_solver.gif)
+
+**Breaker Animation, Day 13, 2019**
+
+![2019, Day 13 Visualization](visuals_media/breaker.gif)
+
+**Terminal Intcode Computer v2, Day 9, 2019**
+
+![2019, Day 9 Visualization](visuals_media/Computer2.gif)
