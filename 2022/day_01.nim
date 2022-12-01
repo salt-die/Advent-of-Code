@@ -1,13 +1,19 @@
-import std/[algorithm, re, sequtils, strutils, sugar]
+import std/[heapqueue, sequtils, strutils, sugar]
 import nimpy
 
-proc extract_ints(s: string): seq[int] =
-  collect(for i in s.findAll(re"-?\d+"): i.parseInt)
+template sum(sequence: untyped): untyped =
+  sequence.foldl(a + b)
+
+proc nlargest[T](iterable: openArray[T], n: int): HeapQueue[T] =
+  for i in iterable:
+    if result.len < n:
+      result.push i
+    elif i > result[0]:
+      discard result.replace i
 
 let
-  aoc_lube = nimpy.pyImport("aoc_lube")
-  RAW = nimpy.callMethod(aoc_lube, string, "fetch", 2022, 1).split("\n\n")
-  CALORIES = collect(for elf in RAW: extract_ints(elf).foldl(a + b))
+  RAW = "aoc_lube".pyImport.callMethod(string, "fetch", 2022, 1).split("\n\n")
+  CALORIES = collect(for elf in RAW: elf.split.map(parseInt).sum)
 
 echo "Part 1: ", CALORIES.max
-echo "Part 2: ", CALORIES.sorted(cmp[int], order=SortOrder.Descending)[0..2].foldl(a + b)
+echo "Part 2: ", CALORIES.nlargest(3).sum
