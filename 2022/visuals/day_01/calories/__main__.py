@@ -49,7 +49,6 @@ class CalorieApp(App):
 
         max_calorie = 0
         for calories in CALORIES:
-            top = jungle.height - elf.height - 2
             elf.x = jungle.width
 
             total = sum(calories)
@@ -57,10 +56,10 @@ class CalorieApp(App):
                 max_calorie = total
 
             table.canvas[:] = " "
+            table.add_text(f"  MAX: {max_calorie}", row=-1, italic=True)
+            table.add_text(f"TOTAL: {total}", row=-2, italic=True)
             for i, calorie in enumerate(calories):
                 table.add_text(str(calorie).rjust(table.width), row=-3 - i, underline=i == 0)
-            table.add_text(f"TOTAL: {total}", row=-2, italic=True)
-            table.add_text(f"  MAX: {max_calorie}", row=-1, italic=True)
 
             await asyncio.gather(
                 elf.tween(duration=3.0, x=-elf.width),
