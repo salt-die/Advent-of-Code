@@ -63,7 +63,7 @@ class CalorieApp(App):
 
             await asyncio.gather(
                 elf.tween(duration=3.0, x=-elf.width),
-                table.tween(duration=.5, y=(i + 3 - 17)),
+                table.tween(duration=.5, bottom=i + 3),
             )
 
 
