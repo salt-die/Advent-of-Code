@@ -10,4 +10,4 @@ let
   CALORIES = collect(for elf in RAW: extract_ints(elf).foldl(a + b))
 
 echo "Part 1: ", CALORIES.max
-echo "Part 2: ", CALORIES.sorted(cmp[int], order=SortOrder.Descending)[..2].foldl(a + b)
+echo "Part 2: ", CALORIES.sorted(cmp[int], order=SortOrder.Descending)[0..2].foldl(a + b)
