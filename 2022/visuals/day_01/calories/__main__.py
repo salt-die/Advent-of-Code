@@ -19,6 +19,7 @@ JUNGLE = ASSETS / "jungle"
 SKY = ASSETS / "sky.png"
 CANDY_CANE = ASSETS / "candy_cane.png"
 
+
 class CalorieApp(App):
     async def on_start(self):
         sky = Image(path=SKY, size_hint=(1.0, 1.0))
