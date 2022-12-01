@@ -23,15 +23,17 @@ CANDY_CANE = ASSETS / "candy_cane.png"
 class CalorieApp(App):
     async def on_start(self):
         sky = Image(path=SKY, size_hint=(1.0, 1.0))
-        jungle = Parallax(path=JUNGLE, size_hint=(1.0, 1.0), interpolation="linear")
+        jungle = Parallax(path=JUNGLE, size_hint=(1.0, 1.0))
+
         elf = Animation(path=ELF, size=(13, 26), interpolation="nearest")
+        elf.subscribe(jungle, "size", lambda: setattr(elf, "bottom", jungle.bottom - 1))
 
         table = TextWidget(size=(17, 12), default_color_pair=TABLE_COLORPAIR)
         right_border = Image(path=CANDY_CANE, size=(17, 6))
         right_border.texture = right_border.texture[::-1, ::-1]
         right_border.subscribe(table, "pos", lambda: setattr(right_border, "pos", (table.y, table.right)))
         bottom_border = Image(path=CANDY_CANE)
-        bottom_border._otexture = bottom_border._otexture.swapaxes(0, 1)[::-1, ::-1]
+        bottom_border._otexture = bottom_border._otexture.swapaxes(0, 1)[::-1, ::-1]  # Rotate original image and then resize.
         bottom_border.size = (3, 15)
         bottom_border.subscribe(table, "pos", lambda: setattr(bottom_border, "pos", (table.bottom, table.x)))
 
@@ -48,7 +50,7 @@ class CalorieApp(App):
         max_calorie = 0
         for calories in CALORIES:
             top = jungle.height - elf.height - 2
-            elf.pos = (top, jungle.width)
+            elf.x = jungle.width
 
             total = sum(calories)
             if total > max_calorie:
@@ -61,7 +63,7 @@ class CalorieApp(App):
             table.add_text(f"  MAX: {max_calorie}", row=-1, italic=True)
 
             await asyncio.gather(
-                elf.tween(duration=3.0, pos=(top, -elf.width)),
+                elf.tween(duration=3.0, x=-elf.width),
                 table.tween(duration=.5, y=(i + 3 - 17)),
             )
 
