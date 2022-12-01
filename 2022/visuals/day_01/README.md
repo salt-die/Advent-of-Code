@@ -1,0 +1,1 @@
+# Year 2022, Day 1 Visualization: Counting Calories
