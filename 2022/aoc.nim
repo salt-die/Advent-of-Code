@@ -1,11 +1,11 @@
 include std/prelude
-import std/[heapqueue, re]
+import std/[heapqueue, math, re, sugar]
 
 import nimpy
 
 proc fetch*(year, day: int): string =
   ## Get AoC input.
-  "aoc_lube".pyImport.callMethod(string, "fetch", 2022, 1)
+  "aoc_lube".pyImport.callMethod(string, "fetch", year, day)
 
 template part*(p: int, solution: untyped) =
   ## Template to print solution.
@@ -22,6 +22,9 @@ proc nlargest*[T](iterable: openArray[T], n: int): HeapQueue[T] =
       result.push i
     elif i > result[0]:
       discard result.replace i
+
+proc `%`*(a, b: int): int =
+  floorMod(a, b)
 
 template sum*(it: untyped): untyped =
   ## Sum of all items in iterable.
