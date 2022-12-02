@@ -98,4 +98,4 @@ class RPSApp(App):
             await shoot(a, b)
 
 
-RPSApp().run()
+RPSApp(title="Paper, Rock, Scissors").run()
