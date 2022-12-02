@@ -70,17 +70,20 @@ class RPSApp(App):
         throws = ["rock", "paper", "scissors"]
 
         async def shoot(a, b):
+            nonlocal total
+
             a_int = ord(a) - ord("A")
             b_int = ord(b) - ord("X")
             outcome = (b_int - a_int + 1) % 3
-            nonlocal total
-            total += b_int + 1 * 3 * outcome
+            throw_score = b_int + 1
+            outcome_score = 3 * outcome
+            score = throw_score + outcome_score
 
             label.add_text(f"{a:^11}  {b:^11}", row=1, column=1, underline=True)
-            label.add_text(f"   throw: {throws[b_int]:>8} => {b_int + 1}", row=2, column=1)
-            label.add_text(f" outcome: {outcomes[outcome]:>8} => {3 * outcome}", row=3, column=1)
+            label.add_text(f"   throw: {throws[b_int]:>8} => {throw_score}", row=2, column=1)
+            label.add_text(f" outcome: {outcomes[outcome]:>8} => {outcome_score}", row=3, column=1)
             label.add_text(f"   score: ", row=4, column=1)
-            label.add_text(f"            {b_int + 1 + 3 * outcome}", row=4, column=11, underline=True)
+            label.add_text(f"            {score}", row=4, column=11, underline=True)
             label.add_text(f"   total: {total:>13}", row=5, column=1)
 
             left_anim = [left_rock, left_paper, left_scissors][a_int]
@@ -93,6 +96,8 @@ class RPSApp(App):
 
             left_anim.is_visible = right_anim.is_visible = False
             left.is_visible = right.is_visible = True
+
+            total += score
 
         for a, b in GAMES:
             await shoot(a, b)
