@@ -6,8 +6,8 @@ strats = dict(
 )
 
 games = [
-    (strats[line[0]], strats[line[2]])
-    for line in  aoc_lube.fetch(year=2022, day=2).splitlines()
+    (strats[a], strats[b])
+    for a, _, b in aoc_lube.fetch(year=2022, day=2).splitlines()
 ]
 
 def part_one():
