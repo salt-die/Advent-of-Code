@@ -33,3 +33,9 @@ template sum*(it: untyped): untyped =
 template prod*(it: untyped): untyped =
   ## Product of all items in iterable.
   it.foldl(a * b)
+
+template `?`*(cond: bool; a, b: untyped): untyped =
+  if cond:
+    a
+  else:
+    b
