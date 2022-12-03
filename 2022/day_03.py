@@ -1,7 +1,7 @@
 from itertools import chain
 
 import aoc_lube
-from aoc_lube.utils import chunk
+from aoc_lube.utils import chunk, split
 
 RUCKSACKS = aoc_lube.fetch(year=2022, day=3).splitlines()
 
@@ -12,8 +12,8 @@ def priority(letter):
 def part_one():
     return sum(map(priority,
         chain.from_iterable(
-            set(rucksack[:(l := len(rucksack) // 2)]) & set(rucksack[l:])
-            for rucksack in RUCKSACKS
+            set(a) & set(b)
+            for a, b in map(split, RUCKSACKS)
         )
     ))
 
