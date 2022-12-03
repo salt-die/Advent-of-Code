@@ -1,28 +1,16 @@
 include aoc
 
+type Sacks = seq[string] | seq[seq[char]]
+
 let sacks = fetch(2022, 3).splitLines()
 
-proc priority(letter: char): int =
-  let offset = letter.isLowerAscii ? 'a'.ord: 'A'.ord - 26
-  1 + letter.ord - offset
+proc priority(c: char): int =
+  1 + c.ord - (if c >= 'a': 'a'.ord else: 'A'.ord - 26)
 
-part 1: sum sacks
-  .mapIt(
-    it
-    .toSeq
-    .distribute(2)
-    .mapIt(it.toHashSet)
-    .foldl(a * b)
-    .pop
-    .priority
+proc sumPriorities(groups: seq[Sacks]): int =
+  sum groups.mapIt(
+    it.mapIt(it.toSet).foldl(a * b).chooseOne.priority
   )
 
-part 2: sum sacks
-  .distribute(sacks.len div 3)
-  .mapIt(
-    it
-    .mapIt(it.toHashSet)
-    .foldl(a * b)
-    .pop
-    .priority
-  )
+part 1: sumPriorities sacks.mapIt(it.distribute(2))
+part 2: sumPriorities sacks.chunk(3)

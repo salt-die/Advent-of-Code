@@ -1,5 +1,5 @@
 include std/prelude
-import std/[heapqueue, math, re, sugar]
+import std/[heapqueue, math, re, setutils, sugar]
 
 import nimpy
 
@@ -34,8 +34,13 @@ template prod*(it: untyped): untyped =
   ## Product of all items in iterable.
   it.foldl(a * b)
 
-template `?`*(cond: bool; a, b: untyped): untyped =
-  if cond:
-    a
-  else:
-    b
+proc distribute*(it: string, n: Positive, spread: bool=false): seq[seq[char]] =
+  ## Distribute for strings.
+  it.toSeq.distribute(n, spread)
+
+template chunk*(it: untyped, n: int): untyped =
+  ## Chunk iterable into groups of `n`.
+  it.distribute(it.len div n)
+
+proc chooseOne*[T](s: set[T]): T =
+  for x in s: return x
