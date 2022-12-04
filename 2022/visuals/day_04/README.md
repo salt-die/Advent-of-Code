@@ -1,0 +1,1 @@
+# Year 2022, Day 4 Visualization: Camp Cleanup
