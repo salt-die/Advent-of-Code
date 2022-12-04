@@ -6,7 +6,8 @@ import aoc_lube
 import parse
 
 from nurses_2.app import App
-from nurses_2.easings import lerp, out_bounce
+from nurses_2.clamp import clamp
+from nurses_2.easings import lerp, out_elastic
 from nurses_2.colors import ColorPair, BLACK, YELLOW, GREEN, RED, WHITE_ON_BLACK, WHITE
 from nurses_2.widgets.text_widget import TextWidget
 from nurses_2.widgets.widget import Widget
@@ -22,7 +23,7 @@ DASH = "▬"
 DURATION = 1
 
 def ease(old, new, p):
-    return round(lerp(old, new, out_bounce(p)))
+    return clamp(round(lerp(old, new, out_elastic(p))), 1, 99)
 
 
 class RangeApp(App):
@@ -46,6 +47,24 @@ class RangeApp(App):
         self.add_widgets(bg, container)
         bg.play()
 
+        def set_ranges(a, b, c, d):
+            ranges.canvas.T[:] = " ", DASH, " "
+            ranges.colors[1] = WHITE_ON_BLACK
+
+            ranges.canvas[0, a + 2: b + 3] = DASH
+            ranges.add_text(f"{a:>2}", column=a - 1)
+            ranges.add_text(f"{b:<2}", column=b + 4)
+
+            ranges.canvas[2, c + 2: d + 3] = DASH
+            ranges.add_text(f"{c:>2}", row=2, column=c - 1)
+            ranges.add_text(f"{d:<2}", row=2, column=d + 4)
+
+            if a <= d and c <= b:
+                start, end = max(a, c), min(b, d)
+                ranges.colors[1, start - 1: end + 6] = YELLOW_ON_BLACK
+                ranges.add_text(f"{start:>2} ", row=1, column=start - 1)
+                ranges.add_text(f" {end:<2}", row=1, column=end + 3)
+
         old_a, old_b = old_c, old_d = 0, 99
         for i, (a, b, c, d) in enumerate(RANGES):
             # Roll assignments:
@@ -64,26 +83,10 @@ class RangeApp(App):
                 _b = ease(old_b, b, p)
                 _c = ease(old_c, c, p)
                 _d = ease(old_d, d, p)
-
-                ranges.canvas.T[:] = " ", DASH, " "
-                ranges.colors[1] = WHITE_ON_BLACK
-
-                ranges.canvas[0, _a + 2: _b + 3] = DASH
-                ranges.add_text(f"{_a:>2}", column=_a - 1)
-                ranges.add_text(f"{_b:<2}", column=_b + 4)
-
-                ranges.canvas[2, _c + 2: _d + 3] = DASH
-                ranges.add_text(f"{_c:>2}", row=2, column=_c - 1)
-                ranges.add_text(f"{_d:<2}", row=2, column=_d + 4)
-
-                if _a <= _d and _c <= _b:
-                    start, end = max(_a, _c), min(_b, _d)
-                    ranges.colors[1, start - 1: end + 6] = YELLOW_ON_BLACK
-                    ranges.add_text(f"{start:>2} ", row=1, column=start - 1)
-                    ranges.add_text(f"{end:>3}", row=1, column=end + 3)
-
+                set_ranges(_a, _b, _c, _d)
                 await asyncio.sleep(0)
 
+            set_ranges(a, b, c, d)
             old_a, old_b, old_c, old_d = a, b, c, d
             await asyncio.sleep(1)
 
