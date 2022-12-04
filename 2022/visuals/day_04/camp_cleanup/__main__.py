@@ -8,7 +8,7 @@ import parse
 from nurses_2.app import App
 from nurses_2.clamp import clamp
 from nurses_2.easings import lerp, out_elastic
-from nurses_2.colors import ColorPair, BLACK, GREEN, MAGENTA, RED
+from nurses_2.colors import ColorPair, BLACK, YELLOW, GREEN, RED
 from nurses_2.widgets.text_widget import TextWidget
 from nurses_2.widgets.widget import Widget
 from nurses_2.widgets.video_player import VideoPlayer
@@ -17,7 +17,7 @@ RANGES = tuple(parse.findall("{:d}-{:d},{:d}-{:d}", aoc_lube.fetch(year=2022, da
 SKY_PATH = Path(__file__).parent.parent / "assets" / "sky.gif"
 RED_ON_BLACK = ColorPair.from_colors(RED, BLACK)
 GREEN_ON_BLACK = ColorPair.from_colors(GREEN, BLACK)
-MAGENTA_ON_BLACK = ColorPair.from_colors(MAGENTA, BLACK)
+YELLOW_ON_BLACK = ColorPair.from_colors(YELLOW, BLACK)
 DASH = "▬"
 DURATION = 1
 
@@ -41,7 +41,7 @@ class RangeApp(App):
 
         ranges = TextWidget(size=(3, 105), pos=(12, 0))
         ranges.colors[0] = RED_ON_BLACK
-        ranges.colors[1] = MAGENTA_ON_BLACK
+        ranges.colors[1] = YELLOW_ON_BLACK
         ranges.colors[2] = GREEN_ON_BLACK
 
         container.add_widgets(inputs, ranges)
