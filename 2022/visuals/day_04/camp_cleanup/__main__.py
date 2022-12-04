@@ -37,7 +37,7 @@ class RangeApp(App):
 
         inputs = TextWidget(size=(11, 11), pos=(0, 47))
         inputs.add_text("Assignments", underline=True)
-        inputs.colors[-1] = 0, 0, 0, 255, 255, 255
+        inputs.colors[-1] = BLACK_ON_WHITE
         for i in range(9):
             a, b, c, d = RANGES[i]
             inputs.add_text(f"{a:>2}-{b:>2},{c:>2}-{d:>2}", row=-i-2)
