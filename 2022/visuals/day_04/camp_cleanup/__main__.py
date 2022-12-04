@@ -15,11 +15,12 @@ from nurses_2.widgets.video_player import VideoPlayer
 RANGES = tuple(parse.findall("{:d}-{:d},{:d}-{:d}", aoc_lube.fetch(year=2022, day=4)))
 SKY_PATH = Path(__file__).parent.parent / "assets" / "sky.gif"
 A_COLORPAIR = ColorPair.from_colors(RED, BLACK)
-B_COLORPAIR = ColorPair.from_colors(YELLOW, BLACK)
-AB_COLORPAIR = ColorPair.from_colors(GREEN, BLACK)
+B_COLORPAIR = ColorPair.from_colors(GREEN, BLACK)
+AB_COLORPAIR = ColorPair.from_colors(YELLOW, BLACK)
 BLACK_ON_WHITE = ColorPair.from_colors(BLACK, WHITE)
 DASH = "▬"
 DURATION = 1
+
 
 class RangeApp(App):
     async def on_start(self):
@@ -52,7 +53,7 @@ class RangeApp(App):
             ranges.colors[1] = WHITE_ON_BLACK
 
             ranges.canvas[0, a + 2: b + 3] = DASH
-            ranges.add_text(f"{a:<2}", column=a - 1)
+            ranges.add_text(f"{a:>2}", column=a - 1)
             ranges.add_text(f"{b:<2}", column=b + 4)
 
             ranges.canvas[2, c + 2: d + 3] = DASH
@@ -72,15 +73,10 @@ class RangeApp(App):
             while (current_time := monotonic()) < end_time:
                 p = 1 - (end_time - current_time) / DURATION
 
-                def current(old, new):
-                    return round(lerp(old, new, out_cubic(p)))
-
-                current_a = current(old_a, a)
-                current_b = current(old_b, b)
-                current_c = current(old_c, c)
-                current_d = current(old_d, d)
-
-                set_ranges(current_a, current_b, current_c, current_d)
+                set_ranges(*(
+                    round(lerp(old, new, out_cubic(p)))
+                    for old, new in ((old_a, a), (old_b, b), (old_c, c), (old_d, d))
+                ))
 
                 await asyncio.sleep(0)
 
