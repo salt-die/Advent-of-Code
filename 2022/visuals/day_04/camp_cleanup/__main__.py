@@ -7,7 +7,7 @@ import parse
 
 from nurses_2.app import App
 from nurses_2.clamp import clamp
-from nurses_2.easings import lerp, out_elastic
+from nurses_2.easings import lerp, out_bounce
 from nurses_2.colors import ColorPair, BLACK, YELLOW, GREEN, RED
 from nurses_2.widgets.text_widget import TextWidget
 from nurses_2.widgets.widget import Widget
@@ -22,7 +22,7 @@ DASH = "▬"
 DURATION = 1
 
 def ease(old, new, p):
-    return clamp(round(lerp(old, new, out_elastic(p))), 1, 99)
+    return clamp(round(lerp(old, new, out_bounce(p))), 1, 99)
 
 
 class RangeApp(App):
