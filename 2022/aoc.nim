@@ -1,5 +1,5 @@
 include std/prelude
-import std/[heapqueue, math, re, setutils, sugar]
+import std/[heapqueue, macros, math, re, setutils, sugar]
 
 import nimpy
 
@@ -44,3 +44,12 @@ template chunk*(it: untyped, n: int): untyped =
 
 proc chooseOne*[T](s: set[T]): T =
   for x in s: return x
+
+macro `=*`*(lhs, rhs: untyped): auto =
+  ## Unpacking macro.
+  result = newStmtList()
+  for i, v in lhs:
+    result.add(
+      quote do:
+        let `v` = `rhs`[`i`]
+    )
