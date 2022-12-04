@@ -9,6 +9,18 @@ Several visualizations were created with my terminal graphics library, [nurses_2
 
 # Terminal Visualizations
 
+**Camp Cleanup, Day 4, 2022**
+
+![2022, Day 4 Visualization](visuals_media/camp_cleanup.gif)
+
+**Rock, Paper, Scissors, Day 2, 2022**
+
+![2022, Day 2 Visualization](visuals_media/rock_paper_scissors.gif)
+
+**Counting Calories, Day 1, 2022**
+
+![2022, Day 1 Visualization](visuals_media/counting_calories.gif)
+
 **Packet Printer, Day 16, 2021**
 
 ![2021, Day 16 Visualization](visuals_media/packet_printer.png)
