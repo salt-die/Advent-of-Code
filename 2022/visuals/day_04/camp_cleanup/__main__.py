@@ -48,7 +48,7 @@ class RangeApp(App):
 
         old_a, old_b = old_c, old_d = 0, 99
         for i, (a, b, c, d) in enumerate(RANGES):
-            # Roll assignemnts:
+            # Roll assignments:
             inputs.canvas[2:] = inputs.canvas[1:-1]
             if i + 9 < len(RANGES):
                 top_a, top_b, top_c, top_d = RANGES[i + 9]
