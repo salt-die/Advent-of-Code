@@ -34,8 +34,8 @@ class RangeApp(App):
         inputs.add_text("Assignments", underline=True)
         inputs.colors[1:-1, :5] = RED_ON_BLACK
         inputs.colors[1:-1, 6:] = GREEN_ON_BLACK
-        inputs.colors[-1, :5] = RED_ON_BLACK.reversed
-        inputs.colors[-1, 6:] = GREEN_ON_BLACK.reversed
+        inputs.colors[-1, :5] = RED_ON_BLACK.reversed()
+        inputs.colors[-1, 6:] = GREEN_ON_BLACK.reversed()
         for i in range(9):
             inputs.add_text("{:>2}-{:>2},{:>2}-{:>2}".format(*RANGES[i]), row=-i - 2)
 
