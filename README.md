@@ -9,6 +9,10 @@ Several visualizations were created with my terminal graphics library, [nurses_2
 
 # Terminal Visualizations
 
+**Supply Stacks, Day 5, 2022**
+
+![2022, Day 5 Visualization](visuals_media/supply_stacks.gif)
+
 **Camp Cleanup, Day 4, 2022**
 
 ![2022, Day 4 Visualization](visuals_media/camp_cleanup.gif)
