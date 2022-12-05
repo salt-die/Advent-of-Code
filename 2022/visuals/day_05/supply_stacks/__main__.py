@@ -74,6 +74,10 @@ class SupplyStacksApp(App):
             pos_hint=(1.0, 1.0),
             anchor="bottom_right",
         )
+        for i, stack in enumerate(STACKS):
+            for j, (letter, _) in enumerate(stack):
+                text_stack.add_text(f"[{letter}]", row=-j - 1, column=i * 3)
+
         sv = ScrollView(
             size_hint=(1.0, 1.0),
             show_vertical_bar=False,
@@ -82,38 +86,40 @@ class SupplyStacksApp(App):
         )
         sv.view = boxes = Boxes()
         sv.vertical_proportion = .8
-        self.add_widgets(sv, text_stack)
 
-        def update_text():
-            text_stack.canvas[:] = " "
-            for i, stack in enumerate(STACKS):
-                for j, (letter, _) in enumerate(stack):
-                    text_stack.add_text(f"[{letter}]", row=j, column=i * 3)
-            text_stack.canvas = text_stack.canvas[::-1]
+        self.add_widgets(sv, text_stack)
 
         for a, b, c in COMMANDS:
             b -= 1
             c -= 1
-            for _ in range(a):
-                update_text()
+            b_stack = STACKS[b]
+            c_stack = STACKS[c]
+            b_len = len(b_stack)
+            c_len = len(c_stack)
 
-                letter, sprite = STACKS[b].pop()
+            for _ in range(a):
+                letter, sprite = b_stack.pop()
+                b_len -= 1
 
                 # Animate up
-                u, v = boxes.iso_tile_to_uv(len(STACKS[b]), b)
+                u, v = boxes.iso_tile_to_uv(b_len, b)
                 while u > -TH:
                     u -= 1
                     boxes.paint_boxes(sprite, b, u, v)
                     await asyncio.sleep(0)
 
                 # Animate down
-                target, v = boxes.iso_tile_to_uv(len(STACKS[c]), c)
+                target, v = boxes.iso_tile_to_uv(c_len, c)
                 while u < target:
                     u += 1
                     boxes.paint_boxes(sprite, c, u, v)
                     await asyncio.sleep(0)
 
+                text_stack.add_text("   ", row=-b_len - 1, column=b * 3)
+                text_stack.add_text(f"[{letter}]", row=-c_len - 1, column=c * 3)
+
                 STACKS[c].append((letter, sprite))
+                c_len += 1
 
 
 SupplyStacksApp(title="--- Day 5: Supply Stacks ---").run()
