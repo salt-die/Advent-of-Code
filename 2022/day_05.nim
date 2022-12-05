@@ -24,7 +24,6 @@ part 1:
 part 2:
   mut_stacks = stacks
   for (_, a, b, c) in commands:
-    c.stack.add b.stack[^a..^1]
+    c.stack.add b.stack.toOpenArray(b.stack.len - a, b.stack.high)
     b.stack.setLen b.stack.len - a
-
   stringify()
