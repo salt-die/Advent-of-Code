@@ -1,5 +1,5 @@
 include std/prelude
-import std/[heapqueue, macros, math, re, setutils, sugar]
+import std/[heapqueue, macros, math, re, setutils, strscans, sugar]
 
 import nimpy
 
