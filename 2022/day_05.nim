@@ -5,7 +5,8 @@ let
 
   stacks = collect(for x in 0..8:
     collect(for y in 0..7:
-      if raw[0][7 - y][1 + 4 * x] != ' ': raw[0][7 - y][1 + 4 * x]))
+      let chr = raw[0][7 - y][1 + 4 * x]
+      if  chr != ' ': chr))
 
   commands = collect(for line in raw[1]:
     line.scanTuple("move $i from $i to $i"))
