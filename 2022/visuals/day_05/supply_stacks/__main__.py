@@ -1,5 +1,4 @@
 import asyncio
-from collections import defaultdict
 from itertools import cycle
 from pathlib import Path
 
@@ -16,6 +15,7 @@ ASSETS = Path(__file__).parent.parent / "assets"
 TILES_PATH = ASSETS / "boxes.png"
 WH, WW = 13, 10  # World size
 TH, TW = 18, 18  # Tile size
+OY, OX = (WH + WW // 2 + 1) * TH // 2 - TH - 1, 1  # Origin
 NSTACKS = 9
 TILE_SHEET = Sprite.from_image(TILES_PATH).texture
 BOXES = cycle((
@@ -34,9 +34,8 @@ BOXES = cycle((
 def parse_raw():
     stacks, commands = aoc_lube.fetch(year=2022, day=5).split("\n\n")
     stacks = stacks.splitlines()
-    to_sprite = defaultdict(BOXES.__next__)
     stacks = [
-        [(l, to_sprite[l]) for y in range(7, -1, -1) if (l := stacks[y][x]) != " "]
+        [(l, next(BOXES)) for y in range(7, -1, -1) if (l := stacks[y][x]) != " "]
         for x in range(1, 35, 4)
     ]
 
@@ -48,13 +47,12 @@ STACKS, COMMANDS = parse_raw()
 class Boxes(GraphicWidget):
     def __init__(self):
         super().__init__(
-            size=((WH + WW // 2 + 1) * TH // 4, WW * TW // 2 + 1),
+            size=((WH + WW // 2 + 1) * TH // 4, WW * TW // 2 + OX),
             default_color=ABLACK,
         )
 
     def iso_tile_to_uv(self, y, x):
-        OY = self.height * 2 - TH - 1  # y-origin
-        return OY - y * TH // 2 - x * TH // 4, x * TW // 2 + 1
+        return OY - y * TH // 2 - x * TH // 4, x * TW // 2 + OX
 
     def paint_boxes(self, popped, px, u, v):
         # We can probably do better than repainting the entire scene...
@@ -71,7 +69,11 @@ class Boxes(GraphicWidget):
 
 class SupplyStacksApp(App):
     async def on_start(self):
-        text_stack = TextWidget(size=(30, 27), pos_hint=(1.0, 1.0), anchor="bottom_right")
+        text_stack = TextWidget(
+            size=(53, 27),  # Note `53` is max length of a stack during move operations.
+            pos_hint=(1.0, 1.0),
+            anchor="bottom_right",
+        )
         sv = ScrollView(
             size_hint=(1.0, 1.0),
             show_vertical_bar=False,
