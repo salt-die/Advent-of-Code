@@ -11,21 +11,20 @@ let
     line.scanTuple("move $i from $i to $i"))
 
 var mut_stacks: seq[seq[char]]
-template stack_b: auto = mut_stacks[b - 1]
-template stack_c: auto = mut_stacks[c - 1]
+proc stack(i: int): var seq[char] = mut_stacks[i - 1]
+proc stringify: string = collect(for s in mut_stacks: s[^1]).join("")
 
 part 1:
   mut_stacks = stacks
   for (_, a, b, c) in commands:
     for _ in 0..<a:
-      stack_c.add stack_b.pop
-  collect(for stack in mut_stacks: stack[^1]).join("")
+      c.stack.add b.stack.pop
+  stringify()
 
 part 2:
   mut_stacks = stacks
   for (_, a, b, c) in commands:
-    for item in stack_b[^a..^1]:
-      stack_c.add item
-    stack_b.setLen(stack_b.len - a)
+    c.stack.add b.stack[^a..^1]
+    b.stack.setLen b.stack.len - a
 
-  collect(for stack in mut_stacks: stack[^1]).join("")
+  stringify()
