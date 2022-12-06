@@ -1,5 +1,5 @@
-import std/[heapqueue, macros, math, re, setutils, strscans, strutils, sugar,
-            strutils, parseutils, hashes, tables, sequtils, parseopt, strformat]
+import std/[heapqueue, macros, math, parseopt, parseutils, re, sequtils,
+            setutils, strformat, strscans, strutils, sugar, tables]
 
 import nimpy
 
