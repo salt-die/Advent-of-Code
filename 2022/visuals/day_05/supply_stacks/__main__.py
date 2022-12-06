@@ -13,9 +13,10 @@ from aoc_lube.utils import extract_ints, chunk
 
 ASSETS = Path(__file__).parent.parent / "assets"
 TILES_PATH = ASSETS / "boxes.png"
-WH, WW = 13, 10  # World size
-TH, TW = 18, 18  # Tile size
-OY, OX = (WH + WW // 2 + 1) * TH // 2 - TH - 1, 1  # Origin
+WH, WW = 13, 10  # world size
+TH, TW = 18, 18  # tile size
+HH, HW = TH // 2, TW // 2  # half tile size
+OY, OX = (WH + WW // 2 + 1) * TH // 2 - TH - 1, 1  # origin
 NSTACKS = 9
 TILE_SHEET = Sprite.from_image(TILES_PATH).texture
 BOXES = cycle((
@@ -47,24 +48,39 @@ STACKS, COMMANDS = parse_raw()
 class Boxes(GraphicWidget):
     def __init__(self):
         super().__init__(
-            size=((WH + WW // 2 + 1) * TH // 4, WW * TW // 2 + OX),
+            size=((WH + WW // 2 + 1) * HH // 2, WW * HW + OX),
             default_color=ABLACK,
         )
+        # Paint all boxes.
+        for x, stack in enumerate(reversed(STACKS)):
+            for y, (_, sprite) in enumerate(stack):
+                sprite.paint(self.texture, self.iso_tile_to_uv(y, NSTACKS - x - 1))
 
     def iso_tile_to_uv(self, y, x):
-        return OY - y * TH // 2 - x * TH // 4, x * TW // 2 + OX
+        """
+        Transform (y, x) tile-coordinate to (u, v) texture-coordinate.
+        """
+        return OY - y * HH - x * HH // 2, OX + x * HW
 
-    def paint_boxes(self, popped, px, u, v):
-        # We can probably do better than repainting the entire scene...
-        self.texture[:] = self.default_color
+    def repaint_column(self, popped, x, u, v):
+        self.texture[:, v: v + TW] = self.default_color
 
-        for x, stack in enumerate(reversed(STACKS)):  # These need to be painted in reverse order.
-            x = NSTACKS - x - 1
-            for y, (_, sprite) in enumerate(stack):
-                sprite.paint(self.texture, self.iso_tile_to_uv(y, x))
+        if x != NSTACKS - 1:
+            # Paint half column behind
+            for y, (_, sprite) in enumerate(STACKS[x + 1]):
+                Sprite(sprite.texture[:, :HW]).paint(self.texture, self.iso_tile_to_uv(y, x + 1))
 
-            if px == x:
-                popped.paint(self.texture, (u, v))
+        # Paint column
+        for y, (_, sprite) in enumerate(STACKS[x]):
+            sprite.paint(self.texture, self.iso_tile_to_uv(y, x))
+
+        popped.paint(self.texture, (u, v))
+
+        if x != 0:
+            # Paint half column in front
+            for y, (_, sprite) in enumerate(STACKS[x - 1]):
+                au, av = self.iso_tile_to_uv(y, x - 1)
+                Sprite(sprite.texture[:, HW:]).paint(self.texture, (au, av + HW))
 
 
 class SupplyStacksApp(App):
@@ -105,14 +121,14 @@ class SupplyStacksApp(App):
                 u, v = boxes.iso_tile_to_uv(b_len, b)
                 while u > -TH:
                     u -= 1
-                    boxes.paint_boxes(sprite, b, u, v)
+                    boxes.repaint_column(sprite, b, u, v)
                     await asyncio.sleep(0)
 
                 # Animate down
                 target, v = boxes.iso_tile_to_uv(c_len, c)
                 while u < target:
                     u += 1
-                    boxes.paint_boxes(sprite, c, u, v)
+                    boxes.repaint_column(sprite, c, u, v)
                     await asyncio.sleep(0)
 
                 text_stack.add_text("   ", row=-b_len - 1, column=b * 3)
