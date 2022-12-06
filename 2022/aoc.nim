@@ -53,3 +53,11 @@ macro `=*`*(lhs, rhs: untyped): auto =
       quote do:
         let `v` = `rhs`[`i`]
     )
+
+proc symAdd*[T](s: var set[T], items: varargs[T]) =
+  ## Add an item if not in the set, else remove it.
+  for item in items:
+    if item in s:
+      s.excl item
+    else:
+      s.incl item
