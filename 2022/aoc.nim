@@ -26,13 +26,13 @@ proc nlargest*[T](iterable: openArray[T], n: int): HeapQueue[T] =
 proc `%`*(a, b: int): int =
   floorMod(a, b)
 
-template sum*(it: untyped): untyped =
+template sum*(it: untyped): int =
   ## Sum of all items in iterable.
-  it.foldl(a + b)
+  it.foldl(a + b, 0)
 
-template prod*(it: untyped): untyped =
+template prod*(it: untyped): int =
   ## Product of all items in iterable.
-  it.foldl(a * b)
+  it.foldl(a * b, 1)
 
 proc distribute*(it: string, n: Positive, spread: bool=false): seq[seq[char]] =
   ## Distribute for strings.
