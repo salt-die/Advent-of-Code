@@ -32,6 +32,19 @@ class Path:
     def iterdir(self):
         yield from self.children
 
+    def add_path(self, name, is_file=False):
+        for child in self.children:
+            if child.name == name:
+                return child
+
+        node = Path(name)
+        self.children.append(node)
+        if is_file:
+            node._is_file = True
+        else:
+            node.parent = self
+        return node
+
 
 class NoSpaceApp(App):
     async def on_start(self):
@@ -54,71 +67,52 @@ class NoSpaceApp(App):
         self.add_widget(split)
         split.split_col = 40
 
-        def print_output(line):
-            if len(line) > terminal.width:
-                terminal.width = len(line)
-            terminal.add_text(line, row=-1)
-            terminal.colors[-1, :] = WHITE_ON_BLACK
-            terminal.height += 1
-
-        async def type_line(cwd, line):
-            absolute = []
-            while cwd.name != "/":
-                if len(absolute) == 3:
-                    absolute.append("..")
-                    break
-                absolute.append(cwd.name)
-                cwd = cwd.parent
-
-            prompt = "/".join(reversed(absolute)) + ">"
-            start= len(prompt)
-            terminal.add_text(prompt, row=-1, bold=True)
-
-            if len(prompt) + len(line) > terminal.width:
-                terminal.width = len(prompt) + len(line) + 1
-
-            for i, char in enumerate(line[1:]):
-                terminal.canvas[-1, start + i] = char
-                terminal.canvas[-1, start + i + 1] = CURSOR
-                await asyncio.sleep(.2 * random())
-
-            terminal.canvas[-1, start + i + 1] = " " # Hide cursor
-            terminal.height += 1
-
         for line in RAW:
             match line.split():
                 case ["$", "cd", ".."]:
                     cwd = cwd.parent
-                    await type_line(cwd, line)
                 case ["$", "cd", dir_]:
-                    for child in cwd.children:
-                        if child.name == dir_:
-                            cwd = child
-                            break
-                    await type_line(cwd, line)
+                    cwd = cwd.add_path(dir_)
                 case ["$", "ls"]:
-                    await type_line(cwd, line)
+                    pass
                 case ["dir", dir_]:
-                    for child in cwd.children:
-                        if child.name == dir_:
-                            break
-                    else:
-                        node = Path(dir_)
-                        cwd.children.append(node)
-                        node.parent = cwd
-                        file_view._view.update_tree_layout()
-                    print_output(line)
+                    cwd.add_path(dir_)
                 case [size, file]:
                     name = f"{file} {size}"
-                    for child in cwd.children:
-                        if child.name == name:
-                            break
-                    else:
-                        node = Path(name)
-                        cwd.children.append(node)
-                        node._is_file = True
-                        file_view._view.update_tree_layout()
-                    print_output(line)
+                    cwd.add_path(name, True)
+
+            if line.startswith("$"):
+                file_view._view.update_tree_layout()
+
+                absolute = []
+                current = cwd
+                while current.name != "/":
+                    if len(absolute) == 3:
+                        absolute.append("..")
+                        break
+                    absolute.append(current.name)
+                    current = current.parent
+
+                prompt = "/".join(reversed(absolute)) + ">"
+                start= len(prompt)
+                terminal.add_text(prompt, row=-1, bold=True)
+
+                if len(prompt) + len(line) > terminal.width:
+                    terminal.width = len(prompt) + len(line) + 1
+
+                for i, char in enumerate(line[1:]):
+                    terminal.canvas[-1, start + i] = char
+                    terminal.canvas[-1, start + i + 1] = CURSOR
+                    await asyncio.sleep(.2 * random())
+
+                terminal.canvas[-1, start + i + 1] = " " # Hide cursor
+                terminal.height += 1
+            else:
+                if len(line) > terminal.width:
+                    terminal.width = len(line)
+                terminal.add_text(line, row=-1)
+                terminal.colors[-1, :] = WHITE_ON_BLACK
+                terminal.height += 1
 
 
 NoSpaceApp(title="--- Day 7: No Space Left On Device ---").run()
