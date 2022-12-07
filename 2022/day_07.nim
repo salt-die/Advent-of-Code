@@ -10,7 +10,7 @@ type Path = ref object
 proc size(path: Path): int =
   path.files.values.toSeq.sum + path.directories.values.toSeq.mapIt(it.size).sum
 
-iterator iter_dir(path: Path): Path {.closure.} =
+iterator iter_dir(path: Path): Path =
   var stack = @[path]
 
   while stack.len > 0:
