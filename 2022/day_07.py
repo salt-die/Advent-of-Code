@@ -49,9 +49,9 @@ SYSTEM = parse_raw()
 
 def part_one():
     return sum(
-        size
+        dir_.size
         for dir_ in SYSTEM.iter_dir()
-        if (size := dir_.size) <= 100000
+        if dir_.size <= 100000
     )
 
 def part_two():
