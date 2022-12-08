@@ -6,7 +6,7 @@ import aoc_lube
 from nurses_2.app import App
 from nurses_2.colors import ColorPair, BLACK, GREEN, WHITE_ON_BLACK
 from nurses_2.widgets.text_widget import TextWidget
-from nurses_2.widgets.split_layout import HSplitLayout
+from nurses_2.widgets.split_layout import VSplitLayout
 from nurses_2.widgets.file_chooser import FileChooser
 
 RAW = aoc_lube.fetch(2022, 7).splitlines()
@@ -60,7 +60,7 @@ class NoSpaceApp(App):
         system.children.append(Path("/"))
         file_view = FileChooser(root_dir=system, size_hint=(1.0, 1.0))
 
-        split = HSplitLayout(size_hint=(1.0, 1.0))
+        split = VSplitLayout(size_hint=(1.0, 1.0))
         split.left_pane.add_widget(terminal)
         split.right_pane.add_widget(file_view)
 
