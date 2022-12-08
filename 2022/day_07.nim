@@ -52,14 +52,13 @@ part 2:
     if size > needed: size
   ).min
 
-## Alternative fast solution:
+# ## Alternative fast solution:
 # let sizes = block:
 #   var sizes, stack: seq[int]
 
 #   proc stack_pop =
 #     sizes.add stack.pop
-#     if stack.len > 0:
-#       stack[^1] += sizes[^1]
+#     stack[^1] += sizes[^1]
 
 #   for line in fetch(2022, 7).splitlines.mapIt(it.split):
 #     case line:
@@ -69,8 +68,8 @@ part 2:
 #       of ["dir", _]: discard
 #       of [@size, _]: stack[^1] += size.parseInt
 
-#   while stack.len > 0: stack_pop()
-
+#   while stack.len > 1: stack_pop()
+#   sizes.add stack
 #   sizes
 
 # part 1: sum sizes.filterIt(it <= 100_000)
