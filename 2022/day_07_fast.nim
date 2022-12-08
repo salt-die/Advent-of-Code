@@ -11,11 +11,11 @@ let sizes = block:
 
   for line in fetch(2022, 7).splitlines.mapIt(it.split):
     case line:
-      of ["$", "cd", ".."]: stack_pop()
-      of ["$", "cd", _]: stack.add 0
-      of ["$", "ls"]: discard
-      of ["dir", _]: discard
-      of [@size, _]: stack[^1] += size.parseInt
+    of ["$", "cd", ".."]: stack_pop()
+    of ["$", "cd", _]: stack.add 0
+    of ["$", "ls"]: discard
+    of ["dir", _]: discard
+    of [@size, _]: stack[^1] += size.parseInt
 
   while stack.len > 1: stack_pop()
   sizes.add stack
