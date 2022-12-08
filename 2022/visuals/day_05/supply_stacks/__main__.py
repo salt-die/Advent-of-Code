@@ -4,7 +4,7 @@ from pathlib import Path
 
 from nurses_2.app import App
 from nurses_2.colors import ABLACK
-from nurses_2.widgets.graphic_widget import GraphicWidget, Sprite
+from nurses_2.widgets.graphic_widget import GraphicWidget, read_texture, composite
 from nurses_2.widgets.scroll_view import ScrollView
 from nurses_2.widgets.text_widget import TextWidget
 
@@ -18,18 +18,18 @@ TH, TW = 18, 18  # tile size
 HH, HW = TH // 2, TW // 2  # half tile size
 OY, OX = (WH + WW // 2 + 1) * TH // 2 - TH - 1, 1  # origin
 NSTACKS = 9
-TILE_SHEET = Sprite.from_image(TILES_PATH).texture
+TILE_SHEET = read_texture(TILES_PATH)
 BOXES = cycle((
-    Sprite(TILE_SHEET[:TH, :TW]),
-    Sprite(TILE_SHEET[:TH, TW:2 * TW]),
-    Sprite(TILE_SHEET[:TH, 4 * TW:5 * TW]),
-    Sprite(TILE_SHEET[TH:2 * TH, :TW]),
-    Sprite(TILE_SHEET[TH:2 * TH, TW:2 * TW]),
-    Sprite(TILE_SHEET[TH:2 * TH, 4 * TW:5 * TW]),
-    Sprite(TILE_SHEET[3 * TH:4 * TH, :TW]),
-    Sprite(TILE_SHEET[4 * TH:5 * TH, :TW]),
-    Sprite(TILE_SHEET[4 * TH:5 * TH, TW:2 * TW]),
-    Sprite(TILE_SHEET[4 * TH:5 * TH, 2 * TW:3 * TW]),
+    TILE_SHEET[:TH, :TW],
+    TILE_SHEET[:TH, TW:2 * TW],
+    TILE_SHEET[:TH, 4 * TW:5 * TW],
+    TILE_SHEET[TH:2 * TH, :TW],
+    TILE_SHEET[TH:2 * TH, TW:2 * TW],
+    TILE_SHEET[TH:2 * TH, 4 * TW:5 * TW],
+    TILE_SHEET[3 * TH:4 * TH, :TW],
+    TILE_SHEET[4 * TH:5 * TH, :TW],
+    TILE_SHEET[4 * TH:5 * TH, TW:2 * TW],
+    TILE_SHEET[4 * TH:5 * TH, 2 * TW:3 * TW],
 ))
 
 def parse_raw():
@@ -53,8 +53,8 @@ class Boxes(GraphicWidget):
         )
         # Paint all boxes.
         for x, stack in enumerate(reversed(STACKS)):
-            for y, (_, sprite) in enumerate(stack):
-                sprite.paint(self.texture, self.iso_tile_to_uv(y, NSTACKS - x - 1))
+            for y, (_, texture) in enumerate(stack):
+                composite(texture, self.texture, self.iso_tile_to_uv(y, NSTACKS - x - 1), mask_mode=True)
 
     def iso_tile_to_uv(self, y, x):
         """
@@ -67,20 +67,20 @@ class Boxes(GraphicWidget):
 
         if x != NSTACKS - 1:
             # Paint half column behind
-            for y, (_, sprite) in enumerate(STACKS[x + 1]):
-                Sprite(sprite.texture[:, :HW]).paint(self.texture, self.iso_tile_to_uv(y, x + 1))
+            for y, (_, texture) in enumerate(STACKS[x + 1]):
+                composite(texture[:, :HW], self.texture, self.iso_tile_to_uv(y, x + 1), mask_mode=True)
 
         # Paint column
-        for y, (_, sprite) in enumerate(STACKS[x]):
-            sprite.paint(self.texture, self.iso_tile_to_uv(y, x))
+        for y, (_, texture) in enumerate(STACKS[x]):
+            composite(texture, self.texture, self.iso_tile_to_uv(y, x), mask_mode=True)
 
-        popped.paint(self.texture, (u, v))
+        composite(popped, self.texture, (u, v), mask_mode=True)
 
         if x != 0:
             # Paint half column in front
-            for y, (_, sprite) in enumerate(STACKS[x - 1]):
+            for y, (_, texture) in enumerate(STACKS[x - 1]):
                 au, av = self.iso_tile_to_uv(y, x - 1)
-                Sprite(sprite.texture[:, HW:]).paint(self.texture, (au, av + HW))
+                composite(texture[:, HW:], self.texture, (au, av + HW), mask_mode=True)
 
 
 class SupplyStacksApp(App):
