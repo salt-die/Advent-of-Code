@@ -8,6 +8,15 @@ Several visualizations were created with my terminal graphics library, [nurses_2
 
 
 # Terminal Visualizations
+Check [visuals_media](visuals_media/) for more visualizations.
+
+**Treetop Tree House, Day 8, 2022**
+
+![2022, Day 8 Visualization](visuals_media/treetop.gif)
+
+**No Space No Space Left On Device, Day 7, 2022**
+
+![2022, Day 7 Visualization](visuals_media/no_space.gif)
 
 **Supply Stacks, Day 5, 2022**
 
@@ -25,10 +34,6 @@ Several visualizations were created with my terminal graphics library, [nurses_2
 
 ![2022, Day 1 Visualization](visuals_media/counting_calories.gif)
 
-**Packet Printer, Day 16, 2021**
-
-![2021, Day 16 Visualization](visuals_media/packet_printer.png)
-
 **Dumbo Octopuses, Day 11, 2021**
 
 ![2021, Day 11 Visualization](visuals_media/dumbo_octos.gif)
@@ -45,14 +50,6 @@ Several visualizations were created with my terminal graphics library, [nurses_2
 
 ![2021, Day 1 Visualization](visuals_media/ocean_floor.gif)
 
-**Intcode Callback, Day 8, 2020**
-
-![2020, Day 8 Visualization](visuals_media/intcode_callback.gif)
-
-**Bag Pretty Printer, Day 7, 2020**
-
-![2020, Day 7 Visualization](visuals_media/bag_pretty_printer.png)
-
 **Skiing, Day 3, 2020**
 
 ![2020, Day 3 Visualization](visuals_media/skiing.gif)
@@ -60,14 +57,6 @@ Several visualizations were created with my terminal graphics library, [nurses_2
 **Maze Solving in 2.5d, Day 15, 2019**
 
 ![2019, Day 15 Visualization 2](visuals_media/maze_solver_2.gif)
-
-**Maze Solving Animation, Day 15, 2019**
-
-![2019, Day 15 Visualization 1](visuals_media/maze_solver.gif)
-
-**Breaker Animation, Day 13, 2019**
-
-![2019, Day 13 Visualization](visuals_media/breaker.gif)
 
 **Terminal Intcode Computer v2, Day 9, 2019**
 
