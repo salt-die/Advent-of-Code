@@ -11,38 +11,36 @@ from nurses_2.widgets.text_widget import TextWidget
 import aoc_lube
 from aoc_lube.utils import extract_ints, chunk
 
-ASSETS = Path(__file__).parent.parent / "assets"
-TILES_PATH = ASSETS / "boxes.png"
 WH, WW = 13, 10  # world size
 TH, TW = 18, 18  # tile size
 HH, HW = TH // 2, TW // 2  # half tile size
 OY, OX = (WH + WW // 2 + 1) * TH // 2 - TH - 1, 1  # origin
 NSTACKS = 9
-TILE_SHEET = read_texture(TILES_PATH)
-BOXES = cycle((
-    TILE_SHEET[:TH, :TW],
-    TILE_SHEET[:TH, TW:2 * TW],
-    TILE_SHEET[:TH, 4 * TW:5 * TW],
-    TILE_SHEET[TH:2 * TH, :TW],
-    TILE_SHEET[TH:2 * TH, TW:2 * TW],
-    TILE_SHEET[TH:2 * TH, 4 * TW:5 * TW],
-    TILE_SHEET[3 * TH:4 * TH, :TW],
-    TILE_SHEET[4 * TH:5 * TH, :TW],
-    TILE_SHEET[4 * TH:5 * TH, TW:2 * TW],
-    TILE_SHEET[4 * TH:5 * TH, 2 * TW:3 * TW],
-))
 
-def parse_raw():
+def init_stacks():
+    tile_sheet = read_texture(Path(__file__).parent.parent / "assets" / "boxes.png")
+    boxes = cycle((
+        tile_sheet[:TH, :TW],
+        tile_sheet[:TH, TW:2 * TW],
+        tile_sheet[:TH, 4 * TW:5 * TW],
+        tile_sheet[TH:2 * TH, :TW],
+        tile_sheet[TH:2 * TH, TW:2 * TW],
+        tile_sheet[TH:2 * TH, 4 * TW:5 * TW],
+        tile_sheet[3 * TH:4 * TH, :TW],
+        tile_sheet[4 * TH:5 * TH, :TW],
+        tile_sheet[4 * TH:5 * TH, TW:2 * TW],
+        tile_sheet[4 * TH:5 * TH, 2 * TW:3 * TW],
+    ))
     stacks, commands = aoc_lube.fetch(year=2022, day=5).split("\n\n")
     stacks = stacks.splitlines()
     stacks = [
-        [(l, next(BOXES)) for y in range(7, -1, -1) if (l := stacks[y][x]) != " "]
+        [(l, next(boxes)) for y in range(7, -1, -1) if (l := stacks[y][x]) != " "]
         for x in range(1, 35, 4)
     ]
 
     return stacks, tuple(chunk(extract_ints(commands), 3))
 
-STACKS, COMMANDS = parse_raw()
+STACKS, COMMANDS = init_stacks()
 
 
 class Boxes(GraphicWidget):
