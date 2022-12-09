@@ -7,17 +7,15 @@ def parse_input():
         d, n = line.split()
         yield dirs[d], int(n)
 
-DIRECTIONS = tuple(parse_input())
-
 def simulate_rope(nknots):
     rope = np.zeros((nknots, 2), int)
     seen = {(0, 0)}
-    for d, n in DIRECTIONS:
+    for d, n in parse_input():
         for _ in range(n):
             rope[0] += d
             for i in range(nknots - 1):
                 delta = rope[i] - rope[i + 1]
-                rope[i + 1] += np.clip(delta, -1, 1) * (abs(delta).max() > 1)
+                rope[i + 1] += np.sign(delta) * (np.linalg.norm(delta, ord=np.inf) > 1)
             seen.add(tuple(rope[-1]))
     return len(seen)
 
