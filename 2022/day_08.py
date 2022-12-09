@@ -9,10 +9,9 @@ trees = int_grid(aoc_lube.fetch(year=2022, day=8)).astype(np.uint8)
 def part_one():
     visible = np.zeros_like(trees, bool)
     visible[[0, -1]] = visible[:, [0, -1]] = True
-    kernel = np.array([[0, 1, 0], [0, 1, 0], [0, 0, 0]], np.uint8)
 
     for i in range(4):
-        dilated = cv2.dilate(np.rot90(trees, i), kernel, iterations=98)
+        dilated = np.maximum.accumulate(np.rot90(trees, i))
         dilated[1:] -= dilated[:-1]
         np.rot90(visible, i)[dilated.nonzero()] = True
 
@@ -20,7 +19,7 @@ def part_one():
 
 def part_two():
     kernel = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]], np.uint8)
-    tall_trees = np.argwhere(cv2.dilate(trees, kernel) == trees) # Local maxima
+    tall_trees = np.argwhere(cv2.dilate(trees, kernel, iterations=10) == trees) # Local maxima
 
     score = 0
     for y, x in tall_trees:
