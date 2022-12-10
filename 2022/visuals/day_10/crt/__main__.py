@@ -50,9 +50,9 @@ class CRTApp(App):
         def update_banner(box):
             nonlocal buffer, fill_mask
             text = box.text.ljust(8)
-            buffer = np.full((6, len(text) * 5), " ", object)
+            buffer = np.full((6, len(text) * 5), ".", object)
             for i, letter in enumerate(text):
-                buffer[:, i * 5: (i + 1) * 5] = LETTER_TO_ARRAY.get(letter, " ")
+                buffer[:, i * 5: (i + 1) * 5] = LETTER_TO_ARRAY.get(letter, ".")
             fill_mask = buffer == "."
             buffer[fill_mask] = fill_char
             buffer[~fill_mask] = text_char
@@ -71,10 +71,10 @@ class CRTApp(App):
             chunk = int(n)
 
         slider = Slider(
-            pos=(9, 32),
-            size=(1, 8),
+            pos=(9, 30),
+            size=(1, 10),
             min=1,
-            max=8,
+            max=10,
             fill_color=AOC_BRIGHT_GREEN,
             callback=slider_update,
             default_color_pair=GREEN_ON_BLUE,
