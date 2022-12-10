@@ -1,4 +1,5 @@
 import asyncio
+import string
 from pathlib import Path
 
 import numpy as np
@@ -8,7 +9,6 @@ from nurses_2.colors import Color, ColorPair, ColorTheme, gradient
 from nurses_2.widgets.slider import Slider
 from nurses_2.widgets.text_widget import TextWidget
 from nurses_2.widgets.textbox import Textbox
-from nurses_2.widgets.widget import Widget
 
 AOC_GREEN = Color.from_hex("009900")
 AOC_BRIGHT_GREEN = Color.from_hex("99ff99")
@@ -30,33 +30,40 @@ LENGTH = HEIGHT * WIDTH
 
 def load_font():
     font = (Path(__file__).parent.parent.parent / "letters.txt").read_text()
-    letters = np.array([list(line) for line in font.splitlines()])
-    letters[letters=="."] = " "
-    return {chr(i + ord("A")): letters[:, i * 5: (i + 1) * 5] for i in range(26)}
+    font_array = np.array([list(line) for line in font.splitlines()])
+    chars = f" {string.digits}!{string.ascii_lowercase}{string.ascii_uppercase}"
+    return {char: font_array[:, i * 5: (i + 1) * 5] for i, char in enumerate(chars)}
 
 LETTER_TO_ARRAY = load_font()
 
 
 class CRTApp(App):
     async def on_start(self):
-        crt = TextWidget(size=(HEIGHT, WIDTH))
+        crt = TextWidget(size=(HEIGHT, WIDTH), pos=(2, 0))
         crt.colors[..., 3:] = AOC_BLUE  # Background
         crt_fg = crt.colors[..., :3].reshape(-1, 3)  # Foreground
         crt_fg[:] = gradient(AOC_GREEN, AOC_BRIGHT_GREEN, LENGTH)
 
-        banner = "ADVENT OF CODE "
-        buffer = np.full((6, len(banner) * 5), " ", object)
-        for i, letter in enumerate(banner):
-            if letter in LETTER_TO_ARRAY:
-                buffer[:, i * 5: (i + 1) * 5] = LETTER_TO_ARRAY[letter]
-        fill_mask = buffer == " "
+        buffer = fill_mask = None
+        text_char = "#"
+        fill_char = " "
+        def update_banner(box):
+            nonlocal buffer, fill_mask
+            text = box.text.ljust(8)
+            buffer = np.full((6, len(text) * 5), " ", object)
+            for i, letter in enumerate(text):
+                buffer[:, i * 5: (i + 1) * 5] = LETTER_TO_ARRAY.get(letter, " ")
+            fill_mask = buffer == "."
+            buffer[fill_mask] = fill_char
+            buffer[~fill_mask] = text_char
 
-        slider_label = TextWidget(
-            pos=(7, 0),
-            size=(1, 30),
-            default_color_pair=GREEN_ON_BLUE
+        bannerbox = Textbox(
+            pos=(0, 13),
+            size=(1, 37),
+            enter_callback=update_banner,
         )
-        slider_label.add_text(f"Pixels updated per iteration: ")
+        bannerbox.text = "ADVENT OF CODE "
+        update_banner(bannerbox)
 
         chunk = 1
         def slider_update(n):
@@ -64,7 +71,7 @@ class CRTApp(App):
             chunk = int(n)
 
         slider = Slider(
-            pos=(7, 30),
+            pos=(9, 32),
             size=(1, 8),
             min=1,
             max=8,
@@ -73,52 +80,41 @@ class CRTApp(App):
             default_color_pair=GREEN_ON_BLUE,
         )
 
-        fillbox_label = TextWidget(
-            pos=(9, 0),
-            size=(1, 16),
-            default_color_pair=GREEN_ON_BLUE,
-        )
-        fillbox_label.add_text("Fill character: ")
-
-        def update_fill(box):
-            buffer[fill_mask] = box.text[:1]
-            box.text = ""
-
-        fillbox = Textbox(
-            pos=(9, 16),
-            size=(1, 2),
-            max_chars=1,
-            enter_callback=update_fill,
-        )
-
-        textbox_label = TextWidget(
-            pos=(9, 19),
-            size=(1, 16),
-            default_color_pair=GREEN_ON_BLUE,
-        )
-        textbox_label.add_text("Text character: ")
-
         def update_text(box):
-            buffer[~fill_mask] = box.text[:1]
+            nonlocal text_char
+            buffer[~fill_mask] = text_char = box.text
             box.text = ""
 
         textbox = Textbox(
-            pos=(9, 35),
+            pos=(11, 16),
             size=(1, 2),
             max_chars=1,
             enter_callback=update_text,
         )
 
-        container = Widget(size=(10, 40), pos_hint=(.5, .5), anchor="center")
-        container.add_widgets(
-            crt,
-            slider_label,
-            slider,
-            fillbox_label,
-            fillbox,
-            textbox_label,
-            textbox,
+        def update_fill(box):
+            nonlocal fill_char
+            buffer[fill_mask] = fill_char = box.text
+            box.text = ""
+
+        fillbox = Textbox(
+            pos=(11, 38),
+            size=(1, 2),
+            max_chars=1,
+            enter_callback=update_fill,
         )
+
+        container = TextWidget(
+            size=(12, 40),
+            pos_hint=(.5, .5),
+            anchor="center",
+            default_color_pair=GREEN_ON_BLUE,
+        )
+        container.add_text("Banner Text:")
+        container.add_text("Pixels updated per iteration:", row=9)
+        container.add_text("Text character:", row=11)
+        container.add_text("Fill character:", row=11, column=22)
+        container.add_widgets(bannerbox, crt, slider, textbox, fillbox)
 
         self.add_widget(container)
 
