@@ -10,6 +10,10 @@ Several visualizations were created with my terminal graphics library, [nurses_2
 # Terminal Visualizations
 Check [visuals_media](visuals_media/) for more visualizations.
 
+**Cathode-Ray Tube, Day 10, 2022**
+
+![2022, Day 8 Visualization](visuals_media/cathode_ray_tube.gif)
+
 **Rope Bridge, Day 9, 2022**
 
 ![2022, Day 8 Visualization](visuals_media/rope_bridge.gif)
