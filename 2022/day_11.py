@@ -12,10 +12,14 @@ class Monkey(q):
     items, op, test, a, b
     nitems = 0
 
-    def throw(self, item):
-        buddy = self.b if item % self.test else self.a
-        MONKEYS[buddy].items.append(item)
-
+    def do_round(self, stressed):
+        while self.items:
+            item = self.op(self.items.popleft())
+            if stressed:
+                item %= LCM
+            else:
+                item //= 3
+            MONKEYS[self.b if item % self.test else self.a].items.append(item)
 
 def parse_raw():
     for data in aoc_lube.fetch(year=2022, day=11).split("\n\n"):
@@ -32,11 +36,7 @@ LCM = lcm(*(monkey.test for monkey in MONKEYS))
 def do_rounds(n, stressed):
     for _ in range(n):
         for monkey in MONKEYS:
-            items = monkey.items
-            monkey.nitems += len(items)
-            while items:
-                item = monkey.op(items.popleft())
-                monkey.throw(item % LCM if stressed else item // 3)
+            monkey.do_round(stressed)
 
     a, b = nlargest(2, MONKEYS, key=lambda monkey: monkey.nitems)
     return a.nitems  * b.nitems
