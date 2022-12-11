@@ -13,6 +13,7 @@ class Monkey(q):
     nitems = 0
 
     def do_round(self, stressed):
+        self.nitems += len(self.items)
         while self.items:
             item = self.op(self.items.popleft())
             if stressed:
