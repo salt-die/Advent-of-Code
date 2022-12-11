@@ -32,15 +32,11 @@ LCM = lcm(*(monkey.test for monkey in MONKEYS))
 def do_rounds(n, stressed):
     for _ in range(n):
         for monkey in MONKEYS:
-            while monkey.items:
-                item = monkey.items.popleft()
-                monkey.nitems += 1
-                if stressed:
-                    item = monkey.op(item) % LCM
-                else:
-                    item = monkey.op(item) // 3
-
-                monkey.throw(item)
+            items = monkey.items
+            monkey.nitems += len(items)
+            while items:
+                item = monkey.op(items.popleft())
+                monkey.throw(item % LCM if stressed else item // 3)
 
     a, b = nlargest(2, MONKEYS, key=lambda monkey: monkey.nitems)
     return a.nitems  * b.nitems
