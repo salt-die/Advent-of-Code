@@ -31,8 +31,7 @@ LENGTH = HEIGHT * WIDTH
 def load_font():
     font = (Path(__file__).parent.parent.parent / "letters.txt").read_text()
     font_array = np.array([list(line) for line in font.splitlines()])
-    chars = f" {string.digits}!{string.ascii_lowercase}{string.ascii_uppercase}"
-    return {char: font_array[:, i * 5: (i + 1) * 5] for i, char in enumerate(chars)}
+    return {char: font_array[:, i * 5: (i + 1) * 5] for i, char in enumerate(string.printable[:-5])}
 
 LETTER_TO_ARRAY = load_font()
 
