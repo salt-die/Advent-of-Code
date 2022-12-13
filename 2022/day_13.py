@@ -16,11 +16,7 @@ def cmp(a, b):
         case _, int():
             b = [b]
 
-    for i, j in zip(a, b):
-        if result := cmp(i, j):
-            return result
-
-    return len(a) - len(b)
+    return next(filter(None, map(cmp, a, b)), len(a) - len(b))
 
 def part_one():
     return sum(i for i, (a, b) in enumerate(PACKETS, start=1) if cmp(a, b) < 0)
