@@ -59,6 +59,6 @@ def part_one():
 
 def part_two():
     return fill_cave(CAVE.bottom)
-print(part_two(), max(x for x, _ in CAVE), max(y for _, y in CAVE), min(x for x, _ in CAVE), min(y for _, y in CAVE))
+
 aoc_lube.submit(year=2022, day=14, part=1, solution=part_one)
 aoc_lube.submit(year=2022, day=14, part=2, solution=part_two)
