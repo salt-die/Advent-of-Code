@@ -8,7 +8,6 @@ from shapely import (
     LineString,
     LinearRing,
     MultiPoint,
-    Polygon,
     intersection,
     union_all,
 )
@@ -25,40 +24,36 @@ def part_one():
     mask = intersection_widths > 0
 
     intervals = [
-        LineString(((x - width, row), (x + width, row)))
+        LineString(((x - width, 0), (x + width, 0)))
         for x, width in zip(XS[mask], intersection_widths[mask])
     ]
 
     return int(union_all(intervals).length)
 
 def part_two():
-    valid_region = Polygon([(0, 0), (4_000_000, 0), (4_000_000, 4_000_000)])
-
     boundaries = [
-        LinearRing((
-            (x + r + 1, y),
-            (x, y + r + 1),
-            (x - r - 1, y),
-            (x, y - r - 1),
-        ))
+        LinearRing(((x + r + 1, y), (x, y + r + 1), (x - r - 1, y), (x, y - r - 1)))
         for (x, y), r in zip(SENSORS, DISTANCES)
-    ]
-    candidates = set()
-    for a, b in combinations(boundaries, r=2):
-        if isinstance(points := intersection(a, b), MultiPoint):
-            for point in points.geoms:
-                if (
-                    valid_region.contains(point) and
-                    point.x.is_integer() and
-                    point.y.is_integer()
-                ):
-                    candidates.add((int(point.x), int(point.y)))
+    ]  # diamond-boundaries
+
+    candidates = {
+        (int(point.x), int(point.y))
+
+        for a, b in combinations(boundaries, r=2)
+        if isinstance(points := intersection(a, b), MultiPoint)
+
+        for point in points.geoms
+        if 0 <= point.x <= 4_000_000
+        if 0 <= point.y <= 4_000_000
+        if point.x.is_integer()
+        if point.y.is_integer()
+    }  # integer boundary intersections within bounds
 
     for candidate in candidates:
         for sensor, d in zip(SENSORS, DISTANCES):
             if np.linalg.norm(sensor - candidate, ord=1) < d:
                 break
-        else:
+        else:  # candidate is outside of all diamond-boundaries
             x, y = candidate
             return 4_000_000 * x + y
 
