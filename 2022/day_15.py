@@ -1,10 +1,10 @@
-from itertools import combinations
+from functools import reduce
 
 import aoc_lube
 from aoc_lube.utils import extract_ints
 
 import numpy as np
-from shapely import LineString, LinearRing, MultiPoint, intersection, union_all
+from shapely import LineString, Polygon, union_all, difference, dif
 
 DATA = np.fromiter(extract_ints(aoc_lube.fetch(year=2022, day=15)), int).reshape(-1, 2, 2)
 SENSORS = DATA[:, 0]
@@ -22,31 +22,10 @@ def part_one():
     return int(union_all(intervals).length)
 
 def part_two():
-    boundaries = [
-        LinearRing(((x + r + 1, y), (x, y + r + 1), (x - r - 1, y), (x, y - r - 1)))
-        for (x, y), r in zip(SENSORS, DISTANCES)
-    ]  # diamond-boundaries
-
-    candidates = {
-        (int(point.x), int(point.y))
-
-        for a, b in combinations(boundaries, r=2)
-        if isinstance(points := intersection(a, b), MultiPoint)
-
-        for point in points.geoms
-        if 0 <= point.x <= 4_000_000
-        if 0 <= point.y <= 4_000_000
-        if point.x.is_integer()
-        if point.y.is_integer()
-    }  # integer boundary intersections within bounds
-
-    for candidate in candidates:
-        for sensor, d in zip(SENSORS, DISTANCES):
-            if np.linalg.norm(sensor - candidate, ord=1) < d:
-                break
-        else:  # candidate is outside of all diamond-boundaries
-            x, y = candidate
-            return 4_000_000 * x + y
+    MAX = 4_000_000
+    diamonds = (Polygon(((x + r, y), (x, y + r), (x - r, y), (x, y - r))) for (x, y), r in zip(SENSORS, DISTANCES))
+    beacon = reduce(difference, diamonds, Polygon(((0, 0), (0, MAX), (MAX, MAX), (MAX, 0)))).centroid
+    return int(beacon.x) * MAX + int(beacon.y)
 
 aoc_lube.submit(year=2022, day=15, part=1, solution=part_one)
 aoc_lube.submit(year=2022, day=15, part=2, solution=part_two)
