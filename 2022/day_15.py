@@ -11,21 +11,17 @@ SENSORS = DATA[:, 0]
 DISTANCES = np.linalg.norm(SENSORS - DATA[:, 1], ord=1, axis=1).astype(int)
 
 def part_one():
-    intersection_widths = DISTANCES - abs(SENSORS[:, 1] - 2_000_000)
-    mask = intersection_widths > 0
-
-    intervals = [
-        LineString(((x - width, 0), (x + width, 0)))
-        for x, width in zip(SENSORS[:, 0][mask], intersection_widths[mask])
-    ]
-
+    xs, ys = SENSORS.T
+    widths = DISTANCES - abs(ys - 2_000_000)
+    mask = widths > 0
+    intervals = [LineString(((x - width, 0), (x + width, 0))) for x, width in zip(xs[mask], widths[mask])]
     return int(union_all(intervals).length)
 
 def part_two():
     MAX = 4_000_000
     diamonds = (Polygon(((x + r, y), (x, y + r), (x - r, y), (x, y - r))) for (x, y), r in zip(SENSORS, DISTANCES))
     beacon = reduce(difference, diamonds, Polygon(((0, 0), (0, MAX), (MAX, MAX), (MAX, 0)))).centroid
-    return int(beacon.x) * MAX + int(beacon.y)
+    return int(beacon.x * MAX + beacon.y)
 
 aoc_lube.submit(year=2022, day=15, part=1, solution=part_one)
 aoc_lube.submit(year=2022, day=15, part=2, solution=part_two)
