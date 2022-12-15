@@ -4,7 +4,7 @@ import aoc_lube
 from aoc_lube.utils import extract_ints
 
 import numpy as np
-from shapely import LineString, Polygon, union_all, difference, dif
+from shapely import LineString, Polygon, union_all, difference
 
 DATA = np.fromiter(extract_ints(aoc_lube.fetch(year=2022, day=15)), int).reshape(-1, 2, 2)
 SENSORS = DATA[:, 0]
