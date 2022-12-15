@@ -4,28 +4,19 @@ import aoc_lube
 from aoc_lube.utils import extract_ints
 
 import numpy as np
-from shapely import (
-    LineString,
-    LinearRing,
-    MultiPoint,
-    intersection,
-    union_all,
-)
+from shapely import LineString, LinearRing, MultiPoint, intersection, union_all
 
 DATA = np.fromiter(extract_ints(aoc_lube.fetch(year=2022, day=15)), int).reshape(-1, 2, 2)
 SENSORS = DATA[:, 0]
-XS, YS = SENSORS.T
-BEACONS = DATA[:, 1]
-DISTANCES = np.linalg.norm(SENSORS - BEACONS, ord=1, axis=1).astype(int)
+DISTANCES = np.linalg.norm(SENSORS - DATA[:, 1], ord=1, axis=1).astype(int)
 
 def part_one():
-    row = 2_000_000
-    intersection_widths = DISTANCES - abs(YS - row)
+    intersection_widths = DISTANCES - abs(SENSORS[:, 1] - 2_000_000)
     mask = intersection_widths > 0
 
     intervals = [
         LineString(((x - width, 0), (x + width, 0)))
-        for x, width in zip(XS[mask], intersection_widths[mask])
+        for x, width in zip(SENSORS[:, 0][mask], intersection_widths[mask])
     ]
 
     return int(union_all(intervals).length)
