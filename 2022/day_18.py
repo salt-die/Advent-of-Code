@@ -1,18 +1,19 @@
 import aoc_lube
+from aoc_lube.utils import extract_ints
 
-RAW = aoc_lube.fetch(year=2022, day=18)
-print(RAW)
+import numpy as np
+from scipy.ndimage import convolve, label, generate_binary_structure as kernel
 
-def parse_raw():
-    ...
+DATA = np.fromiter(extract_ints(aoc_lube.fetch(year=2022, day=18)), int).reshape(-1, 3)
+DATA -= DATA.min(axis=0) - 1
+DROPLET = np.zeros(DATA.max(axis=0) + 2, int)
+DROPLET[*DATA.T] = 1
 
-DATA = parse_raw()
+def surface_area():
+    nneighbors = convolve(DROPLET, kernel(3, 1), mode="constant") * DROPLET
+    return 7 * DROPLET.sum() - nneighbors.sum()
 
-def part_one():
-    ...
+aoc_lube.submit(year=2022, day=18, part=1, solution=surface_area)
 
-def part_two():
-    ...
-
-aoc_lube.submit(year=2022, day=18, part=1, solution=part_one)
-aoc_lube.submit(year=2022, day=18, part=2, solution=part_two)
+DROPLET[np.isin(label(1 - DROPLET)[0], (0, 1), invert=True)] = 1
+aoc_lube.submit(year=2022, day=18, part=2, solution=surface_area)
