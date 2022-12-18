@@ -10,7 +10,7 @@ DROPLET = np.zeros(DATA.max(axis=0) + 2, int)
 DROPLET[*DATA.T] = 1
 
 def surface_area():
-    nneighbors = convolve(DROPLET, kernel(3, 1), mode="constant") * DROPLET
+    nneighbors = convolve(DROPLET, kernel(3, 1)) * DROPLET
     return 7 * DROPLET.sum() - nneighbors.sum()
 
 aoc_lube.submit(year=2022, day=18, part=1, solution=surface_area)
