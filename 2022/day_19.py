@@ -15,17 +15,14 @@ def solve(blueprints, duration):
         nbots = intvar(0, duration, shape=(duration, 4))
         resources = intvar(0, duration**2, shape=(duration, 4))
 
-        model = Model(resources[0] == 0, nbots[0] == [1, 0, 0, 0])
-
-        for t in range(1, duration):
-            # 1) Build one bot max
-            model += bot_to_build[t - 1].sum() <= 1
-            # 2) Must cover cost of build
-            model += resources[t - 1] >= bot_to_build[t - 1] @ costs
-            # 3) Resources are previous resources - cost of build + resources gathered.
-            model += resources[t] == resources[t - 1] - bot_to_build[t - 1] @ costs + nbots[t - 1]
-            # 4) Number of bots increases by bots built.
-            model += nbots[t] == nbots[t - 1] + bot_to_build[t - 1]
+        model = Model(
+            resources[0] == 0,
+            nbots[0] == [1, 0, 0, 0],
+            resources >= bot_to_build @ costs,
+            resources[1:] == resources[:-1] - bot_to_build[:-1] @ costs + nbots[:-1],
+            nbots[1:] == nbots[:-1] + bot_to_build[:-1],
+            [row.sum() <= 1 for row in bot_to_build],
+        )
 
         model.maximize(resources[-1][-1])
         model.solve()
