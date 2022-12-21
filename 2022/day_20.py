@@ -48,9 +48,7 @@ def mix():
 def extract_coords():
     current = ROOT
 
-    while True:
-        if current.val == 0:
-            break
+    while current.val != 0:
         current = current.r
 
     for _ in range(3):
@@ -67,6 +65,7 @@ def part_two():
     while True:
         current.val *= 811589153
         current = current.r
+
         if current is ROOT:
             break
 
