@@ -1,5 +1,5 @@
 import aoc_lube
-from aoc_lube.utils import extract_ints
+from aoc_lube.utils import extract_ints, pairwise_cycle
 
 
 class Block:
@@ -13,14 +13,12 @@ class Block:
 
 
 def parse_raw():
-    it = extract_ints(aoc_lube.fetch(year=2022, day=20))
-    root = current = Block(next(it))
-    for l, val in enumerate(it, start=1):
-        current.o = Block(val)
-        current = current >> current.o
+    it = map(Block, extract_ints(aoc_lube.fetch(year=2022, day=20)))
+    for i, (a, b) in enumerate(pairwise_cycle(it)):
+        a.o = b
+        a >> b
 
-    current.o = root
-    return current >> root, l
+    return b, i
 
 ROOT, LEN = parse_raw()
 
