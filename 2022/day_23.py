@@ -3,12 +3,12 @@ from collections import deque, defaultdict
 import aoc_lube
 from aoc_lube.utils import ilen
 
-ELVES = set(
+ELVES = {
     complex(y, x)
     for y, line in enumerate(aoc_lube.fetch(year=2022, day=23).splitlines())
     for x, c in enumerate(line)
     if c == "#"
-)
+}
 N, S, W, E = -1, 1, -1j, 1j
 NE, SE, NW, SW = N + E, S + E, N + W, S + W
 NEIGHBORS = N, NE, NW, S, SE, SW, W, E
