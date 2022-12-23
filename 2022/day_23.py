@@ -41,4 +41,4 @@ def part_two():
     return ilen(iter(do_round, False)) + 1
 
 aoc_lube.submit(year=2022, day=23, part=1, solution=part_one)
-aoc_lube.submit(year=2022, day=23, part=2, solution=lambda: 988)
+aoc_lube.submit(year=2022, day=23, part=2, solution=part_two)
