@@ -3,8 +3,6 @@ from itertools import count
 import aoc_lube
 import numpy as np
 
-DIM = 35, 100
-
 def parse_raw():
     blizzards = np.zeros((4, 35, 100), dtype=bool)
 
