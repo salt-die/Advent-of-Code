@@ -1,6 +1,7 @@
 from itertools import count
 
 import aoc_lube
+from aoc_lube.utils import Deltas
 import numpy as np
 
 def parse_raw():
@@ -19,27 +20,26 @@ def move(a, b):
     positions = {a}
 
     for steps in count(1):
-        new_positions = set()
-        if steps < 5:  # Assume we don't wait too long at start
-            new_positions.add(a)
-
         BLIZZARDS[0] = np.roll(BLIZZARDS[0], -1, (0,))
         BLIZZARDS[1] = np.roll(BLIZZARDS[1],  1, (1,))
         BLIZZARDS[2] = np.roll(BLIZZARDS[2],  1, (0,))
         BLIZZARDS[3] = np.roll(BLIZZARDS[3], -1, (1,))
         blizzards = np.any(BLIZZARDS, axis=0)
 
-        for y, x in positions:
-            if (y, x) == b:
-                return steps
+        if b in positions:
+            return steps
 
-            for dy, dx in ((-1, 0), (1, 0), (0, -1), (0, 1), (0, 0)):
-                ny = y + dy
-                nx = x + dx
-                if 0 <= ny < 35 and 0 <= nx < 100 and not blizzards[ny, nx]:
-                    new_positions.add((ny, nx))
+        positions = {
+            (ny, nx)
+            for y, x in positions
+            for dy, dx in Deltas.FIVE
+            if 0 <= (ny := y + dy) < 35
+            if 0 <= (nx := x + dx) < 100
+            if not blizzards[ny, nx]
+        }
 
-        positions = new_positions
+        if steps < 5:  # Assume we don't wait too long at start
+            positions.add(a)
 
 def part_one():
     return move((-1, 0), (34, 99))
