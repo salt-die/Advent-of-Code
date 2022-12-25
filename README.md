@@ -10,13 +10,29 @@ Several visualizations were created with my terminal graphics library, [nurses_2
 # Terminal Visualizations
 Check [visuals_media](visuals_media/) for more visualizations.
 
+**Unstable Diffusion, Day 23, 2022**
+
+![2022, Day 23 Visualization](visuals_media/diffusion.gif)
+
+**Lava Droplet, Day 18, 2022**
+
+![2022, Day 18 Visualization](visuals_media/lava_droplet.gif)
+
+**Tetrish, Day 17, 2022**
+
+![2022, Day 17 Visualization](visuals_media/tetrish.gif)
+
+**Regolith Reservoir, Day 14, 2022**
+
+![2022, Day 14 Visualization](visuals_media/reservoir.gif)
+
 **Cathode-Ray Tube, Day 10, 2022**
 
-![2022, Day 8 Visualization](visuals_media/cathode_ray_tube.gif)
+![2022, Day 10 Visualization](visuals_media/cathode_ray_tube.gif)
 
 **Rope Bridge, Day 9, 2022**
 
-![2022, Day 8 Visualization](visuals_media/rope_bridge.gif)
+![2022, Day 9 Visualization](visuals_media/rope_bridge.gif)
 
 **Treetop Tree House, Day 8, 2022**
 
