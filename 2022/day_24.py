@@ -6,12 +6,10 @@ import numpy as np
 
 def parse_raw():
     blizzards = np.zeros((4, 35, 100), dtype=bool)
-
     for y, line in enumerate(aoc_lube.fetch(year=2022, day=24).splitlines()[1: -1]):
         for x, c in enumerate(line[1: -1]):
-            if (i := "^>v<".find(c)) != -1:
-                blizzards[i, y, x] = True
-
+            if c != ".":
+                blizzards["^>v<".find(c), y, x] = True
     return blizzards
 
 BLIZZARDS = parse_raw()
