@@ -9,7 +9,7 @@ def parse_raw():
     for y, line in enumerate(aoc_lube.fetch(year=2022, day=24).splitlines()[1: -1]):
         for x, c in enumerate(line[1: -1]):
             if c != ".":
-                blizzards["^>v<".find(c), y, x] = True
+                blizzards["v>^<".find(c), y, x] = True
     return blizzards
 
 BLIZZARDS = parse_raw()
@@ -18,11 +18,9 @@ def move(a, b):
     positions = {a}
 
     for steps in count(1):
-        BLIZZARDS[0] = np.roll(BLIZZARDS[0], -1, (0,))
-        BLIZZARDS[1] = np.roll(BLIZZARDS[1],  1, (1,))
-        BLIZZARDS[2] = np.roll(BLIZZARDS[2],  1, (0,))
-        BLIZZARDS[3] = np.roll(BLIZZARDS[3], -1, (1,))
-        blizzards = np.any(BLIZZARDS, axis=0)
+        for i, face in enumerate(BLIZZARDS):
+            BLIZZARDS[i] = np.roll(face, (-1)**(i>>1), i & 1)
+        blizzards = BLIZZARDS.any(axis=0)
 
         if b in positions:
             return steps
