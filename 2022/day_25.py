@@ -1,18 +1,18 @@
 import aoc_lube
-
-RAW = aoc_lube.fetch(year=2022, day=25)
-print(RAW)
-
-def parse_raw():
-    ...
-
-DATA = parse_raw()
+from aoc_lube.utils import shiftmod
 
 def part_one():
-    ...
+    number = sum(
+        sum(("=-012".find(c) - 2) * 5**i for i, c in enumerate(reversed(line)))
+        for line in aoc_lube.fetch(year=2022, day=25).splitlines()
+    )
 
-def part_two():
-    ...
+    digits = ""
+    while number:
+        number, digit = number // 5, shiftmod(number, 5, -2)
+        number += digit < 0
+        digits += "012=-"[digit]
+
+    return digits[::-1]
 
 aoc_lube.submit(year=2022, day=25, part=1, solution=part_one)
-aoc_lube.submit(year=2022, day=25, part=2, solution=part_two)
