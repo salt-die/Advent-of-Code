@@ -12,29 +12,19 @@ def get_password(keypad, start, validate):
             if validate(y + dy, x + dx):
                 y += dy
                 x += dx
-        password += str(keypad[y][x])
+        password += keypad[y][x]
     return password
 
 def part_one():
     return get_password(
-        keypad=[
-            [1, 2, 3],
-            [4, 5, 6],
-            [7, 8, 9],
-        ],
+        keypad=["123", "456", "789"],
         start=(1, 1),
         validate=lambda y, x: max(abs(y - 1), abs(x - 1)) <= 1,
     )
 
 def part_two():
     return get_password(
-        keypad=[
-            [-1, -1 ,  1 , -1 , -1],
-            [-1,  2 ,  3 ,  4 , -1],
-            [ 5,  6 ,  7 ,  8 ,  9],
-            [-1, "A", "B", "C", -1],
-            [-1, -1 , "D", -1 , -1],
-        ],
+        keypad=["00100", "02340", "56789", "0ABC0", "00D00"],
         start=(2, 0),
         validate=lambda y, x: abs(y - 2) + abs(x - 2) <= 2,
     )
