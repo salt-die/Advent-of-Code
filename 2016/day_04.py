@@ -1,29 +1,34 @@
 from collections import Counter
-from itertools import chain
+from heapq import nsmallest
 import re
 
 import aoc_lube
 from aoc_lube.utils import shift_cipher
 
-RAW = aoc_lube.fetch(year=2016, day=4)
-IDCHECKSUM_RE = re.compile(r'(\d+)\[([a-z]{5})\]')
+def parse_raw():
+    checksum_re = re.compile(r'(\d+)\[([a-z]{5})\]')
+    for room in aoc_lube.fetch(year=2016, day=4).split():
+        *names, idchecksum = room.split("-")
+        sector_id, checksum = checksum_re.match(idchecksum).groups()
+        yield "".join(names), int(sector_id), checksum
+
+ROOMS = list(parse_raw())
 
 def part_one():
     total = 0
-    for room in RAW.split():
-        *names, idchecksum = room.split("-")
-        counts = Counter(chain.from_iterable(names)).items()
-        most_common = sorted(counts, key=lambda tup: (-tup[1], tup[0]))[:5]
-        [(sector_id, checksum)] = IDCHECKSUM_RE.findall(idchecksum)
+    for name, sector_id, checksum in ROOMS:
+        most_common = nsmallest(
+            n=5,
+            iterable=Counter(name).items(),
+            key=lambda tup: (-tup[1], tup[0]),
+        )
         if "".join(letter for letter, _ in most_common) == checksum:
             total += int(sector_id)
     return total
 
 def part_two():
-    for room in RAW.split():
-        *names, idchecksum = room.split("-")
-        [(sector_id, _)] = IDCHECKSUM_RE.findall(idchecksum)
-        if "northpole" in set(shift_cipher(name, int(sector_id)) for name in names):
+    for name, sector_id, _ in ROOMS:
+        if "northpole" in shift_cipher(name, sector_id):
             return sector_id
 
 aoc_lube.submit(year=2016, day=4, part=1, solution=part_one)
