@@ -24,7 +24,7 @@ def part_one():
 
 def part_two():
     return get_password(
-        keypad=["00100", "02340", "56789", "0ABC0", "00D00"],
+        keypad=["--1--", "-234-", "56789", "-ABC-", "--D--"],
         start=(2, 0),
         validate=lambda y, x: abs(y - 2) + abs(x - 2) <= 2,
     )
