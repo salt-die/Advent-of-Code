@@ -23,7 +23,7 @@ def part_one():
             key=lambda tup: (-tup[1], tup[0]),
         )
         if "".join(letter for letter, _ in most_common) == checksum:
-            total += int(sector_id)
+            total += sector_id
     return total
 
 def part_two():
