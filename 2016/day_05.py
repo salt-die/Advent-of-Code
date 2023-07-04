@@ -1,6 +1,7 @@
-import aoc_lube
 from hashlib import md5
 from itertools import count, islice
+
+import aoc_lube
 
 DOOR_ID = aoc_lube.fetch(year=2016, day=5)
 
