@@ -8,19 +8,19 @@ def interesting():
     for i in count():
         hash_ = md5(f"{DOOR_ID}{i}".encode()).hexdigest()
         if hash_.startswith("00000"):
-            yield hash_
+            yield hash_[5:7]
 
 def part_one():
-    return "".join(hash_[5] for hash_ in islice(interesting(), 8))
+    return "".join(a for a, _ in islice(interesting(), 8))
 
 def part_two():
     password = {}
-    for hash_ in interesting():
-        pos = int(hash_[5], 16)
+    for a, b in interesting():
+        pos = int(a, 16)
         if 8 <= pos or pos in password:
             continue
 
-        password[pos] = hash_[6]
+        password[pos] = b
         if len(password) == 8:
             return "".join(char for _, char in sorted(password.items()))
 
