@@ -16,8 +16,8 @@ def produce_screen():
         elif match := parse("rotate row y={:d} by {:d}", instruction):
             row, shift = match
             screen[row] = np.roll(screen[row], shift)
-
     return screen
+
 SCREEN = produce_screen()
 
 def part_one():
