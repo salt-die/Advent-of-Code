@@ -9,7 +9,7 @@ def parse_data():
 IPS = list(parse_data())
 
 def contains_abba(it):
-    return any(a != b and b == c and a == d for a, b, c, d in sliding_window(it, 4))
+    return any(a == d != b == c for a, b, c, d in sliding_window(it, 4))
 
 def supports_tls(ip):
     supernets, hypernets = ip
@@ -18,7 +18,7 @@ def supports_tls(ip):
 def supports_ssl(ip):
     supernets, hypernets = ip
     return any(
-        a != b and a == c and any(f"{b}{a}{b}" in hypernet for hypernet in hypernets)
+        a == c != b and any(f"{b}{a}{b}" in hypernet for hypernet in hypernets)
         for supernet in supernets
         for a, b, c in sliding_window(supernet, 3)
     )
