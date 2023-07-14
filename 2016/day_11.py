@@ -56,7 +56,7 @@ def nmoves(initial_state):
 
         for nitems, direction in product((1, 2), (-1, 1)):
             for items in combinations(floors[elevator], nitems):
-                if (dest := elevator + direction) < 0 or dest >= 4:
+                if 0 < (dest := elevator + direction) or 4 <= dest:
                     continue
 
                 new_floors = move_items(floors, elevator, dest, set(items))
