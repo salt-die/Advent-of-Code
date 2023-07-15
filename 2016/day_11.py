@@ -56,7 +56,7 @@ def nmoves(initial_state):
 
         for nitems, direction in product((1, 2), (-1, 1)):
             for items in combinations(floors[elevator], nitems):
-                if 0 < (dest := elevator + direction) or 4 <= dest:
+                if (dest := elevator + direction) < 0 or 4 <= dest:
                     continue
 
                 new_floors = move_items(floors, elevator, dest, set(items))
@@ -67,8 +67,8 @@ def part_one():
     return nmoves(INITIAL_CONFIG)
 
 def part_two():
-    a, b, c, d = INITIAL_CONFIG
-    return nmoves((a | {"yc", "yg", "zc", "zg"}, b, c, d))
+    a, *b = INITIAL_CONFIG
+    return nmoves((a | {"yc", "yg", "zc", "zg"}, *b))
 
 aoc_lube.submit(year=2016, day=11, part=1, solution=part_one)
 aoc_lube.submit(year=2016, day=11, part=2, solution=part_two)
