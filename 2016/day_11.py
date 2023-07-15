@@ -40,6 +40,13 @@ def hash_state(floors, elevator):
         n += 16 ** (2 * i) * sum(b == "g" for _, b in floor)
     return n
 
+def hash_state_v2(floors, elevator):
+    def kind_hash(kind):
+        locations = (i for i, floor in enumerate(floors) for _, b in floor if b == kind)
+        return "".join(map(str, sorted(locations)))
+
+    return int(f"1{elevator}{kind_hash('c')}{kind_hash('g')}")
+
 def nmoves(initial_state):
     queue = deque([(initial_state, 0, 0)])
     seen = set()
