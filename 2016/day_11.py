@@ -27,7 +27,7 @@ def is_valid_state(floors):
 
 def move_items(floors, elevator, dest, items):
     return tuple(
-        floor ^ items if i == elevator else
+        floor - items if i == elevator else
         floor | items if i == dest else
         floor
         for i, floor in enumerate(floors)
