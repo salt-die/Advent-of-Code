@@ -41,11 +41,19 @@ def hash_state(floors, elevator):
     return n
 
 def hash_state_v2(floors, elevator):
-    def kind_hash(kind):
-        locations = (i for i, floor in enumerate(floors) for _, b in floor if b == kind)
-        return "".join(map(str, sorted(locations)))
+    """
+    Correct, but too slow.
+    """
+    pairs = {}
+    for i, floor in enumerate(floors):
+        for a, b in floor:
+            if b == "c":
+                pairs.setdefault(a, []).insert(0, i)
+            else:
+                pairs.setdefault(a, []).append(i)
 
-    return int(f"1{elevator}{kind_hash('c')}{kind_hash('g')}")
+    pairs_hash = "".join(f"{a}{b}" for _, (a, b) in sorted(pairs.items()))
+    return int(f"{elevator}{pairs_hash}")
 
 def nmoves(initial_state):
     queue = deque([(initial_state, 0, 0)])
