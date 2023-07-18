@@ -33,17 +33,15 @@ def move_items(floors, elevator, dest, items):
         for i, floor in enumerate(floors)
     )
 
-def hash_state(floors, elevator):
-    n = elevator
-    for i, floor in enumerate(floors, start=1):
-        n += 16 ** (2 * i - 1) * len(floor)
-        n += 16 ** (2 * i) * sum(b == "g" for _, b in floor)
-    return n
+# Non-equivalent states are hashed together, but fast:
+# def hash_state(floors, elevator):
+#     n = elevator
+#     for i, floor in enumerate(floors, start=1):
+#         n += 16 ** (2 * i - 1) * len(floor)
+#         n += 16 ** (2 * i) * sum(b == "g" for _, b in floor)
+#     return n
 
-def hash_state_v2(floors, elevator):
-    """
-    Correct, but too slow.
-    """
+def hash_state(floors, elevator):
     pairs = {}
     for i, floor in enumerate(floors):
         for a, b in floor:
@@ -52,7 +50,7 @@ def hash_state_v2(floors, elevator):
             else:
                 pairs.setdefault(a, []).append(i)
 
-    pairs_hash = "".join(f"{a}{b}" for _, (a, b) in sorted(pairs.items()))
+    pairs_hash = ''.join(f"{a}{b}" for a, b in sorted(pairs.values()))
     return int(f"{elevator}{pairs_hash}")
 
 def nmoves(initial_state):
