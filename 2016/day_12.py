@@ -1,18 +1,21 @@
 import aoc_lube
 
-INSTRUCTIONS = aoc_lube.fetch(year=2016, day=12).splitlines()
+INSTRUCTIONS = [
+    [int(s) if s.isdigit() or s.startswith("-") else s for s in line.split()]
+    for line in aoc_lube.fetch(year=2016, day=12).splitlines()
+]
 
 def execute(registers):
     addr = 0
     while addr < len(INSTRUCTIONS):
-        match INSTRUCTIONS[addr].split():
+        match INSTRUCTIONS[addr]:
             case "inc", reg:
                 registers[reg] += 1
             case "dec", reg:
                 registers[reg] -= 1
             case "cpy", val, reg:
-                registers[reg] = int(val) if val.isdigit() else registers[val]
-            case "jnz", val, jmp if val.isdigit() and val != "0" or registers[val] != 0:
+                registers[reg] = registers.get(val, val)
+            case "jnz", val, jmp if registers.get(val, val):
                 addr += int(jmp)
                 continue
         addr += 1
