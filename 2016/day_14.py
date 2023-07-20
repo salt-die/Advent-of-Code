@@ -1,7 +1,7 @@
-from hashlib import md5
-from itertools import count
 from bisect import bisect_left
 from functools import cache
+from hashlib import md5
+from itertools import count
 import re
 
 import aoc_lube
