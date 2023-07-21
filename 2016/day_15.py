@@ -9,12 +9,7 @@ def solve_discs():
     residues = [a - b - i for i, (a, b) in enumerate(DISCS, start=1)]
     return chinese_remainder_theorem(moduli, residues)
 
-def part_one():
-    return solve_discs()
+aoc_lube.submit(year=2016, day=15, part=1, solution=solve_discs)
 
-def part_two():
-    DISCS.append((11, 0))
-    return solve_discs()
-
-aoc_lube.submit(year=2016, day=15, part=1, solution=part_one)
-aoc_lube.submit(year=2016, day=15, part=2, solution=part_two)
+DISCS.append((11, 0))
+aoc_lube.submit(year=2016, day=15, part=2, solution=solve_discs)
