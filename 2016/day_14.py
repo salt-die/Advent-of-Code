@@ -12,7 +12,7 @@ def find_repeat(n, hash_function):
     reg = re.compile(rf'(.)\1{{{n - 1}}}')
     for i in count():
         if m := reg.findall(hash_function(i)):
-            yield i, (m[0] if n == 3 else set(m))
+            yield i, m[0] if n == 3 else set(m)
 
 def generate_keys(hash_function):
     quint_gen = find_repeat(5, hash_function)
