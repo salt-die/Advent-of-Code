@@ -17,12 +17,14 @@ def find_repeat(n, hash_function):
 def generate_keys(hash_function):
     quint_gen = find_repeat(5, hash_function)
     quints = deque()
+    while not quints or quints[-1][0] < 1000:
+        quints.append(next(quint_gen))
 
     for index, repeated in find_repeat(3, hash_function):
-        while not quints or quints[-1][0] < index + 1000:
+        if quints[-1][0] < index + 1000:
             quints.append(next(quint_gen))
 
-        while quints[0][0] <= index:
+        if quints[0][0] <= index:
             quints.popleft()
 
         for quint_index, quint_repeats in quints:
