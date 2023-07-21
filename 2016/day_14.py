@@ -1,4 +1,4 @@
-from bisect import bisect_left
+from collections import deque
 from functools import cache
 from hashlib import md5
 from itertools import count
@@ -12,21 +12,24 @@ def find_repeat(n, hash_function):
     reg = re.compile(rf'(.)\1{{{n - 1}}}')
     for i in count():
         if m := reg.findall(hash_function(i)):
-            yield i, m[0]
+            yield i, (m[0] if n == 3 else set(m))
 
 def generate_keys(hash_function):
     quint_gen = find_repeat(5, hash_function)
-    quints = []
+    quints = deque()
 
     for index, repeated in find_repeat(3, hash_function):
-        for i in count(bisect_left(quints, (index, "z"))):
-            if i == len(quints):
-                quints.append(next(quint_gen))
+        while not quints or quints[-1][0] < index + 1000:
+            quints.append(next(quint_gen))
 
-            quint_index, quint_repeated = quints[i]
+        while quints[0][0] <= index:
+            quints.popleft()
+
+        for quint_index, quint_repeats in quints:
             if quint_index > index + 1000:
                 break
-            if quint_repeated == repeated:
+
+            if repeated in quint_repeats:
                 yield index
 
 def md5_hash(n):
@@ -51,3 +54,5 @@ def part_two():
 
 aoc_lube.submit(year=2016, day=14, part=1, solution=part_one)
 aoc_lube.submit(year=2016, day=14, part=2, solution=part_two)
+print(part_one())
+print(part_two())
