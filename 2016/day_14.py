@@ -1,7 +1,7 @@
 from collections import deque
 from functools import cache
 from hashlib import md5
-from itertools import count
+from itertools import count, islice
 import re
 
 import aoc_lube
@@ -36,21 +36,14 @@ def md5_hash(n):
     return md5(f"{SALT}{n}".encode()).hexdigest()
 
 @cache
-def stretched(n):
+def stretched_hash(n):
     h = md5_hash(n)
     for _ in range(2016):
         h = md5(h.encode()).hexdigest()
     return h
 
-def part_one():
-    for count, index in enumerate(generate_keys(md5_hash), start=1):
-        if count == 64:
-            return index
+def index_64(hash_function):
+    return next(islice(generate_keys(hash_function), 63, None))
 
-def part_two():
-    for count, index in enumerate(generate_keys(stretched), start=1):
-        if count == 64:
-            return index
-
-aoc_lube.submit(year=2016, day=14, part=1, solution=part_one)
-aoc_lube.submit(year=2016, day=14, part=2, solution=part_two)
+aoc_lube.submit(year=2016, day=14, part=1, solution=lambda: index_64(md5_hash))
+aoc_lube.submit(year=2016, day=14, part=2, solution=lambda: index_64(stretched_hash))
