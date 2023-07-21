@@ -54,5 +54,3 @@ def part_two():
 
 aoc_lube.submit(year=2016, day=14, part=1, solution=part_one)
 aoc_lube.submit(year=2016, day=14, part=2, solution=part_two)
-print(part_one())
-print(part_two())
