@@ -5,7 +5,7 @@ DISCS = [(b, d) for _, b, _, d in chunk(extract_ints(aoc_lube.fetch(year=2016, d
 
 def solve_discs():
     moduli = [a for a, _ in DISCS]
-    residues = [-b - i for i, (_, b) in enumerate(DISCS, start=1)]
+    residues = [-b - i - 1 for i, (_, b) in enumerate(DISCS)]
     return chinese_remainder_theorem(moduli, residues)
 
 aoc_lube.submit(year=2016, day=15, part=1, solution=solve_discs)
