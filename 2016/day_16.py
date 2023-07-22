@@ -1,18 +1,19 @@
 import aoc_lube
+from aoc_lube.utils import chunk
 
-RAW = aoc_lube.fetch(year=2016, day=16)
-print(RAW)
+def fill_disk(fill_length):
+    state = aoc_lube.fetch(year=2016, day=16)
+    invert = str.maketrans("01", "10")
 
-def parse_raw():
-    ...
+    while len(state) < fill_length:
+        state = f"{state}0{state[::-1].translate(invert)}"
 
-DATA = parse_raw()
+    state = state[:fill_length]
 
-def part_one():
-    ...
+    while len(state) % 2 == 0:
+        state = "".join("01"[a == b] for a, b in chunk(state, 2))
 
-def part_two():
-    ...
+    return state
 
-aoc_lube.submit(year=2016, day=16, part=1, solution=part_one)
-aoc_lube.submit(year=2016, day=16, part=2, solution=part_two)
+aoc_lube.submit(year=2016, day=16, part=1, solution=lambda: fill_disk(272))
+aoc_lube.submit(year=2016, day=16, part=2, solution=lambda: fill_disk(35651584))
