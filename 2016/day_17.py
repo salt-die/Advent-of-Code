@@ -1,3 +1,5 @@
+from hashlib import md5
+
 import aoc_lube
 
 RAW = aoc_lube.fetch(year=2016, day=17)
