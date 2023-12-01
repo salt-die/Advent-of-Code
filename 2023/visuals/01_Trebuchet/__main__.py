@@ -28,24 +28,30 @@ def get_trebuchet_frames():
 class TrebuchetApp(App):
     async def on_start(self):
         MAX_INPUT_LENGTH = max(len(line) for line in LINES)
+        # Line text and number
         text = Text(default_color_pair=PRIMARY, size=(1, MAX_INPUT_LENGTH + 9))
 
-        total_label = Text(
-            default_color_pair=PRIMARY,
-            size=(2, text.width),
-            pos_hint={"y_hint": 1.0, "anchor": "bottom"},
-        )
-        total_label.add_str("      ┣━━━━━━━", pos=(-2, -14))
-        total_label.add_str("TOTAL ┃     0 ", pos=(-1, -14))
+        # Total display and vertical separator
+        total_label = Text(size=(2, 14), is_transparent=True)
+        total_label.right = text.right
+        total_label.add_str("      ┣━━━━━━━")
+        total_label.add_str("TOTAL ┃     0 ", pos=(1, 0))
 
+        # Treb animation
         treb = Animation.from_textures(list(get_trebuchet_frames()))
         treb.left = text.right
         treb.play()
 
         def fix_size_and_pos():
+            """On terminal resize, move text, draw vertical separator, and resize treb."""
             H, W = self.root.size
-            treb.size = H, W - text.width
             text.bottom = self.root.bottom - 2
+            total_label_text = total_label.canvas[-2:].copy()
+            total_label.canvas[-2:]["char"] = " "
+            total_label.height = H
+            total_label.canvas[-2:] = total_label_text
+            total_label.canvas[:-2, -8]["char"] = "┃"
+            treb.size = H, W - text.width
 
         fix_size_and_pos()
         text.subscribe(self.root, "size", fix_size_and_pos)
@@ -70,7 +76,7 @@ class TrebuchetApp(App):
             ab = int(digits[a] + digits[b])
             total += ab
 
-            text.add_str(f"{line:<{MAX_INPUT_LENGTH}} ┃    {ab} ", pos=(-1, 0))
+            text.add_str(f"{line:<{MAX_INPUT_LENGTH}}      {ab} ", pos=(-1, 0))
             total_label.add_str(str(total).rjust(5), pos=(-1, -6))
 
             # Color matches
