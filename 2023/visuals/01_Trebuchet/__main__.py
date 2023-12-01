@@ -1,6 +1,7 @@
 import asyncio
 import re
 from pathlib import Path
+from unicodedata import name
 
 import aoc_lube
 from batgrl.app import App
@@ -52,8 +53,11 @@ class TrebuchetApp(App):
         text.subscribe(self.root, "size", fix_size_and_pos)
         self.add_gadgets(text, total_label, treb)
 
-        digits = "zero|one|two|three|four|five|six|seven|eight|nine"
-        to_digit = {digit: str(i) for i, digit in enumerate(digits.split("|"))}
+        digits = {
+            k: v
+            for v in "123456789"
+            for k in [v, name(v).removeprefix("DIGIT ").lower()]
+        }
         total = 0
         for line in LINES:
             text.height += 1
@@ -61,11 +65,11 @@ class TrebuchetApp(App):
 
             matches = [
                 (m.start(1), m.end(1), m.group(1))
-                for m in re.finditer(rf"(?=({digits}|\d))", line)
+                for m in re.finditer(rf"(?=({"|".join(digits)}))", line)
             ]
             a = matches[0][2]
             b = matches[-1][2]
-            ab = int(to_digit.get(a, a) + to_digit.get(b, b))
+            ab = int(digits[a] + digits[b])
             total += ab
 
             text.add_str(f"{line:<{MAX_INPUT_LENGTH}} ┃    {ab} ", pos=(-1, 0))
