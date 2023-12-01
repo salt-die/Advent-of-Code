@@ -11,8 +11,6 @@ from batgrl.gadgets.text import Text
 from batgrl.gadgets.texture_tools import read_texture
 
 AOC_BLUE = Color.from_hex("0f0f23")
-BLUISH = lerp_colors(AOC_BLUE, WHITE, 0.25)
-AOC_GREY = Color.from_hex("cccccc")
 PRIMARY = ColorPair.from_colors(WHITE, AOC_BLUE)
 LINES = aoc_lube.fetch(year=2023, day=1).splitlines()
 
