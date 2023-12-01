@@ -16,7 +16,7 @@ def part_one():
 
 def part_two():
     digits = {
-        k: v for v in "123456789" for k in [v, name(v).removeprefix("UNIT ").lower()]
+        k: v for v in "123456789" for k in [v, name(v).removeprefix("DIGIT ").lower()]
     }
     total = 0
     for line in LINES:
