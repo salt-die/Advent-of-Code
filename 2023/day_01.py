@@ -15,7 +15,9 @@ def part_one():
 
 
 def part_two():
-    digits = {k: v for v in "123456789" for k in [v, name(v)[6:].lower()]}
+    digits = {
+        k: v for v in "123456789" for k in [v, name(v).removeprefix("UNIT ").lower()]
+    }
     total = 0
     for line in LINES:
         a, *_, b = re.findall(rf"(?=({"|".join(digits)}))", 2 * line)
