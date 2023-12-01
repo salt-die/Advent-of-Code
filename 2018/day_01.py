@@ -1,6 +1,9 @@
-import aoc_lube
+from itertools import cycle
 
-FREQUENCIES = [eval(n) for n in aoc_lube.fetch(year=2018, day=1).split()]
+import aoc_lube
+from aoc_lube.utils import extract_ints
+
+FREQUENCIES = list(extract_ints(aoc_lube.fetch(year=2018, day=1)))
 
 
 def part_one():
@@ -8,14 +11,13 @@ def part_one():
 
 
 def part_two():
-    seen = set()
     total = 0
-    while True:
-        for frequency in FREQUENCIES:
-            if total in seen:
-                return total
-            seen.add(total)
-            total += frequency
+    seen = set([total])
+    for frequency in cycle(FREQUENCIES):
+        total += frequency
+        if total in seen:
+            return total
+        seen.add(total)
 
 
 aoc_lube.submit(year=2018, day=1, part=1, solution=part_one)
