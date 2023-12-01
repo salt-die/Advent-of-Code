@@ -1,4 +1,5 @@
 import re
+from unicodedata import name
 
 import aoc_lube
 
@@ -14,12 +15,11 @@ def part_one():
 
 
 def part_two():
-    digits = "zero|one|two|three|four|five|six|seven|eight|nine"
-    to_digit = {digit: str(i) for i, digit in enumerate(digits.split("|"))}
+    digits = {k: v for v in "123456789" for k in [v, name(v)[6:].lower()]}
     total = 0
     for line in LINES:
-        a, *_, b = re.findall(rf"(?=({digits}|\d))", 2 * line)
-        total += int(to_digit.get(a, a) + to_digit.get(b, b))
+        a, *_, b = re.findall(rf"(?=({"|".join(digits)}))", 2 * line)
+        total += int(digits[a] + digits[b])
     return total
 
 
