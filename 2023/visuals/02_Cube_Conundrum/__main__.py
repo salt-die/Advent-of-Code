@@ -97,12 +97,12 @@ class CubeApp(App):
                         max_colors[color] = colors[color]
 
                 game_label.add_str(CUBES.format(**colors), (4 + 2 * j, 0))
-                power = prod(len(v) for v in max_colors.values())
                 game_label.add_str(CUBES.format(**max_colors), pos=(-1, 0))
                 await asyncio.sleep(0.15)
 
             total_label.canvas[:-3, 9:] = total_label.canvas[1:-2, 9:]
             total_label.colors[:-3, 9:] = total_label.colors[1:-2, 9:]
+            power = prod(len(v) for v in max_colors.values())
             total += power
             add_text(total_label.canvas[-3:], TOTAL.format(total=total, power=power))
             n = 15
