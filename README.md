@@ -4,7 +4,7 @@ Advent of Code is a yearly programming puzzle event. More info here: [Advent of 
 
 Many solutions use a fetch/submit helper that now lives in its own repository: https://github.com/salt-die/aoc_lube.
 
-Several visualizations were created with my terminal graphics library, [nurses_2](https://github.com/salt-die/nurses_2).
+Several visualizations were created with my terminal graphics library, [batgrl](https://github.com/salt-die/batgrl).
 
 
 # Terminal Visualizations
