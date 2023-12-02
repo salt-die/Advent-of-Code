@@ -11,27 +11,26 @@ from batgrl.gadgets.braille_video_player import BrailleVideoPlayer
 from batgrl.gadgets.text import Text, add_text
 
 VIDEO = Path(__file__).parent / "cubes.gif"
+# Colors
 AOC_BLUE = Color.from_hex("0f0f23")
 AOC_GREY = Color.from_hex("cccccc")
 AOC_PRIMARY = ColorPair.from_colors(AOC_GREY, AOC_BLUE)
 RED = Color.from_hex("dd3330")
 GREEN = Color.from_hex("22cc39")
 BLUE = Color.from_hex("3268d3")
+# Text
 CUBE = "■"
-MAX_COLOR = 20
-MAX_GAME = 45
 TITLE = """\
 {name:^70}
 ┏━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┓
 ┃         Red          ┃        Green         ┃         Blue         ┃
 ┡━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━┩"""
-SEP = "├──────────────────────┼──────────────────────┼──────────────────────┤"
-
 MAX_COLORS_TITLE = """\
 ┢━━━━━━━━━━━━━━━━━━━━━━╈━━━━━━━━━━━━━━━━━━━━━━╈━━━━━━━━━━━━━━━━━━━━━━┪
 ┃       Max Red        ┃      Max Green       ┃       Max Blue       ┃
 ┡━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━┩"""
 CUBES = "│ {red:^20} │ {green:^20} │ {blue:^20} │"
+SEP = "├──────────────────────┼──────────────────────┼──────────────────────┤"
 TOTAL = """\
        │ {power:>5}
 ━━━━━━━╈━━━━━━━
@@ -41,9 +40,6 @@ TOTAL = """\
 def parse_raw():
     for line in aoc_lube.fetch(year=2023, day=2).splitlines():
         yield line.split(": ")[1].split("; ")
-
-
-GAMES = list(parse_raw())
 
 
 class CubeApp(App):
@@ -73,7 +69,6 @@ class CubeApp(App):
         game_label.canvas[1:, -8]["char"] = "┃"
         for i in range(5, 19, 2):
             game_label.add_str(SEP, pos=(i, 0))
-
         add_text(game_label.canvas[-4:], MAX_COLORS_TITLE)
 
         total_label = Text(
@@ -83,10 +78,11 @@ class CubeApp(App):
             is_transparent=True,
         )
         add_text(total_label.canvas[-3:], TOTAL.format(total=0, power=""))
+
         self.add_gadgets(game_label, video, total_label)
 
         total = 0
-        for i, game in enumerate(GAMES, start=1):
+        for i, game in enumerate(parse_raw(), start=1):
             add_text(game_label.canvas, TITLE.format(name=f"Game {i}"))
 
             max_colors = {"red": "", "blue": "", "green": ""}
