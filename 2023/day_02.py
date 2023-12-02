@@ -11,7 +11,7 @@ def parse_raw():
         for n, color in re.findall(r"(\d+) (\w+)", line):
             if int(n) > cubes[color]:
                 cubes[color] = int(n)
-        yield int(re.search(r"Game (\d+)", line)[1]), cubes
+        yield cubes
 
 
 GAMES = list(parse_raw())
@@ -19,11 +19,11 @@ GAMES = list(parse_raw())
 
 def part_one():
     max_cubes = Counter({"red": 12, "green": 13, "blue": 14})
-    return sum(id for id, game in GAMES if game <= max_cubes)
+    return sum(i for i, game in enumerate(GAMES, start=1) if game <= max_cubes)
 
 
 def part_two():
-    return sum(prod(game.values()) for _, game in GAMES)
+    return sum(prod(game.values()) for game in GAMES)
 
 
 aoc_lube.submit(year=2023, day=2, part=1, solution=part_one)
