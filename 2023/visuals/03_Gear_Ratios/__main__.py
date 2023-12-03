@@ -58,6 +58,7 @@ class GearApp(App):
         sv = ScrollView(
             pos=(0, 19),
             size_hint={"height_hint": 1.0, "width_hint": 1.0, "width_offset": -19},
+            disable_ptf=True,
         )
         sv.view = grid
 
