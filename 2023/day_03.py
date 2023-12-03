@@ -37,3 +37,39 @@ def part_two():
 
 aoc_lube.submit(year=2023, day=3, part=1, solution=part_one)
 aoc_lube.submit(year=2023, day=3, part=2, solution=part_two)
+
+# Alternative solution: Use rectangular regions to determine parts
+# ----------------------------------------------------------------
+# from rects import Rect, Region
+
+# operators = Region()
+# for y, line in enumerate(GRID):
+#     for m in re.finditer(r"([^\d\.])", line):
+#         operators |= Region.from_rect(Rect(m.start(), y, 1, 1))
+
+# print(
+#     sum(
+#         int(m[1])
+#         for y, line in enumerate(GRID)
+#         for m in re.finditer(r"(\d+)", line)
+#         if Region.from_rect(Rect(m.start() - 1, y - 1, len(m[1]) + 2, 3)) & operators
+#     )
+# )
+
+# Alternative solution: Use a convolution
+# ---------------------------------------
+# import numpy as np
+# from scipy.ndimage import convolve
+
+# operators = np.array(
+#     [[int(char != "." and not char.isdigit()) for char in line] for line in GRID]
+# )
+# spread = convolve(operators, np.ones((3, 3))).astype(bool)
+# coded = np.zeros((H, W), int)
+# numbers = []
+# for y, line in enumerate(GRID):
+#     for m in re.finditer(r"(\d+)", line):
+#         numbers.append(int(m[0]))
+#         coded[y, m.start() : m.end()] = len(numbers)
+# translate = np.array(numbers)
+# print(translate[np.unique(coded[spread & (coded != 0)] - 1)].sum())
