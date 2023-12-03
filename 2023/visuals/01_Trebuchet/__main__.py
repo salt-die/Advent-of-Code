@@ -4,14 +4,13 @@ from pathlib import Path
 from unicodedata import name
 
 import aoc_lube
+from aoc_theme import AOC_BLUE, AOC_SECONDARY
 from batgrl.app import App
-from batgrl.colors import GREEN, RED, WHITE, Color, ColorPair, lerp_colors
+from batgrl.colors import GREEN, RED, WHITE, lerp_colors
 from batgrl.gadgets.animation import Animation
 from batgrl.gadgets.text import Text
 from batgrl.gadgets.texture_tools import read_texture
 
-AOC_BLUE = Color.from_hex("0f0f23")
-PRIMARY = ColorPair.from_colors(WHITE, AOC_BLUE)
 LINES = aoc_lube.fetch(year=2023, day=1).splitlines()
 
 
@@ -29,7 +28,7 @@ class TrebuchetApp(App):
     async def on_start(self):
         MAX_INPUT_LENGTH = max(len(line) for line in LINES)
         # Line text and number
-        text = Text(default_color_pair=PRIMARY, size=(1, MAX_INPUT_LENGTH + 9))
+        text = Text(default_color_pair=AOC_SECONDARY, size=(1, MAX_INPUT_LENGTH + 9))
 
         # Total display and vertical separator
         total_label = Text(size=(2, 14), is_transparent=True)
@@ -97,4 +96,4 @@ class TrebuchetApp(App):
 
 
 if __name__ == "__main__":
-    TrebuchetApp(title="Trebuchet?!", background_color_pair=PRIMARY).run()
+    TrebuchetApp(title="Trebuchet?!", background_color_pair=AOC_SECONDARY).run()

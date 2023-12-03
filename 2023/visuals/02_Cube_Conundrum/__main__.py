@@ -6,8 +6,9 @@ from pathlib import Path
 
 import aoc_lube
 from aoc_lube.utils import sliding_window_cycle
+from aoc_theme import AOC_GREY, AOC_PRIMARY, AOC_SECONDARY
 from batgrl.app import App
-from batgrl.colors import WHITE, Color, ColorPair, lerp_colors
+from batgrl.colors import WHITE, Color, lerp_colors
 from batgrl.easings import in_out_exp
 from batgrl.gadgets.braille_video_player import BrailleVideoPlayer
 from batgrl.gadgets.gadget_base import GadgetBase
@@ -16,10 +17,6 @@ from batgrl.gadgets.text import Text
 VIDEO = Path(__file__).parent / "cubes.gif"
 CUBE = "■"
 # Colors
-AOC_BLUE = Color.from_hex("0f0f23")
-AOC_GREY = Color.from_hex("cccccc")
-AOC_PRIMARY = ColorPair.from_colors(AOC_GREY, AOC_BLUE)
-AOC_SECONDARY = ColorPair.from_colors(WHITE, AOC_BLUE)
 RED = Color.from_hex("dd3330")
 GREEN = Color.from_hex("22cc39")
 BLUE = Color.from_hex("3268d3")

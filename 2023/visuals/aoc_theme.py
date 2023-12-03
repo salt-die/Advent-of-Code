@@ -1,4 +1,4 @@
-from batgrl.colors import AColor, Color, ColorPair, ColorTheme
+from batgrl.colors import WHITE, AColor, Color, ColorPair, ColorTheme
 from batgrl.gadgets.behaviors.button_behavior import ButtonBehavior
 from batgrl.gadgets.text import Text
 
@@ -7,6 +7,7 @@ AOC_BRIGHT_GREEN = Color.from_hex("99ff99")
 AOC_GREEN = Color.from_hex("009900")
 AOC_GREY = Color.from_hex("cccccc")
 AOC_PRIMARY = ColorPair.from_colors(AOC_GREY, AOC_BLUE)
+AOC_SECONDARY = ColorPair.from_colors(WHITE, AOC_BLUE)
 AOC_THEME = ColorTheme(
     primary=AOC_PRIMARY,
     text_pad_line_highlight=ColorPair.from_colors(AOC_GREY, Color.from_hex("161633")),
