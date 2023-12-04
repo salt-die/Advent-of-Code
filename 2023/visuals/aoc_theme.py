@@ -51,9 +51,10 @@ AOC_THEME = ColorTheme(
 
 
 class AocButton(ButtonBehavior, Text):
-    def __init__(self, label: str):
-        super().__init__(default_color_pair=AOC_THEME.button_normal)
+    def __init__(self, label: str, callback, **kwargs):
+        super().__init__(default_color_pair=AOC_THEME.button_normal, **kwargs)
         self.set_text(f"[{label}]")
+        self.callback = callback
 
     def update_normal(self):
         self.colors[:] = AOC_THEME.button_normal
@@ -63,3 +64,6 @@ class AocButton(ButtonBehavior, Text):
 
     def update_down(self):
         self.colors[:] = AOC_THEME.button_press
+
+    def on_release(self):
+        self.callback()
