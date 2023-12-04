@@ -102,11 +102,7 @@ class ScratchcardApp(App):
             default_color_pair=SILVER * 2,
         )
 
-        def auto_callback():
-            scratcher.toggle_auto()
-            next_card_event.set()
-
-        auto = AocButton(label="AUTO", pos=(12, 34), callback=auto_callback)
+        auto = AocButton(label="AUTO", pos=(12, 34), callback=scratcher.toggle_auto)
 
         container = Gadget(size=(14, 66), pos_hint={"y_hint": 0.5, "x_hint": 0.5})
         container.add_gadgets(card, scratcher, table, score, next_card, auto)
