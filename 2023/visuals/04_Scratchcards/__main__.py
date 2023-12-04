@@ -18,8 +18,19 @@ RAINBOW = rainbow_gradient(10)
 
 
 class Scratcher(Text):
-    all_scratched_event = asyncio.Event()
-    auto_scratch = False
+    def __init__(self, next_card_event, **kwargs):
+        super().__init__(**kwargs)
+        self.all_scratched_event = asyncio.Event()
+        self.all_scratched_event.set()
+        self.auto_scratch = False
+        self._scratch_task = None
+        self.next_card_event = next_card_event
+
+    @property
+    def is_all_scratched(self):
+        return (self.canvas[:2]["char"] == " ").all() and (
+            self.canvas[3:]["char"] == " "
+        ).all()
 
     def on_mouse(self, mouse_event: MouseEvent) -> bool | None:
         if mouse_event.button != "no_button" and self.collides_point(
@@ -27,33 +38,47 @@ class Scratcher(Text):
         ):
             y, x = self.to_local(mouse_event.position)
             self.canvas[y, x]["char"] = " "
-            if (self.canvas[:2]["char"] == " ").all() and (
-                self.canvas[3:]["char"] == " "
-            ).all():
+            if self.is_all_scratched:
                 self.all_scratched_event.set()
             return True
 
     async def wait_until_scratched(self):
-        self.canvas["char"] = "█"
-
-        if not self.auto_scratch:
-            self.all_scratched_event.clear()
-            await self.all_scratched_event.wait()
-
+        self.canvas["char"][:] = "█"
+        self.all_scratched_event.clear()
         if self.auto_scratch:
-            for y in range(self.height):
-                for x in range(self.width):
+            self._scratch_task = asyncio.create_task(self.auto_scratcher())
+        await self.all_scratched_event.wait()
+
+    async def auto_scratcher(self):
+        for y in range(self.height):
+            for x in range(self.width):
+                if self.canvas[y, x]["char"] != " ":
                     self.canvas[y, x]["char"] = " "
+                    if self.is_all_scratched:
+                        self.all_scratched_event.set()
+                        return
                     await asyncio.sleep(0.03)
 
     def toggle_auto(self):
         self.auto_scratch = not self.auto_scratch
-        self.all_scratched_event.set()
+        if self.auto_scratch:
+            if not self.next_card_event.is_set():
+                self.next_card_event.set()
+            elif not self.all_scratched_event.is_set():
+                self._scratch_task = asyncio.create_task(self.auto_scratcher())
+        elif self._scratch_task:
+            self._scratch_task.cancel()
 
 
 class ScratchcardApp(App):
     async def on_start(self):
         card = Text(size=(14, 33), default_color_pair=BROWN_ON_YELLOW)
+        add_text(
+            card.canvas[2:],
+            " Powerstar         December 2023\n"
+            " ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            " Winning numbers:\n\n\n    Your numbers:",
+        )
 
         table = Text(size=(14, 33), default_color_pair=AOC_PRIMARY)
         table.left = card.right
@@ -63,26 +88,28 @@ class ScratchcardApp(App):
 
         score = Text(default_color_pair=AOC_PRIMARY, is_enabled=False)
 
+        next_card_event = asyncio.Event()
+        next_card_event.set()
+        next_card = AocButton(
+            label="➡️", pos=(12, 40), callback=next_card_event.set, is_enabled=False
+        )
+
         scratcher = Scratcher(
+            next_card_event,
             size=(8, 14),
             pos=(4, 18),
             is_transparent=True,
             default_color_pair=SILVER * 2,
         )
 
-        ok_event = asyncio.Event()
-        ok = AocButton(
-            label="OK", pos=(12, 40), callback=ok_event.set, is_enabled=False
-        )
-
         def auto_callback():
             scratcher.toggle_auto()
-            ok_event.set()
+            next_card_event.set()
 
         auto = AocButton(label="AUTO", pos=(12, 34), callback=auto_callback)
 
         container = Gadget(size=(14, 66), pos_hint={"y_hint": 0.5, "x_hint": 0.5})
-        container.add_gadgets(card, scratcher, table, score, ok, auto)
+        container.add_gadgets(card, scratcher, table, score, next_card, auto)
         self.add_gadgets(container)
 
         score_total = 0
@@ -99,18 +126,16 @@ class ScratchcardApp(App):
                 draws[60:],
             ]
             card.colors[:] = BROWN_ON_YELLOW
+            card.add_str(name.removeprefix("Card"), pos=(2, 10))
             add_text(
-                card.canvas,
-                "\n\n"
-                f" Powerstar{name.removeprefix("Card")}     December 2023\n"
-                " ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                f" Winning numbers: {lines[0]} \n"
-                f"                  {lines[1]} \n\n"
-                f"    Your numbers: {lines[2]} \n"
-                f"                  {lines[3]} \n"
-                f"                  {lines[4]} \n"
-                f"                  {lines[5]} \n"
-                f"                  {lines[6]} \n\n",
+                card.canvas[4:, 18:],
+                f"{lines[0]} \n"
+                f"{lines[1]} \n\n"
+                f"{lines[2]} \n"
+                f"{lines[3]} \n"
+                f"{lines[4]} \n"
+                f"{lines[5]} \n"
+                f"{lines[6]} \n\n",
             )
             card.add_border("mcgugan_wide", color_pair=CARD_BORDER)
 
@@ -155,11 +180,11 @@ class ScratchcardApp(App):
             score.is_enabled = False
 
             if not scratcher.auto_scratch:
-                ok.is_enabled = True
-                ok_event.clear()
-                await ok_event.wait()
-                ok.is_enabled = False
-                ok.update_normal()
+                next_card.is_enabled = True
+                next_card_event.clear()
+                await next_card_event.wait()
+                next_card.is_enabled = False
+                next_card.update_normal()
 
 
 if __name__ == "__main__":
