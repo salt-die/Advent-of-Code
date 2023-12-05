@@ -22,12 +22,12 @@ def offset_gaps(gaps, offset):
 
 def min_location(seeds):
     for group in groups:
-        tmp_gaps = Gaps()
+        mapped_gaps = Gaps()
         for mapping, offset in group:
             if intersect := seeds & mapping:
                 seeds -= mapping
-                tmp_gaps |= offset_gaps(intersect, offset)
-        seeds = tmp_gaps | seeds
+                mapped_gaps |= offset_gaps(intersect, offset)
+        seeds |= mapped_gaps
     return seeds.endpoints[0].value
 
 
