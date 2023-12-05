@@ -159,7 +159,7 @@ class SeedApp(App):
 
         await asyncio.gather(*tweens)
 
-        group_labels.set_text(f"\n  Least location: {srcs.endpoints[0].value} \n")
+        group_labels.set_text(f"\n  Least location: {srcs.endpoints[0].value}  \n")
         group_labels.add_border()
 
 
