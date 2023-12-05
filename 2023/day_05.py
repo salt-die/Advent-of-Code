@@ -22,7 +22,7 @@ def min_location(seeds):
         mapped_gaps = Gaps()
         for mapping, Δ in group:
             if r := seeds & mapping:
-                seeds -= mapping
+                seeds -= r
                 mapped_gaps |= Gaps([P(e.value + Δ, e.boundary) for e in r.endpoints])
         seeds |= mapped_gaps
     return seeds.endpoints[0].value
