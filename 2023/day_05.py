@@ -1,6 +1,7 @@
 import aoc_lube
 from aoc_lube.utils import chunk, extract_ints
-from mind_the_gaps import Endpoint, Gaps, x
+from mind_the_gaps import Endpoint as P
+from mind_the_gaps import Gaps, x
 
 
 def parse_raw():
@@ -16,17 +17,13 @@ def parse_raw():
 seeds, *groups = parse_raw()
 
 
-def offset_gaps(gaps, offset):
-    return Gaps([Endpoint(e.value + offset, e.boundary) for e in gaps.endpoints])
-
-
 def min_location(seeds):
     for group in groups:
         mapped_gaps = Gaps()
-        for mapping, offset in group:
-            if intersect := seeds & mapping:
+        for mapping, Δ in group:
+            if r := seeds & mapping:
                 seeds -= mapping
-                mapped_gaps |= offset_gaps(intersect, offset)
+                mapped_gaps |= Gaps([P(e.value + Δ, e.boundary) for e in r.endpoints])
         seeds |= mapped_gaps
     return seeds.endpoints[0].value
 
