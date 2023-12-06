@@ -104,21 +104,9 @@ class BoatApp(App):
 
         async def move_boat(boat, charge, time):
             await asyncio.sleep(charge)
-            start_time = last_time = monotonic()
-
-            x = 0
-            while last_time < start_time + time - charge:
-                await asyncio.sleep(0)
-
-                elapsed = monotonic() - last_time
-                last_time = monotonic()
-
-                x += elapsed * charge
-                if x < 1:
-                    continue
-
-                boat.x += int(x)
-                x %= 1
+            await boat.tween(
+                duration=time - charge, x=boat.x + (time - charge) * charge
+            )
 
         async def move_parallax(time):
             start = monotonic()
