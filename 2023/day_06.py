@@ -5,10 +5,8 @@ import aoc_lube
 from numpy import diff, roots
 
 DATA = re.findall(r"\d+", aoc_lube.fetch(year=2023, day=6))
-TIMES = map(int, DATA[:4])
-DISTANCES = map(int, DATA[4:])
-TIME = int("".join(DATA[:4]))
-DISTANCE = int("".join(DATA[4:]))
+TIMES, DISTANCES = map(int, DATA[:4]), map(int, DATA[4:])
+TIME, DISTANCE = int("".join(DATA[:4])), int("".join(DATA[4:]))
 
 
 def n_ways(time, distance):
