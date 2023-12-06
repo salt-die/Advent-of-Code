@@ -23,6 +23,5 @@ def part_two():
     return n_ways(TIME, DISTANCE)
 
 
-print(part_one(), part_two())
 aoc_lube.submit(year=2023, day=6, part=1, solution=part_one)
 aoc_lube.submit(year=2023, day=6, part=2, solution=part_two)
