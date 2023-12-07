@@ -11,9 +11,7 @@ def score(hand):
 
 
 def score_wildcard(hand):
-    if "B" in hand:
-        return max(score_wildcard(hand.replace("B", c)) for c in "23456789ACDE")
-    return score(hand)
+    return max(score(hand.replace("B", c)) for c in "23456789ACDE")
 
 
 def part_one():
@@ -29,6 +27,5 @@ def part_two():
     return sum(i * bid for i, (_, _, bid) in enumerate(sorted(scored), start=1))
 
 
-print(part_one(), part_two())
 aoc_lube.submit(year=2023, day=7, part=1, solution=part_one)
 aoc_lube.submit(year=2023, day=7, part=2, solution=part_two)
