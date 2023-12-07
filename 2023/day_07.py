@@ -16,12 +16,12 @@ def score_wild(hand):
 
 def part_one():
     scored = ((score(hand), hand, bid) for hand, bid in HANDS)
-    return sum(i * bid for i, (_, _, bid) in enumerate(sorted(scored), start=1))
+    return sum(i * bid for i, (*_, bid) in enumerate(sorted(scored), start=1))
 
 
 def part_two():
     scored = ((score_wild(hand), hand.replace("k", "a"), bid) for hand, bid in HANDS)
-    return sum(i * bid for i, (_, _, bid) in enumerate(sorted(scored), start=1))
+    return sum(i * bid for i, (*_, bid) in enumerate(sorted(scored), start=1))
 
 
 aoc_lube.submit(year=2023, day=7, part=1, solution=part_one)
