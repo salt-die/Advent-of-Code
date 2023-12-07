@@ -1,7 +1,7 @@
 import aoc_lube
 
 HANDS = [
-    (line[:5].translate(str.maketrans("23456789TJQKA", "bcdefghijklmn")), int(line[5:]))
+    (line[:5].translate(str.maketrans("TJQKA", "abcde")), int(line[5:]))
     for line in aoc_lube.fetch(year=2023, day=7).splitlines()
 ]
 
@@ -11,7 +11,7 @@ def score(hand):
 
 
 def score_wild(hand):
-    return max(score(hand.replace("k", c)) for c in "bcdefghijlmn")
+    return max(score(hand.replace("b", c)) for c in "123456789acde")
 
 
 def part_one():
@@ -20,7 +20,7 @@ def part_one():
 
 
 def part_two():
-    scored = ((score_wild(hand), hand.replace("k", "a"), bid) for hand, bid in HANDS)
+    scored = ((score_wild(hand), hand.replace("b", "0"), bid) for hand, bid in HANDS)
     return sum(i * bid for i, (*_, bid) in enumerate(sorted(scored), start=1))
 
 
