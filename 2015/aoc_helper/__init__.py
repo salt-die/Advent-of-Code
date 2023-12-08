@@ -31,7 +31,7 @@ def day(d: int) -> str:
 
     _wait_for_unlock(d)
 
-    response = requests.get(url=URL.format(day=d) + "/input", cookies=TOKEN)
+    response = requests.get(url=f"{URL.format(day=d)}/input", cookies=TOKEN)
     if not response.ok:
         raise ValueError("Request failed.")
 
@@ -89,9 +89,9 @@ def submit(day: int, solution: Callable, sanity_check=True):
     while True:
         print(f"Submitting {solution} as solution to part {part}:")
         response = requests.post(
-            url=URL.format(day=day) + "/answer",
+            url=f"{URL.format(day=day)}/answer",
             cookies=TOKEN,
-            data={"level": part, "answer": solution}
+            data={"level": part, "answer": solution},
         )
 
         if not response.ok:
@@ -100,15 +100,14 @@ def submit(day: int, solution: Callable, sanity_check=True):
         message = bs4.BeautifulSoup(response.text, "html.parser").article.text
         _pretty_print(message)
 
-        if message[4] == "g":  # "You gave an answer too recently"
-            minutes, seconds = re.search(r"(?:(\d+)m )?(\d+)s", message).groups()
-
-            timeout = 60 * int(minutes or 0) + int(seconds)
-            print(f"Waiting {timeout} seconds to retry...")
-            time.sleep(timeout)
-        else:
+        if message[4] != "g":
             break
 
+        minutes, seconds = re.search(r"(?:(\d+)m )?(\d+)s", message).groups()
+
+        timeout = 60 * int(minutes or 0) + int(seconds)
+        print(f"Waiting {timeout} seconds to retry...")
+        time.sleep(timeout)
     if message[7] == "t":  # "That's the right answer! ..."
         current["solution"] = solution
 

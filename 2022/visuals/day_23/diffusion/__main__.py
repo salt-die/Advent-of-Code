@@ -42,7 +42,7 @@ def do_round():
     for elf in ELVES:
         if any(elf + dyx in ELVES for dyx in NEIGHBORS):
             for check in ALL_CHECKS:
-                if not any(elf + dyx in ELVES for dyx in check):
+                if all(elf + dyx not in ELVES for dyx in check):
                     moves[elf + check[0]].append(elf)
                     break
 

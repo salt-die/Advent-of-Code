@@ -106,13 +106,13 @@ class NoSpaceApp(App):
                     await asyncio.sleep(.2 * random())
 
                 terminal.canvas[-1, start + i + 1] = " " # Hide cursor
-                terminal.height += 1
             else:
                 if len(line) > terminal.width:
                     terminal.width = len(line)
                 terminal.add_text(line, row=-1)
                 terminal.colors[-1, :] = WHITE_ON_BLACK
-                terminal.height += 1
+
+            terminal.height += 1
 
 
 NoSpaceApp(title="--- Day 7: No Space Left On Device ---").run()

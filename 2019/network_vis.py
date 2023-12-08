@@ -23,7 +23,7 @@ computers=[''.join(line) for line in zip(*([computer]*5))]
 
 class Window:
     def __init__(self):
-        self.deques = [deque(maxlen=2) for i in range(5)]
+        self.deques = [deque(maxlen=2) for _ in range(5)]
         self.init_scr()
         self.setup()
         self.start()

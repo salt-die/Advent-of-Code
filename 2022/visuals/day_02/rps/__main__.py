@@ -28,6 +28,7 @@ class RPSApp(App):
         background = GraphicWidget(size_hint=(1.0, 1.0))
         def _update_texture():
             background.texture[:] = gradient(AColor.from_hex("3ad84a"), AColor.from_hex("d82515"), background.width)
+
         background.subscribe(background, "size", _update_texture)
 
         label = TextWidget(size=(7, 26), pos_hint=(.2, .5), anchor="center")
@@ -82,7 +83,7 @@ class RPSApp(App):
             label.add_text(f"{a:^11}  {b:^11}", row=1, column=1, underline=True)
             label.add_text(f"   throw: {throws[b_int]:>8} => {throw_score}", row=2, column=1)
             label.add_text(f" outcome: {outcomes[outcome]:>8} => {outcome_score}", row=3, column=1)
-            label.add_text(f"   score: ", row=4, column=1)
+            label.add_text("   score: ", row=4, column=1)
             label.add_text(f"            {score}", row=4, column=11, underline=True)
             label.add_text(f"   total: {total:>13}", row=5, column=1)
 

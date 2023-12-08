@@ -6,7 +6,7 @@ data = list(aoc_helper.extract_ints(raw))
 def part_one():
     s = set(data[:25])
     for i, n in enumerate(data[25:]):
-        if not any(n - x in s for x in s):
+        if all(n - x not in s for x in s):
             return n
         s.symmetric_difference_update((data[i], data[i + 25]))
 

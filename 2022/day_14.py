@@ -6,11 +6,7 @@ AIR, ROCK, SAND = 0, 1, 2
 
 class CaveDict(dict):
     def __missing__(self, key):
-        if key[1] == self.bottom:
-            self[key] = ROCK
-        else:
-            self[key] = AIR
-
+        self[key] = ROCK if key[1] == self.bottom else AIR
         return self[key]
 
 

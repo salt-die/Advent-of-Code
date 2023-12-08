@@ -71,12 +71,10 @@ class Card(ButtonBehavior, Text):
         self.app.selected_cards.append(card)
         self.root.add_gadget(card)
 
-        kwargs = {"easing": "out_elastic"}
-        if ncards < 5:
-            kwargs["pos"] = (18, ncards * 10 + 5)
-        else:
-            kwargs["pos"] = (18, ncards * 10 + 25)
-
+        kwargs = {
+            "easing": "out_elastic",
+            "pos": (18, ncards * 10 + 5) if ncards < 5 else (18, ncards * 10 + 25),
+        }
         if ncards == 9:
             kwargs["on_complete"] = self.app.all_selected.set
 

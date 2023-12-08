@@ -16,7 +16,7 @@ class Interval(NamedTuple):
         return self.length > 0
 
     def intersects(self, other):
-        return not (self.start > other.stop or self.stop < other.start)
+        return self.start <= other.stop and self.stop >= other.start
 
     def intersection(self, other):
         return Interval(max(self.start, other.start), min(self.stop, other.stop))

@@ -27,7 +27,7 @@ def day(d):
     if d in inputs:
         return inputs[d]
 
-    response = requests.get(url=URL.format(day=d) + "/input", cookies=token)
+    response = requests.get(url=f"{URL.format(day=d)}/input", cookies=token)
     if not response.ok:
         raise ValueError("Bad response")
 
@@ -82,22 +82,25 @@ def submit(day, solv_func):
 
     while True:
         rich.print(f"Submitting {solution} as solution to part {part}:")
-        response = requests.post(url=URL.format(day=day) + "/answer", cookies=token, data={"level": part, "answer": solution})
+        response = requests.post(
+            url=f"{URL.format(day=day)}/answer",
+            cookies=token,
+            data={"level": part, "answer": solution},
+        )
         if not response.ok:
             raise ValueError("Bad response")
 
         message = bs4.BeautifulSoup(response.text, "html.parser").article.text
 
-        if message[4] == "g":  # This rather esoteric check is really asking, "Is this the message 'You gave an answer too recently;...'?"
-            _pretty_print(message)
-            minutes, seconds = re.search(r"(?:(\d+)m )?(\d+)s", message).groups()
-
-            pause = 60 * int(minutes or 0) + int(seconds)
-            rich.print(f"Waiting {pause} seconds to retry...")
-            time.sleep(pause)
-        else:
+        if message[4] != "g":
             break
 
+        _pretty_print(message)
+        minutes, seconds = re.search(r"(?:(\d+)m )?(\d+)s", message).groups()
+
+        pause = 60 * int(minutes or 0) + int(seconds)
+        rich.print(f"Waiting {pause} seconds to retry...")
+        time.sleep(pause)
     if message[7] == "t":  # Correct Solution:  We mark this part as solved by adding key `"solution"`.
         submissions[day][part]["solution"] = solution
         if part == "1": webbrowser.open(response.url)  # View part 2 in browser

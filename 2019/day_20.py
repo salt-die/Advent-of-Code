@@ -32,11 +32,15 @@ for char in (maze_iter := np.nditer(maze, flags=['multi_index'])):
 
 portal_locations = set(chain(*portals.values()))
 while True: # Prune dead-ends and isolated nodes that aren't portal_locations.
-    dead = [node for node, degree in nx.degree(G) if node not in portal_locations and degree <= 1]
-    if not dead:
-        break
-    G.remove_nodes_from(dead)
+    if dead := [
+        node
+        for node, degree in nx.degree(G)
+        if node not in portal_locations and degree <= 1
+    ]:
+        G.remove_nodes_from(dead)
 
+    else:
+        break
 (AA, ), (ZZ, ) = portals.pop('AA'), portals.pop('ZZ')
 G.add_edges_from(portals.values()) # Connect portals
 
@@ -54,7 +58,7 @@ while True: # Contract paths, adding adjacent weights.
 print(nx.shortest_paths.dijkstra_path_length(G, AA, ZZ)) # Part 1
 G.remove_edges_from(portals.values()) # Un-connect portals
 
-inner, outer, outer_coords = {}, {}, set((2, height - 3, width - 3))
+inner, outer, outer_coords = {}, {}, {2, height - 3, width - 3}
 for portal, nodes in portals.items():
     for node in nodes:
         (inner if outer_coords.isdisjoint(node) else outer)[portal] = node

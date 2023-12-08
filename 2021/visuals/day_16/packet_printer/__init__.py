@@ -7,8 +7,6 @@ def _parse_raw():
     inputs = this_dir.parent.parent.parent / "aoc_helper" / "inputs.yaml"
     raw = yaml.full_load(inputs.read_text())["16"]
 
-    bits = bin(int(raw, 16))[2:]
-
-    return bits
+    return bin(int(raw, 16))[2:]
 
 BITS = _parse_raw()
