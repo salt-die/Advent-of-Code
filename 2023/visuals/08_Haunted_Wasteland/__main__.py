@@ -34,7 +34,7 @@ def ghost_textures():
 
 def parse_raw():
     instructions, network = aoc_lube.fetch(year=2023, day=8).split("\n\n")
-    yield list(instructions)
+    yield instructions
     yield {a: b for a, *b in chunk(re.findall(r"\w+", network), 3)}
 
 
@@ -145,6 +145,8 @@ class HauntedApp(App):
                 await asyncio.sleep(delay)
 
             current_node = NETWORK[current_node][current_instruction == "R"]
+            if current_node == "ZZZ":
+                break
 
             instruction_label.colors[1, 18, :3] = AOC_GREY
             for i in range(4):
