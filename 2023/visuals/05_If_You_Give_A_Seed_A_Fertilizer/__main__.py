@@ -1,6 +1,12 @@
 import asyncio
 
-import aoc_lube
+try:
+    from aoc_theme import AOC_BLUE, AOC_GREY, AOC_PRIMARY
+except ImportError:
+    import os
+    import sys
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+    from aoc_theme import AOC_BLUE, AOC_GREY, AOC_PRIMARY
 from aoc_lube.utils import chunk, extract_ints
 from aoc_theme import AOC_BLUE, AOC_GREY, AOC_PRIMARY
 from batgrl.app import App
