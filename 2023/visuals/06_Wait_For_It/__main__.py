@@ -2,7 +2,13 @@ import asyncio
 from pathlib import Path
 from time import monotonic
 
-from aoc_theme import AOC_PRIMARY, AOC_THEME, AocButton
+try:
+    from aoc_theme import AOC_PRIMARY, AOC_THEME, AocButton
+except ImportError:
+    import os
+    import sys
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+    from aoc_theme import AOC_PRIMARY, AOC_THEME, AocButton
 from batgrl.app import App
 from batgrl.gadgets.image import Image
 from batgrl.gadgets.parallax import Parallax
