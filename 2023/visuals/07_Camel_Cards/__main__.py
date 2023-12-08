@@ -1,6 +1,12 @@
 import asyncio
 
-from aoc_theme import AOC_PRIMARY, AocButton
+try:
+    from aoc_theme import AOC_PRIMARY, AocButton
+except ImportError:
+    import os
+    import sys
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+    from aoc_theme import AOC_PRIMARY, AocButton
 from batgrl.app import App
 from batgrl.colors import Color, ColorPair
 from batgrl.gadgets.behaviors.button_behavior import ButtonBehavior
