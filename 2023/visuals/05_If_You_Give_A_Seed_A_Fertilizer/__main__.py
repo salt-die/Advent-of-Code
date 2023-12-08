@@ -10,7 +10,7 @@ from mind_the_gaps import Endpoint, Gaps, x
 
 GREEN_ON_BLUE = ColorPair.from_colors(GREEN, AOC_BLUE)
 YELLOW_ON_BLUE = ColorPair.from_colors(YELLOW, AOC_BLUE)
-RAINBOW = rainbow_gradient(31)
+RAINBOW = rainbow_gradient(50)
 MIN, MAX = 0, 4_294_967_296
 W = 100
 RANGE_RATIO = (MAX - MIN) / W
@@ -73,11 +73,10 @@ class SeedApp(App):
 
             for j, (gap, offset) in enumerate(group):
                 for x1, x2 in scale_gaps(gap):
-                    groups_text.canvas["char"][y1, x1:x2] = BAR
-                    groups_text.colors[y1, x1:x2, :3] = RAINBOW[j]
+                    groups_text.colors[y1, x1:x2, :3] = RAINBOW[j % len(RAINBOW)]
                 for x1, x2 in scale_gaps(offset_gaps(gap, offset)):
                     groups_text.canvas["char"][y2, x1:x2] = BAR
-                    groups_text.colors[y2, x1:x2, :3] = RAINBOW[j]
+                    groups_text.colors[y2, x1:x2, :3] = RAINBOW[j % len(RAINBOW)]
 
         def create_gap_label(a, b, offset, color, duration):
             start_x1 = int(a.value / RANGE_RATIO) + groups_text.x
