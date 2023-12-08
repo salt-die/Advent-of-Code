@@ -4,15 +4,29 @@ from itertools import cycle
 from pathlib import Path
 
 import aoc_lube
-from aoc_theme import (
-    AOC_BLUE,
-    AOC_BRIGHT_GREEN,
-    AOC_GREY,
-    AOC_PRIMARY,
-    AOC_SECONDARY,
-    AOC_THEME,
-    AOC_YELLOW,
-)
+try:
+    from aoc_theme import (
+        AOC_BLUE,
+        AOC_BRIGHT_GREEN,
+        AOC_GREY,
+        AOC_PRIMARY,
+        AOC_SECONDARY,
+        AOC_THEME,
+        AOC_YELLOW,
+    )
+except ImportError:
+    import os
+    import sys
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+    from aoc_theme import (
+        AOC_BLUE,
+        AOC_BRIGHT_GREEN,
+        AOC_GREY,
+        AOC_PRIMARY,
+        AOC_SECONDARY,
+        AOC_THEME,
+        AOC_YELLOW,
+    )
 from batgrl.app import App
 from batgrl.colors import ColorPair, rainbow_gradient
 from batgrl.gadgets.animation import Animation
