@@ -5,15 +5,30 @@ from pathlib import Path
 import aoc_lube
 import numpy as np
 from aoc_lube.utils import chunk
-from aoc_theme import (
-    AOC_BLUE,
-    AOC_BRIGHT_GREEN,
-    AOC_GREEN_ON_BLUE,
-    AOC_GREY,
-    AOC_PRIMARY,
-    AOC_SECONDARY,
-    WHITE,
-)
+from aoc_lube.utils import chunk
+try:
+    from aoc_theme import (
+        AOC_BLUE,
+        AOC_BRIGHT_GREEN,
+        AOC_GREEN_ON_BLUE,
+        AOC_GREY,
+        AOC_PRIMARY,
+        AOC_SECONDARY,
+        WHITE,
+    )
+except ImportError:
+    import os
+    import sys
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+    from aoc_theme import (
+        AOC_BLUE,
+        AOC_BRIGHT_GREEN,
+        AOC_GREEN_ON_BLUE,
+        AOC_GREY,
+        AOC_PRIMARY,
+        AOC_SECONDARY,
+        WHITE,
+    )
 from batgrl.app import App
 from batgrl.colors import ColorPair, lerp_colors
 from batgrl.gadgets.animation import Animation
