@@ -4,7 +4,13 @@ from pathlib import Path
 from unicodedata import name
 
 import aoc_lube
-from aoc_theme import AOC_BLUE, AOC_SECONDARY
+try:
+    from aoc_theme import AOC_BLUE, AOC_SECONDARY
+except ImportError:
+    import os
+    import sys
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+    from aoc_theme import AOC_BLUE, AOC_SECONDARY
 from batgrl.app import App
 from batgrl.colors import GREEN, RED, WHITE, lerp_colors
 from batgrl.gadgets.animation import Animation
