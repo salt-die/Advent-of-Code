@@ -7,9 +7,7 @@ with open("input14") as data:
 def separate(term, out=False):
     coef, symbol = term.split()
     coef, symbol = int(coef), Symbol(symbol)
-    if out:
-        return coef, symbol
-    return coef * symbol
+    return (coef, symbol) if out else coef * symbol
 
 equations = {}
 for equation in data:

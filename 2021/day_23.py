@@ -34,11 +34,7 @@ def pod_index(room):
     """
     Return index of first pod in room.
     """
-    for i, pod in enumerate(room):
-        if pod:
-            return i
-
-    return len(room)
+    return next((i for i, pod in enumerate(room) if pod), len(room))
 
 def shortest_path(*rooms):
     depth = len(rooms[0])
@@ -89,7 +85,7 @@ def shortest_path(*rooms):
             room = rooms[room_index]
 
             path = hallway[pod_dest: stop] if pod_dest < stop else hallway[stop + 1: pod_dest + 1]
-            if any(path) or not all(i in (None, pod) for i in room):
+            if any(path) or any(i not in (None, pod) for i in room):
                 continue
 
             i = pod_index(room) - 1

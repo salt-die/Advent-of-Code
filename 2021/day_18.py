@@ -27,10 +27,7 @@ class BinaryNode:
 
     @property
     def depth(self):
-        if self.is_root:
-            return 0
-
-        return self.parent.depth + 1
+        return 0 if self.is_root else self.parent.depth + 1
 
     @property
     def leftmost(self):
@@ -50,10 +47,7 @@ class BinaryNode:
         if parent.left is self:
             return parent.previous_node
 
-        if isnode(parent.left):
-            return parent.left.rightmost
-
-        return parent
+        return parent.left.rightmost if isnode(parent.left) else parent
 
     @property
     def next_node(self):
@@ -65,10 +59,7 @@ class BinaryNode:
         if parent.right is self:
             return parent.next_node
 
-        if isnode(parent.right):
-            return parent.right.leftmost
-
-        return parent
+        return parent.right.leftmost if isnode(parent.right) else parent
 
     def iter_nodes(self):
         if isnode(self.left):
@@ -142,10 +133,7 @@ def nodify(a, b):
     if isinstance(a, list):
         return nodify(nodify(*a), b)
 
-    if isinstance(b, list):
-        return nodify(a, nodify(*b))
-
-    return BinaryNode(a, b)
+    return nodify(a, nodify(*b)) if isinstance(b, list) else BinaryNode(a, b)
 
 SNAIL_NUMS = [nodify(*literal_eval(line)) for line in aoc_helper.day(18).splitlines()]
 

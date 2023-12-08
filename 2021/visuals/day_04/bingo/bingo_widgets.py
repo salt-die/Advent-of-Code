@@ -73,7 +73,7 @@ class BingoCard(TextWidget):
 
             parent.FINISHED += 1
 
-            if parent.FINISHED in (1, 100):
+            if parent.FINISHED in {1, 100}:
                 self.colors[1:4, :, :3] = ROW_COLOR
             else:
                 self.colors[1:4, :, :3] = SCORE_COLOR

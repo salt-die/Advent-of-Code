@@ -12,7 +12,7 @@ def part_one():
 
 def part_two():
     total = 0
-    seen = set([total])
+    seen = {total}
     for frequency in cycle(FREQUENCIES):
         total += frequency
         if total in seen:

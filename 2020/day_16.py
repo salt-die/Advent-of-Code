@@ -35,7 +35,11 @@ def part_one():
 
 def valid_indices(field):
     """Return all possible indices for `field`."""
-    return set(i for i in range(len(fields)) if all(ticket[i] in fields[field] for ticket in valid_tickets))
+    return {
+        i
+        for i in range(len(fields))
+        if all(ticket[i] in fields[field] for ticket in valid_tickets)
+    }
 
 def part_two():
     matched = matching({field: valid_indices(field) for field in fields})

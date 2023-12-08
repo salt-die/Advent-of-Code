@@ -7,7 +7,7 @@ with open('input24', 'r') as data:
     data = [[char == '#' for char in line] for line in data.read().splitlines()]
 
 bugs = np.array(data)
-states = set((bugs.tostring(), ))
+states = {bugs.tostring()}
 while True:
     neighbor_count = convolve(bugs, KERNEL, mode='same')
     bugs = (bugs & (neighbor_count == 1)) | (~bugs & np.isin(neighbor_count, [1, 2]))

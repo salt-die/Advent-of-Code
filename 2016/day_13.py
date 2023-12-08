@@ -13,7 +13,7 @@ def bfs():
     while queue:
         x, y, n = queue.popleft()
 
-        if 0 <= x and 0 <= y and (x, y) not in seen and is_open(x, y):
+        if x >= 0 and y >= 0 and (x, y) not in seen and is_open(x, y):
             seen.add((x, y))
             queue.append((x + 1, y, n + 1))
             queue.append((x, y + 1, n + 1))

@@ -18,7 +18,7 @@ def part_two():
     password = {}
     for a, b in interesting():
         pos = int(a, 16)
-        if 8 <= pos or pos in password:
+        if pos >= 8 or pos in password:
             continue
 
         password[pos] = b

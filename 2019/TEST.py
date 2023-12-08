@@ -176,10 +176,9 @@ class TEST:
 
         #Highlight pointer and parameters
         self.highlight(pointer, 2)
-        if op_code != 'HALT':
-            self.output_win(f'{op_code}:', pause=False, save=False)
-            self.screen.refresh()
-            sleep(SLEEP2)
+        self.output_win(f'{op_code}:', pause=False, save=False)
+        self.screen.refresh()
+        sleep(SLEEP2)
         for i, mode in enumerate(modes, start=1):
             self.highlight(pointer + i, 3 + int(mode[0]))
             params = ' '.join(f'{self.translate[modes[j]]}{param}'

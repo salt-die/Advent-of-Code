@@ -11,7 +11,7 @@ def angle(u, v):
     return arctan2(x2 - x1, y1 - y2) % (2 * pi)
 
 def unique_lines(asteroid):
-    return len(set(angle(asteroid, other) for other in asteroids))
+    return len({angle(asteroid, other) for other in asteroids})
 
 number_visible, laser_base = max((unique_lines(asteroid), asteroid) for asteroid in asteroids)
 print(number_visible) # Part 1

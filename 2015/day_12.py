@@ -9,9 +9,11 @@ def part_one():
 def count(account):
     match account:
         case dict():
-            if "red" in account.values():
-                return 0
-            return sum(map(count, account.values()))
+            return (
+                0
+                if "red" in account.values()
+                else sum(map(count, account.values()))
+            )
         case list():
             return sum(map(count, account))
         case str():

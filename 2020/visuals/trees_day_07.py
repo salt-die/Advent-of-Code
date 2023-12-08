@@ -8,7 +8,7 @@ def prefix(first, rest, lines):
 
 class Bag:
     def __init__(self, name, bags):
-        self.name = name + " bag"
+        self.name = f"{name} bag"
         self.bags = bags
 
     def __str__(self):
