@@ -6,7 +6,13 @@ from pathlib import Path
 
 import aoc_lube
 from aoc_lube.utils import sliding_window_cycle
-from aoc_theme import AOC_GREY, AOC_PRIMARY, AOC_SECONDARY
+try:
+    from aoc_theme import AOC_GREY, AOC_PRIMARY, AOC_SECONDARY
+except ImportError:
+    import os
+    import sys
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+    from aoc_theme import AOC_GREY, AOC_PRIMARY, AOC_SECONDARY
 from batgrl.app import App
 from batgrl.colors import WHITE, Color, lerp_colors
 from batgrl.easings import in_out_exp
