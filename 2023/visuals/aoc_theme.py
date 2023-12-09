@@ -7,11 +7,12 @@ AOC_BRIGHT_GREEN = Color.from_hex("99ff99")
 AOC_GREEN = Color.from_hex("009900")
 AOC_GREY = Color.from_hex("cccccc")
 AOC_YELLOW = Color.from_hex("eff263")
+AOC_CODE_GRAY = Color.from_hex("10101A")
 AOC_PRIMARY = ColorPair.from_colors(AOC_GREY, AOC_BLUE)
 AOC_SECONDARY = ColorPair.from_colors(WHITE, AOC_BLUE)
 AOC_GREEN_ON_BLUE = ColorPair.from_colors(AOC_GREEN, AOC_BLUE)
 AOC_BRIGHT_GREEN_ON_BLUE = ColorPair.from_colors(AOC_BRIGHT_GREEN, AOC_BLUE)
-
+AOC_CODE_BLOCK = ColorPair.from_colors(AOC_GREY, AOC_CODE_GRAY)
 AOC_THEME = ColorTheme(
     primary=AOC_PRIMARY,
     text_pad_line_highlight=ColorPair.from_colors(AOC_GREY, Color.from_hex("161633")),
@@ -26,6 +27,7 @@ AOC_THEME = ColorTheme(
     scroll_view_indicator_normal=Color.from_hex("6f6f78"),
     scroll_view_indicator_hover=Color.from_hex("5c5c65"),
     scroll_view_indicator_press=Color.from_hex("3a3a44"),
+    markdown_block_code_background=AOC_CODE_GRAY,
     # Will be added as needed...
     menu_item_hover=AOC_PRIMARY,
     menu_item_selected=AOC_PRIMARY,
@@ -47,7 +49,6 @@ AOC_THEME = ColorTheme(
     markdown_quote=AOC_PRIMARY,
     markdown_title=AOC_PRIMARY,
     markdown_image=AOC_PRIMARY,
-    markdown_block_code_background=AOC_GREY,
     markdown_quote_block_code_background=AOC_GREY,
     markdown_header_background=AOC_GREY,
 )
