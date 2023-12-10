@@ -1,29 +1,16 @@
 import aoc_lube
 
 N, E, S, W = -1j, 1, 1j, -1
-Δs = {
-    "|": (N, S),
-    "J": (N, W),
-    "L": (N, E),
-    "7": (S, W),
-    "F": (S, E),
-    "-": (W, E),
-    "S": (N, E, S, W),
-    ".": (),
-}
+Δs = {"|": (N, S), "J": (N, W), "L": (N, E), "7": (S, W), "F": (S, E), "-": (W, E)}
 
 
 def parse_raw():
     grid = {}
-    edges = set()
     for y, line in enumerate(aoc_lube.fetch(year=2023, day=10).splitlines()):
         for x, char in enumerate(line):
-            pos = complex(x, y)
-            grid[pos] = char
-            for Δ in Δs[char]:
-                edges.add((pos, pos + Δ))
-
+            grid[pos := complex(x, y)] = char
             if char == "S":
+                grid[pos] = "|"  # By inspection.
                 cycle = {pos}
                 stack = [pos]
 
