@@ -79,7 +79,7 @@ class AocToggle(ToggleButtonBehavior, Text):
         self.callback(self.toggle_state)
 
 
-class _App(App):
+class PipeApp(App):
     async def on_start(self):
         ascii_pipes = Text(default_color_pair=AOC_PRIMARY)
         ascii_pipes.set_text(ASCII_PIPES)
@@ -213,4 +213,4 @@ class _App(App):
 
 
 if __name__ == "__main__":
-    _App(title="Pipe Maze", color_theme=AOC_THEME).run()
+    PipeApp(title="Pipe Maze", color_theme=AOC_THEME).run()
