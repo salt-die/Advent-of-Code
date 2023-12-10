@@ -206,8 +206,6 @@ class PipeApp(App):
                         ascii_line.colors[..., 3:] = RED
                         unicode_line.colors[..., 3:] = RED
 
-                show_pos(pos)
-
                 await asyncio.sleep(delay)
 
 
