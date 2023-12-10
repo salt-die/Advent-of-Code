@@ -3,18 +3,15 @@ from typing import NamedTuple
 
 import aoc_lube
 from aoc_theme import (
-    AOC_BRIGHT_GREEN,
-    AOC_BRIGHT_GREEN_ON_BLUE,
     AOC_GREEN_ON_BLUE,
     AOC_PRIMARY,
     AOC_SECONDARY,
     AOC_THEME,
+    AocToggle,
 )
 from batgrl.app import App
 from batgrl.colors import Color
-from batgrl.gadgets.behaviors.toggle_button_behavior import ToggleButtonBehavior
 from batgrl.gadgets.scroll_view import ScrollView
-from batgrl.gadgets.slider import Slider
 from batgrl.gadgets.text import Text
 
 GREEN = Color.from_hex("22cc39")
@@ -52,30 +49,6 @@ UNICODE_PIPES = ASCII_PIPES.translate(str.maketrans("|JL7F-", "│┘└┐┌�
 HEAVY_PIPES = dict(zip("|JL7F-", "┃┛┗┓┏━"))
 
 
-class AocToggle(ToggleButtonBehavior, Text):
-    def __init__(self, label, callback):
-        super().__init__(toggle_state="on")
-        self.set_text(f"[[ ] {label}]")
-        self.update_on()
-        self.update_normal()
-        self.callback = callback
-
-    def update_hover(self):
-        self.colors[:] = AOC_BRIGHT_GREEN_ON_BLUE
-
-    def update_normal(self):
-        self.colors[:] = AOC_GREEN_ON_BLUE
-
-    def update_on(self):
-        self.canvas[0, 2]["char"] = "x"
-
-    def update_off(self):
-        self.canvas[0, 2]["char"] = " "
-
-    def on_release(self):
-        self.callback(self.toggle_state)
-
-
 class PipeApp(App):
     async def on_start(self):
         ascii_pipes = Text(default_color_pair=AOC_PRIMARY)
@@ -91,36 +64,27 @@ class PipeApp(App):
         )
         sv.view = unicode_pipes
 
-        def toggle_callback(state):
+        def toggle_display(state):
             if state == "on":
+                unicode_pipes.pos = ascii_pipes.pos
                 sv.view = unicode_pipes
             else:
+                ascii_pipes.pos = unicode_pipes.pos
                 sv.view = ascii_pipes
 
-        button = AocToggle("Toggle Unicode", toggle_callback)
-
-        delay_label = Text(pos=(1, 0), default_color_pair=AOC_GREEN_ON_BLUE)
-        delay_label.set_text("Update delay:".ljust(20))
+        display_toggle = AocToggle("Unicode", toggle_display, toggle_state="on")
 
         delay = 0.1
 
-        def update_delay(t):
+        def toggle_delay(state):
             nonlocal delay
-            delay = t
+            if state == "on":
+                delay = 0
+            else:
+                delay = 0.1
 
-        delay_slider = Slider(
-            pos=(1, 14),
-            size=(1, 6),
-            min=0,
-            max=0.2,
-            start_value=0.1,
-            callback=update_delay,
-            default_color_pair=AOC_GREEN_ON_BLUE,
-            handle_color_pair=AOC_GREEN_ON_BLUE,
-            fill_color=AOC_BRIGHT_GREEN,
-        )
-
-        self.add_gadgets(sv, button, delay_label, delay_slider)
+        delay_toggle = AocToggle("Fast Update", toggle_delay, pos=(1, 0))
+        self.add_gadgets(sv, display_toggle, delay_toggle)
 
         def show_pos(pos):
             """Scroll to pos."""
@@ -131,7 +95,9 @@ class PipeApp(App):
             ):
                 return
             y1, x1 = (
-                unicode_pipes.pos if button.toggle_state == "on" else ascii_pipes.pos
+                unicode_pipes.pos
+                if display_toggle.toggle_state == "on"
+                else ascii_pipes.pos
             )
             y2, x2 = pos
             abs_y, abs_x = y1 + y2, x1 + x2
@@ -158,19 +124,11 @@ class PipeApp(App):
             show_pos(pos)
             await asyncio.sleep(delay)
 
-        ascii_line = Text(
-            size=(1, 1), default_char="-", default_color_pair=AOC_PRIMARY.reversed()
-        )
-        unicode_line = Text(
-            size=(1, 1), default_char="─", default_color_pair=AOC_PRIMARY.reversed()
-        )
+        ascii_line = Text(size=(1, 1), default_color_pair=AOC_SECONDARY)
+        unicode_line = Text(size=(1, 1), default_color_pair=AOC_SECONDARY)
         ascii_pipes.add_gadget(ascii_line)
         unicode_pipes.add_gadget(unicode_line)
-        inside_label = Text(pos=(2, 0), size=(1, 20), default_color_pair=AOC_PRIMARY)
 
-        self.add_gadget(inside_label)
-        inside_label.add_str("OUTSIDE PIPE".center(20))
-        inside_label.colors[..., :3] = RED
         ascii_line.colors[..., 3:] = RED
         unicode_line.colors[..., 3:] = RED
 
@@ -181,8 +139,6 @@ class PipeApp(App):
             inside = False
             for x in range(W):
                 pos = ascii_line.pos = unicode_line.pos = y, x
-                ascii_line.canvas[:] = ascii_pipes.canvas[pos]
-                unicode_line.canvas[:] = unicode_pipes.canvas[pos]
 
                 if pos not in cycle:
                     if inside:
@@ -196,13 +152,9 @@ class PipeApp(App):
                 elif GRID[pos] in "|F7":
                     inside = not inside
                     if inside:
-                        inside_label.add_str(" INSIDE PIPE".center(20))
-                        inside_label.colors[..., :3] = GREEN
                         ascii_line.colors[..., 3:] = GREEN
                         unicode_line.colors[..., 3:] = GREEN
                     else:
-                        inside_label.add_str("OUTSIDE PIPE".center(20))
-                        inside_label.colors[..., :3] = RED
                         ascii_line.colors[..., 3:] = RED
                         unicode_line.colors[..., 3:] = RED
 
