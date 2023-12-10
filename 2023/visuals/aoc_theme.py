@@ -1,5 +1,6 @@
 from batgrl.colors import WHITE, AColor, Color, ColorPair, ColorTheme
 from batgrl.gadgets.behaviors.button_behavior import ButtonBehavior
+from batgrl.gadgets.behaviors.toggle_button_behavior import ToggleButtonBehavior
 from batgrl.gadgets.text import Text
 
 AOC_BLUE = Color.from_hex("0f0f23")
@@ -71,3 +72,30 @@ class AocButton(ButtonBehavior, Text):
 
     def on_release(self):
         self.callback()
+
+
+class AocToggle(ToggleButtonBehavior, Text):
+    def __init__(self, label, callback, **kwargs):
+        super().__init__(**kwargs)
+        self.set_text(f"[ ] {label}")
+        self.update_normal()
+        self.callback = callback
+        if self.toggle_state == "on":
+            self.update_on()
+        else:
+            self.update_off()
+
+    def update_hover(self):
+        self.colors[:] = AOC_BRIGHT_GREEN_ON_BLUE
+
+    def update_normal(self):
+        self.colors[:] = AOC_GREEN_ON_BLUE
+
+    def update_on(self):
+        self.canvas[0, 1]["char"] = "x"
+
+    def update_off(self):
+        self.canvas[0, 1]["char"] = " "
+
+    def on_release(self):
+        self.callback(self.toggle_state)
