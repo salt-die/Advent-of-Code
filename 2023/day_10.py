@@ -10,19 +10,16 @@ def parse_raw():
         for x, char in enumerate(line):
             grid[pos := complex(x, y)] = char
             if char == "S":
-                grid[pos] = "|"  # By inspection.
-                cycle = {pos}
+                grid[pos] = "|"  # by inspection
                 stack = [pos]
 
     yield y + 1, x + 1
     yield grid
 
+    cycle = set()
     while stack:
-        pos = stack.pop()
-        for Δ in Δs[grid[pos]]:
-            if pos + Δ not in cycle:
-                cycle.add(pos + Δ)
-                stack.append(pos + Δ)
+        cycle.add(pos := stack.pop())
+        stack.extend(pos + Δ for Δ in Δs[grid[pos]] if pos + Δ not in cycle)
     yield cycle
 
 
