@@ -3,7 +3,6 @@ from typing import NamedTuple
 
 import aoc_lube
 from aoc_theme import (
-    AOC_BLUE,
     AOC_BRIGHT_GREEN,
     AOC_BRIGHT_GREEN_ON_BLUE,
     AOC_GREEN_ON_BLUE,
@@ -12,7 +11,7 @@ from aoc_theme import (
     AOC_THEME,
 )
 from batgrl.app import App
-from batgrl.colors import Color, ColorPair
+from batgrl.colors import Color
 from batgrl.gadgets.behaviors.toggle_button_behavior import ToggleButtonBehavior
 from batgrl.gadgets.scroll_view import ScrollView
 from batgrl.gadgets.slider import Slider
@@ -20,8 +19,6 @@ from batgrl.gadgets.text import Text
 
 GREEN = Color.from_hex("22cc39")
 RED = Color.from_hex("dd3330")
-YELLOW = Color.from_hex("eac36e")
-YELLOW_ON_BLUE = ColorPair.from_colors(YELLOW, AOC_BLUE)
 
 
 class P(NamedTuple):
@@ -133,7 +130,9 @@ class PipeApp(App):
                 or sv._vertical_bar.is_grabbed
             ):
                 return
-            y1, x1 = unicode_pipes.pos if unicode_pipes.is_enabled else ascii_pipes.pos
+            y1, x1 = (
+                unicode_pipes.pos if button.toggle_state == "on" else ascii_pipes.pos
+            )
             y2, x2 = pos
             abs_y, abs_x = y1 + y2, x1 + x2
 
