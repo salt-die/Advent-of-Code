@@ -26,11 +26,9 @@ def expand(axis, n):
 
 
 def expand_universe(n):
-    return sum(
-        abs(a - b)
-        for axis in [expand(YS.copy(), n), expand(XS.copy(), n)]
-        for a, b in combinations(axis, 2)
-    )
+    ys = expand(YS.copy(), n)
+    xs = expand(XS.copy(), n)
+    return sum(abs(a - b) for axis in (ys, xs) for a, b in combinations(axis, 2))
 
 
 def part_one():
