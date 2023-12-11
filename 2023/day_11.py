@@ -1,4 +1,4 @@
-from itertools import combinations, pairwise
+from itertools import combinations
 
 import aoc_lube
 import numpy as np
@@ -18,16 +18,19 @@ def parse_raw():
 YS, XS = parse_raw()
 
 
-def _expand(axis, n):
+def expand(axis, n):
     diffs = np.diff(axis) - 1
     diffs[diffs < 0] = 0
     axis[1:] += np.cumsum(diffs) * n
+    return axis
 
 
 def expand_universe(n):
-    _expand(YS, n)
-    _expand(XS, n)
-    return sum(abs(a - b) for axis in [YS, XS] for a, b in combinations(axis, 2))
+    return sum(
+        abs(a - b)
+        for axis in [expand(YS.copy(), n), expand(XS.copy(), n)]
+        for a, b in combinations(axis, 2)
+    )
 
 
 def part_one():
