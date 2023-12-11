@@ -3,30 +3,28 @@ from itertools import combinations
 import aoc_lube
 import numpy as np
 
-RAW = aoc_lube.fetch(year=2023, day=11)
-
 
 def parse_raw():
-    universe = RAW.splitlines()
-    ys = [y for y, line in enumerate(universe) for char in line if char == "#"]
-    xs = [x for x in range(len(universe[0])) for line in universe if line[x] == "#"]
-    return np.array(ys, np.int64), np.array(xs, np.int64)
+    grid = aoc_lube.fetch(year=2023, day=11).splitlines()
+    yield np.array([y for y, line in enumerate(grid) for char in line if char == "#"])
+    yield np.array([x for x in range(len(grid[0])) for line in grid if line[x] == "#"])
 
 
 YS, XS = parse_raw()
 
 
 def expand(axis, n):
-    diffs = np.diff(axis) - 1
+    diffs = np.diff(axis, prepend=0) - 1
     diffs[diffs < 0] = 0
-    axis[1:] += np.cumsum(diffs) * n
-    return axis
+    return axis + np.cumsum(diffs) * n
 
 
 def expand_universe(n):
-    ys = expand(YS.copy(), n)
-    xs = expand(XS.copy(), n)
-    return sum(abs(a - b) for axis in (ys, xs) for a, b in combinations(axis, 2))
+    return sum(
+        abs(a - b)
+        for axis in (expand(YS, n), expand(XS, n))
+        for a, b in combinations(axis, 2)
+    )
 
 
 def part_one():
