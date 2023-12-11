@@ -1,6 +1,7 @@
-from itertools import combinations
+from itertools import combinations, pairwise
 
 import aoc_lube
+import numpy as np
 
 RAW = aoc_lube.fetch(year=2023, day=11)
 
@@ -11,21 +12,16 @@ def parse_raw():
     xs = [x for line in universe for x, char in enumerate(line) if char == "#"]
     ys.sort()
     xs.sort()
-    return ys, xs
+    return np.array(ys, np.int64), np.array(xs, np.int64)
 
 
 YS, XS = parse_raw()
 
 
 def _expand(axis, n):
-    scan = 0
-    while scan < max(axis):
-        if scan not in axis:
-            for j, coord in enumerate(axis):
-                if scan < coord:
-                    axis[j] = coord + n
-            scan += n
-        scan += 1
+    diffs = np.diff(axis) - 1
+    diffs[diffs < 0] = 0
+    axis[1:] += np.cumsum(diffs) * n
 
 
 def expand_universe(n):
