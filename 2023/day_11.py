@@ -9,9 +9,7 @@ RAW = aoc_lube.fetch(year=2023, day=11)
 def parse_raw():
     universe = RAW.splitlines()
     ys = [y for y, line in enumerate(universe) for char in line if char == "#"]
-    xs = [x for line in universe for x, char in enumerate(line) if char == "#"]
-    ys.sort()
-    xs.sort()
+    xs = [x for x in range(len(universe)) for line in universe if line[x] == "#"]
     return np.array(ys, np.int64), np.array(xs, np.int64)
 
 
