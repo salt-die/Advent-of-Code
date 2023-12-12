@@ -6,8 +6,12 @@ import numpy as np
 
 def parse_raw():
     grid = aoc_lube.fetch(year=2023, day=11).splitlines()
-    yield np.array([y for y, line in enumerate(grid) for char in line if char == "#"])
-    yield np.array([x for x in range(len(grid[0])) for line in grid if line[x] == "#"])
+    yield np.array(
+        [y for y, line in enumerate(grid) for char in line if char == "#"], np.int64
+    )
+    yield np.array(
+        [x for x in range(len(grid[0])) for line in grid if line[x] == "#"], np.int64
+    )
 
 
 YS, XS = parse_raw()
