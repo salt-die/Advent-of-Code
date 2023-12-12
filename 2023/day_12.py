@@ -19,21 +19,16 @@ def total_combinations(springs, groups):
             return springs.count("#", i) == 0
         if i == len(springs):
             return j == len(groups) - 1 and r == groups[j]
-        if springs[i] == "#":
-            return broken(i, j, r)
-        if springs[i] == ".":
-            return working(i, j, r)
-        return broken(i, j, r) + working(i, j, r)
 
-    def broken(i, j, r):
-        return combinations(i + 1, j, r + 1)
-
-    def working(i, j, r):
-        if r == groups[j]:
-            return combinations(i + 1, j + 1, 0)
-        if r == 0:
-            return combinations(i + 1, j, 0)
-        return 0
+        n = 0
+        if springs[i] != ".":
+            n += combinations(i + 1, j, r + 1)
+        if springs[i] != "#":
+            if r == groups[j]:
+                n += combinations(i + 1, j + 1, 0)
+            elif r == 0:
+                n += combinations(i + 1, j, 0)
+        return n
 
     return combinations(0, 0, 0)
 
