@@ -5,11 +5,11 @@ import aoc_lube
 
 def parse_raw():
     for line in aoc_lube.fetch(year=2023, day=12).splitlines():
-        springs, s = line.split()
-        yield springs, tuple(map(int, s.split(",")))
+        springs, groups = line.split()
+        yield springs, tuple(map(int, groups.split(",")))
 
 
-DATA = parse_raw()
+DATA = list(parse_raw())
 
 
 def total_combinations(springs, groups):
