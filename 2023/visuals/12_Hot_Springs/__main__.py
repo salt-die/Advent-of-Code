@@ -124,6 +124,7 @@ class SpringApp(App):
 
                 await asyncio.sleep(0)
 
+            found_label.canvas[0]["char"] = " "
             total_label.canvas[:-3, 8:] = total_label.canvas[1:-2, 8:]
             total_label.canvas[-3, 8:]["char"] = " "
 
@@ -132,7 +133,7 @@ class SpringApp(App):
             animated_text.colors[..., :3] = AOC_GREY
             animated_text.is_enabled = True
             await animated_text.tween(
-                duration=1, easing="out_bounce", pos=(total_label.bottom - 3, 9)
+                duration=0.5, easing="out_bounce", pos=(total_label.bottom - 3, 9)
             )
             animated_text.is_enabled = False
 
