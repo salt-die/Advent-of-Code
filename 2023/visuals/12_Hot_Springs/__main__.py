@@ -1,14 +1,17 @@
 import asyncio
 from itertools import product
+from pathlib import Path
 
 import aoc_lube
 from aoc_theme import AOC_GREY, AOC_PRIMARY, AOC_THEME
 from batgrl.app import App
 from batgrl.colors import Color
+from batgrl.gadgets.braille_video_player import BrailleVideoPlayer
 from batgrl.gadgets.text import Text
 
 GREEN = Color.from_hex("22cc39")
 RED = Color.from_hex("dd3330")
+SPRING = Path(__file__).parent / "spring.gif"
 
 
 def parse_raw():
@@ -45,11 +48,26 @@ class SpringApp(App):
         found_label.width = len(FOUND.format(""))
         found_label.colors[2:, :, :3] = GREEN
 
+        video = BrailleVideoPlayer(
+            source=SPRING,
+            size=(18, 15),
+            pos=(2, found_label.x - 17),
+            default_color_pair=AOC_PRIMARY,
+            gray_threshold=25,
+        )
+        video.play()
+
         animated_text = Text(
             default_color_pair=AOC_PRIMARY, is_enabled=False, is_transparent=True
         )
 
-        self.add_gadgets(total_label, combinations_label, found_label, animated_text)
+        self.add_gadgets(
+            total_label,
+            combinations_label,
+            found_label,
+            video,
+            animated_text,
+        )
 
         total = 0
         for springs, groups in DATA:
