@@ -1,31 +1,27 @@
 import asyncio
 
 import aoc_lube
-from aoc_theme import AOC_GREEN_ON_BLUE, AOC_PRIMARY, AOC_THEME, WHITE, AocToggle
+from aoc_theme import AOC_PRIMARY, AOC_THEME, WHITE, AocToggle
 from batgrl.app import App
 from batgrl.colors import Color, rainbow_gradient
-from batgrl.gadgets.behaviors.movable import Movable
 from batgrl.gadgets.progress_bar import ProgressBar
-from batgrl.gadgets.scroll_view import ScrollView
-from batgrl.gadgets.text import Text, add_text
+from batgrl.gadgets.text import Text
 
 INIT_SEQUENCE = aoc_lube.fetch(year=2023, day=15).split(",")
 RAINBOW = rainbow_gradient(9)
 
 # Note that the max number of lenses a box contains at any point for my input is 6, so the
 # size of our boxes is just big enough to fit 6 lenses. Not guaranteed to work on your input!
-LENS_BOX = """\
- Box {:>3}
-+-+------+
---)------)--
-+-+------+"""
-BH, BW = 4, 12
-LR = 2  # Light row
-LO = 3  # Lens offset
+NLENS = 6
+LENS_BOX = "┄)┄┄┄┄┄┄)┄"
+BH, BW = 1, 10
+LO = 2  # Lens offset
+NROWS = 32
+NCOLS = 8
 
 
 def box_pos(n):
-    row, column = divmod(n, 16)
+    row, column = divmod(n, 8)
     return row * BH, column * BW
 
 
@@ -38,39 +34,18 @@ def hash(string):
 
 
 def color_blend(a: Color, b: Color):
-    # So lenses don't color blend I don't think (but I'm no physicist).
-    # I think they subtract color, but if my lenses did that then the light would just
-    # turn black and won't look as cool. So my ascii lenses break the laws of physics and
-    # blend.
-    return Color(
-        a.red // 2 + b.red // 2, a.green // 2 + b.green // 2, a.blue // 2 + b.blue // 2
-    )
-
-
-class MovableText(Movable, Text):
-    ...
+    return Color((a.red + b.red) // 2, (a.green + b.green) // 2, (a.blue + b.blue) // 2)
 
 
 class LensApp(App):
     async def on_start(self):
-        box_border = Text(default_color_pair=AOC_GREEN_ON_BLUE, is_transparent=True)
-        box_border.set_text(">       <")
-
-        boxes_label = Text(size=(16 * BH, 16 * BW), default_color_pair=AOC_PRIMARY)
-        for i in range(256):
-            row, column = box_pos(i)
-            add_text(boxes_label.canvas[row:, column:], LENS_BOX.format(i))
-            boxes_label.colors[row + 2, column + BW - 2 : column + BW, :3] = WHITE
-
-        boxes_label.add_gadget(box_border)
-
-        sv = ScrollView(
-            size_hint={"height_hint": 1.0, "width_hint": 1.0},
-            disable_ptf=True,
-            show_horizontal_bar=False,
-            show_vertical_bar=False,
+        boxes_label = Text(
+            size=(NROWS * BH, NCOLS * BW), default_color_pair=AOC_PRIMARY
         )
-        sv.view = boxes_label
+        for i in range(256):
+            y, x = box_pos(i)
+            boxes_label.add_str(LENS_BOX, (y, x))
+            boxes_label.canvas[["overline", "underline"]][y, x + 1 : x + BW - 2] = True
 
         pause_event = asyncio.Event()
         pause_event.set()
@@ -82,9 +57,8 @@ class LensApp(App):
                 pause_event.set()
 
         pause_button = AocToggle("PAUSE", pause, pos=(3, 8))
-        auto_move_button = AocToggle("AUTO-MOVE", lambda _: None, pos=(4, 8))
 
-        delay = 0.5
+        delay = 0.2
 
         def go_fast(state):
             nonlocal delay
@@ -93,18 +67,17 @@ class LensApp(App):
             else:
                 delay = 0.5
 
-        fast_button = AocToggle("TURBO", go_fast, pos=(5, 8))
+        fast_button = AocToggle("TURBO", go_fast, pos=(4, 8))
         progress = ProgressBar(size=(1, 28), pos=(2, 1))
-        info_label = MovableText(
-            size=(7, 30),
-            pos=(1, 0),
+        info_label = Text(
+            size=(6, 30),
+            pos=(NROWS * BH // 2 - 3, NCOLS * BW + 1),
             default_color_pair=AOC_PRIMARY,
-            disable_oob=True,
         )
         info_label.add_border()
-        info_label.add_gadgets(progress, pause_button, auto_move_button, fast_button)
+        info_label.add_gadgets(progress, pause_button, fast_button)
 
-        self.add_gadgets(sv, info_label)
+        self.add_gadgets(boxes_label, info_label)
 
         init_sequence = aoc_lube.fetch(year=2023, day=15).split(",")
         boxes = [{} for _ in range(256)]
@@ -129,42 +102,28 @@ class LensApp(App):
                 box[label] = int(n)
                 info_label.add_str(f"Adding {label} to {box_id}.".center(28), (1, 1))
 
-            row, col = box_border.pos = box_pos(box_id)
+            row, col = box_pos(box_id)
+            col += LO
 
-            if not sv.is_grabbed and auto_move_button.toggle_state == "on":
-                ly, lx = boxes_label.pos
-                absy, absx = row + ly, col + lx
-
-                if absy < 0:
-                    sv._scroll_up(-absy + 1)
-                elif absy + BH >= sv.port_height:
-                    sv._scroll_down(absy - sv.port_height + BH + 1)
-                if absx < 0:
-                    sv._scroll_left(-absx + 1)
-                elif absx + BW >= sv.port_width:
-                    sv._scroll_right(absx - sv.port_width + BW + 1)
-
-            boxes_label.add_str(
-                ")" * len(box) + "-" * (6 - len(box)), (row + LR, col + LO)
-            )
-            for i, focal in enumerate(box.values(), start=col + 3):
-                boxes_label.colors[row + LR, i, :3] = RAINBOW[focal - 1]
+            boxes_label.add_str(")" * len(box) + "┄" * (NLENS - len(box)), (row, col))
+            boxes_label.canvas[row, col + len(box) : col + BW - 4][
+                ["overline", "underline"]
+            ] = True
+            for x, focal in enumerate(box.values(), start=col):
+                boxes_label.colors[row, x, :3] = RAINBOW[focal - 1]
+            boxes_label.colors[row, col + len(box) : col + NLENS] = AOC_PRIMARY
 
             current_color = WHITE
             for i, box in enumerate(boxes):
                 row, col = box_pos(i)
-                row += LR
-                boxes_label.colors[row, col : col + 2, :3] = current_color
-                col += 3
-                # Uncomment below for an extra color blend on entering a box:
-                # current_color = color_blend(current_color, WHITE)
+                boxes_label.colors[row, col, :3] = current_color
                 for focal in box.values():
                     current_color = color_blend(current_color, RAINBOW[focal - 1])
+
                 boxes_label.colors[
-                    row, col + len(box.values()) : col + 6, :3
+                    row, col + LO + len(box) : col + BW - 2, :3
                 ] = current_color
-                col += 7
-                boxes_label.colors[row, col : col + 2, :3] = current_color
+                boxes_label.colors[row, col + BW - 1, :3] = current_color
 
             await asyncio.sleep(delay)
 
