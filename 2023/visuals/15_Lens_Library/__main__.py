@@ -1,10 +1,11 @@
 import asyncio
 
 import aoc_lube
-from aoc_theme import AOC_GREEN_ON_BLUE, AOC_PRIMARY, WHITE, AocToggle
+from aoc_theme import AOC_GREEN_ON_BLUE, AOC_PRIMARY, AOC_THEME, WHITE, AocToggle
 from batgrl.app import App
 from batgrl.colors import Color, rainbow_gradient
 from batgrl.gadgets.behaviors.movable import Movable
+from batgrl.gadgets.progress_bar import ProgressBar
 from batgrl.gadgets.scroll_view import ScrollView
 from batgrl.gadgets.text import Text, add_text
 
@@ -80,33 +81,36 @@ class LensApp(App):
             else:
                 pause_event.set()
 
-        pause_button = AocToggle("PAUSE", pause, pos=(2, 8))
-        auto_move_button = AocToggle("AUTO-MOVE", lambda _: None, pos=(3, 8))
+        pause_button = AocToggle("PAUSE", pause, pos=(3, 8))
+        auto_move_button = AocToggle("AUTO-MOVE", lambda _: None, pos=(4, 8))
 
         delay = 0.5
 
         def go_fast(state):
             nonlocal delay
             if state == "on":
-                delay = 0.1
+                delay = 0
             else:
                 delay = 0.5
 
-        fast_button = AocToggle("TURBO", go_fast, pos=(4, 8))
+        fast_button = AocToggle("TURBO", go_fast, pos=(5, 8))
+        progress = ProgressBar(size=(1, 28), pos=(2, 1))
         info_label = MovableText(
-            size=(6, 30),
+            size=(7, 30),
             pos=(1, 0),
             default_color_pair=AOC_PRIMARY,
+            disable_oob=True,
         )
-        info_label.add_border("mcgugan_wide")
-        info_label.add_gadgets(pause_button, auto_move_button, fast_button)
+        info_label.add_border()
+        info_label.add_gadgets(progress, pause_button, auto_move_button, fast_button)
 
         self.add_gadgets(sv, info_label)
 
         init_sequence = aoc_lube.fetch(year=2023, day=15).split(",")
         boxes = [{} for _ in range(256)]
 
-        for s in init_sequence:
+        for i, s in enumerate(init_sequence):
+            progress.progress = i / (len(init_sequence) - 1)
             await pause_event.wait()
 
             if s.endswith("-"):
@@ -124,9 +128,6 @@ class LensApp(App):
                 box = boxes[box_id]
                 box[label] = int(n)
                 info_label.add_str(f"Adding {label} to {box_id}.".center(28), (1, 1))
-
-            info_label.add_border()
-            info_label.apply_hints()
 
             row, col = box_border.pos = box_pos(box_id)
 
@@ -169,4 +170,6 @@ class LensApp(App):
 
 
 if __name__ == "__main__":
-    LensApp(title="Lens Library", background_color_pair=AOC_PRIMARY).run()
+    LensApp(
+        title="Lens Library", background_color_pair=AOC_PRIMARY, color_theme=AOC_THEME
+    ).run()
