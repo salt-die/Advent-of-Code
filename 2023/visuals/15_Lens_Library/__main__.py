@@ -56,7 +56,7 @@ class LensApp(App):
             else:
                 pause_event.set()
 
-        pause_button = AocToggle("PAUSE", pause, pos=(3, 8))
+        pause_button = AocToggle("PAUSE", pause, pos=(3, 10))
 
         delay = 0.2
 
@@ -67,7 +67,7 @@ class LensApp(App):
             else:
                 delay = 0.5
 
-        fast_button = AocToggle("TURBO", go_fast, pos=(4, 8))
+        fast_button = AocToggle("TURBO", go_fast, pos=(4, 10))
         progress = ProgressBar(size=(1, 28), pos=(2, 1))
         info_label = Text(
             size=(6, 30),
