@@ -11,26 +11,26 @@ def min_heatloss(mn, mx):
     q = [(0, 0, 0, 1, 0), (0, 0, 0, 0, 1)]
     heatlosses = {}
     while q:
-        cost, y, x, dy, dx = heappop(q)
+        heatloss, y, x, Δy, Δx = heappop(q)
         if y == H - 1 and x == W - 1:
-            return cost
+            return heatloss
 
-        for dy, dx in ((-dx, dy), (dx, -dy)):
-            new_heatloss = 0
+        for Δy, Δx in ((-Δx, Δy), (Δx, -Δy)):
+            Δheatloss = 0
             for d in range(1, mx + 1):
-                v = y + dy * d
-                u = x + dx * d
+                v = y + Δy * d
+                u = x + Δx * d
 
                 if not (0 <= v < H and 0 <= u < W):
                     break
 
-                new_heatloss += GRID[v, u]
+                Δheatloss += GRID[v, u]
 
                 if d >= mn:
-                    new_cost = cost + new_heatloss
-                    if heatlosses.get((v, u, dy, dx), float("inf")) > new_cost:
-                        heatlosses[v, u, dy, dx] = new_cost
-                        heappush(q, (new_cost, v, u, dy, dx))
+                    new_heatloss = heatloss + Δheatloss
+                    if heatlosses.get((v, u, Δy, Δx), float("inf")) > new_heatloss:
+                        heatlosses[v, u, Δy, Δx] = new_heatloss
+                        heappush(q, (new_heatloss, v, u, Δy, Δx))
 
 
 aoc_lube.submit(2023, 17, 1, lambda: min_heatloss(1, 3))
