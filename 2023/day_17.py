@@ -8,10 +8,10 @@ H, W = GRID.shape
 
 
 def min_heatloss(mn, mx):
-    q = [(0, 0, 0, 1, 0), (0, 0, 0, 0, 1)]
+    heap = [(0, 0, 0, 1, 0), (0, 0, 0, 0, 1)]
     heatlosses = {}
-    while q:
-        heatloss, y, x, Δy, Δx = heappop(q)
+    while heap:
+        heatloss, y, x, Δy, Δx = heappop(heap)
         if y == H - 1 and x == W - 1:
             return heatloss
 
@@ -30,7 +30,7 @@ def min_heatloss(mn, mx):
                     new_heatloss = heatloss + Δheatloss
                     if heatlosses.get((v, u, Δy, Δx), float("inf")) > new_heatloss:
                         heatlosses[v, u, Δy, Δx] = new_heatloss
-                        heappush(q, (new_heatloss, v, u, Δy, Δx))
+                        heappush(heap, (new_heatloss, v, u, Δy, Δx))
 
 
 aoc_lube.submit(2023, 17, 1, lambda: min_heatloss(1, 3))
