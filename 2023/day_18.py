@@ -14,7 +14,6 @@ def parse_raw():
 
 def points(data):
     y = x = 0
-    yield y, x
     for (dy, dx), n in data:
         y += dy * n
         x += dx * n
