@@ -4,8 +4,7 @@ from aoc_lube.utils import distribute
 
 
 def parse_raw():
-    to_dydx = {"U": (-1, 0), "D": (1, 0), "L": (0, -1), "R": (0, 1)}
-    to_dydx |= {d: v for d, v in zip("3120", to_dydx.values())}
+    to_dydx = dict(zip("UDLR3120", ((-1, 0), (1, 0), (0, -1), (0, 1)) * 2))
     for line in aoc_lube.fetch(2023, 18).splitlines():
         dir, n, color = line.split()
         yield to_dydx[dir], int(n)
