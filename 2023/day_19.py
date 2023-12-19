@@ -53,7 +53,7 @@ def nvalid(workflow, part):
         return
 
     if workflow == "A":
-        yield prod(hi - lo + 1 for lo, hi in part.values())
+        yield prod(hi - lo for lo, hi in part.values())
         return
 
     for cmd in WORKFLOWS[workflow]:
@@ -65,24 +65,27 @@ def nvalid(workflow, part):
 
             if op == "<":
                 if lo < n:
-                    yield from nvalid(goto, part | {cat: (lo, n - 1)})
+                    yield from nvalid(goto, part | {cat: (lo, n)})
 
-                if hi < n:
+                if hi <= n:
                     break
 
                 part = part | {cat: (n, hi)}
             else:
+                n += 1
                 if n < hi:
-                    yield from nvalid(goto, part | {cat: (n + 1, hi)})
+                    yield from nvalid(goto, part | {cat: (n, hi)})
 
-                if n < lo:
+                if n <= lo:
                     break
+
                 part = part | {cat: (lo, n)}
 
 
 def part_two():
-    return sum(nvalid("in", dict(zip("xmas", ((1, 4000),) * 4))))
+    return sum(nvalid("in", dict(zip("xmas", ((1, 4001),) * 4))))
 
 
+print(part_two())
 aoc_lube.submit(year=2023, day=19, part=1, solution=part_one)
 aoc_lube.submit(year=2023, day=19, part=2, solution=part_two)
