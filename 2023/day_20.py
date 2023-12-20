@@ -26,74 +26,59 @@ def init_states():
     }
 
 
+def cycle(states, on_progress):
+    queue = deque([("button", "roadcaster", 0)])
+
+    while queue:
+        src, dst, signal = queue.popleft()
+        on_progress(src, signal)
+
+        if dst not in MODULES:
+            continue
+
+        type_, outs = MODULES[dst]
+        if type_ == "%":
+            if signal:
+                continue
+
+            states[dst] ^= 1
+            output_signal = states[dst]
+        elif type_ == "&":
+            memory = states[dst]
+            memory[src] = signal
+            output_signal = not all(memory.values())
+        else:
+            output_signal = signal
+
+        for out in outs:
+            queue.append((dst, out, output_signal))
+
+
 def part_one():
     states = init_states()
     lohi = [0, 0]
+
+    def on_progress(_, signal):
+        lohi[signal] += 1
+
     for _ in range(1000):
-        queue = deque([("button", "roadcaster", 0)])
-
-        while queue:
-            src, dst, signal = queue.popleft()
-            lohi[signal] += 1
-
-            if dst not in MODULES:
-                continue
-
-            type_, outs = MODULES[dst]
-            if type_ == "%":
-                if signal:
-                    continue
-
-                states[dst] ^= 1
-                output_signal = states[dst]
-            elif type_ == "&":
-                memory = states[dst]
-                memory[src] = signal
-                output_signal = not all(memory.values())
-            else:
-                output_signal = signal
-
-            for out in outs:
-                queue.append((dst, out, output_signal))
-
+        cycle(states, on_progress)
     return prod(lohi)
 
 
 def part_two():
     states = init_states()
     sources = set(inputs(*inputs("rx")))
-    button_presses = 1
+    npresses = []
+
+    def on_progress(src, signal):
+        if signal and src in sources:
+            npresses.append(i)
 
     for i in count(1):
-        queue = deque([("button", "roadcaster", 0)])
-
-        while queue:
-            src, dst, signal = queue.popleft()
-            if signal and src in sources:
-                sources.remove(src)
-                button_presses = lcm(button_presses, i)
-                if not sources:
-                    return button_presses
-
-            if dst not in MODULES:
-                continue
-
-            type_, outs = MODULES[dst]
-            if type_ == "%":
-                if signal:
-                    continue
-
-                states[dst] ^= 1
-                output_signal = states[dst]
-            elif type_ == "&":
-                memory = states[dst]
-                memory[src] = signal
-                output_signal = not all(memory.values())
-            else:
-                output_signal = signal
-
-            for out in outs:
-                queue.append((dst, out, output_signal))
+        cycle(states, on_progress)
+        if len(npresses) == len(sources):
+            return lcm(*npresses)
 
 
 aoc_lube.submit(year=2023, day=20, part=1, solution=part_one)
