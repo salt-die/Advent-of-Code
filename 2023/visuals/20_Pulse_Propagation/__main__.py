@@ -127,20 +127,15 @@ class PulseApp(App):
 
         (rx_in,) = inputs("rx")
         sources = [*inputs(rx_in)]
-        cyclers_to_sources = {next(inputs(src)): src for src in sources}
+        cyclers_to_sources = {src: next(inputs(src)) for src in sources}
 
         npresses = []
 
         async def on_progress(src, dst, signal):
             if signal and dst == rx_in:
-                for cycler in cyclers_to_sources:
-                    if cyclers_to_sources[cycler] == src:
-                        break
-                del cyclers_to_sources[cycler]
-
                 npresses.append(i)
                 broadcast_label.add_str(
-                    f"{cycler} cycle: {i:>4}", (len(npresses) + 1, 1)
+                    f"{cyclers_to_sources[src]} cycle: {i:>4}", (len(npresses) + 1, 1)
                 )
 
             broadcast_label.add_str(f"Cycles: {i:>4}", (1, 1))
