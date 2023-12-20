@@ -90,7 +90,6 @@ class PulseApp(App):
             label.set_text(CYCLER_TEMPLATE)
 
         positions = {}
-        flippers = {}
         for cycler, label in zip(cyclers, cycler_labels):
             positions[cycler] = label
             label.colors[..., :3] = RED
@@ -109,7 +108,6 @@ class PulseApp(App):
                 if out not in MODULES[cycler][1]:
                     label.add_str(" ", (3, 3 + i * 7))
                 positions[out] = (label, i)
-                flippers[out] = cycler
 
                 out = next(
                     (module for module in MODULES[out][1] if module != cycler), None
