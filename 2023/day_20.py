@@ -31,7 +31,7 @@ def cycle(states, on_progress):
 
     while queue:
         src, dst, signal = queue.popleft()
-        on_progress(src, signal)
+        on_progress(dst, signal)
 
         if dst not in MODULES:
             continue
@@ -68,16 +68,16 @@ def part_one():
 
 def part_two():
     states = init_states()
-    sources = set(inputs(*inputs("rx")))
+    (rx_in,) = inputs("rx")
     npresses = []
 
-    def on_progress(src, signal):
-        if signal and src in sources:
+    def on_progress(dst, signal):
+        if signal and dst == rx_in:
             npresses.append(i)
 
     for i in count(1):
         cycle(states, on_progress)
-        if len(npresses) == len(sources):
+        if len(npresses) == len(states[rx_in]):
             return lcm(*npresses)
 
 
