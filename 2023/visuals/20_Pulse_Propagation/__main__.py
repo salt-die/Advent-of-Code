@@ -11,7 +11,6 @@ from batgrl.gadgets.text import Text
 
 RED = Color.from_hex("dd3330")
 GREEN = Color.from_hex("22cc39")
-BLUE = Color.from_hex("3268d3")
 
 
 def parse_input():
@@ -33,7 +32,7 @@ def init_states():
 
 
 async def cycle(states, on_progress):
-    queue = deque([("button", "broadcaster", 0)])
+    queue = deque([("button", "roadcaster", 0)])
 
     while queue:
         src, dst, signal = queue.popleft()
@@ -60,7 +59,6 @@ async def cycle(states, on_progress):
 
 
 MODULES = dict(parse_input())
-MODULES["broadcaster"] = MODULES["roadcaster"]
 UP = "⇧"
 DN = "⇩"
 CYCLER_TEMPLATE = """\
