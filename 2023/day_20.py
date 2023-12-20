@@ -50,8 +50,7 @@ def cycle(states, on_progress):
         else:
             output_signal = signal
 
-        for out in outs:
-            queue.append((dst, out, output_signal))
+        queue.extend((dst, out, output_signal) for out in outs)
 
 
 def part_one():
