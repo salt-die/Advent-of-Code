@@ -69,7 +69,7 @@ def part_two():
 
         while queue:
             src, dst, signal = queue.popleft()
-            if src in sources and signal:
+            if signal and src in sources:
                 sources.remove(src)
                 button_presses = lcm(button_presses, i)
                 if not sources:
@@ -97,4 +97,4 @@ def part_two():
 
 
 aoc_lube.submit(year=2023, day=20, part=1, solution=part_one)
-aoc_lube.submit(year=2023, day=20, part=1, solution=part_two)
+aoc_lube.submit(year=2023, day=20, part=2, solution=part_two)
