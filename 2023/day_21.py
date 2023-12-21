@@ -1,5 +1,3 @@
-from itertools import product
-
 import aoc_lube
 from aoc_lube.utils import GRID_NEIGHBORHOODS
 from scipy.interpolate import lagrange
@@ -7,7 +5,6 @@ from scipy.interpolate import lagrange
 RAW = aoc_lube.fetch(year=2023, day=21)
 GRID = RAW.splitlines()
 H = len(GRID)
-START = next((y, x) for (y, x) in product(range(H), repeat=2) if GRID[y][x] == "S")
 
 
 def step(nodes):
@@ -20,7 +17,7 @@ def step(nodes):
 
 
 def part_one():
-    nodes = [START]
+    nodes = [(65, 65)]
     for _ in range(64):
         nodes = step(nodes)
     return len(nodes)
@@ -29,7 +26,7 @@ def part_one():
 def part_two():
     xs = [65, 65 + H, 65 + 2 * H]
     ys = []
-    nodes = [START]
+    nodes = [(65, 65)]
     for i in range(xs[-1]):
         nodes = step(nodes)
         if i + 1 in xs:
