@@ -43,7 +43,7 @@ def init_bricks():
         Brick([*extract_ints(line)]) for line in aoc_lube.fetch(2023, 22).splitlines()
     ]
     bricks.sort(key=lambda brick: brick.brick[5])
-    bricks = bricks[:200]  # re: 200, this is python afterall...
+    bricks = bricks[:200]  # re: 200, this is python after all...
 
     stack = []
     for brick in bricks:
