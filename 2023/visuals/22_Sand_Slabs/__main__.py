@@ -108,10 +108,10 @@ class SandApp(App):
 
             if reset_event.is_set():
                 bricks = init_bricks()
+                cubes = [cube for brick in bricks for cube in brick.cubes]
+                brick_renderer.cubes = cubes
                 reset_event.clear()
 
-            cubes = [cube for brick in bricks for cube in brick.cubes]
-            brick_renderer.cubes = cubes
             await asyncio.sleep(0)
             brick_renderer.is_animating = False
             brick_renderer.render_cubes()
