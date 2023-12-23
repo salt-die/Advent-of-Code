@@ -18,7 +18,8 @@ def part_one():
     return max(len(path) for path in nx.all_simple_paths(g, START, END)) - 1
 
 
-def edge_contraction(G):  # See: 2019, Day 18
+def part_two():
+    # Edge contraction a la 2019, Day 18
     nx.set_edge_attributes(G, 1, name="weight")
     while True:
         for node, degree in nx.degree(G):
@@ -32,10 +33,6 @@ def edge_contraction(G):  # See: 2019, Day 18
                 break
         else:
             break
-
-
-def part_two():
-    edge_contraction(G)
 
     return max(
         nx.path_weight(G, path, weight="weight")
