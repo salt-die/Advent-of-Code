@@ -1,8 +1,8 @@
 from itertools import combinations, starmap
 
 import aoc_lube
+import numpy as np
 from aoc_lube.utils import extract_ints
-from sympy import solve_poly_system, symbols
 
 DATA = [
     list(extract_ints(line)) for line in aoc_lube.fetch(year=2023, day=24).splitlines()
@@ -39,28 +39,23 @@ def part_one():
     return sum(starmap(valid_intersection, combinations(DATA, 2)))
 
 
+def cross(arr):
+    a, b, c = arr
+    return np.array([[0, -c, b], [c, 0, -a], [-b, a, 0]])
+
+
 def part_two():
-    x, y, z, dx, dy, dz, t0, t1, t2 = variables = symbols("x y z dx dy dz t0 t1 t2")
-    (
-        (x0, y0, z0, dx0, dy0, dz0),
-        (x1, y1, z1, dx1, dy1, dz1),
-        (x2, y2, z2, dx2, dy2, dz2),
-    ) = DATA[:3]
-    [(x, y, z, *_)] = solve_poly_system(
-        [
-            x + dx * t0 - x0 - dx0 * t0,
-            y + dy * t0 - y0 - dy0 * t0,
-            z + dz * t0 - z0 - dz0 * t0,
-            x + dx * t1 - x1 - dx1 * t1,
-            y + dy * t1 - y1 - dy1 * t1,
-            z + dz * t1 - z1 - dz1 * t1,
-            x + dx * t2 - x2 - dx2 * t2,
-            y + dy * t2 - y2 - dy2 * t2,
-            z + dz * t2 - z2 - dz2 * t2,
-        ],
-        *variables,
+    xp, xv, yp, yv, zp, zv = [
+        np.array(arr)
+        for hailstone in DATA[:3]
+        for arr in [hailstone[:3], hailstone[3:]]
+    ]
+    unknowns = np.append(
+        np.cross(-xp, xv) + np.cross(yp, yv),
+        np.cross(-xp, xv) + np.cross(zp, zv),
     )
-    return x + y + z
+    m = np.block([[cross(xv - yv), cross(xp - yp)], [cross(xv - zv), cross(xp - zp)]])
+    return round(np.linalg.solve(m, unknowns)[:3].sum())
 
 
 aoc_lube.submit(year=2023, day=24, part=1, solution=part_one)
