@@ -39,24 +39,22 @@ def part_one():
     return sum(starmap(valid_intersection, combinations(DATA, 2)))
 
 
-def cross(arr):
-    a, b, c = arr
-    return np.array([[0, -c, b], [c, 0, -a], [-b, a, 0]])
+def skew(arr3d):
+    return np.cross(np.eye(3), arr3d)
 
 
 def part_two():
-    xp, xv, yp, yv, zp, zv = [
-        np.array(arr)
-        for hailstone in DATA[:3]
-        for arr in [hailstone[:3], hailstone[3:]]
+    (xp, xv), (yp, yv), (zp, zv) = [
+        (np.array(hailstone[:3]), np.array(hailstone[3:])) for hailstone in DATA[:3]
     ]
     unknowns = np.append(
         np.cross(-xp, xv) + np.cross(yp, yv),
         np.cross(-xp, xv) + np.cross(zp, zv),
     )
-    m = np.block([[cross(xv - yv), cross(xp - yp)], [cross(xv - zv), cross(xp - zp)]])
+    m = np.block([[skew(xv - yv), skew(xp - yp)], [skew(xv - zv), skew(xp - zp)]])
     return round(np.linalg.solve(m, unknowns)[:3].sum())
 
 
+print(part_two())
 aoc_lube.submit(year=2023, day=24, part=1, solution=part_one)
 aoc_lube.submit(year=2023, day=24, part=2, solution=part_two)
