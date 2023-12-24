@@ -55,6 +55,5 @@ def part_two():
     return round(np.linalg.solve(m, unknowns)[:3].sum())
 
 
-print(part_two())
 aoc_lube.submit(year=2023, day=24, part=1, solution=part_one)
 aoc_lube.submit(year=2023, day=24, part=2, solution=part_two)
