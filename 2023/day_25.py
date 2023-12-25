@@ -1,18 +1,23 @@
 import aoc_lube
+import networkx as nx
 
-RAW = aoc_lube.fetch(year=2023, day=25)
-print(RAW)
 
 def parse_raw():
-    ...
+    G = nx.Graph()
+    for line in aoc_lube.fetch(year=2023, day=25).splitlines():
+        node, rest = line.split(": ")
+        for other in rest.split():
+            G.add_edge(node, other)
+    return G
 
-DATA = parse_raw()
+
+G = parse_raw()
+
 
 def part_one():
-    ...
+    G.remove_edges_from(nx.minimum_edge_cut(G))
+    a, b = nx.connected_components(G)
+    return len(a) * len(b)
 
-def part_two():
-    ...
 
 aoc_lube.submit(year=2023, day=25, part=1, solution=part_one)
-aoc_lube.submit(year=2023, day=25, part=2, solution=part_two)
