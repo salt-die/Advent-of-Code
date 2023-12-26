@@ -3,15 +3,12 @@ import networkx as nx
 
 
 def parse_raw():
-    G = nx.Graph()
-    for line in aoc_lube.fetch(year=2023, day=25).splitlines():
-        node, rest = line.split(": ")
-        for other in rest.split():
-            G.add_edge(node, other)
-    return G
+    for line in aoc_lube.fetch(year=2023, day=25).replace(":", " ").splitlines():
+        node, *neighbors = line.split()
+        yield node, neighbors
 
 
-G = parse_raw()
+G = nx.Graph(dict(parse_raw()))
 
 
 def part_one():
