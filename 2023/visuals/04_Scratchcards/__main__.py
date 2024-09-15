@@ -136,9 +136,8 @@ class ScratchcardApp(App):
                 f"{lines[5]} \n"
                 f"{lines[6]} \n\n",
             )
-            card.add_border(
-                "mcgugan_wide", fg_color=BROWN, bg_color=Color.from_hex(AOC_BLUE)
-            )
+            card.add_border("mcgugan_wide")
+            card.canvas["bg_color"][[0, -1]] = Color.from_hex(AOC_BLUE)
 
             await scratcher.wait_until_scratched()
 
