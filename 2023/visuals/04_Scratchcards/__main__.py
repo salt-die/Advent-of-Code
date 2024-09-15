@@ -2,19 +2,21 @@ import asyncio
 import re
 
 import aoc_lube
-from aoc_theme import AOC_BLUE, AOC_PRIMARY, AocButton
+from aoc_theme import AOC_BLUE, AOC_PRIMARY, AOC_THEME, AocButton
 from batgrl.app import App
-from batgrl.colors import Color, ColorPair, lerp_colors, rainbow_gradient
+from batgrl.colors import Color, lerp_colors, rainbow_gradient
 from batgrl.gadgets.gadget import Gadget
-from batgrl.gadgets.text import Text, add_text
-from batgrl.io import MouseEvent
+from batgrl.gadgets.text import Text, add_text, new_cell
+from batgrl.terminal.events import MouseEvent
 
 BROWN = Color.from_hex("2d1503")
 YELLOW = Color.from_hex("eac36e")
 SILVER = Color.from_hex("827f7f")
-BROWN_ON_YELLOW = ColorPair.from_colors(BROWN, YELLOW)
-CARD_BORDER = ColorPair.from_colors(BROWN, AOC_BLUE)
 RAINBOW = rainbow_gradient(10)
+PRIMARY_CELL = new_cell(
+    fg_color=Color.from_hex(AOC_PRIMARY["fg"]),
+    bg_color=Color.from_hex(AOC_PRIMARY["bg"]),
+)
 
 
 class Scratcher(Text):
@@ -33,10 +35,8 @@ class Scratcher(Text):
         ).all()
 
     def on_mouse(self, mouse_event: MouseEvent) -> bool | None:
-        if mouse_event.button != "no_button" and self.collides_point(
-            mouse_event.position
-        ):
-            y, x = self.to_local(mouse_event.position)
+        if mouse_event.button != "no_button" and self.collides_point(mouse_event.pos):
+            y, x = self.to_local(mouse_event.pos)
             self.canvas[y, x]["char"] = " "
             if self.is_all_scratched:
                 self.all_scratched_event.set()
@@ -72,7 +72,9 @@ class Scratcher(Text):
 
 class ScratchcardApp(App):
     async def on_start(self):
-        card = Text(size=(14, 33), default_color_pair=BROWN_ON_YELLOW)
+        card = Text(
+            size=(14, 33), default_cell=new_cell(fg_color=BROWN, bg_color=YELLOW)
+        )
         add_text(
             card.canvas[2:],
             " Powerstar         December 2023\n"
@@ -80,18 +82,18 @@ class ScratchcardApp(App):
             " Winning numbers:\n\n\n    Your numbers:",
         )
 
-        table = Text(size=(14, 33), default_color_pair=AOC_PRIMARY)
+        table = Text(size=(14, 33), default_cell=PRIMARY_CELL)
         table.left = card.right
         table.canvas[:, 19]["char"] = "┃"
         table.add_str("Score:", pos=(-3, 1))
         add_text(table.canvas[-2:, 12:], "━━━━━━━╋━━━━━━━━━━\n TOTAL ┃     0")
 
-        score = Text(default_color_pair=AOC_PRIMARY, is_enabled=False)
+        score = Text(default_cell=PRIMARY_CELL, is_enabled=False, is_transparent=True)
 
         next_card_event = asyncio.Event()
         next_card_event.set()
         next_card = AocButton(
-            label="➡️", pos=(12, 40), callback=next_card_event.set, is_enabled=False
+            label="→", pos=(12, 40), callback=next_card_event.set, is_enabled=False
         )
 
         scratcher = Scratcher(
@@ -99,7 +101,7 @@ class ScratchcardApp(App):
             size=(8, 14),
             pos=(4, 18),
             is_transparent=True,
-            default_color_pair=SILVER * 2,
+            default_cell=new_cell(fg_color=SILVER, bg_color=SILVER),
         )
 
         auto = AocButton(label="AUTO", pos=(12, 34), callback=scratcher.toggle_auto)
@@ -121,7 +123,8 @@ class ScratchcardApp(App):
                 draws[45:59],
                 draws[60:],
             ]
-            card.colors[:] = BROWN_ON_YELLOW
+            card.canvas["fg_color"] = BROWN
+            card.canvas["bg_color"] = YELLOW
             card.add_str(name.removeprefix("Card"), pos=(2, 10))
             add_text(
                 card.canvas[4:, 18:],
@@ -133,7 +136,9 @@ class ScratchcardApp(App):
                 f"{lines[5]} \n"
                 f"{lines[6]} \n\n",
             )
-            card.add_border("mcgugan_wide", color_pair=CARD_BORDER)
+            card.add_border(
+                "mcgugan_wide", fg_color=BROWN, bg_color=Color.from_hex(AOC_BLUE)
+            )
 
             await scratcher.wait_until_scratched()
 
@@ -161,7 +166,7 @@ class ScratchcardApp(App):
 
             for i in range(11):
                 for j, (y, x1, x2) in enumerate(match_coords):
-                    card.colors[y, x1:x2, :3] = lerp_colors(
+                    card.canvas["fg_color"][y, x1:x2] = lerp_colors(
                         BROWN, RAINBOW[j // 2], i / 20
                     )
 
@@ -171,8 +176,8 @@ class ScratchcardApp(App):
             table.canvas[-3, 23:]["char"] = " "
 
             await score.tween(duration=0.5, easing="out_bounce", pos=(11, 56))
-            table.add_str(str(current_score).rjust(3), (11, 23))
-            table.add_str(str(score_total).rjust(5), (13, 21))
+            table.add_str(str(current_score).rjust(3), pos=(11, 23))
+            table.add_str(str(score_total).rjust(5), pos=(13, 21))
             score.is_enabled = False
 
             if not scratcher.auto_scratch:
@@ -184,4 +189,8 @@ class ScratchcardApp(App):
 
 
 if __name__ == "__main__":
-    ScratchcardApp(title="Scratchcards", background_color_pair=AOC_PRIMARY).run()
+    ScratchcardApp(
+        title="Scratchcards",
+        bg_color=Color.from_hex(AOC_PRIMARY["bg"]),
+        color_theme=AOC_THEME,
+    ).run()
