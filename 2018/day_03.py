@@ -29,3 +29,28 @@ def part_two():
 
 aoc_lube.submit(year=2018, day=3, part=1, solution=part_one)
 aoc_lube.submit(year=2018, day=3, part=2, solution=part_two)
+
+
+# Alternatively, using regions:
+# from batgrl.geometry import Region
+
+
+# def parse_raw():
+#     unions = Region()
+#     intersections = Region()
+#     for _, x, y, w, h in CLAIMS:
+#         r = Region.from_rect((y, x), (h, w))
+#         intersections |= r & unions
+#         unions |= r
+#     return intersections
+
+
+# def part_one():
+#     return sum(h * w for _, (h, w) in DATA.rects())
+
+
+# def part_two():
+#     for claim, x, y, w, h in CLAIMS:
+#         r = Region.from_rect((y, x), (h, w))
+#         if not DATA & r:
+#             return claim
