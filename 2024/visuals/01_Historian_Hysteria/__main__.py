@@ -2,13 +2,11 @@ from collections import Counter
 
 import aoc_lube
 from aoc_lube.utils import distribute, extract_ints
-from aoc_theme import AOC_THEME, AocToggle
+from aoc_theme import AOC_THEME, AocText, AocToggle
 from batgrl.app import App
-from batgrl.gadgets.behaviors.themable import Themable
 from batgrl.gadgets.gadget import Gadget
 from batgrl.gadgets.scroll_view import ScrollView
 from batgrl.gadgets.tabs import Tabs
-from batgrl.gadgets.text import Text, new_cell
 
 L, R = distribute(extract_ints(aoc_lube.fetch(year=2024, day=1)), 2)
 L = list(L)
@@ -24,18 +22,14 @@ FOOTER = """\
 
 class HistorianApp(App):
     async def on_start(self):
-        fg = Themable.color_theme.primary.fg
-        bg = Themable.color_theme.primary.bg
-        default_cell = new_cell(fg_color=fg, bg_color=bg)
-
         part_1 = Gadget(size=(20, 28))
 
-        labels_1 = Text(default_cell=default_cell)
+        labels_1 = AocText()
         labels_1.set_text(LABELS)
-        footer_1 = Text(default_cell=default_cell)
+        footer_1 = AocText()
         footer_1.set_text(FOOTER)
 
-        data_1 = Text(size=(1000, 26), default_cell=default_cell)
+        data_1 = AocText(size=(1000, 26))
         data_1.canvas["char"][:, [7, 15]] = "┃"
 
         sv_1 = ScrollView(size=(15, 28), dynamic_bars=True)
@@ -72,12 +66,12 @@ class HistorianApp(App):
 
         part_2 = Gadget(size=(20, 28))
 
-        labels_2 = Text(default_cell=default_cell)
+        labels_2 = AocText()
         labels_2.set_text(LABELS)
-        footer_2 = Text(default_cell=default_cell)
+        footer_2 = AocText()
         footer_2.set_text(FOOTER)
 
-        data_2 = Text(size=(1000, 26), default_cell=default_cell)
+        data_2 = AocText(size=(1000, 26))
         data_2.canvas["char"][:, [7, 15]] = "┃"
 
         def on_toggle_2(state):

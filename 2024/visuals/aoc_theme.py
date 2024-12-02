@@ -101,6 +101,14 @@ class AocToggle(Themable, ToggleButtonBehavior, Text):
         self.callback(self.toggle_state)
 
 
+class AocText(Themable, Text):
+    def update_theme(self):
+        self.default_fg_color = self.color_theme.primary.fg
+        self.default_bg_color = self.color_theme.primary.bg
+        self.canvas["fg_color"] = self.color_theme.primary.fg
+        self.canvas["bg_color"] = self.color_theme.primary.bg
+
+
 if __name__ == "__main__":
     import asyncio
     from colorsys import hsv_to_rgb
