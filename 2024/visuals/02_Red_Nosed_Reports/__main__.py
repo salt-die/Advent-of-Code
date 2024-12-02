@@ -49,7 +49,7 @@ class RedNosedReportsApp(App):
             else:
                 delay = 0.05
 
-        toggle = AocToggle("TURBO", toggle_delay, is_transparent=True)
+        toggle = AocToggle("TURBO", toggle_delay)
         toggle.bottom = total_label.bottom
         self.add_gadgets(header, reports_label, diff_label, total_label, toggle)
 
