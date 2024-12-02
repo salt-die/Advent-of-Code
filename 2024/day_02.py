@@ -49,7 +49,7 @@ aoc_lube.submit(year=2024, day=2, part=2, solution=part_two)
 #             return is_safe(report[:i] + report[i + 1 :]) or is_safe(
 #                 report[: i + 1] + report[i + 2 :]
 #             )
-#     if 0 < sgn * (b - a) < 4:
+#     if abs(b - a) < 4:
 #         return is_safe(report[1:])
 #     return is_safe(report[:-1])
 #
