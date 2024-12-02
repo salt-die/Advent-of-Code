@@ -31,6 +31,10 @@ aoc_lube.submit(year=2024, day=2, part=2, solution=part_two)
 # Alternatively, for a O(n) solution for part 2:
 #
 #
+# def sign(n):
+#     return 1 if n > 0 else -1 if n < 0 else 0
+#
+#
 # def sign_of_seq(report):
 #     a, b, c, d = report[:4]
 #     return sign(sign(b - a) + sign(c - b) + sign(d - c))
