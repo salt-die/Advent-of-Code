@@ -46,13 +46,8 @@ aoc_lube.submit(year=2024, day=2, part=2, solution=part_two)
 #         return False
 #     for i, (a, b) in enumerate(sliding_window(report, 2)):
 #         if sign(b - a) != sgn:
-#             return (
-#                 is_safe(
-#                     report[:i] + report[i + 1 :]
-#                 )  # Should be able to determine which of
-#                 or is_safe(
-#                     report[: i + 1] + report[i + 2 :]
-#                 )  # these to use by the magnitude of b - a
+#             return is_safe(report[:i] + report[i + 1 :]) or is_safe(
+#                 report[: i + 1] + report[i + 2 :]
 #             )
 #     if 0 < sgn * (b - a) < 4:
 #         return is_safe(report[1:])
