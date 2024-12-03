@@ -5,7 +5,7 @@ from bisect import bisect
 import aoc_lube
 from aoc_theme import AOC_THEME, AocText, AocToggle
 from batgrl.app import App
-from batgrl.colors import BLACK, WHITE, Color, lerp_colors
+from batgrl.colors import WHITE, Color, lerp_colors
 from batgrl.gadgets.scroll_view import ScrollView
 
 RAW = aoc_lube.fetch(year=2024, day=3)
@@ -13,8 +13,6 @@ NEWLINES = [-1, *(i for i, char in enumerate(RAW) if char == "\n")]
 COMMAND_RE = re.compile(r"mul\((\d{1,3}),(\d{1,3})\)|do\(\)|don't\(\)")
 GREEN = Color.from_hex("22cc39")
 RED = Color.from_hex("dd3330")
-DARK_GREEN = lerp_colors(GREEN, BLACK, 0.5)
-DARK_RED = lerp_colors(RED, BLACK, 0.5)
 BRIGHT_GREEN = lerp_colors(GREEN, WHITE, 0.5)
 BRIGHT_RED = lerp_colors(RED, WHITE, 0.5)
 DIM = Color.from_hex("444444")
