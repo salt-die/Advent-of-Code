@@ -98,7 +98,7 @@ class CeresSearchApp(App):
 
             xmas.pos = y + 1 - j + grid.y, x - k + grid.x
             await xmas.tween(
-                duration=(abs(xmas.y - j) + abs(xmas.x - 7)) * 0.02,
+                duration=(abs(xmas.y - 1) + abs(xmas.x - 7)) * 0.02,
                 pos=(1, 7),
                 easing="in_out_back",
             )
