@@ -113,8 +113,7 @@ class MullItOverApp(App):
             row = bisect(NEWLINES, i) - 1
             column = i - NEWLINES[row] - 1
             data_label.canvas["fg_color"][row, column] = color
-            if not sv.is_grabbed and not sv._horizontal_bar.is_grabbed:
-                sv.scroll_to_rect((row, column), (1, 23))
+            sv.scroll_to_rect((row, column), (1, 23))
 
             await asyncio.sleep(delay)
 

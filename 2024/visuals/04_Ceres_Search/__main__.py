@@ -139,12 +139,7 @@ class CeresSearchApp(App):
         while auto_y < grid.height - 5:
             await auto_event.wait()
             search.pos = auto_y, auto_x
-            if (
-                not sv.is_grabbed
-                and not sv._horizontal_bar.is_grabbed
-                and not sv._vertical_bar.is_grabbed
-            ):
-                sv.scroll_to_rect(search.pos, search.size)
+            sv.scroll_to_rect(search.pos, search.size)
             if auto_x < grid.width - 6:
                 auto_x += 1
             else:
