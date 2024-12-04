@@ -49,6 +49,7 @@ class MovableAocText(Movable, AocText):
 class CeresSearchApp(App):
     async def on_start(self):
         found = set()
+        nfound = 0
         found_label = AocText(size_hint={"width_hint": 1.0}, size=(1, 10))
         found_label.add_str("Found: 0", truncate_str=True)
 
@@ -85,7 +86,8 @@ class CeresSearchApp(App):
         )
         search.add_gadget(search_hint)
 
-        async def animate_find(y, x, dy, dx, n):
+        async def animate_find(y, x, dy, dx):
+            nonlocal nfound
             h = 4 if dy else 1
             w = 4 if dx else 1
             j = 3 if dy < 0 else 0
@@ -102,7 +104,8 @@ class CeresSearchApp(App):
                 pos=(1, 7),
                 easing="in_out_back",
             )
-            found_label.add_str(f"Found: {n}")
+            nfound += 1
+            found_label.add_str(f"Found: {nfound}")
             self.root.remove_gadget(xmas)
 
         def on_pos():
@@ -120,7 +123,7 @@ class CeresSearchApp(App):
                             find = y + i, x + j, dy, dx
                             if find not in found:
                                 found.add(find)
-                                asyncio.create_task(animate_find(*find, len(found)))
+                                asyncio.create_task(animate_find(*find))
 
         search.bind("pos", on_pos)
 
