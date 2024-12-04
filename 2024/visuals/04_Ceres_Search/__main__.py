@@ -95,9 +95,13 @@ class CeresSearchApp(App):
             for i, char in enumerate("XMAS"):
                 xmas.canvas["char"][j + i * dy, k + i * dx] = char
                 xmas.canvas["fg_color"][j + i * dy, k + i * dx] = GRADIENT[i]
-            xmas.pos = y + 1 - j, x - k
-            await xmas.tween(duration=0.75, pos=(1, 7), easing="in_out_back")
-            found.add((y, x, dy, dx))
+
+            xmas.pos = y + 1 - j + grid.y, x - k + grid.x
+            await xmas.tween(
+                duration=(abs(xmas.y - j) + abs(xmas.x - 7)) * 0.02,
+                pos=(1, 7),
+                easing="in_out_back",
+            )
             found_label.add_str(f"Found: {len(found)}")
             self.root.remove_gadget(xmas)
 
@@ -113,8 +117,10 @@ class CeresSearchApp(App):
                         if is_xmas(grid_canvas["char"], i, j, dy, dx):
                             search_hint.is_visible = True
                             update_hint(grid_canvas, hint_canvas, i, j, dy, dx)
-                            if (y + i, x + j, dy, dx) not in found:
-                                asyncio.create_task(animate_find(y + i, x + j, dy, dx))
+                            find = y + i, x + j, dy, dx
+                            if find not in found:
+                                found.add(find)
+                                asyncio.create_task(animate_find(*find))
 
         search.bind("pos", on_pos)
 
