@@ -4,7 +4,6 @@ from aoc_lube.utils import GRID_NEIGHBORHOODS
 BOARD = aoc_lube.fetch(year=2024, day=4).splitlines()
 H, W = len(BOARD), len(BOARD[0])
 MOORE = GRID_NEIGHBORHOODS[8]
-DIAGS = MOORE[4:]
 
 
 def is_word(y, x, dy, dx, word):
