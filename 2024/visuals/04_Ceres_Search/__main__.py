@@ -4,7 +4,7 @@ import aoc_lube
 from aoc_lube.utils import GRID_NEIGHBORHOODS
 from aoc_theme import AOC_THEME, AocText, AocToggle
 from batgrl.app import App
-from batgrl.colors import Color, gradient, lerp_colors
+from batgrl.colors import Color, gradient
 from batgrl.gadgets.behaviors.movable import Movable
 from batgrl.gadgets.scroll_view import ScrollView
 
@@ -31,13 +31,8 @@ def update_hint(grid, hint, y, x, dy, dx):
         j = y + i * dy
         k = x + i * dx
         hint["char"][j, k] = grid["char"][j, k]
-        if (grid["fg_color"][j, k] == GREY).all():
-            grid["fg_color"][j, k] = GRADIENT[i]
-        else:
-            grid["fg_color"][j, k] = lerp_colors(
-                GRADIENT[i], grid["fg_color"][j, k], 0.5
-            )
-        hint["fg_color"][j, k] = grid["fg_color"][j, k]
+        grid["fg_color"][j, k] = GRADIENT[i]
+        hint["fg_color"][j, k] = GRADIENT[i]
 
 
 class MovableAocText(Movable, AocText):
