@@ -85,7 +85,7 @@ class CeresSearchApp(App):
         )
         search.add_gadget(search_hint)
 
-        async def animate_find(y, x, dy, dx):
+        async def animate_find(y, x, dy, dx, n):
             h = 4 if dy else 1
             w = 4 if dx else 1
             j = 3 if dy < 0 else 0
@@ -102,7 +102,7 @@ class CeresSearchApp(App):
                 pos=(1, 7),
                 easing="in_out_back",
             )
-            found_label.add_str(f"Found: {len(found)}")
+            found_label.add_str(f"Found: {n}")
             self.root.remove_gadget(xmas)
 
         def on_pos():
@@ -120,7 +120,7 @@ class CeresSearchApp(App):
                             find = y + i, x + j, dy, dx
                             if find not in found:
                                 found.add(find)
-                                asyncio.create_task(animate_find(*find))
+                                asyncio.create_task(animate_find(*find, len(found)))
 
         search.bind("pos", on_pos)
 
