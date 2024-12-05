@@ -14,14 +14,13 @@ def parse_raw():
 RULES, PAGES = parse_raw()
 
 
+@cmp_to_key
 def cmp(a, b):
-    if (a, b) in RULES:
-        return -1
-    return 1
+    return -1 if (a, b) in RULES else 1
 
 
 def is_sorted(page):
-    return all(cmp(a, b) == -1 for a, b in sliding_window(page))
+    return all(a < b for a, b in sliding_window(map(cmp, page)))
 
 
 def part_one():
@@ -30,9 +29,7 @@ def part_one():
 
 def part_two():
     return sum(
-        sorted(page, key=cmp_to_key(cmp))[len(page) // 2]
-        for page in PAGES
-        if not is_sorted(page)
+        sorted(page, key=cmp)[len(page) // 2] for page in PAGES if not is_sorted(page)
     )
 
 
