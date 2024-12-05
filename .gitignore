@@ -1,11 +1,5 @@
 __pycache__/
 
-# Advent of Code Session Token
-.token
-
-# Script to create initial files for daily visualization.
-new_day.py
-
 # gephi files used for graph images
 *.gexf
 
