@@ -14,25 +14,28 @@ def patrol(oy=-1, ox=-1):
     dy, dx = -1, 0
     while True:
         if not (0 <= y < H and 0 <= x < W):
-            return False, len(seen)
+            return len(seen) if oy == -1 else False
         if GRID[y][x] == "#" or (y == oy and x == ox):
             y -= dy
             x -= dx
             dy, dx = dx, -dy
         elif (y, x, dy, dx) in seen:
-            return True, len(seen)
+            return True
         else:
-            seen.add((y, x, dy, dx))
+            if oy == -1:
+                seen.add((y, x))
+            else:
+                seen.add((y, x, dy, dx))
             y += dy
             x += dx
 
 
 def part_one():
-    return patrol()[1]
+    return patrol()
 
 
 def part_two():
-    return sum(patrol(y, x)[0] for y in range(H) for x in range(W) if GRID[y][x] == ".")
+    return sum(patrol(y, x) for y in range(H) for x in range(W) if GRID[y][x] == ".")
 
 
 aoc_lube.submit(year=2024, day=6, part=1, solution=part_one)
