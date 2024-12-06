@@ -105,18 +105,18 @@ class GuardGallivantApp(App):
 
         reset_button = AocButton("Reset", reset)
         clear_button = AocButton("Clear", clear)
-        header = AocText(
-            size=(1, 1), size_hint={"width_hint": 1.0, "max_width": grid.width + 2}
-        )
         turbo_button = AocToggle(
             "TURBO",
             toggle_turbo,
             pos_hint={"x_hint": 1.0, "anchor": "right", "x_offset": -2},
         )
-
         stop_button.left = start_button.right
         reset_button.left = stop_button.right
         clear_button.left = reset_button.right
+
+        header = AocText(
+            size=(1, 1), size_hint={"width_hint": 1.0, "max_width": grid.width + 2}
+        )
         header.add_gadgets(
             start_button, stop_button, reset_button, clear_button, turbo_button
         )
