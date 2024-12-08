@@ -1,6 +1,4 @@
-from itertools import product
 from math import log10
-from operator import add, mul
 
 import aoc_lube
 from aoc_lube.utils import extract_ints
@@ -10,29 +8,35 @@ DATA = [
 ]
 
 
-def concat(a, b):
-    return int(a * 10 ** (int(log10(b)) + 1) + b)
+def endswith(a, b):
+    return a % (10 ** (int(log10(b)) + 1)) == b
 
 
-def solve(equation, operators):
-    target, initial, *operands = equation
-    for guess in product(operators, repeat=len(operands)):
-        result = initial
-        for operator, operand in zip(guess, operands):
-            result = operator(result, operand)
-            if result > target:
-                break
-        if result == target:
-            return target
-    return 0
+def unconcat(a, b):
+    return a // (10 ** (int(log10(b)) + 1))
+
+
+def solve(target, operands, part):
+    *operands, operand = operands
+    if not operands:
+        return operand == target
+    if (
+        part == 2
+        and endswith(target, operand)
+        and solve(unconcat(target, operand), operands, part)
+    ):
+        return True
+    if target % operand == 0 and solve(target // operand, operands, part):
+        return True
+    return solve(target - operand, operands, part)
 
 
 def part_one():
-    return sum(solve(equation, (add, mul)) for equation in DATA)
+    return sum(target for target, *operands in DATA if solve(target, operands, 1))
 
 
 def part_two():
-    return sum(solve(equation, (add, mul, concat)) for equation in DATA)
+    return sum(target for target, *operands in DATA if solve(target, operands, 2))
 
 
 aoc_lube.submit(year=2024, day=7, part=1, solution=part_one)
