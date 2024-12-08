@@ -41,7 +41,5 @@ def part_two():
     return sum_antipodes(2)
 
 
-print(part_one(), part_two())
-
 aoc_lube.submit(year=2024, day=8, part=1, solution=part_one)
 aoc_lube.submit(year=2024, day=8, part=2, solution=part_two)
