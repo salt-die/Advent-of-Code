@@ -80,6 +80,7 @@ class DiskFragmenterApp(App):
     async def on_start(self):
         defrag = asyncio.Event()
         defrag_kind = 1
+        start = 0
 
         bg = Pane(
             bg_color=BLACK,
@@ -116,7 +117,6 @@ class DiskFragmenterApp(App):
         memory.defrag = defrag
         memory.file_size = file_size
         memory.file_id = color_button
-        start = memory.height * memory.width
 
         def do_part_1():
             nonlocal defrag_kind
@@ -206,6 +206,7 @@ class DiskFragmenterApp(App):
             chars[start:end] = "."
             ids[start:end] = memory.default_fg_color
 
+        start = memory.height * memory.width
         while True:
             await defrag.wait()
             start, end = get_last_file_segment(start - 1)
@@ -215,8 +216,8 @@ class DiskFragmenterApp(App):
                 continue
 
             if defrag_kind == 1:
-                start = end
                 await move(end - 1)
+                start = end
             else:
                 await move(start, end - start)
 
