@@ -25,7 +25,7 @@ def part_one():
     fragged = []
     for free_info in free:
         file_info = used[-1]
-        if free_info[0] > file_info[0] + file_info[1]:
+        if free_info[0] > file_info[0]:
             break
         while free_info[1] >= file_info[1]:
             file_info[0] = free_info[0]
@@ -58,5 +58,6 @@ def part_two():
     return checksum(used)
 
 
+print(part_one(), part_two())
 aoc_lube.submit(year=2024, day=9, part=1, solution=part_one)
 aoc_lube.submit(year=2024, day=9, part=2, solution=part_two)
