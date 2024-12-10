@@ -27,20 +27,18 @@ G, TRAILHEADS, SUMMITS = parse_raw()
 
 
 def part_one():
-    total = 0
-    for a in TRAILHEADS:
-        for b in SUMMITS:
-            total += nx.has_path(G, a, b)
-    return total
+    return sum(nx.has_path(G, a, b) for a in TRAILHEADS for b in SUMMITS)
 
 
 def part_two():
-    total = 0
-    for a in TRAILHEADS:
-        for b in SUMMITS:
-            if nx.has_path(G, a, b):
-                total += ilen(nx.all_simple_edge_paths(G, a, b))
-    return total
+    return sum(
+        ilen(
+            nx.all_simple_edge_paths(G, a, b)
+            for a in TRAILHEADS
+            for b in SUMMITS
+            if nx.has_path(G, a, b)
+        )
+    )
 
 
 aoc_lube.submit(year=2024, day=10, part=1, solution=part_one)
