@@ -42,7 +42,7 @@ def nsides(region):
     total = 0
     for dir in Vec2(0, 0).adj():
         edge_uf = UnionFind(pos for pos in region if pos + dir not in region)
-        for pos in edge_uf.items():
+        for pos in edge_uf.elements():
             if (adj := pos + dir.rotate(True)) in edge_uf:
                 edge_uf.merge(pos, adj)
             if (adj := pos + dir.rotate(False)) in edge_uf:
