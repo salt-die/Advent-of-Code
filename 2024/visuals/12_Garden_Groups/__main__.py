@@ -74,7 +74,7 @@ class HighlightGarden(AocText):
             return
 
         region = REGIONS[pos]
-        root = REGIONS._find(pos)
+        root = REGIONS.find(pos)
 
         color = GRADIENT[root]
         for pos in region:
