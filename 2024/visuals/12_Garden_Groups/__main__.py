@@ -80,7 +80,7 @@ class HighlightGarden(AocText):
         for pos in region:
             self.canvas["fg_color"][pos] = color
 
-        edge_color = lerp_colors(color, lerp_to(color), 0.80)
+        edge_color = lerp_colors(color, lerp_to(color), 0.5)
 
         for pos in region:
             for dir in Vec2(0, 0).adj():
