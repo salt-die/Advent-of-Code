@@ -12,7 +12,7 @@ from batgrl.gadgets.image import Image
 from batgrl.gadgets.pane import Pane
 from batgrl.texture_tools import read_texture, resize_texture
 
-DARK_RED = Color.from_hex("510f0c")
+DARK_RED = Color.from_hex("840902")
 
 ASSETS = Path(__file__).parent.parent / "assets"
 ALIEN = ASSETS / "alien.png"
@@ -24,7 +24,6 @@ LEFT_BUTTON_UP = read_texture(ASSETS / "left_button_up.png")
 LEFT_BUTTON_DOWN = read_texture(ASSETS / "left_button_down.png")
 DOWN_BUTTON_UP = read_texture(ASSETS / "down_button_up.png")
 DOWN_BUTTON_DOWN = read_texture(ASSETS / "down_button_down.png")
-ALIEN_Y = 17
 
 
 class GraphicButton(ButtonBehavior, Graphics):
@@ -79,8 +78,10 @@ class DownButton(GraphicButton):
 
 class ClawContraptionApp(App):
     async def on_start(self):
+        alien_y = 17
+
         aliens = [
-            Image(path=ALIEN, size=(9, 18), pos=(ALIEN_Y, randrange(self.root.width)))
+            Image(path=ALIEN, size=(9, 18), pos=(alien_y, randrange(self.root.width)))
             for _ in range(14)
         ]
 
@@ -151,7 +152,7 @@ class ClawContraptionApp(App):
             gravity = 1 / 100
             velocity = 0
             real_y = alien.y
-            while real_y < ALIEN_Y:
+            while real_y < alien_y:
                 velocity += gravity
                 real_y += velocity
                 alien.y = int(real_y)
@@ -187,6 +188,10 @@ class ClawContraptionApp(App):
         button_bg.height = grid.height + 1
 
         def _on_grid_pos():
+            nonlocal alien_y
+            alien_y = grid.y - 10
+            for alien in aliens:
+                alien.y = alien_y
             button_bg.y = grid.y - 1
 
         grid.bind("pos", _on_grid_pos)
