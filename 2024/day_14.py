@@ -18,8 +18,7 @@ def part_one():
 
 def part_two():
     for i in count():
-        pos = (POS + i * VEL) % DIM
-        if np.unique(pos, axis=0).shape == pos.shape:
+        if np.unique((POS + i * VEL) % DIM, axis=0).shape == POS.shape:
             return i
 
 
