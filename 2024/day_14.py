@@ -11,24 +11,15 @@ DIM = np.array([101, 103])
 
 
 def part_one():
-    quads = np.zeros(4, int)
-    for pos, vel in zip(POS, VEL):
-        new_pos = (pos + 100 * vel) % DIM
-        if (new_pos != (DIM // 2)).all():
-            quads[(new_pos < DIM // 2) @ (2, 1)] += 1
-    return quads.prod()
+    pos = (POS + 100 * VEL) % DIM
+    not_centered = pos[np.all(pos != DIM // 2, axis=-1)]
+    return np.bincount((not_centered < DIM // 2) @ (2, 1)).prod()
 
 
 def part_two():
-    seen = set()
     for i in count():
-        for pos, vel in zip(POS, VEL):
-            new_pos = tuple((pos + i * vel) % DIM)
-            if new_pos in seen:
-                seen.clear()
-                break
-            seen.add(new_pos)
-        else:
+        pos = (POS + i * VEL) % DIM
+        if np.unique(pos, axis=0).shape == pos.shape:
             return i
 
 
