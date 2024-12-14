@@ -20,14 +20,15 @@ def part_one():
 
 
 def part_two():
-    locs = np.empty(DIM, int)
+    seen = set()
     for i in count():
-        locs[:] = 0
         for pos, vel in zip(POS, VEL):
-            new_pos = (pos + i * vel) % DIM
-            locs[tuple(new_pos)] += 1
-
-        if (locs < 2).all():
+            new_pos = tuple((pos + i * vel) % DIM)
+            if new_pos in seen:
+                seen.clear()
+                break
+            seen.add(new_pos)
+        else:
             return i
 
 
