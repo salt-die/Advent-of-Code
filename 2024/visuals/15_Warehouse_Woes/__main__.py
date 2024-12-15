@@ -73,10 +73,31 @@ class WarehouseWoesApp(App):
     async def on_start(self):
         part_1_event = asyncio.Event()
         part_2_event = asyncio.Event()
+        delay_1 = 0.07
+        delay_2 = 0.07
 
         start_1 = AocButton("Start", part_1_event.set)
         stop_1 = AocButton("Stop", part_1_event.clear)
         stop_1.left = start_1.right
+        slider_label_1 = AocText(
+            size=(1, 13), pos_hint={"x_hint": 1.0, "anchor": "right", "x_offset": -10}
+        )
+
+        def update_delay_1(value):
+            nonlocal delay_1
+            delay_1 = value
+            slider_label_1.add_str(f" Delay: {value:.2f}")
+
+        slider_1 = Slider(
+            size=(1, 10),
+            min=0,
+            max=0.3,
+            start_value=0.07,
+            callback=update_delay_1,
+            is_transparent=True,
+            alpha=0,
+            pos_hint={"x_hint": 1.0, "anchor": "right"},
+        )
         warehouse_1 = AocText(size=WAREHOUSE_1.shape)
         warehouse_1.canvas["char"] = WAREHOUSE_1
         sv1 = ScrollView(
@@ -86,11 +107,30 @@ class WarehouseWoesApp(App):
         )
         sv1.view = warehouse_1
         container_1 = AocText(size_hint={"height_hint": 1.0, "width_hint": 1.0})
-        container_1.add_gadgets(start_1, stop_1, sv1)
+        container_1.add_gadgets(start_1, stop_1, slider_label_1, slider_1, sv1)
 
         start_2 = AocButton("Start", part_2_event.set)
         stop_2 = AocButton("Stop", part_2_event.clear)
         stop_2.left = start_2.right
+        slider_label_2 = AocText(
+            size=(1, 13), pos_hint={"x_hint": 1.0, "anchor": "right", "x_offset": -10}
+        )
+
+        def update_delay_2(value):
+            nonlocal delay_2
+            delay_2 = value
+            slider_label_2.add_str(f" Delay: {value:.2f}")
+
+        slider_2 = Slider(
+            size=(1, 10),
+            min=0,
+            max=0.3,
+            start_value=0.07,
+            callback=update_delay_2,
+            is_transparent=True,
+            alpha=0,
+            pos_hint={"x_hint": 1.0, "anchor": "right"},
+        )
         warehouse_2 = AocText(size=WAREHOUSE_2.shape)
         warehouse_2.canvas["char"] = WAREHOUSE_2
         sv2 = ScrollView(
@@ -100,35 +140,13 @@ class WarehouseWoesApp(App):
         )
         sv2.view = warehouse_2
         container_2 = AocText(size_hint={"height_hint": 1.0, "width_hint": 1.0})
-        container_2.add_gadgets(start_2, stop_2, sv2)
+        container_2.add_gadgets(start_2, stop_2, slider_label_2, slider_2, sv2)
 
         tabs = Tabs(size_hint={"height_hint": 1.0, "width_hint": 1.0})
         tabs.add_tab("Part 1", container_1)
         tabs.add_tab("Part 2", container_2)
+        self.add_gadget(tabs)
 
-        delay = 0.2
-
-        slider_label = AocText(
-            size=(1, 11), pos_hint={"x_hint": 1.0, "anchor": "right", "x_offset": -11}
-        )
-
-        def update_delay(value):
-            nonlocal delay
-            delay = value
-            slider_label.add_str(f"Delay: {delay:.2f}")
-
-        slider = Slider(
-            size=(1, 10),
-            min=0,
-            max=0.3,
-            start_value=0.2,
-            callback=update_delay,
-            is_transparent=True,
-            alpha=0,
-            pos_hint={"x_hint": 1.0, "anchor": "right"},
-        )
-
-        self.add_gadgets(tabs, slider_label, slider)
         container_1.add_str(
             "Instructions:", truncate_str=True, pos=(0, stop_1.right + 1)
         )
@@ -173,7 +191,7 @@ class WarehouseWoesApp(App):
                 warehouse_1.canvas["char"][current_pos] = "@"
                 warehouse_1.canvas["fg_color"][current_pos] = YELLOW
                 await part_1_event.wait()
-                await asyncio.sleep(delay)
+                await asyncio.sleep(delay_1)
 
         async def do_part_two():
             current_pos = Vec2(START.y, 2 * START.x)
@@ -209,7 +227,7 @@ class WarehouseWoesApp(App):
                 warehouse_2.canvas["char"][current_pos] = "@"
                 warehouse_2.canvas["fg_color"][current_pos] = YELLOW
                 await part_2_event.wait()
-                await asyncio.sleep(delay)
+                await asyncio.sleep(delay_2)
 
         part_1_task = asyncio.create_task(do_part_one())  # noqa: F841
         part_2_task = asyncio.create_task(do_part_two())  # noqa: F841
