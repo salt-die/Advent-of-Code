@@ -4,28 +4,24 @@ from batgrl.gadgets.behaviors.themable import Themable
 from batgrl.gadgets.behaviors.toggle_button_behavior import ToggleButtonBehavior
 from batgrl.gadgets.text import Text
 
-AOC_BLUE = "0f0f23"
-AOC_BRIGHT_GREEN = "99ff99"
-AOC_GREEN = "009900"
-AOC_GREY = "cccccc"
-AOC_YELLOW = "eff263"
-AOC_CODE_GRAY = "10101A"
 AOC_THEME = ColorTheme(
     primary={"fg": "cccccc", "bg": "0f0f23"},
-    text_pad_line_highlight={"fg": AOC_GREY, "bg": "161633"},
+    text_pad_line_highlight={"fg": "cccccc", "bg": "161633"},
     text_pad_selection_highlight={"fg": "eff8fe", "bg": "0078d7"},
     textbox_primary={"fg": "9d9da0", "bg": "10101a"},
     textbox_selection_highlight={"fg": "eff8fe", "bg": "0078d7"},
     textbox_placeholder={"fg": "3b3b3b", "bg": "10101a"},
-    button_normal={"fg": AOC_GREEN, "bg": AOC_BLUE},
-    button_hover={"fg": AOC_BRIGHT_GREEN, "bg": AOC_BLUE},
-    button_press={"fg": AOC_BRIGHT_GREEN, "bg": AOC_BLUE},
+    button_normal={"fg": "009900", "bg": "0f0f23"},
+    button_hover={"fg": "99ff99", "bg": "0f0f23"},
+    button_press={"fg": "99ff99", "bg": "0f0f23"},
     progress_bar={"fg": "cccccc", "bg": "0f0f23"},
     scroll_view_scrollbar="111121",
     scroll_view_indicator_normal="6f6f78",
     scroll_view_indicator_hover="5c5c65",
     scroll_view_indicator_press="3a3a44",
-    markdown_block_code_background=AOC_CODE_GRAY,
+    markdown_block_code_background="10101a",
+    titlebar_normal={"fg": "99ff99", "bg": "0f0f23"},
+    titlebar_inactive={"fg": "009900", "bg": "0f0f23"},
 )
 
 
