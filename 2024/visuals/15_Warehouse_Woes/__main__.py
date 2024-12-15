@@ -82,37 +82,8 @@ class WarehouseWoesApp(App):
                 np.isin(warehouse.canvas["char"], ["O", "[", "]"])
             ] = BROWN
 
-        async def do_part_one(warehouse, label):
-            current_pos = START
-            wh = warehouse.canvas["char"]
-            for instruction in INSTRUCTIONS:
-                label[0, 29:] = label[0, 28:-1]
-                label[0, 28] = instruction
-                direction = DIRS[instruction]
-                wh[current_pos] = "."
-                new_pos = current_pos + direction
-                if wh[new_pos] == ".":
-                    current_pos = new_pos
-                elif wh[new_pos] == "#":
-                    continue
-
-                look_ahead = new_pos
-                while wh[look_ahead] == "O":
-                    look_ahead += direction
-                if wh[look_ahead] == "#":
-                    continue
-                wh[look_ahead] = "O"
-                wh[new_pos] = "."
-                current_pos = new_pos
-
-                recolor_foreground(warehouse)
-                wh[current_pos] = "@"
-                warehouse.canvas["fg_color"][current_pos] = YELLOW
-                await events[0].wait()
-                await asyncio.sleep(delays[0])
-
-        async def do_part_two(warehouse, label):
-            current_pos = Vec2(START.y, 2 * START.x)
+        async def do_part_i(warehouse, label, i):
+            current_pos = START if i == 0 else Vec2(START.y, 2 * START.x)
             wh = warehouse.canvas["char"]
             for instruction in INSTRUCTIONS:
                 label[0, 29:] = label[0, 28:-1]
@@ -124,17 +95,24 @@ class WarehouseWoesApp(App):
                     current_pos = new_pos
                 elif wh[new_pos] == "#":
                     pass
+                elif i == 0:
+                    look_ahead = new_pos
+                    while wh[look_ahead] == "O":
+                        look_ahead += direction
+                    if wh[look_ahead] != "#":
+                        wh[look_ahead] = "O"
+                        wh[new_pos] = "."
+                        current_pos = new_pos
                 elif direction.x:  # Horizontal push.
                     look_ahead = new_pos
                     while wh[look_ahead] in "[]":
                         look_ahead += direction
-                    if wh[look_ahead] == "#":
-                        continue
-                    while look_ahead != new_pos:
-                        wh[look_ahead] = wh[look_ahead - direction]
-                        look_ahead -= direction
-                    wh[new_pos] = "."
-                    current_pos = new_pos
+                    if wh[look_ahead] != "#":
+                        while look_ahead != new_pos:
+                            wh[look_ahead] = wh[look_ahead - direction]
+                            look_ahead -= direction
+                        wh[new_pos] = "."
+                        current_pos = new_pos
                 elif can_vertical_push(new_pos, direction, wh):
                     do_vertical_push(new_pos, direction, wh)
                     current_pos = new_pos
@@ -142,10 +120,9 @@ class WarehouseWoesApp(App):
                 recolor_foreground(warehouse)
                 wh[current_pos] = "@"
                 warehouse.canvas["fg_color"][current_pos] = YELLOW
-                await events[1].wait()
-                await asyncio.sleep(delays[1])
+                await events[i].wait()
+                await asyncio.sleep(delays[i])
 
-        coros = [do_part_one, do_part_two]
         tasks = []
 
         for i in range(2):
@@ -191,7 +168,7 @@ class WarehouseWoesApp(App):
             )
             container.canvas["fg_color"][0, 28] = 255
             tasks.append(
-                asyncio.create_task(coros[i](warehouse, container.canvas["char"]))
+                asyncio.create_task(do_part_i(warehouse, container.canvas["char"], i))
             )
 
 
