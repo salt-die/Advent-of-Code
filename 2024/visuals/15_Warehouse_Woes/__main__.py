@@ -76,12 +76,6 @@ class WarehouseWoesApp(App):
         tabs = Tabs(size_hint={"height_hint": 1.0, "width_hint": 1.0})
         self.add_gadget(tabs)
 
-        def recolor_foreground(warehouse):
-            warehouse.canvas["fg_color"] = warehouse.default_fg_color
-            warehouse.canvas["fg_color"][
-                np.isin(warehouse.canvas["char"], ["O", "[", "]"])
-            ] = BROWN
-
         async def do_part_i(warehouse, label, i):
             current_pos = START if i == 0 else Vec2(START.y, 2 * START.x)
             wh = warehouse.canvas["char"]
@@ -117,7 +111,10 @@ class WarehouseWoesApp(App):
                     do_vertical_push(new_pos, direction, wh)
                     current_pos = new_pos
 
-                recolor_foreground(warehouse)
+                warehouse.canvas["fg_color"] = warehouse.default_fg_color
+                warehouse.canvas["fg_color"][
+                    np.isin(warehouse.canvas["char"], ["O", "[", "]"])
+                ] = BROWN
                 wh[current_pos] = "@"
                 warehouse.canvas["fg_color"][current_pos] = YELLOW
                 await events[i].wait()
