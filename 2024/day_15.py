@@ -34,27 +34,6 @@ def parse_raw():
 START, WAREHOUSE_1, WAREHOUSE_2, DIRECTIONS = parse_raw()
 
 
-def part_one():
-    current_pos = START
-    for direction in DIRECTIONS:
-        new_pos = current_pos + direction
-        if WAREHOUSE_1[new_pos] == ".":
-            current_pos = new_pos
-        elif WAREHOUSE_1[new_pos] == "#":
-            continue
-
-        look_ahead = new_pos
-        while WAREHOUSE_1[look_ahead] == "O":
-            look_ahead += direction
-        if WAREHOUSE_1[look_ahead] == "#":
-            continue
-        WAREHOUSE_1[look_ahead] = "O"
-        WAREHOUSE_1[new_pos] = "."
-        current_pos = new_pos
-
-    return (np.argwhere(WAREHOUSE_1 == "O") * (100, 1)).sum()
-
-
 def can_vertical_push(pos, dir):
     adj_pos = Vec2(0, 1) if WAREHOUSE_2[pos] == "[" else Vec2(0, -1)
     new_pos = pos + dir
@@ -85,29 +64,52 @@ def do_vertical_push(pos, dir):
     WAREHOUSE_2[pos] = WAREHOUSE_2[pos + adj_pos] = "."
 
 
-def part_two():
-    current_pos = Vec2(START.y, 2 * START.x)
+def move_robot(part):
+    if part == 1:
+        current_pos = START
+        wh = WAREHOUSE_1
+    else:
+        current_pos = Vec2(START.y, 2 * START.x)
+        wh = WAREHOUSE_2
+
     for direction in DIRECTIONS:
         new_pos = current_pos + direction
-        if WAREHOUSE_2[new_pos] == ".":
+        if wh[new_pos] == ".":
             current_pos = new_pos
-        elif WAREHOUSE_2[new_pos] == "#":
-            pass
-        elif direction.x:  # Horizontal push.
+        elif wh[new_pos] == "#":
+            continue
+        elif part == 1:
             look_ahead = new_pos
-            while WAREHOUSE_2[look_ahead] in "[]":
+            while wh[look_ahead] == "O":
                 look_ahead += direction
-            if WAREHOUSE_2[look_ahead] == "#":
+            if wh[look_ahead] == "#":
+                continue
+            wh[look_ahead] = "O"
+            wh[new_pos] = "."
+            current_pos = new_pos
+        elif direction.x:
+            look_ahead = new_pos
+            while wh[look_ahead] in "[]":
+                look_ahead += direction
+            if wh[look_ahead] == "#":
                 continue
             while look_ahead != new_pos:
-                WAREHOUSE_2[look_ahead] = WAREHOUSE_2[look_ahead - direction]
+                wh[look_ahead] = wh[look_ahead - direction]
                 look_ahead -= direction
-            WAREHOUSE_2[new_pos] = "."
+            wh[new_pos] = "."
             current_pos = new_pos
         elif can_vertical_push(new_pos, direction):
             do_vertical_push(new_pos, direction)
             current_pos = new_pos
-    return (np.argwhere(WAREHOUSE_2 == "[") * (100, 1)).sum()
+    return (np.argwhere(np.isin(wh, ("O", "["))) * (100, 1)).sum()
+
+
+def part_one():
+    return move_robot(1)
+
+
+def part_two():
+    return move_robot(2)
 
 
 aoc_lube.submit(year=2024, day=15, part=1, solution=part_one)
