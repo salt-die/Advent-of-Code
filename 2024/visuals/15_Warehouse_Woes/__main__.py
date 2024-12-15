@@ -211,8 +211,8 @@ class WarehouseWoesApp(App):
                 await part_2_event.wait()
                 await asyncio.sleep(delay)
 
-        part_1_task = asyncio.create_task(do_part_one())
-        part_2_task = asyncio.create_task(do_part_two())
+        part_1_task = asyncio.create_task(do_part_one())  # noqa: F841
+        part_2_task = asyncio.create_task(do_part_two())  # noqa: F841
 
 
 WarehouseWoesApp(title="Warehouse Woes", color_theme=AOC_THEME).run()
