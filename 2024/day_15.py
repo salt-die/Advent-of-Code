@@ -93,7 +93,7 @@ def part_two():
             current_pos = new_pos
         elif WAREHOUSE_2[new_pos] == "#":
             pass
-        elif direction.x:
+        elif direction.x:  # Horizontal push.
             look_ahead = new_pos
             while WAREHOUSE_2[look_ahead] in "[]":
                 look_ahead += direction
