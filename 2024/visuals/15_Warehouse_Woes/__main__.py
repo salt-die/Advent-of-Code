@@ -89,17 +89,9 @@ class WarehouseWoesApp(App):
                     current_pos = new_pos
                 elif wh[new_pos] == "#":
                     pass
-                elif i == 0:
+                elif i == 0 or direction.x:
                     look_ahead = new_pos
-                    while wh[look_ahead] == "O":
-                        look_ahead += direction
-                    if wh[look_ahead] != "#":
-                        wh[look_ahead] = "O"
-                        wh[new_pos] = "."
-                        current_pos = new_pos
-                elif direction.x:  # Horizontal push.
-                    look_ahead = new_pos
-                    while wh[look_ahead] in "[]":
+                    while wh[look_ahead] in "O[]":
                         look_ahead += direction
                     if wh[look_ahead] != "#":
                         while look_ahead != new_pos:

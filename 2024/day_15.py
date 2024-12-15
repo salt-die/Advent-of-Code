@@ -78,18 +78,9 @@ def move_robot(part):
             current_pos = new_pos
         elif wh[new_pos] == "#":
             continue
-        elif part == 1:
+        elif part == 1 or direction.x:
             look_ahead = new_pos
-            while wh[look_ahead] == "O":
-                look_ahead += direction
-            if wh[look_ahead] == "#":
-                continue
-            wh[look_ahead] = "O"
-            wh[new_pos] = "."
-            current_pos = new_pos
-        elif direction.x:
-            look_ahead = new_pos
-            while wh[look_ahead] in "[]":
+            while wh[look_ahead] in "O[]":
                 look_ahead += direction
             if wh[look_ahead] == "#":
                 continue
