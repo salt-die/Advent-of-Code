@@ -71,90 +71,10 @@ def do_vertical_push(pos, dir, chars):
 
 class WarehouseWoesApp(App):
     async def on_start(self):
-        part_1_event = asyncio.Event()
-        part_2_event = asyncio.Event()
-        delay_1 = 0.07
-        delay_2 = 0.07
-
-        start_1 = AocButton("Start", part_1_event.set)
-        stop_1 = AocButton("Stop", part_1_event.clear)
-        stop_1.left = start_1.right
-        slider_label_1 = AocText(
-            size=(1, 13), pos_hint={"x_hint": 1.0, "anchor": "right", "x_offset": -10}
-        )
-
-        def update_delay_1(value):
-            nonlocal delay_1
-            delay_1 = value
-            slider_label_1.add_str(f" Delay: {value:.2f}")
-
-        slider_1 = Slider(
-            size=(1, 10),
-            min=0,
-            max=0.3,
-            start_value=0.07,
-            callback=update_delay_1,
-            is_transparent=True,
-            alpha=0,
-            pos_hint={"x_hint": 1.0, "anchor": "right"},
-        )
-        warehouse_1 = AocText(size=WAREHOUSE_1.shape)
-        warehouse_1.canvas["char"] = WAREHOUSE_1
-        sv1 = ScrollView(
-            pos=(1, 0),
-            size_hint={"height_hint": 1.0, "height_offset": -1, "width_hint": 1.0},
-            dynamic_bars=True,
-        )
-        sv1.view = warehouse_1
-        container_1 = AocText(size_hint={"height_hint": 1.0, "width_hint": 1.0})
-        container_1.add_gadgets(start_1, stop_1, slider_label_1, slider_1, sv1)
-
-        start_2 = AocButton("Start", part_2_event.set)
-        stop_2 = AocButton("Stop", part_2_event.clear)
-        stop_2.left = start_2.right
-        slider_label_2 = AocText(
-            size=(1, 13), pos_hint={"x_hint": 1.0, "anchor": "right", "x_offset": -10}
-        )
-
-        def update_delay_2(value):
-            nonlocal delay_2
-            delay_2 = value
-            slider_label_2.add_str(f" Delay: {value:.2f}")
-
-        slider_2 = Slider(
-            size=(1, 10),
-            min=0,
-            max=0.3,
-            start_value=0.07,
-            callback=update_delay_2,
-            is_transparent=True,
-            alpha=0,
-            pos_hint={"x_hint": 1.0, "anchor": "right"},
-        )
-        warehouse_2 = AocText(size=WAREHOUSE_2.shape)
-        warehouse_2.canvas["char"] = WAREHOUSE_2
-        sv2 = ScrollView(
-            pos=(1, 0),
-            size_hint={"height_hint": 1.0, "height_offset": -1, "width_hint": 1.0},
-            dynamic_bars=True,
-        )
-        sv2.view = warehouse_2
-        container_2 = AocText(size_hint={"height_hint": 1.0, "width_hint": 1.0})
-        container_2.add_gadgets(start_2, stop_2, slider_label_2, slider_2, sv2)
-
+        delays = [0.07, 0.07]
+        events = [asyncio.Event(), asyncio.Event()]
         tabs = Tabs(size_hint={"height_hint": 1.0, "width_hint": 1.0})
-        tabs.add_tab("Part 1", container_1)
-        tabs.add_tab("Part 2", container_2)
         self.add_gadget(tabs)
-
-        container_1.add_str(
-            "Instructions:", truncate_str=True, pos=(0, stop_1.right + 1)
-        )
-        container_1.canvas["fg_color"][0, 28] = 255
-        container_2.add_str(
-            "Instructions:", truncate_str=True, pos=(0, stop_2.right + 1)
-        )
-        container_2.canvas["fg_color"][0, 28] = 255
 
         def recolor_foreground(warehouse):
             warehouse.canvas["fg_color"] = warehouse.default_fg_color
@@ -162,16 +82,14 @@ class WarehouseWoesApp(App):
                 np.isin(warehouse.canvas["char"], ["O", "[", "]"])
             ] = BROWN
 
-        async def do_part_one():
+        async def do_part_one(warehouse, label):
             current_pos = START
-            wh = warehouse_1.canvas["char"]
+            wh = warehouse.canvas["char"]
             for instruction in INSTRUCTIONS:
-                container_1.canvas["char"][0, 29:] = container_1.canvas["char"][
-                    0, 28:-1
-                ]
-                container_1.canvas["char"][0, 28] = instruction
+                label[0, 29:] = label[0, 28:-1]
+                label[0, 28] = instruction
                 direction = DIRS[instruction]
-                warehouse_1.canvas["char"][current_pos] = "."
+                wh[current_pos] = "."
                 new_pos = current_pos + direction
                 if wh[new_pos] == ".":
                     current_pos = new_pos
@@ -187,22 +105,20 @@ class WarehouseWoesApp(App):
                 wh[new_pos] = "."
                 current_pos = new_pos
 
-                recolor_foreground(warehouse_1)
-                warehouse_1.canvas["char"][current_pos] = "@"
-                warehouse_1.canvas["fg_color"][current_pos] = YELLOW
-                await part_1_event.wait()
-                await asyncio.sleep(delay_1)
+                recolor_foreground(warehouse)
+                wh[current_pos] = "@"
+                warehouse.canvas["fg_color"][current_pos] = YELLOW
+                await events[0].wait()
+                await asyncio.sleep(delays[0])
 
-        async def do_part_two():
+        async def do_part_two(warehouse, label):
             current_pos = Vec2(START.y, 2 * START.x)
-            wh = warehouse_2.canvas["char"]
+            wh = warehouse.canvas["char"]
             for instruction in INSTRUCTIONS:
-                container_2.canvas["char"][0, 29:] = container_2.canvas["char"][
-                    0, 28:-1
-                ]
-                container_2.canvas["char"][0, 28] = instruction
+                label[0, 29:] = label[0, 28:-1]
+                label[0, 28] = instruction
                 direction = DIRS[instruction]
-                warehouse_2.canvas["char"][current_pos] = "."
+                wh[current_pos] = "."
                 new_pos = current_pos + direction
                 if wh[new_pos] == ".":
                     current_pos = new_pos
@@ -223,14 +139,60 @@ class WarehouseWoesApp(App):
                     do_vertical_push(new_pos, direction, wh)
                     current_pos = new_pos
 
-                recolor_foreground(warehouse_2)
-                warehouse_2.canvas["char"][current_pos] = "@"
-                warehouse_2.canvas["fg_color"][current_pos] = YELLOW
-                await part_2_event.wait()
-                await asyncio.sleep(delay_2)
+                recolor_foreground(warehouse)
+                wh[current_pos] = "@"
+                warehouse.canvas["fg_color"][current_pos] = YELLOW
+                await events[1].wait()
+                await asyncio.sleep(delays[1])
 
-        part_1_task = asyncio.create_task(do_part_one())  # noqa: F841
-        part_2_task = asyncio.create_task(do_part_two())  # noqa: F841
+        coros = [do_part_one, do_part_two]
+        tasks = []
+
+        for i in range(2):
+            start = AocButton("Start", events[i].set)
+            stop = AocButton("Stop", events[i].clear)
+            stop.left = start.right
+            slider_label = AocText(
+                size=(1, 13),
+                pos_hint={"x_hint": 1.0, "anchor": "right", "x_offset": -10},
+            )
+
+            def create_updater(i, slider_label):
+                def update_delay(value):
+                    delays[i] = value
+                    slider_label.add_str(f" Delay: {value:.2f}")
+
+                return update_delay
+
+            slider = Slider(
+                size=(1, 10),
+                min=0,
+                max=0.3,
+                start_value=0.07,
+                callback=create_updater(i, slider_label),
+                is_transparent=True,
+                alpha=0,
+                pos_hint={"x_hint": 1.0, "anchor": "right"},
+            )
+            wh = WAREHOUSE_1 if i == 0 else WAREHOUSE_2
+            warehouse = AocText(size=wh.shape)
+            warehouse.canvas["char"] = wh
+            sv = ScrollView(
+                pos=(1, 0),
+                size_hint={"height_hint": 1.0, "height_offset": -1, "width_hint": 1.0},
+                dynamic_bars=True,
+            )
+            sv.view = warehouse
+            container = AocText(size_hint={"height_hint": 1.0, "width_hint": 1.0})
+            container.add_gadgets(start, stop, slider_label, slider, sv)
+            tabs.add_tab(f"Part {i + 1}", container)
+            container.add_str(
+                "Instructions:", truncate_str=True, pos=(0, stop.right + 1)
+            )
+            container.canvas["fg_color"][0, 28] = 255
+            tasks.append(
+                asyncio.create_task(coros[i](warehouse, container.canvas["char"]))
+            )
 
 
 WarehouseWoesApp(title="Warehouse Woes", color_theme=AOC_THEME).run()
