@@ -20,7 +20,7 @@ def find_min_path():
             continue
 
         for neighbor in MAZE[pos]:
-            new_dir = (neighbor[0] - pos[0], neighbor[1] - pos[1])
+            new_dir = neighbor[0] - pos[0], neighbor[1] - pos[1]
             new_score = score + 1001 ** (new_dir != dir)
             if min_scores.setdefault((neighbor, new_dir), new_score) >= new_score:
                 min_scores[neighbor, new_dir] = new_score
