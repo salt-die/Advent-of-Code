@@ -1,18 +1,16 @@
-import aoc_helper
+import aoc_lube
 
-RAW = aoc_helper.day(25)
+RAW = aoc_lube.fetch(year=2015, day=25)
 print(RAW)
 
-def parse_raw():
-    ...
+
+def parse_raw(): ...
+
 
 DATA = parse_raw()
 
-def part_one():
-    ...
 
-def part_two():
-    ...
+def part_one(): ...
 
-aoc_helper.submit(25, part_one)
-aoc_helper.submit(25, part_two)
+
+aoc_lube.submit(year=2015, day=25, part=1, solution=part_one)
