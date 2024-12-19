@@ -34,3 +34,32 @@ def part_two():
 
 aoc_lube.submit(year=2024, day=18, part=1, solution=part_one)
 aoc_lube.submit(year=2024, day=18, part=2, solution=part_two)
+
+
+# Alternative Part 2 with Union Find:
+# from itertools import count
+#
+# import aoc_lube
+# from aoc_lube.utils import UnionFind, Vec2, chunk, extract_ints
+#
+# BYTES = [
+#     Vec2(y, x) for x, y in chunk(extract_ints(aoc_lube.fetch(year=2024, day=18)), 2)
+# ]
+#
+#
+# def part_two():
+#     uf = UnionFind()
+#     uf.add("tr")
+#     uf.add("bl")
+#     for i in count():
+#         pos = BYTES[i]
+#         uf.add(pos)
+#         if pos.x == 70 or pos.y == 0:
+#             uf.merge(pos, "tr")
+#         if pos.x == 0 or pos.y == 70:
+#             uf.merge(pos, "bl")
+#         for adj in pos.adj(8):
+#             if adj in uf:
+#                 uf.merge(adj, pos)
+#         if uf.find("tr") == uf.find("bl"):
+#             return f"{pos.x},{pos.y}"
