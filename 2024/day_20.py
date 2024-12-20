@@ -12,13 +12,12 @@ TARGET_LENGTH = nx.shortest_path_length(MAZE, S, E) - 100
 def ncheats(cheat_duration):
     cost_from_start = nx.shortest_path_length(MAZE, S)
     cost_from_end = nx.shortest_path_length(MAZE, E)
-    total = 0
-    for (y1, x1), start_cost in cost_from_start.items():
-        for (y2, x2), end_cost in cost_from_end.items():
-            manhattan = abs(y2 - y1) + abs(x2 - x1)
-            if manhattan <= cheat_duration:
-                total += start_cost + manhattan + end_cost <= TARGET_LENGTH
-    return total
+    return sum(
+        start_cost + manhattan + end_cost <= TARGET_LENGTH
+        for (y1, x1), start_cost in cost_from_start.items()
+        for (y2, x2), end_cost in cost_from_end.items()
+        if (manhattan := abs(y2 - y1) + abs(x2 - x1)) <= cheat_duration
+    )
 
 
 def part_one():
