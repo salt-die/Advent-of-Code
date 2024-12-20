@@ -1,22 +1,21 @@
+from itertools import combinations
+
 import aoc_lube
 import networkx as nx
-import numpy as np
 from aoc_lube.utils import extract_maze
 
-GRID, MAZE = extract_maze(aoc_lube.fetch(year=2024, day=20))
-S = tuple(np.argwhere(GRID == "S").reshape(-1).tolist())
-E = tuple(np.argwhere(GRID == "E").reshape(-1).tolist())
-TARGET_LENGTH = nx.shortest_path_length(MAZE, S, E) - 100
+_, MAZE, POINTS = extract_maze(aoc_lube.fetch(year=2024, day=20))
+SHORTEST_PATH = nx.shortest_path(MAZE, POINTS["S"][0], POINTS["E"][0])
+COST_FROM_START = {node: i for i, node in enumerate(SHORTEST_PATH)}
+COST_FROM_END = {node: i for i, node in enumerate(reversed(SHORTEST_PATH))}
+TARGET_LENGTH = len(SHORTEST_PATH) - 101
 
 
 def ncheats(cheat_duration):
-    cost_from_start = nx.shortest_path_length(MAZE, S)
-    cost_from_end = nx.shortest_path_length(MAZE, E)
     return sum(
-        start_cost + manhattan + end_cost <= TARGET_LENGTH
-        for (y1, x1), start_cost in cost_from_start.items()
-        for (y2, x2), end_cost in cost_from_end.items()
-        if (manhattan := abs(y2 - y1) + abs(x2 - x1)) <= cheat_duration
+        COST_FROM_START[u] + manhattan + COST_FROM_END[v] <= TARGET_LENGTH
+        for u, v in combinations(SHORTEST_PATH, r=2)
+        if (manhattan := abs(v - u)) <= cheat_duration
     )
 
 

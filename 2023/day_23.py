@@ -2,7 +2,7 @@ import aoc_lube
 import networkx as nx
 from aoc_lube.utils import extract_maze
 
-GRID, G = extract_maze(aoc_lube.fetch(year=2023, day=23))
+GRID, G, _ = extract_maze(aoc_lube.fetch(year=2023, day=23))
 H, W = GRID.shape
 START = 0, 1
 END = H - 1, W - 2

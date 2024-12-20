@@ -9,7 +9,7 @@ from batgrl.colors import WHITE, Color
 from batgrl.gadgets.scroll_view import ScrollView
 from batgrl.texture_tools import _composite
 
-GRID, MAZE = extract_maze(aoc_lube.fetch(year=2024, day=16))
+GRID, MAZE, _ = extract_maze(aoc_lube.fetch(year=2024, day=16))
 START, END = (139, 1), (1, 139)
 RED = Color.from_hex("dd3330")
 GREEN = Color.from_hex("22cc39")

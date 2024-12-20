@@ -3,18 +3,17 @@ from heapq import heappop, heappush
 import aoc_lube
 from aoc_lube.utils import extract_maze
 
-MAZE = extract_maze(aoc_lube.fetch(year=2024, day=16))[1]
-START, END = (139, 1), (1, 139)
+_, MAZE, POINTS = extract_maze(aoc_lube.fetch(year=2024, day=16))
 
 
 def find_min_path():
     min_scores = {}
     best_seats = set()
     best_score = -1
-    heap = [(0, START, (0, 1), [])]
+    heap = [(0, POINTS["S"][0], (0, 1), [])]
     while heap:
         score, pos, dir, seats = heappop(heap)
-        if pos == END:
+        if pos == POINTS["E"][0]:
             best_score = score
             best_seats.update(seats)
             continue
