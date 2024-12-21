@@ -5,8 +5,6 @@ import aoc_lube
 from aoc_lube.utils import sliding_window
 
 CODES = aoc_lube.fetch(year=2024, day=21).splitlines()
-
-
 NUMPAD = {
     key: (y, x)
     for y, row in enumerate(["789", "456", "123", "_0A", "<v>"])
