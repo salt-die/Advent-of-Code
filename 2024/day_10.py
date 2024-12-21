@@ -32,12 +32,10 @@ def part_one():
 
 def part_two():
     return sum(
-        ilen(
-            nx.all_simple_edge_paths(G, a, b)
-            for a in TRAILHEADS
-            for b in SUMMITS
-            if nx.has_path(G, a, b)
-        )
+        ilen(nx.all_simple_edge_paths(G, a, b))
+        for a in TRAILHEADS
+        for b in SUMMITS
+        if nx.has_path(G, a, b)
     )
 
 
