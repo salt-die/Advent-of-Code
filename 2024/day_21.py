@@ -12,19 +12,18 @@ NUMPAD = {
     for y, row in enumerate(["789", "456", "123", "_0A", "<v>"])
     for x, key in enumerate(row)
 }
-NUMPAD["^"] = NUMPAD["0"]
-HY, HX = NUMPAD["_"]
+_Y, _X = NUMPAD["_"]
 
 
 @cache
 def paths(a, b):
     (uy, ux), (vy, vx) = NUMPAD[a], NUMPAD[b]
     dy, dx = vy - uy, vx - ux
-    path = f"{'v' * dy}{'^' * -dy}{'>' * dx}{'<' * -dx}"
+    path = f"{'v' * dy}{'0' * -dy}{'>' * dx}{'<' * -dx}"
     paths = []
-    if ux != HX or vy != HY:
+    if ux != _X or vy != _Y:
         paths.append(f"{path}A")
-    if dy and dx and (uy != HY or vx != HX):
+    if dy and dx and (uy != _Y or vx != _X):
         paths.append(f"{path[::-1]}A")
     return paths
 
