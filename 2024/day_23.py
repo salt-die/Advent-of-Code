@@ -1,9 +1,7 @@
 import aoc_lube
 import networkx as nx
 
-G = nx.Graph(
-    (line.split("-") for line in aoc_lube.fetch(year=2024, day=23).splitlines())
-)
+G = nx.Graph(line.split("-") for line in aoc_lube.fetch(year=2024, day=23).splitlines())
 
 
 def part_one():
