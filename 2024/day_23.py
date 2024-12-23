@@ -5,14 +5,10 @@ G = nx.Graph(line.split("-") for line in aoc_lube.fetch(year=2024, day=23).split
 
 
 def part_one():
-    total = 0
-    for clique in nx.enumerate_all_cliques(G):
-        if len(clique) < 3:
-            continue
-        elif len(clique) > 3:
-            return total
-
-        total += any(u.startswith("t") for u in clique)
+    return sum(
+        len(clique) == 3 and any(u.startswith("t") for u in clique)
+        for clique in nx.enumerate_all_cliques(G)
+    )
 
 
 def part_two():
