@@ -12,7 +12,7 @@ def part_one():
 
 
 def part_two():
-    return ",".join(sorted(nx.max_weight_clique(G, None)[0]))
+    return ",".join(sorted(max(nx.find_cliques(G), key=len)))
 
 
 aoc_lube.submit(year=2024, day=23, part=1, solution=part_one)
