@@ -37,8 +37,8 @@ def is_or_operand(out):
 
 def part_two():
     swapped = []
-    for a, op, b, out in ADDER:
-        if op == "XOR" and a[0] != "x" and b[0] != "y" and out[0] != "z":
+    for a, op, _, out in ADDER:
+        if op == "XOR" and a[0] != "x" and out[0] != "z":
             swapped.append(out)
         elif op == "XOR" and is_or_operand(out):
             swapped.append(out)
