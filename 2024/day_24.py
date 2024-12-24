@@ -31,8 +31,8 @@ def part_one():
     return int("".join(str(INITIAL[f"z{45 - i:02}"]) for i in range(46)), 2)
 
 
-def is_followed_by(out, ops):
-    return any(op in ops and out in (a, b) for a, op, b, _ in ADDER)
+def is_or_operand(out):
+    return any(op == "OR" and out in (a, b) for a, op, b, _ in ADDER)
 
 
 def part_two():
@@ -40,11 +40,11 @@ def part_two():
     for a, op, b, out in ADDER:
         if op == "XOR" and a[0] != "x" and b[0] != "y" and out[0] != "z":
             swapped.append(out)
-        elif op == "XOR" and is_followed_by(out, ["OR"]):
+        elif op == "XOR" and is_or_operand(out):
             swapped.append(out)
         elif op != "XOR" and out[0] == "z" and out != "z45":
             swapped.append(out)
-        elif op == "AND" and a != "x00" and is_followed_by(out, ["AND", "XOR"]):
+        elif op == "AND" and a != "x00" and not is_or_operand(out):
             swapped.append(out)
     return ",".join(sorted(swapped))
 
