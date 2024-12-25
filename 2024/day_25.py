@@ -1,18 +1,16 @@
+from itertools import combinations
+
 import aoc_lube
 
-RAW = aoc_lube.fetch(year=2024, day=25)
-print(RAW)
+KEYS = aoc_lube.fetch(year=2024, day=25).split("\n\n")
 
-def parse_raw():
-    ...
 
-DATA = parse_raw()
+def fits(key, lock):
+    return all(a != b for a, b in zip(key, lock) if a == "#" or b == "#")
+
 
 def part_one():
-    ...
+    return sum(fits(a, b) for a, b in combinations(KEYS, r=2))
 
-def part_two():
-    ...
 
 aoc_lube.submit(year=2024, day=25, part=1, solution=part_one)
-aoc_lube.submit(year=2024, day=25, part=2, solution=part_two)
