@@ -6,7 +6,7 @@ KEYS = aoc_lube.fetch(year=2024, day=25).split("\n\n")
 
 
 def fits(key, lock):
-    return all(a != b for a, b in zip(key, lock) if a == "#" or b == "#")
+    return not any(a == b == "#" for a, b in zip(key, lock))
 
 
 def part_one():
