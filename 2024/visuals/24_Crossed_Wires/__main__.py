@@ -27,6 +27,7 @@ def line_char(dy, dx, turn):
 
 
 def draw_path(start, end, color, cells):
+    h, w = cells.shape
     cy, cx = start
     ey, ex = end
     dy = (ey > cy) - (cy > ey)
@@ -34,18 +35,23 @@ def draw_path(start, end, color, cells):
     ty = cy + (ey - cy) // 2
     while cy != ty:
         cy += dy
-        cells[cy, cx]["char"] = "│"
-        cells[cy, cx]["fg_color"] = color
-    cells[cy, cx]["char"] = line_char(dy, dx, 0)
+        if 0 <= cy < h and 0 <= cx < w:
+            cells[cy, cx]["char"] = "│"
+            cells[cy, cx]["fg_color"] = color
+    if 0 <= cy < h and 0 <= cx < w:
+        cells[cy, cx]["char"] = line_char(dy, dx, 0)
     while cx != ex:
         cx += dx
-        cells[cy, cx]["char"] = "─"
-        cells[cy, cx]["fg_color"] = color
-    cells[cy, cx]["char"] = line_char(dy, dx, 1)
+        if 0 <= cy < h and 0 <= cx < w:
+            cells[cy, cx]["char"] = "─"
+            cells[cy, cx]["fg_color"] = color
+    if 0 <= cy < h and 0 <= cx < w:
+        cells[cy, cx]["char"] = line_char(dy, dx, 1)
     while cy != ey:
         cy += dy
-        cells[cy, cx]["char"] = "│"
-        cells[cy, cx]["fg_color"] = color
+        if 0 <= cy < h and 0 <= cx < w:
+            cells[cy, cx]["char"] = "│"
+            cells[cy, cx]["fg_color"] = color
 
 
 class Connector(Grabbable, AocText):
