@@ -99,9 +99,9 @@ class Connector(Grabbable, AocText):
     def ungrab(self, mouse_event):
         self.circuit_board.clear()
         if self.kind == "in":
-            others = self.outs
+            others = [out for out in self.outs if out.out is None]
         else:
-            others = self.ins
+            others = [in_ for in_ in self.ins if in_.in_ is None]
         if others:
 
             def manhattan_distance(a):
