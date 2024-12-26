@@ -302,15 +302,15 @@ class CrossedWiresApp(App):
 
             return callback
 
-        add_input = AocButton("In", create_callback(Input))
-        add_output = AocButton("Out", create_callback(Output))
+        add_input = AocButton("IN", create_callback(Input))
+        add_output = AocButton("OUT", create_callback(Output))
         add_xor = AocButton("XOR", create_callback(lambda: Gate("XOR")))
         add_and = AocButton("AND", create_callback(lambda: Gate("AND")))
         add_or = AocButton("OR", create_callback(lambda: Gate("OR")))
         grid_layout = GridLayout(grid_columns=5)
         grid_layout.add_gadgets(add_input, add_output, add_xor, add_and, add_or)
         grid_layout.size = grid_layout.min_grid_size
-        circuit_board.add_gadget(grid_layout)
+        circuit_board.add_gadgets(grid_layout)
         self.add_gadget(circuit_board)
 
 
