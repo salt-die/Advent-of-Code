@@ -310,7 +310,7 @@ class CrossedWiresApp(App):
         grid_layout = GridLayout(grid_columns=5)
         grid_layout.add_gadgets(add_input, add_output, add_xor, add_and, add_or)
         grid_layout.size = grid_layout.min_grid_size
-        circuit_board.add_gadgets(grid_layout)
+        circuit_board.add_gadget(grid_layout)
         self.add_gadget(circuit_board)
 
 
