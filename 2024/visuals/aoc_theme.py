@@ -5,31 +5,43 @@ from batgrl.gadgets.behaviors.toggle_button_behavior import ToggleButtonBehavior
 from batgrl.gadgets.text import Text
 
 AOC_THEME = ColorTheme(
-    primary={"fg": "cccccc", "bg": "0f0f23"},
-    text_pad_line_highlight={"fg": "cccccc", "bg": "161633"},
-    text_pad_selection_highlight={"fg": "eff8fe", "bg": "0078d7"},
-    textbox_primary={"fg": "9d9da0", "bg": "10101a"},
-    textbox_selection_highlight={"fg": "eff8fe", "bg": "0078d7"},
-    textbox_placeholder={"fg": "3b3b3b", "bg": "10101a"},
-    button_normal={"fg": "009900", "bg": "0f0f23"},
-    button_hover={"fg": "99ff99", "bg": "0f0f23"},
-    button_press={"fg": "99ff99", "bg": "0f0f23"},
-    progress_bar={"fg": "cccccc", "bg": "0f0f23"},
+    primary_fg="cccccc",
+    primary_bg="0f0f23",
+    text_pad_line_highlight_fg="cccccc",
+    text_pad_line_highlight_bg="161633",
+    text_pad_selection_highlight_fg="eff8fe",
+    text_pad_selection_highlight_bg="0078d7",
+    textbox_primary_fg="9d9da0",
+    textbox_primary_bg="10101a",
+    textbox_selection_highlight_fg="eff8fe",
+    textbox_selection_highlight_bg="0078d7",
+    textbox_placeholder_fg="3b3b3b",
+    textbox_placeholder_bg="10101a",
+    button_normal_fg="009900",
+    button_normal_bg="0f0f23",
+    button_hover_fg="99ff99",
+    button_hover_bg="0f0f23",
+    button_press_fg="99ff99",
+    button_press_bg="0f0f23",
+    progress_bar_fg="cccccc",
+    progress_bar_bg="0f0f23",
     scroll_view_scrollbar="111121",
     scroll_view_indicator_normal="6f6f78",
     scroll_view_indicator_hover="5c5c65",
     scroll_view_indicator_press="3a3a44",
     markdown_block_code_background="10101a",
-    titlebar_normal={"fg": "99ff99", "bg": "0f0f23"},
-    titlebar_inactive={"fg": "009900", "bg": "0f0f23"},
+    titlebar_normal_fg="99ff99",
+    titlebar_normal_bg="0f0f23",
+    titlebar_inactive_fg="009900",
+    titlebar_inactive_bg="0f0f23",
 )
 
 
 class AocButton(Themable, ButtonBehavior, Text):
     def __init__(self, label: str, callback, **kwargs):
         super().__init__(**kwargs)
-        self.default_fg_color = self.color_theme.primary.fg
-        self.default_bg_color = self.color_theme.primary.bg
+        self.default_fg_color = self.get_color("primary_fg")
+        self.default_bg_color = self.get_color("primary_bg")
         self.set_text(f"[{label}]")
         self.callback = callback
 
@@ -42,13 +54,13 @@ class AocButton(Themable, ButtonBehavior, Text):
             self.update_down()
 
     def update_normal(self):
-        self.canvas["fg_color"] = self.color_theme.button_normal.fg
-        self.canvas["bg_color"] = self.color_theme.button_normal.bg
+        self.canvas["fg_color"] = self.get_color("button_normal_fg")
+        self.canvas["bg_color"] = self.get_color("button_normal_bg")
         self.canvas["bold"] = False
 
     def update_hover(self):
-        self.canvas["fg_color"] = self.color_theme.button_hover.fg
-        self.canvas["bg_color"] = self.color_theme.button_hover.bg
+        self.canvas["fg_color"] = self.get_color("button_hover_fg")
+        self.canvas["bg_color"] = self.get_color("button_hover_bg")
         self.canvas["bold"] = True
 
     def on_release(self):
@@ -58,8 +70,8 @@ class AocButton(Themable, ButtonBehavior, Text):
 class AocToggle(Themable, ToggleButtonBehavior, Text):
     def __init__(self, label, callback, **kwargs):
         super().__init__(**kwargs)
-        self.default_fg_color = self.color_theme.primary.fg
-        self.default_bg_color = self.color_theme.primary.bg
+        self.default_fg_color = self.get_color("primary_fg")
+        self.default_bg_color = self.get_color("primary_bg")
         self.set_text(f"[ ] {label}")
         self.callback = callback
 
@@ -77,13 +89,13 @@ class AocToggle(Themable, ToggleButtonBehavior, Text):
             self.update_off()
 
     def update_normal(self):
-        self.canvas["fg_color"] = self.color_theme.button_normal.fg
-        self.canvas["bg_color"] = self.color_theme.button_normal.bg
+        self.canvas["fg_color"] = self.get_color("button_normal_fg")
+        self.canvas["bg_color"] = self.get_color("button_normal_bg")
         self.canvas["bold"] = False
 
     def update_hover(self):
-        self.canvas["fg_color"] = self.color_theme.button_hover.fg
-        self.canvas["bg_color"] = self.color_theme.button_hover.bg
+        self.canvas["fg_color"] = self.get_color("button_hover_fg")
+        self.canvas["bg_color"] = self.get_color("button_hover_bg")
         self.canvas["bold"] = True
 
     def update_on(self):
@@ -99,10 +111,10 @@ class AocToggle(Themable, ToggleButtonBehavior, Text):
 
 class AocText(Themable, Text):
     def update_theme(self):
-        self.default_fg_color = self.color_theme.primary.fg
-        self.default_bg_color = self.color_theme.primary.bg
-        self.canvas["fg_color"] = self.color_theme.primary.fg
-        self.canvas["bg_color"] = self.color_theme.primary.bg
+        self.default_fg_color = self.get_color("primary_fg")
+        self.default_bg_color = self.get_color("primary_bg")
+        self.canvas["fg_color"] = self.get_color("primary_fg")
+        self.canvas["bg_color"] = self.get_color("primary_bg")
 
 
 if __name__ == "__main__":

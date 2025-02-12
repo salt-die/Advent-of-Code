@@ -99,11 +99,11 @@ class KeypadButton(ButtonBehavior, AocText):
 
     def update_normal(self):
         self.canvas["char"][[0, -1], 1:-1] = "-"
-        self.canvas["fg_color"][1, 2] = self.color_theme.button_normal.fg
+        self.canvas["fg_color"][1, 2] = self.get_color("button_normal_fg")
 
     def update_hover(self):
         self.canvas["char"][[0, -1], 1:-1] = "-"
-        self.canvas["fg_color"][1, 2] = self.color_theme.button_hover.fg
+        self.canvas["fg_color"][1, 2] = self.get_color("button_hover_fg")
 
     def update_down(self):
         self.canvas["char"][[0, -1], 1:-1] = "_"
