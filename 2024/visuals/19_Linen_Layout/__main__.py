@@ -28,8 +28,8 @@ class ColorButton(ButtonBehavior, Themable, Text):
         self.callback = callback
 
     def update_theme(self):
-        self.default_bg_color = self.color_theme.primary.bg
-        self.canvas["bg_color"] = self.color_theme.primary.bg
+        self.default_bg_color = self.get_color("primary_bg")
+        self.canvas["bg_color"] = self.get_color("primary_bg")
 
     def update_normal(self):
         self.canvas["bg_color"] = self.default_bg_color
@@ -48,8 +48,8 @@ class TowelButton(ButtonBehavior, Themable, Text):
         self.design_label = design_label
 
     def update_theme(self):
-        self.default_bg_color = self.color_theme.primary.bg
-        self.canvas["bg_color"] = self.color_theme.primary.bg
+        self.default_bg_color = self.get_color("primary_bg")
+        self.canvas["bg_color"] = self.get_color("primary_bg")
 
     def update_normal(self):
         self.canvas["bg_color"] = self.default_bg_color
