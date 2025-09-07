@@ -13,7 +13,7 @@ MOORE = GRID_NEIGHBORHOODS[8]
 GREEN = Color.from_hex("22cc39")
 RED = Color.from_hex("fc2f14")
 GREY = Color.from_hex("cccccc")
-GRADIENT = gradient(GREEN, RED, 4)
+GRADIENT = gradient(GREEN, RED, n=4)
 
 
 def is_xmas(grid, y, x, dy, dx):
@@ -21,7 +21,7 @@ def is_xmas(grid, y, x, dy, dx):
     for i, char in enumerate("XMAS"):
         j = y + i * dy
         k = x + i * dx
-        if not (0 <= j < h and 0 <= k < w and grid[j, k] == char):
+        if not (0 <= j < h and 0 <= k < w and grid[j, k] == ord(char)):
             return False
     return True
 
@@ -30,7 +30,7 @@ def update_hint(grid, hint, y, x, dy, dx):
     for i in range(4):
         j = y + i * dy
         k = x + i * dx
-        hint["char"][j, k] = grid["char"][j, k]
+        hint["ord"][j, k] = grid["ord"][j, k]
         grid["fg_color"][j, k] = GRADIENT[i]
         hint["fg_color"][j, k] = GRADIENT[i]
 
@@ -70,15 +70,15 @@ class CeresSearchApp(App):
         grid.height += 2
         grid.width += 2
         grid.canvas[1:, 1:] = grid.canvas[:-1, :-1]
-        grid.canvas[0]["char"] = " "
-        grid.canvas[:, 0]["char"] = " "
+        grid.canvas[0]["ord"] = ord(" ")
+        grid.canvas[:, 0]["ord"] = ord(" ")
 
         search = MovableAocText(
             auto_toggle=toggle,
             is_transparent=True,
             alpha=0.5,
             size=(6, 6),
-            disable_oob=True,
+            allow_oob=False,
         )
         search.add_border("outer")
         search_hint = AocText(
@@ -95,7 +95,7 @@ class CeresSearchApp(App):
             xmas = AocText(size=(h, w), is_transparent=True, alpha=0.0)
             self.add_gadget(xmas)
             for i, char in enumerate("XMAS"):
-                xmas.canvas["char"][j + i * dy, k + i * dx] = char
+                xmas.canvas["ord"][j + i * dy, k + i * dx] = ord(char)
                 xmas.canvas["fg_color"][j + i * dy, k + i * dx] = GRADIENT[i]
 
             xmas.pos = y + 1 - j + grid.y, x - k + grid.x
@@ -117,7 +117,7 @@ class CeresSearchApp(App):
             for i in range(4):
                 for j in range(4):
                     for dy, dx in MOORE:
-                        if is_xmas(grid_canvas["char"], i, j, dy, dx):
+                        if is_xmas(grid_canvas["ord"], i, j, dy, dx):
                             search_hint.is_visible = True
                             update_hint(grid_canvas, hint_canvas, i, j, dy, dx)
                             find = y + i, x + j, dy, dx

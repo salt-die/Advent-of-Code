@@ -99,10 +99,10 @@ class AocToggle(Themable, ToggleButtonBehavior, Text):
         self.canvas["style"] |= Style.BOLD
 
     def update_on(self):
-        self.canvas[0, 1]["char"] = "x"
+        self.canvas[0, 1]["ord"] = ord("x")
 
     def update_off(self):
-        self.canvas[0, 1]["char"] = " "
+        self.canvas[0, 1]["ord"] = ord(" ")
 
     def on_release(self):
         super().on_release()
