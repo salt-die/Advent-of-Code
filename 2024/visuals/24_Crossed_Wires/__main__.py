@@ -36,21 +36,21 @@ def draw_path(start, end, color, cells):
     while cy != ty:
         cy += dy
         if 0 <= cy < h and 0 <= cx < w:
-            cells[cy, cx]["char"] = "│"
+            cells[cy, cx]["ord"] = ord("│")
             cells[cy, cx]["fg_color"] = color
     if 0 <= cy < h and 0 <= cx < w:
-        cells[cy, cx]["char"] = line_char(dy, dx, 0)
+        cells[cy, cx]["ord"] = ord(line_char(dy, dx, 0))
     while cx != ex:
         cx += dx
         if 0 <= cy < h and 0 <= cx < w:
-            cells[cy, cx]["char"] = "─"
+            cells[cy, cx]["ord"] = ord("─")
             cells[cy, cx]["fg_color"] = color
     if 0 <= cy < h and 0 <= cx < w:
-        cells[cy, cx]["char"] = line_char(dy, dx, 1)
+        cells[cy, cx]["ord"] = ord(line_char(dy, dx, 1))
     while cy != ey:
         cy += dy
         if 0 <= cy < h and 0 <= cx < w:
-            cells[cy, cx]["char"] = "│"
+            cells[cy, cx]["ord"] = ord("│")
             cells[cy, cx]["fg_color"] = color
 
 
@@ -153,11 +153,11 @@ class InputToggle(ToggleButtonBehavior, AocText):
 
     def update_on(self):
         self.canvas["bg_color"] = GREEN
-        self.canvas["char"][1, 2] = "1"
+        self.canvas["ord"][1, 2] = ord("1")
 
     def update_off(self):
         self.canvas["bg_color"] = RED
-        self.canvas["char"][1, 2] = "0"
+        self.canvas["ord"][1, 2] = ord("0")
 
     def on_toggle(self):
         super().on_toggle()
@@ -289,7 +289,7 @@ class CircuitBoard(AocText):
                     else GREEN
                 )
                 if isinstance(descendent, Output):
-                    descendent.canvas["char"][2, 3] = (
+                    descendent.canvas["ord"][2, 3] = ord(
                         "0"
                         if descendent.state == "off"
                         else "1"

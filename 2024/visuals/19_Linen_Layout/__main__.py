@@ -131,13 +131,13 @@ class Towel(Movable, Text):
         if x < 0:
             self.matched = False
         else:
-            sub_design = self.design_label.canvas["char"][:, x : x + self.width]
+            sub_design = self.design_label.canvas["ord"][:, x : x + self.width]
 
             self.matched = (
                 abs(y - 3) < 2
                 and not self.intersects()
                 and sub_design.shape == self.size
-                and (sub_design == self.canvas["char"]).all()
+                and (sub_design == self.canvas["ord"]).all()
             )
         if self.matched:
             self.canvas["bg_color"] = lerp_colors(self.creator.default_bg_color, G, 0.3)
@@ -187,7 +187,7 @@ class LinenLayoutApp(App):
                 if len(self.current_towel) == 8:
                     return
                 i = len(self.current_towel) + 3
-                towel_maker.canvas["char"][0, i] = name
+                towel_maker.canvas["ord"][0, i] = ord(name)
                 towel_maker.canvas["fg_color"][0, i] = COLORS[name]
                 self.current_towel += name
 
@@ -219,7 +219,7 @@ class LinenLayoutApp(App):
                 size=(1, len(self.current_towel)),
             )
             for i, char in enumerate(self.current_towel):
-                towel_button.canvas["char"][0, i] = char
+                towel_button.canvas["ord"][0, i] = ord(char)
                 towel_button.canvas["fg_color"][0, i] = COLORS[char]
 
             self.towel_buttons[self.current_towel] = towel_button

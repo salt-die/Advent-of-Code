@@ -98,15 +98,15 @@ class KeypadButton(ButtonBehavior, AocText):
         self.update_normal()
 
     def update_normal(self):
-        self.canvas["char"][[0, -1], 1:-1] = "-"
+        self.canvas["ord"][[0, -1], 1:-1] = ord("-")
         self.canvas["fg_color"][1, 2] = self.get_color("button_normal_fg")
 
     def update_hover(self):
-        self.canvas["char"][[0, -1], 1:-1] = "-"
+        self.canvas["ord"][[0, -1], 1:-1] = ord("-")
         self.canvas["fg_color"][1, 2] = self.get_color("button_hover_fg")
 
     def update_down(self):
-        self.canvas["char"][[0, -1], 1:-1] = "_"
+        self.canvas["ord"][[0, -1], 1:-1] = ord("_")
 
     def on_release(self):
         self.parent.parent.update_label(self.key)
@@ -159,8 +159,8 @@ class Keypad(Gadget):
         self._flash_task = None
 
     def update_label(self, key):
-        self.label.canvas["char"][0, :-1] = self.label.canvas["char"][0, 1:]
-        self.label.canvas["char"][0, -1] = key
+        self.label.canvas["ord"][0, :-1] = self.label.canvas["ord"][0, 1:]
+        self.label.canvas["ord"][0, -1] = ord(key)
         if self.driven:
             robot_key = self.robot_key()
             if key == "A":
