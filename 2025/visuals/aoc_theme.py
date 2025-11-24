@@ -1,10 +1,11 @@
+from batgrl.colors import ColorTheme
 from batgrl.gadgets.behaviors.button_behavior import ButtonBehavior
 from batgrl.gadgets.behaviors.themable import Themable
 from batgrl.gadgets.behaviors.toggle_button_behavior import ToggleButtonBehavior
 from batgrl.gadgets.text import Text
 from batgrl.text_tools import Style
 
-AOC_THEME = {
+AOC_THEME: ColorTheme = {
     "primary_fg": "cccccc",
     "primary_bg": "0f0f23",
     "text_pad_line_highlight_fg": "cccccc",
@@ -29,7 +30,7 @@ AOC_THEME = {
     "scroll_view_indicator_normal": "6f6f78",
     "scroll_view_indicator_hover": "5c5c65",
     "scroll_view_indicator_press": "3a3a44",
-    "markdown_block_code_background": "10101a",
+    "markdown_block_code_bg": "10101a",
     "titlebar_normal_fg": "99ff99",
     "titlebar_normal_bg": "0f0f23",
     "titlebar_inactive_fg": "009900",
@@ -130,7 +131,7 @@ if __name__ == "__main__":
 
     GREEN = Color.from_hex("009900")
     TRUNK = Color.from_hex("cccccc")
-    OFF = Color.from_hex("333333")
+    OFF = Color.from_hex("4e4f37")
     TREE = (Path(__file__).parent / "assets" / "tree.txt").read_text()
 
     def random_color():
@@ -145,36 +146,38 @@ if __name__ == "__main__":
         end_color: Color,
         canvas,
     ):
-        chars = canvas["char"]
+        ords = canvas["ord"]
         colors = canvas["fg_color"]
 
         if kind == "blink":
             while True:
-                colors[chars == ornament] = start_color
+                colors[ords == ord(ornament)] = start_color
                 await asyncio.sleep(delay * 20)
-                colors[chars == ornament] = end_color
+                colors[ords == ord(ornament)] = end_color
                 await asyncio.sleep(delay * 20)
         else:
             grad = gradient(start_color, end_color, n=10)
             grad += gradient(end_color, start_color, n=10)
             i = 0
             while True:
-                colors[chars == ornament] = grad[i]
+                colors[ords == ord(ornament)] = grad[i]
                 i += 1
                 i %= len(grad)
                 await asyncio.sleep(delay)
+
+    def convert_ords(chars: str):
+        return tuple(ord(c) for c in chars)
 
     class ButtonTestApp(App):
         async def on_start(self):
             tree = Text(is_transparent=True)
             tree.set_text(TREE)
-            chars = tree.canvas["char"]
+            ords = tree.canvas["ord"]
             colors = tree.canvas["fg_color"]
-            bolds = tree.canvas["bold"]
-            colors[np.isin(chars, (">", "<"))] = GREEN
-            colors[np.isin(chars, ("|", "_"))] = TRUNK
-            bolds[np.isin(chars, ("*", "@", "O", "o", "_", "|"))] = True
-            colors[np.isin(chars, ("*", "@", "O", "o"))] = OFF
+            colors[np.isin(ords, convert_ords("<>"))] = GREEN
+            colors[np.isin(ords, convert_ords("|_"))] = TRUNK
+            colors[np.isin(ords, convert_ords("*@Oo"))] = OFF
+            tree.canvas["style"][np.isin(ords, convert_ords("*@Oo_|"))] |= Style.BOLD
 
             tasks = []
 
@@ -194,7 +197,7 @@ if __name__ == "__main__":
                     for task in tasks:
                         task.cancel()
                     tasks.clear()
-                    colors[np.isin(chars, ("*", "@", "O", "o"))] = OFF
+                    colors[np.isin(ords, convert_ords("*@Oo"))] = OFF
 
             light_button = AocToggle("Lights!", light_tree)
 
@@ -211,4 +214,8 @@ if __name__ == "__main__":
             shuffle_button.top = light_button.bottom
             self.add_gadgets(tree, light_button, shuffle_button)
 
-    ButtonTestApp(color_theme=AOC_THEME, title="Advent of Code 2024").run()
+    ButtonTestApp(
+        color_theme=AOC_THEME,
+        title="Advent of Code 2025",
+        bg_color=Color.from_hex(AOC_THEME["primary_bg"]),
+    ).run()

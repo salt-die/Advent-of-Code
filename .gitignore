@@ -1,10 +1,6 @@
 __pycache__/
 
-# gephi files used for graph images
 *.gexf
-
-# pony attempts
 2020/pony_intcode/
-
-# TODO
 TODO.md
+*.log
