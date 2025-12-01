@@ -5,9 +5,19 @@ from time import perf_counter
 import aoc_lube
 import cv2
 from aoc_lube.utils import extract_ints
-from aoc_theme import AocText
+from aoc_theme import AOC_THEME, AocText
 from batgrl.app import App
-from batgrl.colors import AGREEN, ARED, AWHITE, GREEN, RED, WHITE, gradient, lerp_colors
+from batgrl.colors import (
+    AGREEN,
+    ARED,
+    AWHITE,
+    GREEN,
+    RED,
+    WHITE,
+    Color,
+    gradient,
+    lerp_colors,
+)
 from batgrl.gadgets.gadget import Gadget
 from batgrl.gadgets.graphics import Graphics
 from batgrl.geometry.easings import out_cubic
@@ -101,4 +111,8 @@ class SecretApp(App):
             await asyncio.sleep(0.3)
 
 
-SecretApp(title="Secret Entrance").run()
+SecretApp(
+    title="Secret Entrance",
+    color_theme=AOC_THEME,
+    bg_color=Color.from_hex(AOC_THEME["primary_bg"]),
+).run()
