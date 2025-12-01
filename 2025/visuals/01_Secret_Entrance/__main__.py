@@ -62,14 +62,15 @@ async def flash_zeros(text: AocText, n):
 def draw_ellipse(texture, dial):
     h, w, _ = texture.shape
     center = h // 2, w // 2
+    axes = h // 2 - 5, w // 2 - 5
     end_angle = (dial % 100) / 99 * 360
     color_index = dial // 100
     if color_index % 2:
         prev_color, color = ARED, AGREEN
     else:
         prev_color, color = AGREEN, ARED
-    cv2.ellipse(texture, center, center, -90.0, 0.0, 360.0, prev_color, 2)
-    cv2.ellipse(texture, center, center, -90.0, 0.0, end_angle, color, 2)
+    cv2.ellipse(texture, center, axes, -90.0, 0.0, 360.0, prev_color, 2)
+    cv2.ellipse(texture, center, axes, -90.0, 0.0, end_angle, color, 2)
 
 
 def draw_line(texture, dial):
