@@ -7,23 +7,11 @@ import cv2
 from aoc_lube.utils import extract_ints
 from aoc_theme import AocText
 from batgrl.app import App
-from batgrl.colors import (
-    AGREEN,
-    ARED,
-    AWHITE,
-    GREEN,
-    RED,
-    WHITE,
-    gradient,
-    lerp_colors,
-    rainbow_gradient,
-)
+from batgrl.colors import AGREEN, ARED, AWHITE, GREEN, RED, WHITE, gradient, lerp_colors
 from batgrl.gadgets.gadget import Gadget
 from batgrl.gadgets.graphics import Graphics
 from batgrl.geometry.easings import out_cubic
 
-NCOLORS = 5
-GRADIENT = rainbow_gradient(NCOLORS, alpha=255)
 RED_GREEN = gradient(GREEN, RED, GREEN, n=100)
 ROTATIONS = list(extract_ints(aoc_lube.fetch(year=2025, day=1).replace("L", "-")))
 
@@ -64,8 +52,7 @@ def draw_ellipse(texture, dial):
     center = h // 2, w // 2
     axes = h // 2 - 5, w // 2 - 5
     end_angle = (dial % 100) / 99 * 360
-    color_index = dial // 100
-    if color_index % 2:
+    if dial // 100 % 2:
         prev_color, color = ARED, AGREEN
     else:
         prev_color, color = AGREEN, ARED
