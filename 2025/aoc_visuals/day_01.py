@@ -5,12 +5,13 @@ from time import perf_counter
 import aoc_lube
 import cv2
 from aoc_lube.utils import extract_ints
-from aoc_theme import AocText
 from batgrl.app import App
 from batgrl.colors import AGREEN, ARED, AWHITE, GREEN, RED, WHITE, gradient, lerp_colors
 from batgrl.gadgets.gadget import Gadget
 from batgrl.gadgets.graphics import Graphics
 from batgrl.geometry.easings import out_cubic
+
+from .aoc_theme import AocText
 
 RED_GREEN = gradient(GREEN, RED, GREEN, n=100)
 ROTATIONS = list(extract_ints(aoc_lube.fetch(year=2025, day=1).replace("L", "-")))
