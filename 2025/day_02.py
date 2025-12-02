@@ -26,9 +26,8 @@ def fold_div(it) -> int:
     all_div = it[0]
     for a in it[1:]:
         if all_div % a:
-            all_div = 1
-        else:
-            all_div = a
+            return 1
+        all_div = a
     return all_div
 
 
