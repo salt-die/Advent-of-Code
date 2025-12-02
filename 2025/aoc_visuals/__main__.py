@@ -1,34 +1,37 @@
+import importlib
+import sys
+
 from batgrl.app import App
 from batgrl.colors import Color
 
 from .aoc_theme import AOC_THEME, AocButton
-from .day_01 import SecretApp
 
 BG_COLOR = Color.from_hex(AOC_THEME["primary_bg"])
-PROBLEMS: list[tuple[str, type[App] | None]] = [
-    ("Secret Entrance", SecretApp),
-    ("Not available", None),
-    ("Not available", None),
-    ("Not available", None),
-    ("Not available", None),
-    ("Not available", None),
-    ("Not available", None),
-    ("Not available", None),
-    ("Not available", None),
-    ("Not available", None),
-    ("Not available", None),
-    ("Not available", None),
+NOT_AVAILABLE = "Not available"
+PROBLEMS = [
+    "Secret Entrance",
+    "Gift Shop",
+    NOT_AVAILABLE,
+    NOT_AVAILABLE,
+    NOT_AVAILABLE,
+    NOT_AVAILABLE,
+    NOT_AVAILABLE,
+    NOT_AVAILABLE,
+    NOT_AVAILABLE,
+    NOT_AVAILABLE,
+    NOT_AVAILABLE,
+    NOT_AVAILABLE,
 ]
 
 
 class AocVisuals(App):
     async def on_start(self):
         for i in range(12):
-            title, app = PROBLEMS[i]
+            title = PROBLEMS[i]
             button = AocButton(
                 label=title, pos_hint={"x_hint": 0.5}, callback=None, pos=(i, 0)
             )
-            if app is None:
+            if title == NOT_AVAILABLE:
                 button.button_state = "disallowed"
             else:
                 button.callback = lambda i=i: self.exit(i)
@@ -47,7 +50,13 @@ while True:
     day: int | None = visuals.run()
     if day is None:
         break
-    title, app = PROBLEMS[day]
-    if app is None:
-        break
-    app(color_theme=AOC_THEME, bg_color=BG_COLOR, title=title).run()
+
+    # Hot reload of visualizations:
+    module_name = f"aoc_visuals.day_{day + 1:02}"
+    if module_name in sys.modules:
+        module = importlib.reload(sys.modules[module_name])
+    else:
+        module = importlib.import_module(module_name)
+
+    app: type[App] = getattr(module, "Visual")
+    app(color_theme=AOC_THEME, bg_color=BG_COLOR, title=PROBLEMS[day]).run()
