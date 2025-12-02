@@ -24,6 +24,8 @@ AOC_THEME: ColorTheme = {
     "button_hover_bg": "0f0f23",
     "button_press_fg": "99ff99",
     "button_press_bg": "0f0f23",
+    "button_disallowed_fg": "222222",
+    "button_disallowed_bg": "0f0f23",
     "progress_bar_fg": "cccccc",
     "progress_bar_bg": "0f0f23",
     "scroll_view_scrollbar": "111121",
@@ -51,6 +53,8 @@ class AocButton(Themable, ButtonBehavior, Text):
             self.update_normal()
         elif self.button_state == "hover":
             self.update_hover()
+        elif self.button_state == "disallowed":
+            self.update_disallowed()
         else:
             self.update_down()
 
@@ -63,6 +67,11 @@ class AocButton(Themable, ButtonBehavior, Text):
         self.canvas["fg_color"] = self.get_color("button_hover_fg")
         self.canvas["bg_color"] = self.get_color("button_hover_bg")
         self.canvas["style"] = Style.BOLD
+
+    def update_disallowed(self):
+        self.canvas["fg_color"] = self.get_color("button_disallowed_fg")
+        self.canvas["bg_color"] = self.get_color("button_disallowed_bg")
+        self.canvas["style"] = Style.NO_STYLE
 
     def on_release(self):
         self.callback()
@@ -116,106 +125,3 @@ class AocText(Themable, Text):
         self.default_bg_color = self.get_color("primary_bg")
         self.canvas["fg_color"] = self.get_color("primary_fg")
         self.canvas["bg_color"] = self.get_color("primary_bg")
-
-
-if __name__ == "__main__":
-    import asyncio
-    from colorsys import hsv_to_rgb
-    from pathlib import Path
-    from random import choice, random
-    from typing import Literal
-
-    import numpy as np
-    from batgrl.app import App
-    from batgrl.colors import Color, gradient
-
-    GREEN = Color.from_hex("009900")
-    TRUNK = Color.from_hex("cccccc")
-    OFF = Color.from_hex("4e4f37")
-    TREE = (Path(__file__).parent / "assets" / "tree.txt").read_text()
-
-    def random_color():
-        r, g, b = hsv_to_rgb(random() * np.pi * 2, 1.0, 1.0)
-        return Color(int(r * 255), int(g * 255), int(b * 255))
-
-    async def light_effect(
-        ornament: Literal["*", "@", "O", "o"],
-        kind: Literal["blink", "gradient"],
-        delay: float,
-        start_color: Color,
-        end_color: Color,
-        canvas,
-    ):
-        ords = canvas["ord"]
-        colors = canvas["fg_color"]
-
-        if kind == "blink":
-            while True:
-                colors[ords == ord(ornament)] = start_color
-                await asyncio.sleep(delay * 20)
-                colors[ords == ord(ornament)] = end_color
-                await asyncio.sleep(delay * 20)
-        else:
-            grad = gradient(start_color, end_color, n=10)
-            grad += gradient(end_color, start_color, n=10)
-            i = 0
-            while True:
-                colors[ords == ord(ornament)] = grad[i]
-                i += 1
-                i %= len(grad)
-                await asyncio.sleep(delay)
-
-    def convert_ords(chars: str):
-        return tuple(ord(c) for c in chars)
-
-    class ButtonTestApp(App):
-        async def on_start(self):
-            tree = Text(is_transparent=True)
-            tree.set_text(TREE)
-            ords = tree.canvas["ord"]
-            colors = tree.canvas["fg_color"]
-            colors[np.isin(ords, convert_ords("<>"))] = GREEN
-            colors[np.isin(ords, convert_ords("|_"))] = TRUNK
-            colors[np.isin(ords, convert_ords("*@Oo"))] = OFF
-            tree.canvas["style"][np.isin(ords, convert_ords("*@Oo_|"))] |= Style.BOLD
-
-            tasks = []
-
-            def light_tree(state):
-                if state == "on":
-                    for ornament in "*@Oo":
-                        coro = light_effect(
-                            ornament,  # type: ignore
-                            choice(["blink", "gradient"]),
-                            random() / 10,
-                            random_color(),
-                            random_color(),
-                            tree.canvas,
-                        )
-                        tasks.append(asyncio.create_task(coro))
-                else:
-                    for task in tasks:
-                        task.cancel()
-                    tasks.clear()
-                    colors[np.isin(ords, convert_ords("*@Oo"))] = OFF
-
-            light_button = AocToggle("Lights!", light_tree)
-
-            def shuffle():
-                if light_button.toggle_state == "off":
-                    return
-                light_tree("off")
-                light_tree("on")
-
-            shuffle_button = AocButton("Shuffle", shuffle)
-            light_button.center = tree.center
-            shuffle_button.center = tree.center
-            light_button.top = tree.bottom
-            shuffle_button.top = light_button.bottom
-            self.add_gadgets(tree, light_button, shuffle_button)
-
-    ButtonTestApp(
-        color_theme=AOC_THEME,
-        title="Advent of Code 2025",
-        bg_color=Color.from_hex(AOC_THEME["primary_bg"]),
-    ).run()
