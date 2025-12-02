@@ -68,7 +68,7 @@ def draw_line(texture, dial):
     cv2.line(texture, (m, m), b, AWHITE, 2)
 
 
-class SecretApp(App):
+class Visual(App):
     async def on_start(self):
         container = Gadget(size=(21, 40), pos_hint={"x_hint": 0.5, "y_hint": 0.5})
         numbers = AocText(size=(1, 40))
