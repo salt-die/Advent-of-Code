@@ -95,7 +95,7 @@ class SecretApp(App):
                     flash_task = asyncio.create_task(flash_zeros(zeros, n))
                 draw_ticks(numbers, dial)
                 graphic.texture[:] = 0
-                draw_line(graphic.texture, dial)
                 draw_ellipse(graphic.texture, dial)
+                draw_line(graphic.texture, dial)
                 await asyncio.sleep(0.02)
             await asyncio.sleep(0.3)
