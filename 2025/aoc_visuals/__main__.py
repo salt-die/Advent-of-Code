@@ -5,7 +5,7 @@ from .aoc_theme import AOC_THEME, AocButton
 from .day_01 import SecretApp
 
 BG_COLOR = Color.from_hex(AOC_THEME["primary_bg"])
-PROBLEMS = [
+PROBLEMS: list[tuple[str, type[App] | None]] = [
     ("Secret Entrance", SecretApp),
     ("Not available", None),
     ("Not available", None),
@@ -44,8 +44,10 @@ visuals = AocVisuals(
 )
 
 while True:
-    day = visuals.run()
+    day: int | None = visuals.run()
     if day is None:
         break
     title, app = PROBLEMS[day]
+    if app is None:
+        break
     app(color_theme=AOC_THEME, bg_color=BG_COLOR, title=title).run()
