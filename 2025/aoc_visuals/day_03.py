@@ -11,7 +11,7 @@ from .aoc_theme import AocText
 BATTERIES = int_grid(aoc_lube.fetch(year=2025, day=3), numpy=False)
 
 
-async def pack_box(box, battery, batteries):
+async def pack_box(box: AocText, battery: AocText, batteries: AocText):
     joltage = chr(batteries.canvas["ord"][0, 0])
     battery.is_enabled = True
     battery.pull_to_front()
@@ -25,14 +25,14 @@ async def pack_box(box, battery, batteries):
     box.add_str("[ ]")
     box.pos = 11, 4
 
-    await battery.tween(duration=0.2, easing="out_cubic", x=5)
+    await battery.tween(duration=0.15, easing="out_cubic", x=5)
     battery.is_enabled = False
     box.add_str(f"[{joltage}]")
 
 
 async def yeet(box: AocText, screen_size: Size, unused_boxes):
     vx = 100
-    vy = -30 - (2 * box.y - 22)
+    vy = -8 - 2 * box.y
     real_x = float(box.x)
     real_y = float(box.y)
     gravity = 100
@@ -51,13 +51,13 @@ async def yeet(box: AocText, screen_size: Size, unused_boxes):
     unused_boxes.append(box)
 
 
-async def load(box, i):
+async def load(box: AocText, i: int):
     points = np.array([box.pos, (12 - i - 1, box.x - 2), (12 - i, 0)])
     curve = BezierCurve(points)
     await move_along_path(box, [curve], easing="in_out_circ", speed=65)
 
 
-async def add_total(used_boxes, stack, total) -> int:
+async def add_total(used_boxes: list[AocText], stack: list[int]) -> int:
     subtotal = sum(10**i * n for i, n in enumerate(reversed(stack)))
     x = 15 - len(str(subtotal))
     for box in used_boxes:
@@ -113,7 +113,7 @@ class Visual(App):
                     await asyncio.sleep(0.01)
                     asyncio.create_task(yeet(box, self.root.size, unused_boxes))
 
-            total += await add_total(used_boxes, stack, total)
+            total += await add_total(used_boxes, stack)
             total_label.add_str(f"Joltage: {total:>15}")
 
             for box in used_boxes:
