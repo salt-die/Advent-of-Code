@@ -54,7 +54,7 @@ async def yeet(box: AocText, screen_size: Size, unused_boxes):
 async def load(box: AocText, i: int):
     points = np.array([box.pos, (12 - i - 1, box.x - 2), (12 - i, 0)])
     curve = BezierCurve(points)
-    await move_along_path(box, [curve], easing="in_out_circ", speed=65)
+    await move_along_path(box, [curve], easing="in_out_circ", speed=65)  # type: ignore
 
 
 async def add_total(used_boxes: list[AocText], stack: list[int]) -> int:
