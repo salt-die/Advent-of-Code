@@ -11,7 +11,7 @@ NOT_AVAILABLE = "Not available"
 PROBLEMS = [
     "Secret Entrance",
     "Gift Shop",
-    NOT_AVAILABLE,
+    "Lobby",
     NOT_AVAILABLE,
     NOT_AVAILABLE,
     NOT_AVAILABLE,
