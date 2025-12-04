@@ -12,7 +12,7 @@ PROBLEMS = [
     "Secret Entrance",
     "Gift Shop",
     "Lobby",
-    NOT_AVAILABLE,
+    "Printing Department",
     NOT_AVAILABLE,
     NOT_AVAILABLE,
     NOT_AVAILABLE,
