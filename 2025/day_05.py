@@ -12,7 +12,6 @@ def parse_raw():
 
 
 RANGES, INGREDIENTS = parse_raw()
-print(RANGES, INGREDIENTS)
 
 
 def part_one():
