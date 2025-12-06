@@ -24,7 +24,7 @@ def solve(problem):
 
 def part_two():
     data = np.array([list(row) for row in (RAW + "  ").splitlines()])
-    splits = [-1, *np.flatnonzero(np.all(data == " ", axis=0)).tolist(), None]
+    splits = [-1, *np.flatnonzero(np.all(data == " ", axis=0)), None]
     return sum(solve(data[:, a + 1 : b]) for a, b in sliding_window(splits, 2))
 
 
