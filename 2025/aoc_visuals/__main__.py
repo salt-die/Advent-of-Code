@@ -14,7 +14,7 @@ PROBLEMS = [
     "Lobby",
     "Printing Department",
     NOT_AVAILABLE,
-    NOT_AVAILABLE,
+    "Trash Compactor",
     NOT_AVAILABLE,
     NOT_AVAILABLE,
     NOT_AVAILABLE,
