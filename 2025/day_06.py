@@ -19,8 +19,7 @@ def part_one():
 
 def solve(problem):
     n = [int("".join(col)) for col in problem[:-1].T]
-    answer = sum(n) if problem[-1, 0] == "+" else prod(n)
-    return answer
+    return sum(n) if problem[-1, 0] == "+" else prod(n)
 
 
 def part_two():
