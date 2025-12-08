@@ -6,17 +6,17 @@ import aoc_lube
 from aoc_lube.utils import UnionFind, chunk, extract_ints
 
 UF = UnionFind(chunk(extract_ints(aoc_lube.fetch(year=2025, day=8)), 3))
-DISTANCES = sorted((dist(a, b), a, b) for a, b in combinations(UF.elements(), 2))
+DISTANCES = sorted(combinations(UF.elements(), 2), key=lambda ps: dist(*ps))
 
 
 def part_one():
-    for _, a, b in DISTANCES[:1000]:
+    for a, b in DISTANCES[:1000]:
         UF.merge(a, b)
     return prod(nlargest(3, map(len, UF.components)))
 
 
 def part_two():
-    for _, a, b in DISTANCES:
+    for a, b in DISTANCES:
         UF.merge(a, b)
         if len(UF.components) == 1:
             return a[0] * b[0]
