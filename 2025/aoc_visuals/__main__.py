@@ -17,7 +17,7 @@ PROBLEMS = [
     "Trash Compactor",
     "Laboratories",
     NOT_AVAILABLE,
-    NOT_AVAILABLE,
+    "Movie Theater",
     NOT_AVAILABLE,
     NOT_AVAILABLE,
     NOT_AVAILABLE,
