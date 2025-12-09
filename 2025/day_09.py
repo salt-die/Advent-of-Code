@@ -10,14 +10,13 @@ POINTS = list(chunk(extract_ints(aoc_lube.fetch(year=2025, day=9)), 2))
 def area(a, b):
     x1, y1 = a
     x2, y2 = b
-
     return (abs(x2 - x1) + 1) * (abs(y2 - y1) + 1)
 
 
 def rect(a, b):
     x1, y1 = a
     x2, y2 = b
-    return Polygon([(x1, y1), (x2, y1), (x2, y2), (x1, y2)])
+    return Polygon([a, (x2, y1), b, (x1, y2)])
 
 
 def part_one():
