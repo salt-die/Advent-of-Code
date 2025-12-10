@@ -170,8 +170,6 @@ class PolygonCanvas(AocText):
 
 class Visual(App):
     async def on_start(self):
-        assert self.root  # For type-checker
-
         poly_canvas = PolygonCanvas(
             size_hint={"height_hint": 1.0, "width_hint": 1.0},
             default_cell=new_cell(ord=ord(".")),
