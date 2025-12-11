@@ -201,6 +201,8 @@ class Visual(App):
         lights_event = asyncio.Event()
 
         for lights, buttons in DATA:
+            lights_label.set_text(f"{lights}\n[{"." * (len(lights) - 2)}]")
+
             grid.grid_columns = len(buttons)
             buttons.sort(key=len)
             for button in buttons:
@@ -223,4 +225,3 @@ class Visual(App):
             button_gadgets.clear()
             wires.clear()
             lights_event.clear()
-            lights_label.set_text(f"{lights}\n[{"." * (len(lights) - 2)}]")
