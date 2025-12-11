@@ -18,7 +18,7 @@ PROBLEMS = [
     "Laboratories",
     NOT_AVAILABLE,
     "Movie Theater",
-    NOT_AVAILABLE,
+    "Factory",
     NOT_AVAILABLE,
     NOT_AVAILABLE,
 ]
