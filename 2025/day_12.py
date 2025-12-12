@@ -5,13 +5,9 @@ from aoc_lube.utils import extract_ints
 
 def parse_raw():
     *packages, regions = aoc_lube.fetch(year=2025, day=12).split("\n\n")
-    areas = np.array(
-        [sum(line.count("#") for line in package.splitlines()) for package in packages]
-    )
-    fits = [
-        (h * w, np.array(data))
-        for h, w, *data in map(extract_ints, regions.splitlines())
-    ]
+    areas = np.array([package.count("#") for package in packages])
+    as_ints = map(extract_ints, regions.splitlines())
+    fits = [(h * w, np.array(data)) for h, w, *data in as_ints]
     return areas, fits
 
 
