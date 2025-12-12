@@ -1,18 +1,25 @@
 import aoc_lube
+import numpy as np
+from aoc_lube.utils import extract_ints
 
-RAW = aoc_lube.fetch(year=2025, day=12)
-print(RAW)
 
 def parse_raw():
-    ...
+    *packages, regions = aoc_lube.fetch(year=2025, day=12).split("\n\n")
+    areas = np.array(
+        [sum(line.count("#") for line in package.splitlines()) for package in packages]
+    )
+    fits = [
+        (h * w, np.array(data))
+        for h, w, *data in map(extract_ints, regions.splitlines())
+    ]
+    return areas, fits
 
-DATA = parse_raw()
+
+AREA, FITS = parse_raw()
+
 
 def part_one():
-    ...
+    return sum(area >= AREA @ region for area, region in FITS)
 
-def part_two():
-    ...
 
 aoc_lube.submit(year=2025, day=12, part=1, solution=part_one)
-aoc_lube.submit(year=2025, day=12, part=2, solution=part_two)
