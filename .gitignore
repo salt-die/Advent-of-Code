@@ -2,5 +2,6 @@ __pycache__/
 
 *.gexf
 2020/pony_intcode/
+2025/day_10_bifur.py
 TODO.md
 *.log

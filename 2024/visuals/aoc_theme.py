@@ -1,10 +1,11 @@
+from batgrl.colors import ColorTheme
 from batgrl.gadgets.behaviors.button_behavior import ButtonBehavior
 from batgrl.gadgets.behaviors.themable import Themable
 from batgrl.gadgets.behaviors.toggle_button_behavior import ToggleButtonBehavior
 from batgrl.gadgets.text import Text
 from batgrl.text_tools import Style
 
-AOC_THEME = {
+AOC_THEME: ColorTheme = {
     "primary_fg": "cccccc",
     "primary_bg": "0f0f23",
     "text_pad_line_highlight_fg": "cccccc",
@@ -29,7 +30,7 @@ AOC_THEME = {
     "scroll_view_indicator_normal": "6f6f78",
     "scroll_view_indicator_hover": "5c5c65",
     "scroll_view_indicator_press": "3a3a44",
-    "markdown_block_code_background": "10101a",
+    "markdown_block_code_bg": "10101a",
     "titlebar_normal_fg": "99ff99",
     "titlebar_normal_bg": "0f0f23",
     "titlebar_inactive_fg": "009900",
